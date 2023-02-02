@@ -6,7 +6,7 @@ using UIKit;
 
 namespace AuroraControls.Platforms.iOS
 {
-    public class AuroraTextField : MauiTextField
+    public class AuroraTextField : MauiTextField, IHaveInsets
     {
         private UIEdgeInsets inset = new UIEdgeInsets(0f, 0f, 0f, 0f);
 
@@ -47,6 +47,11 @@ namespace AuroraControls.Platforms.iOS
             var rect = base.PlaceholderRect(forBounds);
 
             return Inset.InsetRect(rect);
+        }
+
+        public Rect GetViewLocation()
+        {
+            return EditingRect(Bounds).ToRectangle();
         }
     }
 }

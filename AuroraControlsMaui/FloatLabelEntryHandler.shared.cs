@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Maui;
 using Microsoft.Maui.Handlers;
 
 namespace AuroraControls
@@ -23,6 +24,11 @@ namespace AuroraControls
                 [nameof(IUnderlayDrawable.InternalMargin)] = MapFloatLabelInternalMargin,
                 [nameof(IUnderlayDrawable.FocusAnimationPercentage)] = MapFocusAnimationPercentage,
                 [nameof(IUnderlayDrawable.HasValueAnimationPercentage)] = MapHasValueAnimationPercentage,
+            };
+
+        public static PropertyMapper IUnderlayDrawableMapper =
+            new PropertyMapper<IUnderlayDrawable>
+            {
             };
 
         private static void MapFloatLabelFocus(FloatLabelEntryHandler handler, FloatLabelEntry view)
@@ -50,12 +56,12 @@ namespace AuroraControls
 
         private static void MapFloatLabelPlaceholder(FloatLabelEntryHandler handler, FloatLabelEntry view)
         {
-            Invalidate(handler);
+            handler._underlayDrawable.Invalidate();
         }
 
         private static void MapFloatLabelBackground(FloatLabelEntryHandler handler, FloatLabelEntry view)
         {
-            Invalidate(handler);
+            handler._underlayDrawable.Invalidate();
         }
 
         private static void MapFloatLabelActivePlaceholderFontSize(FloatLabelEntryHandler handler, FloatLabelEntry view)
@@ -79,19 +85,19 @@ namespace AuroraControls
 
         private static void MapFocusAnimationPercentage(FloatLabelEntryHandler handler, FloatLabelEntry view)
         {
-            Invalidate(handler);
+            handler._underlayDrawable.Invalidate();
         }
 
         private static void MapHasValueAnimationPercentage(FloatLabelEntryHandler handler, FloatLabelEntry view)
         {
-            Invalidate(handler);
+            handler._underlayDrawable.Invalidate();
         }
 
         private static void UpdateLayoutInsets(FloatLabelEntryHandler handler)
         {
             if (handler.VirtualView is IUnderlayDrawable ud)
             {
-                handler.UpdateLayoutInsets(ud.GetLayoutInset());
+                handler._underlayDrawable.UpdateLayoutInsets(ud.GetLayoutInset());
             }
         }
     }
