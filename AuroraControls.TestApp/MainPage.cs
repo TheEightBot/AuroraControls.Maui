@@ -6,6 +6,8 @@ public class MainPage : ContentPage
     {
         Content = new VerticalStackLayout
         {
+            Padding = 16,
+            Spacing = 16,
             Children =
             {
                 new Label { HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center, Text = "Welcome to .NET MAUI!"},
@@ -14,6 +16,7 @@ public class MainPage : ContentPage
                     Text = "This is My Entry",
                     Placeholder = "My Placeholder",
                     BackgroundColor = Colors.Fuchsia,
+                    BorderStyle = ContainerBorderStyle.RoundedRectangle,
                 },
             }
         };
