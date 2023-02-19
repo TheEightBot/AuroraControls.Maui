@@ -1,6 +1,6 @@
 ﻿namespace AuroraControls;
 
-sealed class SKTextRun
+internal sealed class SKTextRun
 {
     private const string IconTemplateBegin = "{{";
     private const string IconTemplateEnd = "}}";
@@ -10,12 +10,14 @@ sealed class SKTextRun
         Text = text;
     }
 
-
     public string Text { get; }
 
     public SKTypeface Typeface { get; set; }
+
     public SKPoint Offset { get; set; }
+
     public float? FontSize { get; set; }
+
     public SKColor? Color { get; set; }
 
     public override string ToString()
@@ -28,19 +30,27 @@ sealed class SKTextRun
         var runs = new List<SKTextRun>();
 
         if (string.IsNullOrEmpty(text))
+        {
             return runs;
+        }
 
         var start = 0;
 
         while (start < text.Length)
         {
             var startIndex = text.IndexOf(IconTemplateBegin, start, StringComparison.Ordinal);
+
             if (startIndex == -1)
+            {
                 break;
+            }
 
             var endIndex = text.IndexOf(IconTemplateEnd, startIndex, StringComparison.Ordinal);
+
             if (endIndex == -1)
+            {
                 break;
+            }
 
             var pre = text.Substring(start, startIndex - start);
             var post = text.Substring(endIndex + IconTemplateEnd.Length);
@@ -61,12 +71,14 @@ sealed class SKTextRun
                         {
                             color = SKColor.Parse(pair[1]);
                         }
+
                         break;
                     case "font-size":
                         if (pair.Length > 1 && !string.IsNullOrWhiteSpace(pair[1]))
                         {
                             fontSize = float.TryParse(pair[1], out var parsedFontSize) ? parsedFontSize : default(float?);
                         }
+
                         break;
                 }
             }
@@ -86,7 +98,7 @@ sealed class SKTextRun
                 {
                     Typeface = typeface,
                     Color = color,
-                    FontSize = fontSize
+                    FontSize = fontSize,
                 });
 
             start = endIndex + IconTemplateEnd.Length;

@@ -1,5 +1,4 @@
-﻿using System;
-namespace AuroraControls;
+﻿namespace AuroraControls;
 
 /// <summary>
 /// Math extensions.
@@ -38,7 +37,7 @@ public static class MathExtensions
     {
         int difference = end - start;
         int adjusted = (int)(difference * amount);
-        
+
         return (byte)(start + adjusted);
     }
 }

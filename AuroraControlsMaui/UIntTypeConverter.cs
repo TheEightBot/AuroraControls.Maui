@@ -16,7 +16,9 @@ public class UIntTypeConverter : TypeConverter
     {
         var strValue = value?.ToString();
         if (string.IsNullOrWhiteSpace(strValue))
+        {
             return null;
+        }
 
         return uint.Parse(strValue, CultureInfo.InvariantCulture);
     }
@@ -24,7 +26,9 @@ public class UIntTypeConverter : TypeConverter
     public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
     {
         if (value is not uint ui)
+        {
             throw new NotSupportedException();
+        }
 
         return ui.ToString(CultureInfo.InvariantCulture);
     }

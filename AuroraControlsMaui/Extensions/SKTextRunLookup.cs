@@ -4,8 +4,8 @@ public class SKTextRunLookup : IDisposable
 {
     private static readonly Lazy<SKTextRunLookup> instance = new Lazy<SKTextRunLookup>(() => new SKTextRunLookup(true));
 
-    private readonly List<SKTextRunLookupEntry> entries;
-    private readonly bool disposeEntries;
+    private readonly List<SKTextRunLookupEntry> _entries;
+    private readonly bool _disposeEntries;
 
     public SKTextRunLookup()
         : this(false)
@@ -14,49 +14,58 @@ public class SKTextRunLookup : IDisposable
 
     public SKTextRunLookup(bool disposeEntries)
     {
-        this.disposeEntries = disposeEntries;
-        entries = new List<SKTextRunLookupEntry>();
+        this._disposeEntries = disposeEntries;
+        _entries = new List<SKTextRunLookupEntry>();
     }
 
     public static SKTextRunLookup Instance => instance.Value;
 
-    public IEnumerable<SKTypeface> Typefaces => entries.Select(l => l.Typeface);
+    public IEnumerable<SKTypeface> Typefaces => _entries.Select(l => l.Typeface);
 
     public void AddTypeface(SKTypeface typeface, IReadOnlyDictionary<string, string> characters)
     {
-        if (typeface == null)
+        if (typeface is null)
+        {
             throw new ArgumentNullException(nameof(typeface));
-        if (characters == null)
-            throw new ArgumentNullException(nameof(characters));
+        }
 
-        entries.Add(new SKTextRunLookupEntry(typeface, characters));
+        if (characters is null)
+        {
+            throw new ArgumentNullException(nameof(characters));
+        }
+
+        _entries.Add(new SKTextRunLookupEntry(typeface, characters));
     }
 
     public void AddTypeface(SKTextRunLookupEntry entry)
     {
-        if (entry == null)
-            throw new ArgumentNullException(nameof(entry));
-
-        if (!entries.Contains(entry))
+        if (entry is null)
         {
-            entries.Add(entry);
+            throw new ArgumentNullException(nameof(entry));
+        }
+
+        if (!_entries.Contains(entry))
+        {
+            _entries.Add(entry);
         }
     }
 
     public void RemoveTypeface(SKTextRunLookupEntry entry)
     {
-        if (entry == null)
-            throw new ArgumentNullException(nameof(entry));
-
-        if (entries.Contains(entry))
+        if (entry is null)
         {
-            entries.Remove(entry);
+            throw new ArgumentNullException(nameof(entry));
+        }
+
+        if (_entries.Contains(entry))
+        {
+            _entries.Remove(entry);
         }
     }
 
     public bool TryLookup(string template, out SKTypeface typeface, out string character)
     {
-        foreach (var entry in entries)
+        foreach (var entry in _entries)
         {
             if (entry.Characters.ContainsKey(template))
             {
@@ -73,14 +82,15 @@ public class SKTextRunLookup : IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-        if (disposeEntries)
+        if (_disposeEntries)
         {
-            foreach (var entry in entries)
+            foreach (var entry in _entries)
             {
                 entry.Dispose();
             }
         }
-        entries.Clear();
+
+        _entries.Clear();
     }
 
     public void Dispose()

@@ -4,26 +4,36 @@ namespace AuroraControls;
 
 public class SKTextRunLookupEntry : IDisposable
 {
-    private readonly bool disposeTypeface;
+    private readonly bool _disposeTypeface;
 
     public SKTextRunLookupEntry(SKTypeface typeface, bool disposeTypeface, IReadOnlyDictionary<string, string> characters)
     {
-        if (typeface == null)
+        if (typeface is null)
+        {
             throw new ArgumentNullException(nameof(typeface));
-        if (characters == null)
-            throw new ArgumentNullException(nameof(characters));
+        }
 
-        this.disposeTypeface = disposeTypeface;
+        if (characters is null)
+        {
+            throw new ArgumentNullException(nameof(characters));
+        }
+
+        this._disposeTypeface = disposeTypeface;
         Typeface = typeface;
         Characters = characters;
     }
 
     public SKTextRunLookupEntry(SKTypeface typeface, IReadOnlyDictionary<string, string> characters)
     {
-        if (typeface == null)
+        if (typeface is null)
+        {
             throw new ArgumentNullException(nameof(typeface));
-        if (characters == null)
+        }
+
+        if (characters is null)
+        {
             throw new ArgumentNullException(nameof(characters));
+        }
 
         Typeface = typeface;
         Characters = characters;
@@ -56,7 +66,7 @@ public class SKTextRunLookupEntry : IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-        if (disposeTypeface)
+        if (_disposeTypeface)
         {
             Typeface?.Dispose();
         }

@@ -4,26 +4,16 @@ internal static class SKCanvasExtensions
 {
     public static void DrawTextCenteredVertically(this SKCanvas canvas, string text, SKPoint point, SKPaint paint)
     {
-        //var scale = paint.GetFontMetrics(out var fm);
-        //var centerTextPoint = (Math.Abs(fm.Top) + fm.Bottom) / 2f;
-        //var newTextY = point.Y - centerTextPoint;
-        //var measuredTextRect = new SKRect();
-        //paint.MeasureText(text, ref measuredTextRect);
-
-        //var measuredY = point.Y - (paint.MeasureText(text) / 2f);
-        //var textY = point.Y - ((fm.Descent + fm.Ascent) / 2f);  //+ (((-paint.FontMetrics.Ascent + paint.FontMetrics.Descent) / 2) - paint.FontMetrics.Descent);
-        //canvas.DrawText(text, point.X, newTextY, paint);
-
         using (new SKAutoCanvasRestore(canvas))
         {
-            var size = new SKRect();
+            var size = default(SKRect);
 
             paint.EnsureHasValidFont(text);
             paint.MeasureText(text, ref size);
 
             var textRows = canvas.TextRows(text);
 
-            canvas.Translate(0, textRows * ((-paint.FontMetrics.Ascent + paint.FontMetrics.Descent) / 2f) - paint.FontMetrics.Descent);
+            canvas.Translate(0, (textRows * ((-paint.FontMetrics.Ascent + paint.FontMetrics.Descent) / 2f)) - paint.FontMetrics.Descent);
 
             canvas.DrawText(text, point.X, point.Y, paint);
         }
@@ -56,7 +46,7 @@ internal static class SKCanvasExtensions
 
         var splitText = text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
 
-        var size = new SKRect();
+        var size = default(SKRect);
         var heightOffset = -paint.FontMetrics.Ascent;
 
         foreach (var split in splitText)
@@ -67,12 +57,7 @@ internal static class SKCanvasExtensions
             }
             else
             {
-                //var rng = new Random();
-                //var buffer = new byte[4];
-                //rng.NextBytes(buffer);
-                //clonedPaint.Color = new SKColor(buffer[0], buffer[1], buffer[2], buffer[3]);
                 paint.MeasureText(split, ref size);
-                //canvas.DrawRect(new SKRect(x, y + heightOffset, x + size.Width, y  + heightOffset + size.Height), clonedPaint);
                 canvas.DrawText(split, x, y + heightOffset, paint);
             }
 
@@ -82,13 +67,17 @@ internal static class SKCanvasExtensions
 
     public static Size TextSize(this SKCanvas canvas, string text, SKPaint paint)
     {
-        if (canvas == null)
+        if (canvas is null)
+        {
             throw new ArgumentNullException(nameof(canvas));
+        }
 
-        if (paint == null)
+        if (paint is null)
+        {
             throw new ArgumentNullException(nameof(paint));
+        }
 
-        var size = new SKRect();
+        var size = default(SKRect);
 
         paint.EnsureHasValidFont(text);
 
@@ -117,13 +106,17 @@ internal static class SKCanvasExtensions
 
     public static SKRect TextLocation(this SKCanvas canvas, string text, float x, float y, SKPaint paint)
     {
-        if (canvas == null)
+        if (canvas is null)
+        {
             throw new ArgumentNullException(nameof(canvas));
+        }
 
-        if (paint == null)
+        if (paint is null)
+        {
             throw new ArgumentNullException(nameof(paint));
+        }
 
-        var size = new SKRect();
+        var size = default(SKRect);
 
         paint.EnsureHasValidFont(text);
 
@@ -172,22 +165,30 @@ internal static class SKCanvasExtensions
 
     public static int TextRows(this SKCanvas canvas, string text)
     {
-        if (canvas == null)
+        if (canvas is null)
+        {
             throw new ArgumentNullException(nameof(canvas));
+        }
 
         return Math.Max(text?.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None)?.Length ?? 1, 1);
     }
 
     public static void DrawIconifiedText(this SKCanvas canvas, IEnumerable<SKTextRun> runs, float x, float y, SKPaint paint)
     {
-        if (canvas == null)
+        if (canvas is null)
+        {
             throw new ArgumentNullException(nameof(canvas));
+        }
 
-        if (runs == null)
+        if (runs is null)
+        {
             throw new ArgumentNullException(nameof(runs));
+        }
 
-        if (paint == null)
+        if (paint is null)
+        {
             throw new ArgumentNullException(nameof(paint));
+        }
 
         using (new SKAutoCanvasRestore(canvas))
         {
@@ -201,19 +202,24 @@ internal static class SKCanvasExtensions
                 {
                     var newPaint = paint.Clone();
 
-                    if (run.Typeface != null)
+                    if (run.Typeface is not null)
                     {
                         newPaint.Typeface = run.Typeface;
                     }
 
                     newPaint.EnsureHasValidFont(run.Text);
 
-                    if (run.FontSize != null)
+                    if (run.FontSize is not null)
+                    {
                         newPaint.TextSize = run.FontSize.Value;
-                    if (run.Color != null)
-                        newPaint.Color = run.Color.Value;
+                    }
 
-                    var rect = new SKRect();
+                    if (run.Color is not null)
+                    {
+                        newPaint.Color = run.Color.Value;
+                    }
+
+                    var rect = default(SKRect);
                     var width = newPaint.MeasureText(run.Text, ref rect);
 
                     totalWidth += width;
@@ -238,7 +244,6 @@ internal static class SKCanvasExtensions
                 canvas.Translate(0f, -yOffset);
             }
         }
-
     }
 
     public static void DrawCenteredIconifiedText(this SKCanvas canvas, string text, float x, float y, SKPaint paint, bool toUppercase = false)
@@ -248,12 +253,20 @@ internal static class SKCanvasExtensions
 
     public static void DrawCenteredIconifiedText(SKCanvas canvas, string text, float x, float y, SKTextRunLookup lookup, SKPaint paint, bool toUppercase = false)
     {
-        if (canvas == null)
+        if (canvas is null)
+        {
             throw new ArgumentNullException(nameof(canvas));
-        if (text == null)
+        }
+
+        if (text is null)
+        {
             throw new ArgumentNullException(nameof(text));
-        if (paint == null)
+        }
+
+        if (paint is null)
+        {
             throw new ArgumentNullException(nameof(paint));
+        }
 
         var runs = SKTextRun.Create(text, lookup, toUppercase);
         DrawIconifiedText(canvas, runs, x, y, paint);
@@ -272,19 +285,24 @@ internal static class SKCanvasExtensions
             {
                 using (var newPaint = paint.Clone())
                 {
-                    if (run.Typeface != null)
+                    if (run.Typeface is not null)
                     {
                         newPaint.Typeface = run.Typeface;
                     }
 
                     newPaint.EnsureHasValidFont(run.Text);
 
-                    if (run.FontSize != null)
+                    if (run.FontSize is not null)
+                    {
                         newPaint.TextSize = run.FontSize.Value;
-                    if (run.Color != null)
-                        newPaint.Color = run.Color.Value;
+                    }
 
-                    var rect = new SKRect();
+                    if (run.Color is not null)
+                    {
+                        newPaint.Color = run.Color.Value;
+                    }
+
+                    var rect = default(SKRect);
                     newPaint.MeasureText(run.Text, ref rect);
                     width += rect.Width;
 
@@ -301,28 +319,41 @@ internal static class SKCanvasExtensions
 
     public static void DrawText(this SKCanvas canvas, IEnumerable<SKTextRun> runs, float x, float y, SKPaint paint)
     {
-        if (canvas == null)
+        if (canvas is null)
+        {
             throw new ArgumentNullException(nameof(canvas));
-        if (runs == null)
+        }
+
+        if (runs is null)
+        {
             throw new ArgumentNullException(nameof(runs));
-        if (paint == null)
+        }
+
+        if (paint is null)
+        {
             throw new ArgumentNullException(nameof(paint));
+        }
 
         foreach (var run in runs)
         {
             using (var newPaint = paint.Clone())
             {
-                if (run.Typeface != null)
+                if (run.Typeface is not null)
                 {
                     newPaint.Typeface = run.Typeface;
                 }
 
                 newPaint.EnsureHasValidFont(run.Text);
 
-                if (run.FontSize != null)
+                if (run.FontSize is not null)
+                {
                     newPaint.TextSize = run.FontSize.Value;
-                if (run.Color != null)
+                }
+
+                if (run.Color is not null)
+                {
                     newPaint.Color = run.Color.Value;
+                }
 
                 if (run.Text?.Length > 0)
                 {
@@ -340,14 +371,20 @@ internal static class SKCanvasExtensions
 
     private static void DrawIconifiedText(this SKCanvas canvas, string text, float x, float y, SKTextRunLookup lookup, SKPaint paint)
     {
-        if (canvas == null)
+        if (canvas is null)
+        {
             throw new ArgumentNullException(nameof(canvas));
+        }
 
-        if (text == null)
+        if (text is null)
+        {
             throw new ArgumentNullException(nameof(text));
+        }
 
-        if (paint == null)
+        if (paint is null)
+        {
             throw new ArgumentNullException(nameof(paint));
+        }
 
         var runs = SKTextRun.Create(text, lookup);
         canvas.DrawText(runs, x, y, paint);
@@ -355,14 +392,20 @@ internal static class SKCanvasExtensions
 
     public static Size IconifiedTextSize(this SKCanvas canvas, string text, SKPaint paint)
     {
-        if (canvas == null)
+        if (canvas is null)
+        {
             throw new ArgumentNullException(nameof(canvas));
+        }
 
-        if (text == null)
+        if (text is null)
+        {
             throw new ArgumentNullException(nameof(text));
+        }
 
-        if (paint == null)
+        if (paint is null)
+        {
             throw new ArgumentNullException(nameof(paint));
+        }
 
         var runs = SKTextRun.Create(text, SKTextRunLookup.Instance);
 
@@ -374,24 +417,30 @@ internal static class SKCanvasExtensions
             {
                 using (var newPaint = paint.Clone())
                 {
-                    if (run.Typeface != null)
+                    if (run.Typeface is not null)
                     {
                         newPaint.Typeface = run.Typeface;
                     }
 
                     newPaint.EnsureHasValidFont(run.Text);
 
-                    if (run.FontSize != null)
+                    if (run.FontSize is not null)
+                    {
                         newPaint.TextSize = run.FontSize.Value;
+                    }
 
-                    if (run.Color != null)
+                    if (run.Color is not null)
+                    {
                         newPaint.Color = run.Color.Value;
+                    }
 
-                    var rect = new SKRect();
+                    var rect = default(SKRect);
                     var measuredWidth = newPaint.MeasureText(run.Text, ref rect);
 
                     if (rect.Height > height)
+                    {
                         height = rect.Height;
+                    }
 
                     width += measuredWidth;
                 }

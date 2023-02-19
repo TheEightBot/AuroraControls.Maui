@@ -1,29 +1,21 @@
-﻿using System;
+﻿using Microsoft.Maui.Animations;
 using Microsoft.Maui.Platform;
-using Microsoft.Maui.Animations;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 #if IOS
-using UIKit;
 using CoreGraphics;
+using UIKit;
+using PlatformView = UIKit.UIView;
 using SKCanvasView = SkiaSharp.Views.iOS.SKCanvasView;
 using SKPaintSurfaceEventArgs = SkiaSharp.Views.iOS.SKPaintSurfaceEventArgs;
-using PlatformView = UIKit.UIView;
 #elif ANDROID
-using SKCanvasView = SkiaSharp.Views.Android.SKCanvasView;
-using SKPaintSurfaceEventArgs = SkiaSharp.Views.Android.SKPaintSurfaceEventArgs;
-using PlatformView = Android.Views.ViewGroup;
 using Android.Graphics.Drawables;
 using Android.Widget;
+using PlatformView = Android.Views.ViewGroup;
+using SKCanvasView = SkiaSharp.Views.Android.SKCanvasView;
+using SKPaintSurfaceEventArgs = SkiaSharp.Views.Android.SKPaintSurfaceEventArgs;
 #endif
 
 namespace AuroraControls;
-
-public interface IHavePlatformUnderlayDrawable
-{
-    PlatformUnderlayDrawable PlatformUnderlayDrawable { get; }
-}
 
 public class PlatformUnderlayDrawable : IDisposable
 {
@@ -38,7 +30,6 @@ public class PlatformUnderlayDrawable : IDisposable
     private bool _isDrawing;
 
     private bool _needsDraw;
-
 
     private bool _hadValue;
 
@@ -62,7 +53,7 @@ public class PlatformUnderlayDrawable : IDisposable
         _platformView = platformView;
         _virtualView = virtualView;
 
-        if (_canvas == null)
+        if (_canvas is null)
         {
             _canvas = new SKCanvasView { Opaque = false };
 
@@ -91,7 +82,7 @@ public class PlatformUnderlayDrawable : IDisposable
             }
         }
 
-        if (_canvas != null)
+        if (_canvas is not null)
         {
             _canvas.RemoveGestureRecognizer(_canvasTapped);
             _canvas.PaintSurface -= OnPaintSurface;
@@ -102,7 +93,7 @@ public class PlatformUnderlayDrawable : IDisposable
             _canvasTapped = null;
         }
 
-        if (_commandView != null)
+        if (_commandView is not null)
         {
             _commandView.RemoveGestureRecognizer(_commandViewTapped);
             _commandView.RemoveFromSuperview();
@@ -116,7 +107,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
     private void OnPaintSurface(object sender, SKPaintSurfaceEventArgs e)
     {
-        if (_virtualView is IUnderlayDrawable ud && _virtualView is Microsoft.Maui.Controls.ContentView cv && cv.Content != null)
+        if (_virtualView is IUnderlayDrawable ud && _virtualView is Microsoft.Maui.Controls.ContentView cv && cv.Content is not null)
         {
             DrawUnderlay(ud, cv, cv.Content.Frame, e.Surface, e.Info);
         }
@@ -126,16 +117,16 @@ public class PlatformUnderlayDrawable : IDisposable
     {
         if (_virtualView is IUnderlayDrawable ud)
         {
-            if (ud.Command != null)
+            if (ud.Command is not null)
             {
-                if (_commandView == null)
+                if (_commandView is null)
                 {
                     _commandView =
                         new UIView
                         {
                             BackgroundColor = UIColor.Clear,
                             UserInteractionEnabled = true,
-                            Frame = new CGRect(0, 0, (float)_virtualView.Width, (float)_virtualView.Height)
+                            Frame = new CGRect(0f, 0f, (float)_virtualView.Width, (float)_virtualView.Height),
                         };
                     _commandView.AddGestureRecognizer(
                         _commandViewTapped = new UITapGestureRecognizer(() =>
@@ -150,7 +141,7 @@ public class PlatformUnderlayDrawable : IDisposable
                 _platformView.AddSubview(_commandView);
                 _platformView.BringSubviewToFront(_commandView);
             }
-            else if (ud.Command == null && _commandView != null)
+            else if (ud.Command is null && _commandView is not null)
             {
                 _commandView?.RemoveFromSuperview();
             }
@@ -167,7 +158,7 @@ public class PlatformUnderlayDrawable : IDisposable
         _platformView = platformView;
         _virtualView = virtualView;
 
-        if (_canvas == null)
+        if (_canvas is null)
         {
             _canvas = new SKCanvasView(platformView.Context);
 
@@ -185,7 +176,7 @@ public class PlatformUnderlayDrawable : IDisposable
         _backgroundPaint?.Dispose();
         _placeholderPaint?.Dispose();
 
-        if(_canvas != null)
+        if (_canvas is not null)
         {
             _canvas.PaintSurface -= OnPaintSurface;
             _canvas.RemoveFromParent();
@@ -193,7 +184,7 @@ public class PlatformUnderlayDrawable : IDisposable
             _canvas = null;
         }
 
-        if (_commandButton != null)
+        if (_commandButton is not null)
         {
             _commandButton.Click -= CommandClicked;
             _commandButton.RemoveFromParent();
@@ -212,7 +203,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
     private void OnPaintSurface(object sender, SKPaintSurfaceEventArgs e)
     {
-        if (_virtualView is IUnderlayDrawable ud && _virtualView is Microsoft.Maui.Controls.ContentView cv && cv.Content != null)
+        if (_virtualView is IUnderlayDrawable ud && _virtualView is Microsoft.Maui.Controls.ContentView cv && cv.Content is not null)
         {
             DrawUnderlay(ud, cv, cv.Content.Frame, e.Surface, e.Info);
         }
@@ -222,9 +213,9 @@ public class PlatformUnderlayDrawable : IDisposable
     {
         if (_virtualView is IUnderlayDrawable ud)
         {
-            if (ud.Command != null)
+            if (ud.Command is not null)
             {
-                if (_commandButton == null)
+                if (_commandButton is null)
                 {
                     _commandButton =
                         new Android.Widget.Button(_platformView.Context)
@@ -238,7 +229,7 @@ public class PlatformUnderlayDrawable : IDisposable
                 _platformView.AddView(_commandButton);
                 _commandButton.Layout(0, 0, _platformView.Width, _platformView.Height);
             }
-            else if (ud.Command == null && _commandButton != null)
+            else if (ud.Command is null && _commandButton is not null)
             {
                 _commandButton?.RemoveFromParent();
             }
@@ -248,7 +239,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
     public void ClearSubviews()
     {
-        if (_platformView != null)
+        if (_platformView is not null)
         {
 #if IOS
             _platformView.ClearSubviews();
@@ -261,7 +252,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
     public void PrepareForDisplay()
     {
-        if (_platformView != null && _canvas != null)
+        if (_platformView is not null && _canvas is not null)
         {
 #if IOS
             var addedView = _platformView.Subviews.ElementAtOrDefault(0);
@@ -271,7 +262,7 @@ public class PlatformUnderlayDrawable : IDisposable
                 addedView.BackgroundColor = UIColor.Clear;
 
                 if (addedView is UITextField tf)
-                {                    
+                {
                     tf.BorderStyle = UITextBorderStyle.None;
                 }
                 else if (_virtualView is IUnderlayDrawable ud && addedView is UITextView tv)
@@ -336,7 +327,7 @@ public class PlatformUnderlayDrawable : IDisposable
     {
         foreach (var registration in StyledInputLayout.StyledInputLayoutContentRegistrations)
         {
-            if(type.IsAssignableTo(registration.Key))
+            if (type.IsAssignableTo(registration.Key))
             {
                 return registration.Value;
             }
@@ -423,22 +414,22 @@ public class PlatformUnderlayDrawable : IDisposable
     public void PlatformArrange(Rect rect)
     {
 #if IOS
-        if (_canvas != null)
+        if (_canvas is not null)
         {
             _canvas.Frame = new CGRect(0, 0, _platformView?.Bounds.Width ?? 0, _platformView?.Bounds.Height ?? 0);
         }
 
-        if (_commandView != null)
+        if (_commandView is not null)
         {
             _commandView.Frame = new CGRect(0, 0, _platformView?.Bounds.Width ?? 0, _platformView?.Bounds.Height ?? 0);
         }
 #elif ANDROID
-        if (_canvas != null)
+        if (_canvas is not null)
         {
             _canvas?.Layout(0, 0, _platformView?.Width ?? 0, _platformView?.Height ?? 0);
         }
 
-        if (_commandButton != null)
+        if (_commandButton is not null)
         {
             _commandButton?.Layout(0, 0, _platformView?.Width ?? 0, _platformView?.Height ?? 0);
         }
@@ -454,7 +445,7 @@ public class PlatformUnderlayDrawable : IDisposable
         }
 
 #if IOS
-        if(_canvas.Frame == CGRect.Empty)
+        if (_canvas.Frame == CGRect.Empty)
         {
             return;
         }
@@ -586,6 +577,7 @@ public class PlatformUnderlayDrawable : IDisposable
                     {
                         canvas.DrawRect(rectBackground, _borderPaint);
                     }
+
                     break;
                 case ContainerBorderStyle.RoundedRectangle:
                     var roundedRectBackground = SKRect.Create(halfBorder, halfBorder, size.Width - borderSize, size.Height - borderSize);
@@ -601,6 +593,7 @@ public class PlatformUnderlayDrawable : IDisposable
                     {
                         canvas.DrawRoundRect(roundedRectBackground, cornerRadiusSize, _borderPaint);
                     }
+
                     break;
 
                 case ContainerBorderStyle.RoundedRectanglePlaceholderThrough:
@@ -620,7 +613,7 @@ public class PlatformUnderlayDrawable : IDisposable
                         canvas.Clear();
                         if (borderSize > 0d)
                         {
-                             _placeholderPaint.TextSize = placeholderFontSize;
+                            _placeholderPaint.TextSize = placeholderFontSize;
                             var placeholderRectSize = canvas.GetTextContainerRectAt(isError ? underlayDrawable.ErrorText : placeholder, new SKPoint((float)controlXLeft, 0.0f),  _placeholderPaint);
 
                             canvas.DrawRoundRect(roundedRectBackgroundPlaceholderThrough, cornerRadiusSize, _borderPaint);
@@ -653,16 +646,15 @@ public class PlatformUnderlayDrawable : IDisposable
 
             if (isError)
             {
-                 _placeholderPaint.TextSize = placeholderFontSize;
-                 _placeholderPaint.Color = underlayDrawable.ErrorColor.ToSKColor();
-                 _placeholderPaint.EnsureHasValidFont(underlayDrawable.ErrorText ?? placeholder);
+                _placeholderPaint.TextSize = placeholderFontSize;
+                _placeholderPaint.Color = underlayDrawable.ErrorColor.ToSKColor();
+                _placeholderPaint.EnsureHasValidFont(underlayDrawable.ErrorText ?? placeholder);
 
                 canvas.DrawTextCenteredVertically(underlayDrawable.ErrorText ?? placeholder, new SKPoint((float)controlXLeft, focusedPlaceholderCenterY),  _placeholderPaint);
             }
-
             else if (!string.IsNullOrEmpty(placeholder))
             {
-                 _placeholderPaint.Color =
+                _placeholderPaint.Color =
                     placeholderColor
                         .Lerp(
                             focusAnimationPercentage > 0d
@@ -675,16 +667,16 @@ public class PlatformUnderlayDrawable : IDisposable
                 {
                     var placeholderY = controlYCenter.Lerp(focusedPlaceholderCenterY, hasValueAnimationPercentage);
 
-                     _placeholderPaint.TextSize = fontSize.Lerp(placeholderFontSize, (float)hasValueAnimationPercentage);
-                     _placeholderPaint.Color =  _placeholderPaint.Color.WithAlpha((float)hasValueAnimationPercentage);
+                    _placeholderPaint.TextSize = fontSize.Lerp(placeholderFontSize, (float)hasValueAnimationPercentage);
+                    _placeholderPaint.Color = _placeholderPaint.Color.WithAlpha((float)hasValueAnimationPercentage);
 
-                     _placeholderPaint.EnsureHasValidFont(placeholder);
+                    _placeholderPaint.EnsureHasValidFont(placeholder);
 
                     canvas.DrawTextCenteredVertically(placeholder, new SKPoint((float)controlXLeft, (float)placeholderY),  _placeholderPaint);
                 }
 
-                 _placeholderPaint.Color = placeholderColor.ToSKColor().WithAlpha(1f - (float)hasValueAnimationPercentage);
-                 _placeholderPaint.TextSize = fontSize;
+                _placeholderPaint.Color = placeholderColor.ToSKColor().WithAlpha(1f - (float)hasValueAnimationPercentage);
+                _placeholderPaint.TextSize = fontSize;
 
                 canvas.DrawTextCenteredVertically(placeholder, new SKPoint((float)controlXLeft, (float)controlYCenter),  _placeholderPaint);
             }
@@ -694,7 +686,7 @@ public class PlatformUnderlayDrawable : IDisposable
             _isDrawing = false;
         }
 
-        if(_needsDraw)
+        if (_needsDraw)
         {
             _needsDraw = false;
             Invalidate();
@@ -732,4 +724,9 @@ public class PlatformUnderlayDrawable : IDisposable
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
+}
+
+public interface IHavePlatformUnderlayDrawable
+{
+    PlatformUnderlayDrawable PlatformUnderlayDrawable { get; }
 }

@@ -12,9 +12,9 @@ public abstract class VisualEffect : BindableObject
         BindableProperty.Create(nameof(Enabled), typeof(bool), typeof(VisualEffect), true);
 
     /// <summary>
-    /// Gets or sets a value that determines whether the effect is enabled or not.
+    /// Gets or sets a value indicating whether gets or sets a value that determines whether the effect is enabled or not.
     /// </summary>
-    /// <value><c>true</c> if enabled, otherwise <c>false</c></value>
+    /// <value><c>true</c> if enabled, otherwise <c>false</c>.</value>
     public bool Enabled
     {
         get => (bool)GetValue(EnabledProperty);
@@ -25,4 +25,3 @@ public abstract class VisualEffect : BindableObject
 
     public abstract SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect);
 }
-

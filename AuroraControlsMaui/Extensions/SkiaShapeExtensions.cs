@@ -1,5 +1,4 @@
-﻿using System;
-namespace AuroraControls;
+﻿namespace AuroraControls;
 
 /// <summary>
 /// Skia shape extensions.
@@ -23,7 +22,6 @@ public static class SkiaShapeExtensions
 
     public static SKRect Inflate(this SKRect rect, Thickness thickness)
     {
-
         rect.Left -= (float)thickness.Left;
         rect.Top -= (float)thickness.Top;
         rect.Right += (float)thickness.Right;
@@ -34,7 +32,6 @@ public static class SkiaShapeExtensions
 
     public static SKRectI Inflate(this SKRectI rect, Thickness thickness)
     {
-
         rect.Left -= (int)thickness.Left;
         rect.Top -= (int)thickness.Top;
         rect.Right += (int)thickness.Right;
@@ -45,7 +42,6 @@ public static class SkiaShapeExtensions
 
     public static SKRect Subtract(this SKRect rect, Thickness thickness)
     {
-
         rect.Left += (float)thickness.Left;
         rect.Top += (float)thickness.Top;
         rect.Right -= (float)thickness.Right;
@@ -56,7 +52,6 @@ public static class SkiaShapeExtensions
 
     public static SKRectI Subtract(this SKRectI rect, Thickness thickness)
     {
-
         rect.Left += (int)thickness.Left;
         rect.Top += (int)thickness.Top;
         rect.Right -= (int)thickness.Right;

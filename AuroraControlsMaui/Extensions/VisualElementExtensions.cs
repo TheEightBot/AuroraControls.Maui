@@ -1,8 +1,8 @@
 ﻿using System;
-using Microsoft.Maui.Animations;
-using Microsoft.Maui.Controls.Compatibility;
 using System.Linq.Expressions;
 using System.Reflection;
+using Microsoft.Maui.Animations;
+using Microsoft.Maui.Controls.Compatibility;
 using Animation = Microsoft.Maui.Controls.Animation;
 
 namespace AuroraControls;
@@ -16,9 +16,9 @@ public static class VisualElementExtensions
     /// Extends VisualElement with a new ColorTo method which provides a higher level approach for animating an elements color.
     /// </summary>
     /// <returns>A task containing the animation result boolean.</returns>
-    /// <param name="element">VisualElement to process</param>
-    /// <param name="start">Expression</param>
-    /// <param name="end">end color</param>
+    /// <param name="element">VisualElement to process.</param>
+    /// <param name="start">Expression.</param>
+    /// <param name="end">end color.</param>
     /// <param name="rate">The time, in milliseconds, between frames.</param>
     /// <param name="length">The number of milliseconds over which to interpolate the animation.</param>
     /// <param name="easing">The easing function to use to transision in, out, or in and out of the animation.</param>
@@ -26,11 +26,15 @@ public static class VisualElementExtensions
     public static Task<bool> ColorTo<TElement>(this TElement element, Expression<Func<TElement, Color>> start, Color end, uint rate = 16, uint length = 250, Easing easing = null)
         where TElement : IAnimatable
     {
-        if (element == null)
+        if (element is null)
+        {
             return Task.FromResult(false);
+        }
 
-        if (easing == null)
+        if (easing is null)
+        {
             easing = Easing.Linear;
+        }
 
         var member = (MemberExpression)start.Body;
         var property = member.Member as PropertyInfo;
@@ -51,7 +55,6 @@ public static class VisualElementExtensions
         }
         catch (InvalidOperationException)
         {
-
         }
 
         return tcs.Task;
@@ -71,11 +74,15 @@ public static class VisualElementExtensions
     public static Task<bool> TransitionTo<TElement>(this TElement element, Expression<Func<TElement, double>> start, double end, uint rate = 16, uint length = 250, Easing easing = null)
         where TElement : IAnimatable
     {
-        if (element == null)
+        if (element is null)
+        {
             return Task.FromResult(false);
+        }
 
-        if (easing == null)
+        if (easing is null)
+        {
             easing = Easing.Linear;
+        }
 
         var member = (MemberExpression)start.Body;
         var property = member.Member as PropertyInfo;
@@ -96,14 +103,13 @@ public static class VisualElementExtensions
         }
         catch (InvalidOperationException)
         {
-
         }
 
         return tcs.Task;
     }
 
     /// <summary>
-    /// Extends VisualElement with a new SizeTo method which provides a higher level approach for animating transitions. 
+    /// Extends VisualElement with a new SizeTo method which provides a higher level approach for animating transitions.
     /// </summary>
     /// <returns>A task containing the animation result boolean.</returns>
     /// <param name="element">The VisualElement to perform animation on.</param>
@@ -116,11 +122,15 @@ public static class VisualElementExtensions
     public static Task<bool> TransitionTo<TElement>(this TElement element, Expression<Func<TElement, int>> start, int end, uint rate = 16, uint length = 250, Easing easing = null)
         where TElement : IAnimatable
     {
-        if (element == null)
+        if (element is null)
+        {
             return Task.FromResult(false);
+        }
 
-        if (easing == null)
+        if (easing is null)
+        {
             easing = Easing.Linear;
+        }
 
         var member = (MemberExpression)start.Body;
         var property = member.Member as PropertyInfo;
@@ -141,7 +151,6 @@ public static class VisualElementExtensions
         }
         catch (InvalidOperationException)
         {
-
         }
 
         return tcs.Task;
@@ -150,11 +159,15 @@ public static class VisualElementExtensions
     public static Task<bool> TransitionTo<TElement>(this TElement element, Expression<Func<TElement, uint>> start, uint end, uint rate = 16, uint length = 250, Easing easing = null)
         where TElement : IAnimatable
     {
-        if (element == null)
+        if (element is null)
+        {
             return Task.FromResult(false);
+        }
 
-        if (easing == null)
+        if (easing is null)
+        {
             easing = Easing.Linear;
+        }
 
         var member = (MemberExpression)start.Body;
         var property = member.Member as PropertyInfo;
@@ -175,7 +188,6 @@ public static class VisualElementExtensions
         }
         catch (InvalidOperationException)
         {
-
         }
 
         return tcs.Task;
@@ -184,11 +196,15 @@ public static class VisualElementExtensions
     public static Task<bool> VisualTransitionTo<TElement>(this TElement element, string animationName, Action<double> callback, Func<double> start, double end, uint rate = 16, uint length = 250, Easing easing = null)
         where TElement : IAnimatable
     {
-        if (element == null)
+        if (element is null)
+        {
             return Task.FromResult(false);
+        }
 
-        if (easing == null)
+        if (easing is null)
+        {
             easing = Easing.Linear;
+        }
 
         var tcs = new TaskCompletionSource<bool>();
 
@@ -202,7 +218,6 @@ public static class VisualElementExtensions
         }
         catch (InvalidOperationException)
         {
-
         }
 
         return tcs.Task;
@@ -211,11 +226,15 @@ public static class VisualElementExtensions
     public static Task<bool> TransitionTo<TElement>(this TElement element, string animationName, Action<double> callback, double start, double end, uint rate = 16, uint length = 250, Easing easing = null)
         where TElement : IAnimatable
     {
-        if (element == null)
+        if (element is null)
+        {
             return Task.FromResult(false);
+        }
 
-        if (easing == null)
+        if (easing is null)
+        {
             easing = Easing.Linear;
+        }
 
         var tcs = new TaskCompletionSource<bool>();
 
@@ -229,7 +248,6 @@ public static class VisualElementExtensions
         }
         catch (InvalidOperationException)
         {
-
         }
 
         return tcs.Task;
@@ -238,11 +256,15 @@ public static class VisualElementExtensions
     public static Task<bool> TransitionTo<TElement>(this TElement element, string animationName, Action<int> callback, Func<int> start, int end, uint rate = 16, uint length = 250, Easing easing = null)
         where TElement : IAnimatable
     {
-        if (element == null)
+        if (element is null)
+        {
             return Task.FromResult(false);
+        }
 
-        if (easing == null)
+        if (easing is null)
+        {
             easing = Easing.Linear;
+        }
 
         var tcs = new TaskCompletionSource<bool>();
 
@@ -256,19 +278,18 @@ public static class VisualElementExtensions
         }
         catch (InvalidOperationException)
         {
-
         }
 
         return tcs.Task;
     }
 
     /// <summary>
-    /// Extends VisualElement with a new PointTo method which provides a higher level method for animating Points
+    /// Extends VisualElement with a new PointTo method which provides a higher level method for animating Points.
     /// </summary>
     /// <returns>A task containing the animation result boolean.</returns>
     /// <param name="element">The VisualElement to perform animation on.</param>
-    /// <param name="start">Start in point</param>
-    /// <param name="end">Ending point</param>
+    /// <param name="start">Start in point.</param>
+    /// <param name="end">Ending point.</param>
     /// <param name="rate">The time, in milliseconds, between frames.</param>
     /// <param name="length">The number of milliseconds over which to interpolate the animation.</param>
     /// <param name="easing">The easing function to use to transision in, out, or in and out of the animation.</param>
@@ -276,11 +297,15 @@ public static class VisualElementExtensions
     public static Task<bool> PointTo<TElement>(this TElement element, Expression<Func<TElement, Point>> start, Point end, uint rate = 16, uint length = 250, Easing easing = null)
         where TElement : IAnimatable
     {
-        if (element == null)
+        if (element is null)
+        {
             return Task.FromResult(false);
+        }
 
-        if (easing == null)
+        if (easing is null)
+        {
             easing = Easing.Linear;
+        }
 
         var member = (MemberExpression)start.Body;
         var property = member.Member as PropertyInfo;
@@ -308,7 +333,6 @@ public static class VisualElementExtensions
         }
         catch (InvalidOperationException)
         {
-
         }
 
         return tcs.Task;
@@ -319,8 +343,8 @@ public static class VisualElementExtensions
     /// </summary>
     /// <returns>A task containing the animation result boolean.</returns>
     /// <param name="element">The VisualElement to perform animation on.</param>
-    /// <param name="start">Starting thickness</param>
-    /// <param name="end">Ending thickness</param>
+    /// <param name="start">Starting thickness.</param>
+    /// <param name="end">Ending thickness.</param>
     /// <param name="rate">The time, in milliseconds, between frames.</param>
     /// <param name="length">The number of milliseconds over which to interpolate the animation.</param>
     /// <param name="easing">The easing function to use to transision in, out, or in and out of the animation.</param>
@@ -328,11 +352,15 @@ public static class VisualElementExtensions
     public static Task<bool> ThicknessTo<TElement>(this TElement element, Expression<Func<TElement, Thickness>> start, Thickness end, uint rate = 16, uint length = 250, Easing easing = null)
         where TElement : IAnimatable
     {
-        if (element == null)
+        if (element is null)
+        {
             return Task.FromResult(false);
+        }
 
-        if (easing == null)
+        if (easing is null)
+        {
             easing = Easing.Linear;
+        }
 
         var member = (MemberExpression)start.Body;
         var property = member.Member as PropertyInfo;
@@ -362,7 +390,6 @@ public static class VisualElementExtensions
         }
         catch (InvalidOperationException)
         {
-
         }
 
         return tcs.Task;
@@ -382,11 +409,15 @@ public static class VisualElementExtensions
     public static Task<bool> SizeTo<TElement>(this TElement element, Expression<Func<TElement, Size>> start, Size end, uint rate = 16, uint length = 250, Easing easing = null)
         where TElement : IAnimatable
     {
-        if (element == null)
+        if (element is null)
+        {
             return Task.FromResult(false);
+        }
 
-        if (easing == null)
+        if (easing is null)
+        {
             easing = Easing.Linear;
+        }
 
         var member = (MemberExpression)start.Body;
         var property = member.Member as PropertyInfo;
@@ -414,7 +445,6 @@ public static class VisualElementExtensions
         }
         catch (InvalidOperationException)
         {
-
         }
 
         return tcs.Task;
@@ -422,8 +452,10 @@ public static class VisualElementExtensions
 
     public static Page ParentPage(this VisualElement element)
     {
-        if (element == null || element.Parent == null)
+        if (element is null || element.Parent is null)
+        {
             return null;
+        }
 
         var hasParent = false;
 
@@ -431,36 +463,48 @@ public static class VisualElementExtensions
 
         while (hasParent == false)
         {
-            if (parentElement.Parent == null)
+            if (parentElement.Parent is null)
+            {
                 break;
+            }
 
             hasParent = parentElement is Page;
 
             if (!hasParent)
+            {
                 parentElement = parentElement.Parent;
+            }
         }
 
-        return hasParent && parentElement != null ? parentElement as Page : null;
+        return hasParent && parentElement is not null ? parentElement as Page : null;
     }
 
     public static VisualElement FindViewByAutomationId(this VisualElement element, string automationId)
     {
-        if (element == null)
+        if (element is null)
+        {
             return null;
+        }
 
         if (automationId.Equals(element.AutomationId))
+        {
             return element;
+        }
 
         if (element is ContentPage page)
+        {
             return FindViewByAutomationId(page.Content, automationId);
+        }
         else if (element is Layout<View> layout)
         {
             foreach (var child in layout.Children)
             {
                 var foundChild = child.FindViewByAutomationId(automationId);
 
-                if (foundChild != null)
+                if (foundChild is not null)
+                {
                     return foundChild;
+                }
             }
         }
 

@@ -4,7 +4,7 @@ public enum TextDrawLocation
 {
     At,
     Centered,
-    Before
+    Before,
 }
 
 public static class SkiaSharpTextExtensions
@@ -13,7 +13,7 @@ public static class SkiaSharpTextExtensions
         this SKCanvas canvas, string text, SKPoint drawPoint, SKPaint paint,
         TextDrawLocation horizontalLocation = TextDrawLocation.At, TextDrawLocation verticalLocation = TextDrawLocation.At)
     {
-        SKRect textBounds = new SKRect();
+        SKRect textBounds = default(SKRect);
         paint.EnsureHasValidFont(text);
         paint.MeasureText(text, ref textBounds);
 
@@ -51,11 +51,11 @@ public static class SkiaSharpTextExtensions
 
     public static (SKPoint Start, SKPoint End) GetBaselineAt(this SKCanvas canvas, string text, SKPoint drawPoint, SKPaint textPaint, SKPaint baselinePaint, float baselinePadding = 0f)
     {
-        SKRect textBounds = new SKRect();
+        SKRect textBounds = default(SKRect);
         textPaint.EnsureHasValidFont(text);
         textPaint.MeasureText(text, ref textBounds);
 
-        var left = drawPoint.X; //We will always use this as a starting point
+        var left = drawPoint.X; // We will always use this as a starting point
         var top = drawPoint.Y;
         var width = textBounds.Width;
         var baseline = -textBounds.Top + top + baselinePadding + baselinePaint.StrokeWidth;
@@ -65,7 +65,7 @@ public static class SkiaSharpTextExtensions
 
     public static SKRect GetTextDrawPointAt(this SKCanvas canvas, string text, SKPoint drawPoint, SKPaint paint)
     {
-        SKRect textBounds = new SKRect();
+        SKRect textBounds = default(SKRect);
         paint.EnsureHasValidFont(text);
         paint.MeasureText(text, ref textBounds);
 
@@ -108,7 +108,7 @@ public static class SkiaSharpTextExtensions
 
     public static void EnsureHasValidFont(this SKPaint fontPaint, string text)
     {
-        if (fontPaint.Typeface == null)
+        if (fontPaint.Typeface is null)
         {
             fontPaint.Typeface = PlatformInfo.DefaultTypeface;
         }
@@ -127,7 +127,7 @@ public static class SkiaSharpTextExtensions
 
             // If nothing good is found, YOLO and hope for a match...
             var matchedTypeface = SKFontManager.Default.MatchCharacter(text[0]);
-            if (matchedTypeface != null && fontPaint.Typeface != matchedTypeface)
+            if (matchedTypeface is not null && fontPaint.Typeface != matchedTypeface)
             {
                 fontPaint.Typeface = matchedTypeface;
             }

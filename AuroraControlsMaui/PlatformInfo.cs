@@ -19,7 +19,9 @@ public static class PlatformInfo
         get
         {
             if (_scalingFactor > 0d)
+            {
                 return _scalingFactor;
+            }
 
 #if ANDROID
             _scalingFactor = Android.App.Application.Context.Resources.DisplayMetrics.Density;
@@ -35,16 +37,17 @@ public static class PlatformInfo
     {
         get
         {
-            if (_defaultTypeface != null)
+            if (_defaultTypeface is not null)
+            {
                 return _defaultTypeface;
+            }
 
 #if ANDROID
-            //This looks silly, but it should result in grabbing the system default font
+            // This looks silly, but it should result in grabbing the system default font
             _defaultTypeface = SKTypeface.CreateDefault();
 #elif IOS
-                var fontFamily = UIKit.UIFont.SystemFontOfSize(UIKit.UIFont.ButtonFontSize);
-
-                _defaultTypeface = SKTypeface.FromFamilyName(fontFamily.FamilyName, SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
+            using var fontFamily = UIKit.UIFont.SystemFontOfSize(UIKit.UIFont.ButtonFontSize);
+            _defaultTypeface = SKTypeface.FromFamilyName(fontFamily.FamilyName, SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
 #endif
             return _defaultTypeface;
         }
@@ -55,17 +58,18 @@ public static class PlatformInfo
         get
         {
             if (Math.Abs(_defaultButtonFontSize - default(double)) > .01d)
+            {
                 return _defaultButtonFontSize;
+            }
 
 #if IOS
             _defaultButtonFontSize = (double)UIFont.ButtonFontSize;
 #elif ANDROID
-            using (var btn = new Android.Widget.Button(Android.App.Application.Context))
-                _defaultButtonFontSize = (double)btn.TextSize / ScalingFactor;
+            using var btn = new Android.Widget.Button(Android.App.Application.Context);
+            _defaultButtonFontSize = (double)btn.TextSize / ScalingFactor;
 #endif
 
             return _defaultButtonFontSize;
         }
     }
 }
-

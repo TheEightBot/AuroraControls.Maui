@@ -1,233 +1,230 @@
-﻿using System;
-namespace AuroraControls
+﻿namespace AuroraControls;
+
+public class StyledInputLayout : ContentView, IUnderlayDrawable
 {
-    public class StyledInputLayout : ContentView, IUnderlayDrawable
+    public static readonly Dictionary<Type, StyledContentTypeRegistration> StyledInputLayoutContentRegistrations =
+        new Dictionary<Type, StyledContentTypeRegistration>()
+        {
+            [typeof(IPicker)] =
+                new StyledContentTypeRegistration
+                {
+                    HasValue =
+                        view =>
+                        {
+                            if (view is IPicker p)
+                            {
+                                return p.SelectedIndex >= 0;
+                            }
+
+                            return false;
+                        },
+                },
+            [typeof(IDatePicker)] = StyledContentTypeRegistration.Default,
+            [typeof(ITimePicker)] = StyledContentTypeRegistration.Default,
+            [typeof(Editor)] =
+                new StyledContentTypeRegistration
+                {
+                    AlignPlaceholderToTop = true,
+                    HasValue =
+                        view =>
+                        {
+                            if (view is InputView iv)
+                            {
+                                return !string.IsNullOrEmpty(iv.Text);
+                            }
+
+                            return false;
+                        },
+                },
+            [typeof(InputView)] =
+                new StyledContentTypeRegistration
+                {
+                    HasValue =
+                        view =>
+                        {
+                            if (view is InputView iv)
+                            {
+                                return !string.IsNullOrEmpty(iv.Text);
+                            }
+
+                            return false;
+                        },
+                },
+        };
+
+    public bool AlignPlaceholderToTop => false;
+
+    public static readonly BindableProperty InternalMarginProperty = UnderlayDrawableElement.InternalMarginProperty;
+
+    public Thickness InternalMargin
     {
-        public static readonly Dictionary<Type, StyledContentTypeRegistration> StyledInputLayoutContentRegistrations =
-            new Dictionary<Type, StyledContentTypeRegistration>()
-            {
-                [typeof(IPicker)] =
-                    new StyledContentTypeRegistration
-                    {
-                        HasValue =
-                            view =>
-                            {
-                                if (view is IPicker p)
-                                {
-                                    return p.SelectedIndex >= 0;
-                                }
+        get { return (Thickness)GetValue(InternalMarginProperty); }
+        set { SetValue(InternalMarginProperty, value); }
+    }
 
-                                return false;
-                            },
-                    },
-                [typeof(IDatePicker)] = StyledContentTypeRegistration.Default,
-                [typeof(ITimePicker)] = StyledContentTypeRegistration.Default,
-                [typeof(Editor)] =
-                    new StyledContentTypeRegistration
-                    {
-                        AlignPlaceholderToTop = true,
-                        HasValue =
-                            view =>
-                            {
-                                if (view is InputView iv)
-                                {
-                                    return !string.IsNullOrEmpty(iv.Text);
-                                }
+    public static readonly BindableProperty ContainerBorderStyleProperty = UnderlayDrawableElement.ContainerBorderStyleProperty;
 
-                                return false;
-                            },
-                    },
-                [typeof(InputView)] =
-                    new StyledContentTypeRegistration
-                    {
-                        HasValue =
-                            view =>
-                            {
-                                if (view is InputView iv)
-                                {
-                                    return !string.IsNullOrEmpty(iv.Text);
-                                }
+    public ContainerBorderStyle BorderStyle
+    {
+        get { return (ContainerBorderStyle)GetValue(ContainerBorderStyleProperty); }
+        set { SetValue(ContainerBorderStyleProperty, value); }
+    }
 
-                                return false;
-                            },
-                    },
-            };
+    public static readonly BindableProperty ActiveColorProperty = UnderlayDrawableElement.ActiveColorProperty;
 
-        public bool AlignPlaceholderToTop => false;
+    public Color ActiveColor
+    {
+        get { return (Color)GetValue(ActiveColorProperty); }
+        set { SetValue(ActiveColorProperty, value); }
+    }
 
-        public static readonly BindableProperty InternalMarginProperty = UnderlayDrawableElement.InternalMarginProperty;
+    public static readonly BindableProperty InactiveColorProperty = UnderlayDrawableElement.InactiveColorProperty;
 
-        public Thickness InternalMargin
-        {
-            get { return (Thickness)GetValue(InternalMarginProperty); }
-            set { SetValue(InternalMarginProperty, value); }
-        }
+    public Color InactiveColor
+    {
+        get { return (Color)GetValue(InactiveColorProperty); }
+        set { SetValue(InactiveColorProperty, value); }
+    }
 
-        public static readonly BindableProperty ContainerBorderStyleProperty = UnderlayDrawableElement.ContainerBorderStyleProperty;
+    public static readonly BindableProperty DisabledColorProperty = UnderlayDrawableElement.DisabledColorProperty;
 
-        public ContainerBorderStyle BorderStyle
-        {
-            get { return (ContainerBorderStyle)GetValue(ContainerBorderStyleProperty); }
-            set { SetValue(ContainerBorderStyleProperty, value); }
-        }
+    public Color DisabledColor
+    {
+        get { return (Color)GetValue(DisabledColorProperty); }
+        set { SetValue(DisabledColorProperty, value); }
+    }
 
-        public static readonly BindableProperty ActiveColorProperty = UnderlayDrawableElement.ActiveColorProperty;
+    public static readonly BindableProperty IsErrorProperty = UnderlayDrawableElement.IsErrorProperty;
 
-        public Color ActiveColor
-        {
-            get { return (Color)GetValue(ActiveColorProperty); }
-            set { SetValue(ActiveColorProperty, value); }
-        }
+    public bool IsError
+    {
+        get { return (bool)GetValue(IsErrorProperty); }
+        set { SetValue(IsErrorProperty, value); }
+    }
 
-        public static readonly BindableProperty InactiveColorProperty = UnderlayDrawableElement.InactiveColorProperty;
+    public static readonly BindableProperty ErrorTextProperty = UnderlayDrawableElement.ErrorTextProperty;
 
-        public Color InactiveColor
-        {
-            get { return (Color)GetValue(InactiveColorProperty); }
-            set { SetValue(InactiveColorProperty, value); }
-        }
+    public string ErrorText
+    {
+        get { return (string)GetValue(ErrorTextProperty); }
+        set { SetValue(ErrorTextProperty, value); }
+    }
 
-        public static readonly BindableProperty DisabledColorProperty = UnderlayDrawableElement.DisabledColorProperty;
+    public static readonly BindableProperty ErrorColorProperty = UnderlayDrawableElement.ErrorColorProperty;
 
-        public Color DisabledColor
-        {
-            get { return (Color)GetValue(DisabledColorProperty); }
-            set { SetValue(DisabledColorProperty, value); }
-        }
+    public Color ErrorColor
+    {
+        get { return (Color)GetValue(ErrorColorProperty); }
+        set { SetValue(ErrorColorProperty, value); }
+    }
 
-        public static readonly BindableProperty IsErrorProperty = UnderlayDrawableElement.IsErrorProperty;
+    public static readonly BindableProperty ActivePlaceholderFontSizeProperty = UnderlayDrawableElement.ActivePlaceholderFontSizeProperty;
 
-        public bool IsError
-        {
-            get { return (bool)GetValue(IsErrorProperty); }
-            set { SetValue(IsErrorProperty, value); }
-        }
+    public float ActivePlaceholderFontSize
+    {
+        get { return (float)GetValue(ActivePlaceholderFontSizeProperty); }
+        set { SetValue(ActivePlaceholderFontSizeProperty, value); }
+    }
 
-        public static readonly BindableProperty ErrorTextProperty = UnderlayDrawableElement.ErrorTextProperty;
+    public static readonly BindableProperty BorderSizeProperty = UnderlayDrawableElement.BorderSizeProperty;
 
-        public string ErrorText
-        {
-            get { return (string)GetValue(ErrorTextProperty); }
-            set { SetValue(ErrorTextProperty, value); }
-        }
+    public float BorderSize
+    {
+        get { return (float)GetValue(BorderSizeProperty); }
+        set { SetValue(BorderSizeProperty, value); }
+    }
 
-        public static readonly BindableProperty ErrorColorProperty = UnderlayDrawableElement.ErrorColorProperty;
+    public static readonly BindableProperty CornerRadiusProperty = UnderlayDrawableElement.CornerRadiusProperty;
 
-        public Color ErrorColor
-        {
-            get { return (Color)GetValue(ErrorColorProperty); }
-            set { SetValue(ErrorColorProperty, value); }
-        }
+    public float CornerRadius
+    {
+        get { return (float)GetValue(CornerRadiusProperty); }
+        set { SetValue(CornerRadiusProperty, value); }
+    }
 
-        public static readonly BindableProperty ActivePlaceholderFontSizeProperty = UnderlayDrawableElement.ActivePlaceholderFontSizeProperty;
+    public static readonly BindableProperty AlwaysShowPlaceholderProperty = UnderlayDrawableElement.AlwaysShowPlaceholderProperty;
 
-        public float ActivePlaceholderFontSize
-        {
-            get { return (float)GetValue(ActivePlaceholderFontSizeProperty); }
-            set { SetValue(ActivePlaceholderFontSizeProperty, value); }
-        }
+    public bool AlwaysShowPlaceholder
+    {
+        get { return (bool)GetValue(AlwaysShowPlaceholderProperty); }
+        set { SetValue(AlwaysShowPlaceholderProperty, value); }
+    }
 
-        public static readonly BindableProperty BorderSizeProperty = UnderlayDrawableElement.BorderSizeProperty;
+    public static readonly BindableProperty FocusAnimationDurationProperty = UnderlayDrawableElement.FocusAnimationDurationProperty;
 
-        public float BorderSize
-        {
-            get { return (float)GetValue(BorderSizeProperty); }
-            set { SetValue(BorderSizeProperty, value); }
-        }
+    public uint FocusAnimationDuration
+    {
+        get { return (uint)GetValue(FocusAnimationDurationProperty); }
+        set { SetValue(FocusAnimationDurationProperty, value); }
+    }
 
-        public static readonly BindableProperty CornerRadiusProperty = UnderlayDrawableElement.CornerRadiusProperty;
+    public static readonly BindableProperty FocusAnimationPercentageProperty = UnderlayDrawableElement.FocusAnimationPercentageProperty;
 
-        public float CornerRadius
-        {
-            get { return (float)GetValue(CornerRadiusProperty); }
-            set { SetValue(CornerRadiusProperty, value); }
-        }
+    public double FocusAnimationPercentage
+    {
+        get { return (double)GetValue(FocusAnimationPercentageProperty); }
+        set { SetValue(FocusAnimationPercentageProperty, value); }
+    }
 
-        public static readonly BindableProperty AlwaysShowPlaceholderProperty = UnderlayDrawableElement.AlwaysShowPlaceholderProperty;
+    public static readonly BindableProperty HasValueAnimationPercentageProperty = UnderlayDrawableElement.HasValueAnimationPercentageProperty;
 
-        public bool AlwaysShowPlaceholder
-        {
-            get { return (bool)GetValue(AlwaysShowPlaceholderProperty); }
-            set { SetValue(AlwaysShowPlaceholderProperty, value); }
-        }
+    public double HasValueAnimationPercentage
+    {
+        get { return (double)GetValue(HasValueAnimationPercentageProperty); }
+        set { SetValue(HasValueAnimationPercentageProperty, value); }
+    }
 
-        public static readonly BindableProperty FocusAnimationDurationProperty = UnderlayDrawableElement.FocusAnimationDurationProperty;
+    public static readonly BindableProperty PlaceholderOffsetProperty = HavePlaceholderElement.PlaceholderOffsetProperty;
 
-        public uint FocusAnimationDuration
-        {
-            get { return (uint)GetValue(FocusAnimationDurationProperty); }
-            set { SetValue(FocusAnimationDurationProperty, value); }
-        }
+    public Point PlaceholderOffset
+    {
+        get { return (Point)GetValue(PlaceholderOffsetProperty); }
+        set { SetValue(PlaceholderOffsetProperty, value); }
+    }
 
-        public static readonly BindableProperty FocusAnimationPercentageProperty = UnderlayDrawableElement.FocusAnimationPercentageProperty;
+    public static readonly BindableProperty PlaceholderProperty = HavePlaceholderElement.PlaceholderProperty;
 
-        public double FocusAnimationPercentage
-        {
-            get { return (double)GetValue(FocusAnimationPercentageProperty); }
-            set { SetValue(FocusAnimationPercentageProperty, value); }
-        }
+    public string Placeholder
+    {
+        get { return (string)GetValue(PlaceholderProperty); }
+        set { SetValue(PlaceholderProperty, value); }
+    }
 
-        public static readonly BindableProperty HasValueAnimationPercentageProperty = UnderlayDrawableElement.HasValueAnimationPercentageProperty;
+    public static readonly BindableProperty PlaceholderColorProperty = HavePlaceholderElement.PlaceholderColorProperty;
 
-        public double HasValueAnimationPercentage
-        {
-            get { return (double)GetValue(HasValueAnimationPercentageProperty); }
-            set { SetValue(HasValueAnimationPercentageProperty, value); }
-        }
+    public Color PlaceholderColor
+    {
+        get { return (Color)GetValue(PlaceholderColorProperty); }
+        set { SetValue(PlaceholderColorProperty, value); }
+    }
 
-        public static readonly BindableProperty PlaceholderOffsetProperty = HavePlaceholderElement.PlaceholderOffsetProperty;
+    public static readonly BindableProperty FontSizeProperty = HavePlaceholderElement.FontSizeProperty;
 
-        public Point PlaceholderOffset
-        {
-            get { return (Point)GetValue(PlaceholderOffsetProperty); }
-            set { SetValue(PlaceholderOffsetProperty, value); }
-        }
+    public double FontSize
+    {
+        get { return (double)GetValue(FontSizeProperty); }
+        set { SetValue(FontSizeProperty, value); }
+    }
 
-        public static readonly BindableProperty PlaceholderProperty = HavePlaceholderElement.PlaceholderProperty;
+    public static readonly BindableProperty CommandProperty = UnderlayDrawableElement.CommandProperty;
 
-        public string Placeholder
-        {
-            get { return (string)GetValue(PlaceholderProperty); }
-            set { SetValue(PlaceholderProperty, value); }
-        }
+    public ICommand Command
+    {
+        get { return (ICommand)GetValue(CommandProperty); }
+        set { SetValue(CommandProperty, value); }
+    }
 
-        public static readonly BindableProperty PlaceholderColorProperty = HavePlaceholderElement.PlaceholderColorProperty;
+    public static readonly BindableProperty CommandParameterProperty = UnderlayDrawableElement.CommandParameterProperty;
 
-        public Color PlaceholderColor
-        {
-            get { return (Color)GetValue(PlaceholderColorProperty); }
-            set { SetValue(PlaceholderColorProperty, value); }
-        }
-
-        public static readonly BindableProperty FontSizeProperty = HavePlaceholderElement.FontSizeProperty;
-
-        public double FontSize
-        {
-            get { return (double)GetValue(FontSizeProperty); }
-            set { SetValue(FontSizeProperty, value); }
-        }
-
-        public static readonly BindableProperty CommandProperty = UnderlayDrawableElement.CommandProperty;
-
-        public ICommand Command
-        {
-            get { return (ICommand)GetValue(CommandProperty); }
-            set { SetValue(CommandProperty, value); }
-        }
-
-        public static readonly BindableProperty CommandParameterProperty = UnderlayDrawableElement.CommandParameterProperty;
-
-        public object CommandParameter
-        {
-            get { return (object)GetValue(CommandParameterProperty); }
-            set { SetValue(CommandParameterProperty, value); }
-        }
+    public object CommandParameter
+    {
+        get { return (object)GetValue(CommandParameterProperty); }
+        set { SetValue(CommandParameterProperty, value); }
     }
 }
 
-
 public struct StyledContentTypeRegistration
-{    
+{
     public Func<IView, bool> HasValue { get; set; }
 
     public bool AlignPlaceholderToTop { get; set; }

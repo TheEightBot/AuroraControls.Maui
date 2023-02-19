@@ -1,17 +1,21 @@
-﻿using System;
-namespace AuroraControls;
+﻿namespace AuroraControls;
 
 /// <summary>
 /// Font cache.
 /// </summary>
 public static class FontCache
 {
+    /// <summary>
+    /// A dictionary containing a string representing the resource name and the SKTypeface resource.
+    /// </summary>
+    private static readonly Dictionary<string, SKTypeface> _fontDictionary = new Dictionary<string, SKTypeface>();
     private static SKTypeface[] _registeredTypefaces;
+
     public static SKTypeface[] RegisteredTypefaces
     {
         get
         {
-            if (_registeredTypefaces != null)
+            if (_registeredTypefaces is not null)
             {
                 return _registeredTypefaces;
             }
@@ -20,11 +24,6 @@ public static class FontCache
             return _registeredTypefaces;
         }
     }
-
-    /// <summary>
-    /// A dictionary containing a string representing the resource name and the SKTypeface resource.
-    /// </summary>
-    readonly static Dictionary<string, SKTypeface> _fontDictionary = new Dictionary<string, SKTypeface>();
 
     public static SKTypeface Add(string resourceName, string shortNameOverride = null)
     {
@@ -61,7 +60,7 @@ public static class FontCache
     /// </summary>
     /// <returns>The typeface.</returns>
     /// <param name="resourceName">Resource name.</param>
-    /// <param name="shortNameOverride">Optional short name provided for ease of use</param>
+    /// <param name="shortNameOverride">Optional short name provided for ease of use.</param>
     public static SKTypeface GetTypeface(string resourceName, string shortNameOverride = null)
     {
         var cacheName = !string.IsNullOrEmpty(shortNameOverride) ? shortNameOverride : resourceName;

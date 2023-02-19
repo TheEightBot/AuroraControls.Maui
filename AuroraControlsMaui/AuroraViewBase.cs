@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace AuroraControls;
+﻿namespace AuroraControls;
 
 public abstract class AuroraViewBase : SKCanvasView, IAuroraView
 {
-    bool _isPaintingSurface;
-    bool _needsDelayedPaint;
-    bool _attachmentClear;
+    private bool _isPaintingSurface;
+    private bool _needsDelayedPaint;
+    private bool _attachmentClear;
 
     protected float _scale;
 
@@ -25,8 +23,10 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
     {
         base.OnParentSet();
 
-        if (Parent != null)
+        if (Parent is not null)
+        {
             this.InvalidateSurface();
+        }
     }
 
     protected abstract void PaintControl(SKSurface surface, SKImageInfo info);
@@ -35,7 +35,7 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
     {
         base.OnHandlerChanging(args);
 
-        if(args.NewHandler is null)
+        if (args.NewHandler is null)
         {
             IsAttached = false;
 
@@ -65,10 +65,12 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
     {
     }
 
-    void PaintSurfaceInternal(SKSurface surface, SKImageInfo info)
+    private void PaintSurfaceInternal(SKSurface surface, SKImageInfo info)
     {
         if (!IsAttached)
+        {
             return;
+        }
 
         if (_attachmentClear)
         {
@@ -77,7 +79,9 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
         }
 
         if (info.Size == SKSize.Empty)
+        {
             return;
+        }
 
         if (_isPaintingSurface)
         {
@@ -90,7 +94,9 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
         try
         {
             if (!IsAttached)
+            {
                 return;
+            }
 
             PaintControl(surface, info);
         }
@@ -106,4 +112,3 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
         }
     }
 }
-

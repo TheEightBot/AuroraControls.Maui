@@ -1,9 +1,6 @@
-﻿using System;
-
-namespace AuroraControls;
+﻿namespace AuroraControls;
 
 public interface IAuroraView
 {
     void InvalidateSurface();
 }
-

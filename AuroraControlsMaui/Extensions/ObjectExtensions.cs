@@ -9,7 +9,7 @@ internal static class ObjectExtensions
     {
         var propertyInfo = typeof(TObj).GetProperty(propertyName);
 
-        if (propertyInfo == null)
+        if (propertyInfo is null)
         {
             return;
         }

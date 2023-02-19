@@ -5,7 +5,6 @@ namespace AuroraControls;
 
 public static class AuroraControlBuilder
 {
-
     public static MauiAppBuilder ConfigureAuroraControls(this MauiAppBuilder mauiAppBuilder)
     {
         return mauiAppBuilder
@@ -17,4 +16,3 @@ public static class AuroraControlBuilder
                 });
     }
 }
-

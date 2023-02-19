@@ -10,4 +10,3 @@ public static class UIViewExtensions
         return new UIEdgeInsets(inset.Top, inset.Left, inset.Bottom, inset.Right);
     }
 }
-

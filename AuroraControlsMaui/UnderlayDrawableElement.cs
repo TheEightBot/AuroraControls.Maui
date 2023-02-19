@@ -2,80 +2,6 @@
 
 namespace AuroraControls;
 
-public enum ContainerBorderStyle
-{
-    Underline,
-    RoundedUnderline,
-    Rectangle,
-    RoundedRectangle,
-    RoundedRectanglePlaceholderThrough,
-}
-
-public interface IHavePlaceholder
-{
-    string Placeholder { get; set; }
-
-    Color PlaceholderColor { get; set; }
-
-    double FontSize { get; set; }
-
-    public Point PlaceholderOffset { get; set; }
-}
-
-public static class HavePlaceholderElement
-{
-    public static Color DefaultPlaceholderColor = Color.FromArgb("#808080");
-
-    public static readonly BindableProperty PlaceholderProperty =
-        BindableProperty.Create(nameof(IHavePlaceholder.Placeholder), typeof(string), typeof(IHavePlaceholder), default(string));
-
-    public static readonly BindableProperty PlaceholderColorProperty =
-        BindableProperty.Create(nameof(IHavePlaceholder.PlaceholderColor), typeof(Microsoft.Maui.Graphics.Color), typeof(IHavePlaceholder), default(Microsoft.Maui.Graphics.Color));
-
-    public static readonly BindableProperty PlaceholderOffsetProperty =
-        BindableProperty.Create(nameof(IHavePlaceholder.PlaceholderOffset), typeof(Point), typeof(IHavePlaceholder), default(Point));
-
-    public static readonly BindableProperty FontSizeProperty =
-        BindableProperty.Create(nameof(IHavePlaceholder.FontSize), typeof(double), typeof(IHavePlaceholder), default(double));
-}
-
-public interface IUnderlayDrawable : IElement, IHavePlaceholder
-{
-    Thickness InternalMargin { get; }
-
-    ContainerBorderStyle BorderStyle { get; }
-
-    Color ActiveColor { get; }
-
-    Color InactiveColor { get; }
-
-    Color DisabledColor { get; }
-
-    float BorderSize { get; }
-
-    float CornerRadius { get; }
-
-    float ActivePlaceholderFontSize { get; }
-
-    bool IsError { get; set; }
-
-    string ErrorText { get; set; }
-
-    Color ErrorColor { get; set; }
-
-    bool AlwaysShowPlaceholder { get; }
-
-    uint FocusAnimationDuration { get; }
-
-    double FocusAnimationPercentage { get; set; }
-
-    double HasValueAnimationPercentage { get; set; }
-
-    ICommand Command { get; }
-
-    object CommandParameter { get; }
-}
-
 public static class UnderlayDrawableElement
 {
     public static readonly BindableProperty ContainerBorderStyleProperty =
@@ -133,7 +59,7 @@ public static class UnderlayDrawableElement
                 {
                     if (bindable is IVisualElementController v)
                     {
-                        //TODO: Verify if this is right
+                        // TODO: Verify if this is right
                         v.PlatformSizeChanged();
                     }
                 });
@@ -162,7 +88,7 @@ public static class UnderlayDrawableExtensions
         {
             case ContainerBorderStyle.Underline:
                 return new(
-                    (yOffset + (float)internalMargin.Top),
+                    yOffset + (float)internalMargin.Top,
                     0f,
                     borderSize + (float)internalMargin.Bottom,
                     0f);
@@ -173,6 +99,79 @@ public static class UnderlayDrawableExtensions
                     borderSize + (float)internalMargin.Bottom,
                     borderSize + (float)internalMargin.Right);
         }
-    }    
+    }
 }
 
+public enum ContainerBorderStyle
+{
+    Underline,
+    RoundedUnderline,
+    Rectangle,
+    RoundedRectangle,
+    RoundedRectanglePlaceholderThrough,
+}
+
+public interface IHavePlaceholder
+{
+    string Placeholder { get; set; }
+
+    Color PlaceholderColor { get; set; }
+
+    double FontSize { get; set; }
+
+    public Point PlaceholderOffset { get; set; }
+}
+
+public static class HavePlaceholderElement
+{
+    internal static readonly Color DefaultPlaceholderColor = Color.FromArgb("#808080");
+
+    public static readonly BindableProperty PlaceholderProperty =
+        BindableProperty.Create(nameof(IHavePlaceholder.Placeholder), typeof(string), typeof(IHavePlaceholder), default(string));
+
+    public static readonly BindableProperty PlaceholderColorProperty =
+        BindableProperty.Create(nameof(IHavePlaceholder.PlaceholderColor), typeof(Microsoft.Maui.Graphics.Color), typeof(IHavePlaceholder), default(Microsoft.Maui.Graphics.Color));
+
+    public static readonly BindableProperty PlaceholderOffsetProperty =
+        BindableProperty.Create(nameof(IHavePlaceholder.PlaceholderOffset), typeof(Point), typeof(IHavePlaceholder), default(Point));
+
+    public static readonly BindableProperty FontSizeProperty =
+        BindableProperty.Create(nameof(IHavePlaceholder.FontSize), typeof(double), typeof(IHavePlaceholder), default(double));
+}
+
+public interface IUnderlayDrawable : IElement, IHavePlaceholder
+{
+    Thickness InternalMargin { get; }
+
+    ContainerBorderStyle BorderStyle { get; }
+
+    Color ActiveColor { get; }
+
+    Color InactiveColor { get; }
+
+    Color DisabledColor { get; }
+
+    float BorderSize { get; }
+
+    float CornerRadius { get; }
+
+    float ActivePlaceholderFontSize { get; }
+
+    bool IsError { get; set; }
+
+    string ErrorText { get; set; }
+
+    Color ErrorColor { get; set; }
+
+    bool AlwaysShowPlaceholder { get; }
+
+    uint FocusAnimationDuration { get; }
+
+    double FocusAnimationPercentage { get; set; }
+
+    double HasValueAnimationPercentage { get; set; }
+
+    ICommand Command { get; }
+
+    object CommandParameter { get; }
+}

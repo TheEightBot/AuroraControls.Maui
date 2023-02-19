@@ -11,7 +11,7 @@ public static class EmbeddedResourceLoader
     /// <summary>
     /// A list of key value pairs of assemblies and resource names.
     /// </summary>
-    static readonly List<KeyValuePair<Assembly, string[]>> _assemblies = new List<KeyValuePair<Assembly, string[]>>();
+    private static readonly List<KeyValuePair<Assembly, string[]>> _assemblies = new List<KeyValuePair<Assembly, string[]>>();
 
     /// <summary>
     /// Loads the assembly.
@@ -20,7 +20,9 @@ public static class EmbeddedResourceLoader
     public static void LoadAssembly(Assembly assembly)
     {
         if (_assemblies.Any(kvp => kvp.Key == assembly))
+        {
             return;
+        }
 
         _assemblies.Add(new KeyValuePair<Assembly, string[]>(assembly, assembly.GetManifestResourceNames()));
     }
@@ -28,7 +30,7 @@ public static class EmbeddedResourceLoader
     /// <summary>
     /// Load the specified resource name.
     /// </summary>
-    /// <returns>The resource as a stream</returns>
+    /// <returns>The resource as a stream.</returns>
     /// <param name="name">Takes a string representing the name of the embeded resource.</param>
     public static Stream Load(string name)
     {
@@ -39,11 +41,11 @@ public static class EmbeddedResourceLoader
         foreach (var kvp in _assemblies)
         {
             var foundResource = kvp.Value.FirstOrDefault(n => n.Equals(formattedName, StringComparison.OrdinalIgnoreCase) || n.EndsWith(formattedName, StringComparison.OrdinalIgnoreCase));
-            if (foundResource != null)
+            if (foundResource is not null)
             {
                 stream = kvp.Key.GetManifestResourceStream(foundResource);
 
-                if (stream != null)
+                if (stream is not null)
                 {
                     break;
                 }
