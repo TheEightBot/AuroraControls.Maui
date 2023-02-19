@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 namespace AuroraControls;
 
 public abstract class AuroraViewBase : SKCanvasView, IAuroraView
@@ -16,6 +15,7 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
     public AuroraViewBase()
     {
         _scale = (float)DeviceDisplay.Current.MainDisplayInfo.Density;
+        MinimumHeightRequest = 1;
     }
 
     /// <summary>

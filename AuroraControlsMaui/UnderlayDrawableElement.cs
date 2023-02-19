@@ -17,7 +17,7 @@ public interface IHavePlaceholder
 
     Color PlaceholderColor { get; set; }
 
-    double FontSize { get; }
+    double FontSize { get; set; }
 
     public Point PlaceholderOffset { get; set; }
 }
@@ -34,15 +34,14 @@ public static class HavePlaceholderElement
 
     public static readonly BindableProperty PlaceholderOffsetProperty =
         BindableProperty.Create(nameof(IHavePlaceholder.PlaceholderOffset), typeof(Point), typeof(IHavePlaceholder), default(Point));
+
+    public static readonly BindableProperty FontSizeProperty =
+        BindableProperty.Create(nameof(IHavePlaceholder.FontSize), typeof(double), typeof(IHavePlaceholder), default(double));
 }
 
-public interface IUnderlayDrawable : IHavePlaceholder
+public interface IUnderlayDrawable : IElement, IHavePlaceholder
 {
-    bool IsDrawing { get; set; }
-
     Thickness InternalMargin { get; }
-
-    bool HasValue { get; }
 
     ContainerBorderStyle BorderStyle { get; }
 
@@ -65,8 +64,6 @@ public interface IUnderlayDrawable : IHavePlaceholder
     Color ErrorColor { get; set; }
 
     bool AlwaysShowPlaceholder { get; }
-
-    bool AlignPlaceholderToTop { get; }
 
     uint FocusAnimationDuration { get; }
 
@@ -176,262 +173,6 @@ public static class UnderlayDrawableExtensions
                     borderSize + (float)internalMargin.Bottom,
                     borderSize + (float)internalMargin.Right);
         }
-    }
-
-    public static void AnimateFocus(this IUnderlayDrawable underlayDrawable, bool isFocused, IAnimatable element)
-    {
-        var endFocused = isFocused ? 1d : 0d;
-
-        element
-            .TransitionTo(
-                nameof(UnderlayDrawableElement.FocusAnimationPercentageProperty),
-                x =>
-                {
-                    underlayDrawable.FocusAnimationPercentage = x;
-                },
-                underlayDrawable.FocusAnimationPercentage,
-                endFocused,
-                easing: Easing.CubicInOut,
-                length: underlayDrawable.FocusAnimationDuration);
-    }
-
-    public static void AnimateHasValue(this IUnderlayDrawable underlayDrawable, IAnimatable element)
-    {
-        var endHasValue = underlayDrawable.HasValue ? 1d : 0d;
-
-        element
-            .TransitionTo(
-                nameof(UnderlayDrawableElement.HasValueAnimationPercentageProperty),
-                x =>
-                {
-                    underlayDrawable.HasValueAnimationPercentage = x;
-                },
-                underlayDrawable.HasValueAnimationPercentage,
-                endHasValue,
-                easing: Easing.CubicInOut,
-                length: underlayDrawable.FocusAnimationDuration);
-    }
-
-    public static void DrawUnderlay(this IUnderlayDrawable underlayDrawable, View element, Rect controlFrame, SKSurface surface, SKImageInfo imageInfo)
-    {
-        if (underlayDrawable.IsDrawing)
-        {
-            return;
-        }
-
-        try
-        {
-            underlayDrawable.IsDrawing = true;
-
-            var scale = (float)DeviceDisplay.Current.MainDisplayInfo.Density;
-
-            var canvas = surface.Canvas;
-            var size = imageInfo.Size;
-
-            var hasValue = underlayDrawable.HasValue;
-            var isFocused = element.IsFocused;
-            var isDisabled = !element.IsEnabled;
-            var isError = underlayDrawable.IsError;
-            var borderSize = (float)underlayDrawable.BorderSize * scale;
-            var halfBorder = borderSize / 2f;
-            var cornerRadius = underlayDrawable.CornerRadius * scale;
-            var cornerRadiusSize = new SKSize(cornerRadius, cornerRadius);
-            var internalMargin = underlayDrawable.InternalMargin;
-
-            var placeholderFontSize = underlayDrawable.ActivePlaceholderFontSize * scale;
-            var placeholderColor =
-                underlayDrawable.PlaceholderColor != default(Color)
-                    ? underlayDrawable.PlaceholderColor
-                    : HavePlaceholderElement.DefaultPlaceholderColor;
-
-            var fontSize = (float)underlayDrawable.FontSize * scale;
-
-            var controlYCenter =
-                underlayDrawable.AlignPlaceholderToTop
-                ? (controlFrame.Top * scale) + (fontSize * .5f)
-                : controlFrame.Center.Y * scale;
-
-            var focusedPlaceholderCenterY = borderSize + ((float)internalMargin.Top * scale) + (placeholderFontSize * .5f);
-            var controlXLeft = controlFrame.Left * scale;
-
-            var placeholderOffset = underlayDrawable.PlaceholderOffset;
-            if (placeholderOffset != default(Point))
-            {
-                controlYCenter += placeholderOffset.Y * scale;
-                controlXLeft += placeholderOffset.X * scale;
-            }
-
-            var hasValueAnimationPercentage =
-                underlayDrawable.AlwaysShowPlaceholder
-                    ? 1d
-                    : underlayDrawable.HasValueAnimationPercentage;
-
-            var focusAnimationPercentage = underlayDrawable.FocusAnimationPercentage;
-
-            using var borderPaint =
-                new SKPaint
-                {
-                    IsAntialias = true,
-                    Style = SKPaintStyle.Stroke,
-                    StrokeWidth = borderSize,
-                    Color =
-                        isError
-                            ? underlayDrawable.ErrorColor.ToSKColor()
-                            : underlayDrawable.InactiveColor.Lerp(underlayDrawable.ActiveColor, focusAnimationPercentage).ToSKColor(),
-                };
-
-            using var backgroundPaint =
-                new SKPaint
-                {
-                    Style = SKPaintStyle.Fill,
-                };
-
-            using var placeholderPaint =
-                new SKPaint
-                {
-                    TextSize = placeholderFontSize,
-                    TextAlign = SKTextAlign.Left,
-                    IsAntialias = true,
-                    //TODO: Port
-                    //Typeface = Services.PlatformInfo.DefaultTypeface,
-                };
-
-            var placeholder = underlayDrawable.Placeholder;
-
-            canvas.Clear(SKColors.Transparent);
-
-            switch (underlayDrawable.BorderStyle)
-            {
-                case ContainerBorderStyle.Underline:
-                    borderPaint.StrokeCap = SKStrokeCap.Square;
-                    canvas.DrawLine(new SKPoint(0, size.Height - halfBorder), new SKPoint(size.Width, size.Height - halfBorder), borderPaint);
-                    break;
-                case ContainerBorderStyle.RoundedUnderline:
-                    borderPaint.StrokeCap = SKStrokeCap.Round;
-                    canvas.DrawLine(new SKPoint(halfBorder, size.Height - halfBorder), new SKPoint(size.Width - borderSize, size.Height - halfBorder), borderPaint);
-                    break;
-                case ContainerBorderStyle.Rectangle:
-                    var rectBackground = SKRect.Create(halfBorder, halfBorder, size.Width - borderSize, size.Height - borderSize);
-
-                    backgroundPaint.Color =
-                        isDisabled
-                            ? underlayDrawable.DisabledColor.Lerp(Colors.White, .2d).ToSKColor()
-                            : element.BackgroundColor.ToSKColor();
-
-                    canvas.DrawRect(rectBackground, backgroundPaint);
-
-                    if (underlayDrawable.BorderSize > 0d)
-                    {
-                        canvas.DrawRect(rectBackground, borderPaint);
-                    }
-                    break;
-                case ContainerBorderStyle.RoundedRectangle:
-                    var roundedRectBackground = SKRect.Create(halfBorder, halfBorder, size.Width - borderSize, size.Height - borderSize);
-
-                    backgroundPaint.Color =
-                        isDisabled
-                            ? underlayDrawable.DisabledColor.Lerp(Colors.White, .2d).ToSKColor()
-                            : element.BackgroundColor.ToSKColor();
-
-                    canvas.DrawRoundRect(roundedRectBackground, cornerRadiusSize, backgroundPaint);
-
-                    if (borderSize > 0d)
-                    {
-                        canvas.DrawRoundRect(roundedRectBackground, cornerRadiusSize, borderPaint);
-                    }
-                    break;
-
-                case ContainerBorderStyle.RoundedRectanglePlaceholderThrough:
-                    var roundedRectBackgroundPlaceholderThrough = SKRect.Create(halfBorder, halfBorder + focusedPlaceholderCenterY, size.Width - borderSize, size.Height - focusedPlaceholderCenterY - borderSize);
-
-                    backgroundPaint.Color =
-                        isDisabled
-                            ? underlayDrawable.DisabledColor.Lerp(Colors.White, .2d).ToSKColor()
-                            : element.BackgroundColor.ToSKColor();
-
-                    canvas.DrawRoundRect(roundedRectBackgroundPlaceholderThrough, cornerRadiusSize, backgroundPaint);
-
-                    using (new SKAutoCanvasRestore(canvas))
-                    {
-                        canvas.Save();
-                        canvas.Clear();
-
-                        if (borderSize > 0d)
-                        {
-                            placeholderPaint.TextSize = placeholderFontSize;
-                            var placeholderRectSize = canvas.GetTextContainerRectAt(isError ? underlayDrawable.ErrorText : placeholder, new SKPoint((float)controlXLeft, 0.0f), placeholderPaint);
-
-                            canvas.DrawRoundRect(roundedRectBackgroundPlaceholderThrough, cornerRadiusSize, borderPaint);
-
-                            System.Diagnostics.Debug.WriteLine($"HVAP: {hasValueAnimationPercentage}");
-
-                            if (hasValueAnimationPercentage > 0.0d)
-                            {
-                                var bufferSize = 2f;
-                                var top = roundedRectBackgroundPlaceholderThrough.Top - (borderPaint.StrokeWidth * .5f);
-
-                                var startingBlendMode = backgroundPaint.BlendMode;
-
-                                backgroundPaint.BlendMode = SKBlendMode.SrcIn;
-
-                                backgroundPaint.Color =
-                                    borderPaint.Color.Lerp(
-                                        element.BackgroundColor.ToSKColor(),
-                                        hasValueAnimationPercentage);
-
-                                canvas.DrawRect(new SKRect(placeholderRectSize.Left - bufferSize, top, placeholderRectSize.Right + (bufferSize * 2f), top + placeholderRectSize.Height), backgroundPaint);
-
-                                backgroundPaint.BlendMode = startingBlendMode;
-                            }
-                        }
-
-                        canvas.Restore();
-                    }
-                    break;
-            }
-
-            if (isError)
-            {
-                placeholderPaint.TextSize = placeholderFontSize;
-                placeholderPaint.Color = underlayDrawable.ErrorColor.ToSKColor();
-                placeholderPaint.EnsureHasValidFont(underlayDrawable.ErrorText ?? placeholder);
-
-                canvas.DrawTextCenteredVertically(underlayDrawable.ErrorText ?? placeholder, new SKPoint((float)controlXLeft, focusedPlaceholderCenterY), placeholderPaint);
-            }
-
-            else if (!string.IsNullOrEmpty(placeholder))
-            {
-                placeholderPaint.Color =
-                    placeholderColor
-                        .Lerp(
-                            focusAnimationPercentage > 0d
-                                ? underlayDrawable.ActiveColor
-                                : placeholderColor,
-                            focusAnimationPercentage > 0d ? focusAnimationPercentage : hasValueAnimationPercentage)
-                        .ToSKColor();
-
-                if (placeholderFontSize > 0d)
-                {
-                    var placeholderY = controlYCenter.Lerp(focusedPlaceholderCenterY, hasValueAnimationPercentage);
-
-                    placeholderPaint.TextSize = fontSize.Lerp(placeholderFontSize, (float)hasValueAnimationPercentage);
-                    placeholderPaint.Color = placeholderPaint.Color.WithAlpha((float)hasValueAnimationPercentage);
-
-                    placeholderPaint.EnsureHasValidFont(placeholder);
-
-                    canvas.DrawTextCenteredVertically(placeholder, new SKPoint((float)controlXLeft, (float)placeholderY), placeholderPaint);
-                }
-
-                placeholderPaint.Color = placeholderColor.ToSKColor().WithAlpha(1f - (float)hasValueAnimationPercentage);
-                placeholderPaint.TextSize = fontSize;
-
-                canvas.DrawTextCenteredVertically(placeholder, new SKPoint((float)controlXLeft, (float)controlYCenter), placeholderPaint);
-            }
-        }
-        finally
-        {
-            underlayDrawable.IsDrawing = false;
-        }
-    }
+    }    
 }
 
