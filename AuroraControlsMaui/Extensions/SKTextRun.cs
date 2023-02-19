@@ -1,6 +1,6 @@
 ﻿namespace AuroraControls;
 
-internal class SKTextRun
+sealed class SKTextRun
 {
     private const string IconTemplateBegin = "{{";
     private const string IconTemplateEnd = "}}";

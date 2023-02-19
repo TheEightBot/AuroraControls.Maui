@@ -11,15 +11,7 @@ public static class EmbeddedResourceLoader
     /// <summary>
     /// A list of key value pairs of assemblies and resource names.
     /// </summary>
-    static readonly List<KeyValuePair<Assembly, string[]>> _assemblies;
-
-    /// <summary>
-    /// Initializes the <see cref="T:Aurora.EmbeddedResourceLoader"/> class.
-    /// </summary>
-    static EmbeddedResourceLoader()
-    {
-        _assemblies = new List<KeyValuePair<Assembly, string[]>>();
-    }
+    static readonly List<KeyValuePair<Assembly, string[]>> _assemblies = new List<KeyValuePair<Assembly, string[]>>();
 
     /// <summary>
     /// Loads the assembly.

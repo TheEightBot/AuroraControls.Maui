@@ -26,6 +26,6 @@ public class UIntTypeConverter : TypeConverter
         if (value is not uint ui)
             throw new NotSupportedException();
 
-        return ui.ToString();
+        return ui.ToString(CultureInfo.InvariantCulture);
     }
 }

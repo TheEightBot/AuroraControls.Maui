@@ -42,9 +42,10 @@ public static class FontCache
     public static void Remove(string resourceName, string shortNameOverride = null)
     {
         var cacheName = !string.IsNullOrEmpty(shortNameOverride) ? shortNameOverride : resourceName;
-        if (_fontDictionary.ContainsKey(cacheName))
+
+        if (_fontDictionary.TryGetValue(cacheName, out SKTypeface value))
         {
-            var typeFace = _fontDictionary[cacheName];
+            var typeFace = value;
 
             _fontDictionary.Remove(cacheName);
 
@@ -60,12 +61,15 @@ public static class FontCache
     /// </summary>
     /// <returns>The typeface.</returns>
     /// <param name="resourceName">Resource name.</param>
+    /// <param name="shortNameOverride">Optional short name provided for ease of use</param>
     public static SKTypeface GetTypeface(string resourceName, string shortNameOverride = null)
     {
         var cacheName = !string.IsNullOrEmpty(shortNameOverride) ? shortNameOverride : resourceName;
 
-        if (_fontDictionary.ContainsKey(cacheName))
-            return _fontDictionary[cacheName];
+        if (_fontDictionary.TryGetValue(cacheName, out SKTypeface value))
+        {
+            return value;
+        }
 
         return Add(resourceName, shortNameOverride);
     }

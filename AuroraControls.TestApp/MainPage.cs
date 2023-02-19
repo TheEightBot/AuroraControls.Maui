@@ -65,8 +65,7 @@ public class MainPage : ContentPage
                             AutoSize = EditorAutoSizeOption.TextChanges,
                         },
                 },
-                },
-            }
+            },
         };
     }
 }

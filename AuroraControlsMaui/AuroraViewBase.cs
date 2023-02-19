@@ -4,9 +4,9 @@ namespace AuroraControls;
 
 public abstract class AuroraViewBase : SKCanvasView, IAuroraView
 {
-    bool _isPaintingSurface = false;
-    bool _needsDelayedPaint = false;
-    bool _attachmentClear = false;
+    bool _isPaintingSurface;
+    bool _needsDelayedPaint;
+    bool _attachmentClear;
 
     protected float _scale;
 

@@ -25,7 +25,7 @@ public interface IHavePlatformUnderlayDrawable
     PlatformUnderlayDrawable PlatformUnderlayDrawable { get; }
 }
 
-public class PlatformUnderlayDrawable
+public class PlatformUnderlayDrawable : IDisposable
 {
     private IView _virtualView;
 
@@ -46,6 +46,8 @@ public class PlatformUnderlayDrawable
 
     private bool _hadFocus;
 
+    private bool _disposedValue;
+
 #if IOS
     private SKCanvasView _canvas;
 
@@ -54,7 +56,6 @@ public class PlatformUnderlayDrawable
     private UIView _commandView;
 
     private UITapGestureRecognizer _commandViewTapped;
-
 
     public void ConnectHandler(PlatformView platformView, IView virtualView)
     {
@@ -331,7 +332,7 @@ public class PlatformUnderlayDrawable
         }
     }
 
-    private StyledContentTypeRegistration GetRegistration(Type type)
+    private static StyledContentTypeRegistration GetRegistration(Type type)
     {
         foreach (var registration in StyledInputLayout.StyledInputLayoutContentRegistrations)
         {
@@ -698,5 +699,37 @@ public class PlatformUnderlayDrawable
             _needsDraw = false;
             Invalidate();
         }
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposedValue)
+        {
+            if (disposing)
+            {
+                _backgroundPaint?.Dispose();
+                _borderPaint?.Dispose();
+                _canvas?.Dispose();
+                _placeholderPaint?.Dispose();
+
+#if ANDROID
+                _commandButton?.Dispose();
+#elif IOS
+                _canvasTapped?.Dispose();
+                _commandViewTapped?.Dispose();
+                _commandView?.Dispose();
+#endif
+
+            }
+
+            _disposedValue = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }
