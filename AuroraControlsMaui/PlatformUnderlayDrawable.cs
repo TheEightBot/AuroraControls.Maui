@@ -7,7 +7,6 @@ using Microsoft.Maui;
 #if IOS
 using UIKit;
 using CoreGraphics;
-using AuroraControls.Platforms.iOS;
 using SKCanvasView = SkiaSharp.Views.iOS.SKCanvasView;
 using SKPaintSurfaceEventArgs = SkiaSharp.Views.iOS.SKPaintSurfaceEventArgs;
 using PlatformView = UIKit.UIView;

@@ -9,7 +9,6 @@ using CoreGraphics;
 #elif ANDROID
 using Android.Views;
 using AndroidX.AppCompat.Widget;
-using AuroraControls.Platforms.Android;
 #endif
 
 namespace AuroraControls
