@@ -29,9 +29,11 @@ jobs:
       id: version
       uses: release-kit/semver@v1.0.10        
         
-    - name: Build Stellar    
-      run: dotnet build AuroraControlsMaui/AuroraControlsMaui.csproj
+    - name: Build Aurora Controls MAUI    
+      run: dotnet build AuroraControlsMaui/AuroraControls.csproj
+
     - name: Create the package
-      run: dotnet pack --configuration Release  /p:AssemblyVersion=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} /p:Version=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} AuroraControlsMaui/AuroraControlsMaui.csproj
+      run: dotnet pack --configuration Release  /p:AssemblyVersion=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} /p:Version=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} AuroraControlsMaui/AuroraControls.csproj
+      
     - name: Publish the package to GPR
       run: dotnet nuget push AuroraControlsMaui/bin/Release/*.nupkg
