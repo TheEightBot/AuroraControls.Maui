@@ -14,6 +14,8 @@ public static class MauiProgram
             })
             .ConfigureAuroraControls();
 
+        EmbeddedResourceLoader.LoadAssembly(typeof(MauiProgram).Assembly);
+
         return builder.Build();
     }
 }
