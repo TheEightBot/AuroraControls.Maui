@@ -1,8 +1,13 @@
 ﻿namespace AuroraControls;
 
 [ContentProperty(nameof(NotificationCount))]
+#pragma warning disable CA1001 // Types that own disposable fields should be disposable
 public class NotificationBadge : AuroraViewBase
+#pragma warning restore CA1001 // Types that own disposable fields should be disposable
 {
+    private SKPaint _badgePaint;
+    private SKPaint _fontPaint;
+
     public event EventHandler<ValueChangedEventArgs> NotificationCountChanged;
 
     /// <summary>
@@ -196,6 +201,22 @@ public class NotificationBadge : AuroraViewBase
         }
     }
 
+    protected override void Attached()
+    {
+        _badgePaint = new();
+        _fontPaint = new();
+
+        base.Attached();
+    }
+
+    protected override void Detached()
+    {
+        _badgePaint?.Dispose();
+        _fontPaint?.Dispose();
+
+        base.Detached();
+    }
+
     protected override void PaintControl(SKSurface surface, SKImageInfo info)
     {
         DrawNotificationBadge(surface, info.Rect, true);
@@ -210,77 +231,73 @@ public class NotificationBadge : AuroraViewBase
             canvas.Clear();
         }
 
-        using (var badgePaint = new SKPaint())
-        using (var fontPaint = new SKPaint())
+        _badgePaint.IsAntialias = true;
+        _badgePaint.FilterQuality = SKFilterQuality.High;
+        _badgePaint.Color = BadgeColor.ToSKColor();
+
+        var shadowSpread = HasShadow ? (float)ShadowSpread * _scale : 0f;
+
+        if (shadowSpread > 0)
         {
-            badgePaint.IsAntialias = true;
-            badgePaint.FilterQuality = SKFilterQuality.High;
-            badgePaint.Color = BadgeColor.ToSKColor();
+            _badgePaint.ImageFilter =
+                SKImageFilter.CreateDropShadow(
+                    0, 0, shadowSpread, shadowSpread,
+                    SKColors.Black);
+        }
 
-            var shadowSpread = HasShadow ? (float)ShadowSpread * _scale : 0f;
+        var minLength = Math.Min(rect.Height, rect.Width);
 
-            if (shadowSpread > 0)
+        var maxBadgeSize = MaxBadgeSize * _scale;
+
+        if (maxBadgeSize > 0 && minLength > maxBadgeSize)
+        {
+            minLength = (float)maxBadgeSize;
+        }
+
+        _fontPaint.Color = FontColor.ToSKColor();
+        _fontPaint.TextSize = (float)FontSize * _scale;
+        _fontPaint.Typeface = Typeface ?? PlatformInfo.DefaultTypeface;
+        _fontPaint.IsAntialias = true;
+        _fontPaint.TextAlign = SKTextAlign.Center;
+
+        var notificationCount = NotificationCount;
+        var notificationText = notificationCount > 99 ? TooManyNotificationsSymbol : notificationCount.ToString();
+
+        _fontPaint.EnsureHasValidFont(notificationText);
+
+        var hideBadgeCondition = !(notificationCount <= 0 && HideBadgeIfZero);
+
+        if (hideBadgeCondition)
+        {
+            canvas.DrawCircle(rect.MidX, rect.MidY, (minLength * .5f) - (shadowSpread * 2f), _badgePaint);
+
+            if (!string.IsNullOrEmpty(notificationText))
             {
-                badgePaint.ImageFilter =
-                    SKImageFilter.CreateDropShadow(
-                        0, 0, shadowSpread, shadowSpread,
-                        SKColors.Black);
-            }
-
-            var minLength = Math.Min(rect.Height, rect.Width);
-
-            var maxBadgeSize = MaxBadgeSize * _scale;
-
-            if (maxBadgeSize > 0 && minLength > maxBadgeSize)
-            {
-                minLength = (float)maxBadgeSize;
-            }
-
-            fontPaint.Color = FontColor.ToSKColor();
-            fontPaint.TextSize = (float)FontSize * _scale;
-            fontPaint.Typeface = Typeface ?? PlatformInfo.DefaultTypeface;
-            fontPaint.IsAntialias = true;
-            fontPaint.TextAlign = SKTextAlign.Center;
-
-            var notificationCount = NotificationCount;
-            var notificationText = notificationCount > 99 ? TooManyNotificationsSymbol : notificationCount.ToString();
-
-            fontPaint.EnsureHasValidFont(notificationText);
-
-            var hideBadgeCondition = !(notificationCount <= 0 && HideBadgeIfZero);
-
-            if (hideBadgeCondition)
-            {
-                canvas.DrawCircle(rect.MidX, rect.MidY, (minLength * .5f) - (shadowSpread * 2f), badgePaint);
-
-                if (!string.IsNullOrEmpty(notificationText))
+                try
                 {
-                    try
+                    var textFits = false;
+                    var midY = 0f;
+
+                    minLength *= .7f;
+
+                    while (!textFits)
                     {
-                        var textFits = false;
-                        var midY = 0f;
+                        var textBounds = SKRect.Empty;
+                        _fontPaint.MeasureText(notificationText, ref textBounds);
 
-                        minLength *= .7f;
-
-                        while (!textFits)
+                        if (textBounds.Width < minLength && textBounds.Height < minLength)
                         {
-                            var textBounds = SKRect.Empty;
-                            fontPaint.MeasureText(notificationText, ref textBounds);
-
-                            if (textBounds.Width < minLength && textBounds.Height < minLength)
-                            {
-                                midY = textBounds.MidY;
-                                break;
-                            }
-
-                            fontPaint.TextSize -= .5f;
+                            midY = textBounds.MidY;
+                            break;
                         }
 
-                        canvas.DrawText(notificationText, rect.MidX, rect.MidY - midY, fontPaint);
+                        _fontPaint.TextSize -= .5f;
                     }
-                    catch (ArgumentNullException)
-                    {
-                    }
+
+                    canvas.DrawText(notificationText, rect.MidX, rect.MidY - midY, _fontPaint);
+                }
+                catch (ArgumentNullException)
+                {
                 }
             }
         }

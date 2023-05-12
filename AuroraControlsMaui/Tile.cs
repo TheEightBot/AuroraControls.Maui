@@ -1,4 +1,6 @@
-﻿namespace AuroraControls;
+﻿using Svg.Skia;
+
+namespace AuroraControls;
 
 /// <summary>
 /// Tile.
@@ -12,10 +14,19 @@ public class Tile : AuroraViewBase
 
     private readonly string _rippleAnimationName, _tapAnimationName;
 
+    private readonly object _pictureLock = new object();
+
     private SKPoint _lastTouchLocation;
     private double _rippleAnimationPercentage, _tapAnimationPercentage;
 
-    private Svg.SKSvg _svg;
+    private SKPaint _shadowPaint;
+    private SKPaint _ripplePaint;
+    private SKPaint _fontPaint;
+    private SKPaint _overlayPaint;
+
+    private SKSvg _svg;
+
+    private string _pictureName;
 
     private bool _tapped;
 
@@ -27,11 +38,11 @@ public class Tile : AuroraViewBase
     public static BindableProperty EmbeddedImageNameProperty =
         BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(Tile), null,
             propertyChanged:
-                async static (bindable, _, _) =>
+                static (bindable, _, _) =>
                 {
                     if (bindable is Tile tile)
                     {
-                        await tile.SetSvgResource().ConfigureAwait(false);
+                        tile.SetSvgResource();
                         tile.InvalidateSurface();
                     }
                 });
@@ -52,11 +63,10 @@ public class Tile : AuroraViewBase
     public static BindableProperty MaxImageSizeProperty =
         BindableProperty.Create(nameof(MaxImageSize), typeof(Size), typeof(Tile), default(Size),
             propertyChanged:
-                async static (bindable, _, _) =>
+                static (bindable, _, _) =>
                 {
                     if (bindable is Tile tile)
                     {
-                        await tile.SetSvgResource().ConfigureAwait(false);
                         tile.InvalidateSurface();
                     }
                 });
@@ -401,13 +411,33 @@ public class Tile : AuroraViewBase
     {
         _rippleAnimationName = $"{nameof(Ripples)}_{Guid.NewGuid()}";
         _tapAnimationName = $"{nameof(TapAnimationDuration)}_{Guid.NewGuid()}";
+
+        MinimumHeightRequest = IAuroraView.StandardControlHeight;
     }
 
     protected override void Attached()
     {
         this.EnableTouchEvents = true;
 
+        _shadowPaint = new();
+        _ripplePaint = new();
+        _fontPaint = new();
+        _overlayPaint = new();
+
+        SetSvgResource();
+
         base.Attached();
+    }
+
+    protected override void Detached()
+    {
+        _shadowPaint?.Dispose();
+        _ripplePaint?.Dispose();
+        _fontPaint?.Dispose();
+        _overlayPaint?.Dispose();
+        _svg?.Dispose();
+
+        base.Detached();
     }
 
     /// <summary>
@@ -448,21 +478,20 @@ public class Tile : AuroraViewBase
 
             if (ShadowColor != Colors.White && ShadowLocation != Point.Zero)
             {
-                using (var shadowPaint = new SKPaint())
                 using (new SKAutoCanvasRestore(canvas))
                 {
                     var sigma = SKMaskFilter.ConvertRadiusToSigma(shadowBlurRadius) * (1f - (float)_tapAnimationPercentage);
-                    shadowPaint.IsAntialias = true;
-                    shadowPaint.Color = ShadowColor.ToSKColor();
-                    shadowPaint.Style = SKPaintStyle.Fill;
-                    shadowPaint.IsAntialias = true;
-                    shadowPaint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, sigma);
+                    _shadowPaint.IsAntialias = true;
+                    _shadowPaint.Color = ShadowColor.ToSKColor();
+                    _shadowPaint.Style = SKPaintStyle.Fill;
+                    _shadowPaint.IsAntialias = true;
+                    _shadowPaint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, sigma);
 
                     canvas.Translate(new SKPoint(shadowLocationX, shadowLocationY));
 
                     var shadowRect = new SKRect(rect.Left + sigma, rect.Top + sigma, rect.Right - (sigma * 2f), rect.Bottom - (sigma * 2f));
 
-                    canvas.DrawRoundRect(shadowRect, cornerRadius, cornerRadius, shadowPaint);
+                    canvas.DrawRoundRect(shadowRect, cornerRadius, cornerRadius, _shadowPaint);
                 }
             }
 
@@ -479,11 +508,10 @@ public class Tile : AuroraViewBase
                 if (_lastTouchLocation != SKPoint.Empty && _rippleAnimationPercentage > 0.0d)
                 {
                     using (var ripplePath = new SKPath())
-                    using (var ripplePaint = new SKPaint())
                     {
-                        ripplePaint.IsAntialias = true;
-                        ripplePaint.Style = SKPaintStyle.Fill;
-                        ripplePaint.Color =
+                        _ripplePaint.IsAntialias = true;
+                        _ripplePaint.Style = SKPaintStyle.Fill;
+                        _ripplePaint.Color =
                             ButtonBackgroundColor != Colors.White
                                 ? ButtonBackgroundColor.AddLuminosity(-.2f).MultiplyAlpha((1f - (float)_rippleAnimationPercentage) * .5f).ToSKColor()
                                 : Colors.Transparent.ToSKColor();
@@ -498,7 +526,7 @@ public class Tile : AuroraViewBase
 
                         using (var finalRipple = ripplePath.Op(_backgroundPath, SKPathOp.Intersect))
                         {
-                            canvas.DrawPath(finalRipple, ripplePaint);
+                            canvas.DrawPath(finalRipple, _ripplePaint);
                         }
                     }
                 }
@@ -518,30 +546,27 @@ public class Tile : AuroraViewBase
 
                 if (!string.IsNullOrEmpty(Text))
                 {
-                    using (var fontPaint = new SKPaint())
+                    _fontPaint.Color = FontColor.ToSKColor();
+                    _fontPaint.TextSize = (float)FontSize * _scale;
+                    _fontPaint.IsAntialias = true;
+                    _fontPaint.Typeface = Typeface ?? PlatformInfo.DefaultTypeface;
+
+                    textBounds = canvas.GetTextContainerRectAt(Text, SKPoint.Empty, _fontPaint);
+
+                    var textY = rect.Top + rect.Height - (float)ContentPadding.Bottom - textBounds.Height - (borderWidth * 2f);
+
+                    if (IsIconifiedText)
                     {
-                        fontPaint.Color = FontColor.ToSKColor();
-                        fontPaint.TextSize = (float)FontSize * _scale;
-                        fontPaint.IsAntialias = true;
-                        fontPaint.Typeface = Typeface ?? PlatformInfo.DefaultTypeface;
-
-                        textBounds = canvas.GetTextContainerRectAt(Text, SKPoint.Empty, fontPaint);
-
-                        var textY = rect.Top + rect.Height - (float)ContentPadding.Bottom - textBounds.Height - (borderWidth * 2f);
-
-                        if (IsIconifiedText)
-                        {
-                            canvas.DrawCenteredIconifiedText(Text, rect.MidX, textY, fontPaint);
-                        }
-                        else
-                        {
-                            fontPaint.EnsureHasValidFont(Text);
-                            canvas.DrawTextAt(Text, new SKPoint(rect.MidX, textY), fontPaint, TextDrawLocation.Centered, TextDrawLocation.At);
-                        }
+                        canvas.DrawCenteredIconifiedText(Text, rect.MidX, textY, _fontPaint);
+                    }
+                    else
+                    {
+                        _fontPaint.EnsureHasValidFont(Text);
+                        canvas.DrawTextAt(Text, new SKPoint(rect.MidX, textY), _fontPaint, TextDrawLocation.Centered, TextDrawLocation.At);
                     }
                 }
 
-                if (!string.IsNullOrEmpty(EmbeddedImageName) && _svg != null)
+                if (!string.IsNullOrEmpty(_pictureName))
                 {
                     // TODO: The text measurement here seems not right
                     var contentRect = new SKRect(
@@ -550,11 +575,11 @@ public class Tile : AuroraViewBase
                         rect.Right - (float)(ContentPadding.Right * _scale),
                         rect.Bottom - textBounds.Height - (float)(ContentPadding.Bottom * _scale));
 
-                    var imageSize = contentRect.AspectFit(_svg.CanvasSize);
+                    var imageSize = contentRect.AspectFit(_svg.Picture.CullRect.Size);
 
                     var scaleAmount =
                         this.MaxImageSize == Size.Zero
-                            ? (float)Math.Min(imageSize.Width / _svg.CanvasSize.Width, imageSize.Height / _svg.CanvasSize.Height)
+                            ? (float)Math.Min(imageSize.Width / _svg.Picture.CullRect.Width, imageSize.Height / _svg.Picture.CullRect.Height)
                             : 1f;
 
                     var svgScale = SKMatrix.CreateScale(scaleAmount, scaleAmount);
@@ -562,23 +587,22 @@ public class Tile : AuroraViewBase
                     var translation =
                         this.MaxImageSize == Size.Zero
                             ? SKMatrix.CreateTranslation(imageSize.Left, imageSize.Top)
-                            : SKMatrix.CreateTranslation(imageSize.MidX - (_svg.CanvasSize.Width / 2f), imageSize.MidY - (_svg.CanvasSize.Height / 2f));
+                            : SKMatrix.CreateTranslation(imageSize.MidX - (_svg.Picture.CullRect.Width / 2f), imageSize.MidY - (_svg.Picture.CullRect.Height / 2f));
 
                     svgScale = svgScale.PostConcat(translation);
 
                     if (OverlayColor != Colors.Transparent)
                     {
                         using (new SKAutoCanvasRestore(canvas))
-                        using (var overlayPaint = new SKPaint())
                         {
-                            overlayPaint.BlendMode = SKBlendMode.SrcATop;
-                            overlayPaint.IsAntialias = true;
-                            overlayPaint.Color = OverlayColor.ToSKColor();
+                            _overlayPaint.BlendMode = SKBlendMode.SrcATop;
+                            _overlayPaint.IsAntialias = true;
+                            _overlayPaint.Color = OverlayColor.ToSKColor();
 
                             canvas.SaveLayer(null);
                             canvas.Clear();
                             canvas.DrawPicture(_svg.Picture, ref svgScale);
-                            canvas.DrawPaint(overlayPaint);
+                            canvas.DrawPaint(_overlayPaint);
                         }
                     }
                     else
@@ -719,31 +743,27 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// Sets the svg resource.
     /// </summary>
-    private async Task SetSvgResource()
+    private void SetSvgResource()
     {
-        if (string.IsNullOrEmpty(EmbeddedImageName))
+        var embeddedImageName = EmbeddedImageName;
+
+        if (string.IsNullOrEmpty(embeddedImageName))
         {
-            _svg = new Svg.SKSvg();
+            _pictureName = null;
             return;
         }
 
-        if (MaxImageSize != default(Size))
+        if (!string.IsNullOrEmpty(_pictureName) && _pictureName.Equals(embeddedImageName))
         {
-            var width = (int)Math.Floor(MaxImageSize.Width) * _scale;
-            var height = (int)Math.Floor(MaxImageSize.Height) * _scale;
-
-            _svg = new Svg.SKSvg((float)PlatformInfo.DevicePpi, new SKSize(width, height));
-        }
-        else
-        {
-            _svg = new Svg.SKSvg();
+            return;
         }
 
-        using (var imageStream = EmbeddedResourceLoader.Load(EmbeddedImageName))
+        lock (_pictureLock)
         {
+            using var imageStream = EmbeddedResourceLoader.Load(embeddedImageName);
+            _svg = new SKSvg();
             _svg.Load(imageStream);
-            _svg.Draw();
-            await imageStream.FlushAsync().ConfigureAwait(false);
+            _pictureName = embeddedImageName;
         }
     }
 }
