@@ -8,7 +8,11 @@ namespace AuroraControls;
 
 public static class PlatformInfo
 {
+    private const int BaselinePpi = 160;
+
     private static double _scalingFactor = -1d;
+
+    private static double _devicePpi = -1d;
 
     private static SKTypeface _defaultTypeface;
 
@@ -70,6 +74,25 @@ public static class PlatformInfo
 #endif
 
             return _defaultButtonFontSize;
+        }
+    }
+
+    public static double DevicePpi
+    {
+        get
+        {
+            if (_devicePpi > 0d)
+            {
+                return _devicePpi;
+            }
+
+#if IOS
+            _devicePpi = ScalingFactor * BaselinePpi;
+#elif ANDROID
+            _devicePpi = (double)Android.App.Application.Context.Resources.DisplayMetrics.DensityDpi;
+#endif
+
+            return _devicePpi;
         }
     }
 }

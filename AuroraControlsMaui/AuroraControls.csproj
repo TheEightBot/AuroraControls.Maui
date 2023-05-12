@@ -15,25 +15,6 @@
 	  <CreatePackage>false</CreatePackage>
 	</PropertyGroup>
 	<ItemGroup>
-	  <None Remove="Platforms\Android\" />
-	  <None Remove="Platforms\iOS\" />
-	  <None Remove="Platforms\MacCatalyst\" />
-	  <None Remove="Platforms\Tizen\" />
-	  <None Remove="Platforms\Windows\" />
-	  <None Remove="Extensions\" />
-	  <None Remove="SkiaSharp.Views.Maui.Controls" />
-	  <None Remove="VisualEffects\" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Platforms\Android\" />
-	  <Folder Include="Platforms\iOS\" />
-	  <Folder Include="Platforms\MacCatalyst\" />
-	  <Folder Include="Platforms\Tizen\" />
-	  <Folder Include="Platforms\Windows\" />
-	  <Folder Include="Extensions\" />
-	  <Folder Include="VisualEffects\" />
-	</ItemGroup>
-	<ItemGroup>
 	  <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.3" />
 	</ItemGroup>
 </Project>

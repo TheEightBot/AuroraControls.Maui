@@ -1,4 +1,6 @@
-﻿namespace AuroraControls;
+﻿using System.Runtime.CompilerServices;
+
+namespace AuroraControls;
 
 public abstract class AuroraViewBase : SKCanvasView, IAuroraView
 {
@@ -55,6 +57,18 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
     protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
     {
         PaintSurfaceInternal(e.Surface, e.Info);
+    }
+
+    protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        base.OnPropertyChanged(propertyName);
+
+        if (propertyName.Equals(HeightProperty.PropertyName) ||
+            propertyName.Equals(WidthProperty.PropertyName) ||
+            propertyName.Equals(MarginProperty.PropertyName))
+        {
+            this.InvalidateSurface();
+        }
     }
 
     protected virtual void Attached()

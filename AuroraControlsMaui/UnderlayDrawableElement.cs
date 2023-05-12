@@ -55,7 +55,7 @@ public static class UnderlayDrawableElement
     public static readonly BindableProperty InternalMarginProperty =
         BindableProperty.Create(nameof(IUnderlayDrawable.InternalMargin), typeof(Thickness), typeof(IUnderlayDrawable), new Thickness(2),
             propertyChanged:
-                (bindable, oldValue, newValue) =>
+                static (bindable, _, _) =>
                 {
                     if (bindable is IVisualElementController v)
                     {
