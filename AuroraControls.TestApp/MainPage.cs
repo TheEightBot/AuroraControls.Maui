@@ -241,6 +241,23 @@ public class MainPage : ContentPage
                                     },
                                 },
                             }),
+                            new Tile
+                            {
+                                EmbeddedImageName = "triforce.svg",
+                                ButtonBackgroundColor = Colors.Fuchsia,
+                            },
+                            new SvgImageView
+                            {
+                                EmbeddedImageName = "splatoon.svg",
+                                OverlayColor = Colors.Chartreuse,
+                            },
+                            new GradientPillButton
+                            {
+                                Text = "Gradient Pill Button",
+                                ButtonBackgroundStartColor = Colors.Fuchsia,
+                                ButtonBackgroundEndColor = Colors.Chartreuse,
+                                FontColor = Colors.Black,
+                            },
                         },
                     },
             };
