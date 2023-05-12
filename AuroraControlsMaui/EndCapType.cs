@@ -4,6 +4,6 @@ namespace AuroraControls;
 
 public enum EndCapType
 {
-    Square,
-    Rounded,
+    Square = 1,
+    Rounded = 2,
 }

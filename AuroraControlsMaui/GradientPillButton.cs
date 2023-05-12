@@ -1,0 +1,539 @@
+﻿namespace AuroraControls;
+
+/// <summary>
+/// Gradient pill button.
+/// </summary>
+#pragma warning disable CA1001 // Types that own disposable fields should be disposable
+public class GradientPillButton : AuroraViewBase
+#pragma warning restore CA1001 // Types that own disposable fields should be disposable
+{
+    private SKPath _backgroundPath;
+    private SKPoint _lastTouchLocation;
+    private double _rippleAnimationPercentage;
+
+    private bool _tapped;
+
+    public event EventHandler Clicked;
+
+    /// <summary>
+    /// The button background start color property.
+    /// </summary>
+    public static BindableProperty ButtonBackgroundStartColorProperty =
+        BindableProperty.Create(nameof(ButtonBackgroundStartColor), typeof(Color), typeof(GradientPillButton), Colors.Transparent,
+            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+
+    /// <summary>
+    /// Gets or sets the start color of the button background.
+    /// </summary>
+    /// <value>Expects a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Default.</value>
+    public Color ButtonBackgroundStartColor
+    {
+        get { return (Color)GetValue(ButtonBackgroundStartColorProperty); }
+        set { SetValue(ButtonBackgroundStartColorProperty, value); }
+    }
+
+    /// <summary>
+    /// The button background end color property.
+    /// </summary>
+    public static BindableProperty ButtonBackgroundEndColorProperty =
+        BindableProperty.Create(nameof(ButtonBackgroundEndColor), typeof(Color), typeof(GradientPillButton), default(Color),
+            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+
+    /// <summary>
+    /// Gets or sets the end color of the button background.
+    /// </summary>
+    /// <value>Expects a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Default.</value>
+    public Color ButtonBackgroundEndColor
+    {
+        get { return (Color)GetValue(ButtonBackgroundEndColorProperty); }
+        set { SetValue(ButtonBackgroundEndColorProperty, value); }
+    }
+
+    /// <summary>
+    /// The gradient direction property.
+    /// </summary>
+    public static BindableProperty GradientDirectionProperty =
+        BindableProperty.Create(nameof(GradientDirection), typeof(GradientDirection), typeof(GradientPillButton), GradientDirection.Horizontal,
+            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+
+    /// <summary>
+    /// Gets or sets the gradient direction.
+    /// </summary>
+    /// <value>Expects GradientDirection enum case. Default value is GradientDirection.Horizontal.</value>
+    public GradientDirection GradientDirection
+    {
+        get { return (GradientDirection)GetValue(GradientDirectionProperty); }
+        set { SetValue(GradientDirectionProperty, value); }
+    }
+
+    /// <summary>
+    /// The border color property.
+    /// </summary>
+    public static BindableProperty BorderColorProperty =
+        BindableProperty.Create(nameof(BorderColor), typeof(Color), typeof(GradientPillButton), default(Color),
+                                propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+
+    /// <summary>
+    /// Gets or sets the color of the border.
+    /// </summary>
+    /// <value>Expects a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Default.</value>
+    public Color BorderColor
+    {
+        get { return (Color)GetValue(BorderColorProperty); }
+        set { SetValue(BorderColorProperty, value); }
+    }
+
+    /// <summary>
+    /// The shadow color property.
+    /// </summary>
+    public static BindableProperty ShadowColorProperty =
+        BindableProperty.Create(nameof(ShadowColor), typeof(Color), typeof(GradientPillButton), Color.FromRgba(0d, 0d, 0d, .33d),
+            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+
+    /// <summary>
+    /// Gets or sets the color of the shadow.
+    /// </summary>
+    /// <value>Expects a Xamarin.Forms.Color. Default value is Color.FromRgba(0d, 0d, 0d, .33d).</value>
+    public Color ShadowColor
+    {
+        get { return (Color)GetValue(ShadowColorProperty); }
+        set { SetValue(ShadowColorProperty, value); }
+    }
+
+    /// <summary>
+    /// The shadow location property.
+    /// </summary>
+    public static BindableProperty ShadowLocationProperty =
+        BindableProperty.Create(nameof(ShadowLocation), typeof(Point), typeof(GradientPillButton), new Point(0, 3),
+            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+
+    /// <summary>
+    /// Gets or sets the shadow location.
+    /// </summary>
+    /// <value>Takes a point with x and y offsets. Default value is new Point(0, 3).</value>
+    public Point ShadowLocation
+    {
+        get { return (Point)GetValue(ShadowLocationProperty); }
+        set { SetValue(ShadowLocationProperty, value); }
+    }
+
+    /// <summary>
+    /// The shadow blur radius property.
+    /// </summary>
+    public static BindableProperty ShadowBlurRadiusProperty =
+        BindableProperty.Create(nameof(ShadowBlurRadius), typeof(double), typeof(GradientPillButton), default(double),
+            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+
+    /// <summary>
+    /// Gets or sets the shadow blur radius.
+    /// </summary>
+    /// <value>The shadow blur radius. Default value is default(double).</value>
+    public double ShadowBlurRadius
+    {
+        get { return (double)GetValue(ShadowBlurRadiusProperty); }
+        set { SetValue(ShadowBlurRadiusProperty, value); }
+    }
+
+    /// <summary>
+    /// The border width property.
+    /// </summary>
+    public static BindableProperty BorderWidthProperty =
+        BindableProperty.Create(nameof(BorderWidth), typeof(double), typeof(GradientPillButton), 0d,
+            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+
+    /// <summary>
+    /// Gets or sets the width of the border.
+    /// </summary>
+    /// <value>Expects a double value. Default is 0d.</value>
+    public double BorderWidth
+    {
+        get { return (double)GetValue(BorderWidthProperty); }
+        set { SetValue(BorderWidthProperty, value); }
+    }
+
+    /// <summary>
+    /// The text property.
+    /// </summary>
+    public static BindableProperty TextProperty =
+        BindableProperty.Create(nameof(Text), typeof(string), typeof(GradientPillButton), default(string),
+            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+
+    /// <summary>
+    /// Gets or sets the text for the button.
+    /// </summary>
+    /// <value>string value for text. Default is default(string).</value>
+    public string Text
+    {
+        get { return (string)GetValue(TextProperty); }
+        set { SetValue(TextProperty, value); }
+    }
+
+    /// <summary>
+    /// The font color property.
+    /// </summary>
+    public static BindableProperty FontColorProperty =
+        BindableProperty.Create(nameof(FontColor), typeof(Color), typeof(GradientPillButton), Colors.White,
+            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+
+    /// <summary>
+    /// Gets or sets the color of the font.
+    /// </summary>
+    /// <value>Expects a Xamarin.Forms.Color. Default value is Color.White.</value>
+    public Color FontColor
+    {
+        get { return (Color)GetValue(FontColorProperty); }
+        set { SetValue(FontColorProperty, value); }
+    }
+
+    public static BindableProperty FontSizeProperty =
+        BindableProperty.Create(nameof(FontSize), typeof(double), typeof(GradientPillButton), PlatformInfo.DefaultButtonFontSize,
+            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+
+    public double FontSize
+    {
+        get => (double)GetValue(FontSizeProperty);
+        set => SetValue(FontSizeProperty, value);
+    }
+
+    /// <summary>
+    /// The typeface property.
+    /// </summary>
+    public static BindableProperty TypefaceProperty =
+        BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(GradientPillButton), default(SKTypeface),
+            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+
+    /// <summary>
+    /// Gets or sets the typeface for the button.
+    /// </summary>
+    /// <value>Expects a SKTypeface. Dfault default(SKTypeface).</value>
+    public SKTypeface Typeface
+    {
+        get { return (SKTypeface)GetValue(TypefaceProperty); }
+        set { SetValue(TypefaceProperty, value); }
+    }
+
+    public static BindableProperty IsIconifiedTextProperty =
+        BindableProperty.Create(nameof(IsIconifiedText), typeof(bool), typeof(GradientPillButton), default(bool),
+            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+
+    public bool IsIconifiedText
+    {
+        get => (bool)GetValue(IsIconifiedTextProperty);
+        set => SetValue(IsIconifiedTextProperty, value);
+    }
+
+    /// <summary>
+    /// The ripples property.
+    /// </summary>
+    public static BindableProperty RipplesProperty =
+        BindableProperty.Create(nameof(Ripples), typeof(bool), typeof(GradientPillButton), true,
+            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+
+    /// <summary>
+    /// Gets or sets a value indicating whether this <see cref="T:Aurora.Controls.GradientPillButton"/> is ripples.
+    /// </summary>
+    /// <value><c>true</c> if ripples; otherwise, <c>false</c>.</value>
+    public bool Ripples
+    {
+        get { return (bool)GetValue(RipplesProperty); }
+        set { SetValue(RipplesProperty, value); }
+    }
+
+    /// <summary>
+    /// The command property. Fires on tap.
+    /// </summary>
+    public static BindableProperty CommandProperty =
+        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(GradientPillButton), default(ICommand));
+
+    /// <summary>
+    /// Gets or sets the command.
+    /// </summary>
+    /// <value>The command.</value>
+    public ICommand Command
+    {
+        get { return (ICommand)GetValue(CommandProperty); }
+        set { SetValue(CommandProperty, value); }
+    }
+
+    /// <summary>
+    /// The command parameter property.
+    /// </summary>
+    public static BindableProperty CommandParameterProperty =
+        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(GradientPillButton), default(object));
+
+    /// <summary>
+    /// Gets or sets the command parameter.
+    /// </summary>
+    /// <value>The command parameter. default value is default(object).</value>
+    public object CommandParameter
+    {
+        get { return (object)GetValue(CommandParameterProperty); }
+        set { SetValue(CommandParameterProperty, value); }
+    }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether this <see cref="T:Aurora.Controls.GradientPillButton"/> is tapped.
+    /// </summary>
+    /// <value><c>true</c> if tapped; otherwise, <c>false</c>.</value>
+    public bool Tapped
+    {
+        get
+        {
+            return _tapped;
+        }
+
+        set
+        {
+            if (_tapped != value)
+            {
+                _tapped = value;
+                this.InvalidateSurface();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GradientPillButton"/> class.
+    /// </summary>
+    public GradientPillButton()
+    {
+        MinimumHeightRequest = IAuroraView.StandardControlHeight;
+    }
+
+    protected override void Attached()
+    {
+        this.EnableTouchEvents = true;
+        _backgroundPath = new();
+        base.Attached();
+    }
+
+    protected override void Detached()
+    {
+        _backgroundPath.Dispose();
+        base.Detached();
+    }
+
+    /// <summary>
+    /// This is the method used to draw our control on the SKCanvas. This method is fired every time <c>this.InvalidateSurface();</c> is called, resulting in a "redrawing" of the control.
+    /// </summary>
+    /// <param name="surface">The skia surface to paint on the controls.</param>
+    /// <param name="info">Information about the skia image.</param>
+    protected override void PaintControl(SKSurface surface, SKImageInfo info)
+    {
+        var canvas = surface.Canvas;
+
+        if (ButtonBackgroundStartColor != default(Color) && ButtonBackgroundEndColor == default(Color))
+        {
+            ButtonBackgroundEndColor = ButtonBackgroundStartColor.WithHue(.5f);
+        }
+
+        using (var backgroundPaint = new SKPaint())
+        {
+            var halfBorder = (float)this.BorderWidth / 2f;
+
+            var scale = info.Height / (float)Height;
+            var rect = new SKRect((float)ShadowLocation.X + (float)ShadowBlurRadius + halfBorder, (float)ShadowLocation.Y + (float)ShadowBlurRadius + halfBorder,
+                  info.Width - (float)ShadowLocation.X - (float)ShadowBlurRadius - halfBorder, info.Height - (float)ShadowLocation.Y - (float)ShadowBlurRadius - halfBorder);
+
+            SKPoint gradientPointStart = SKPoint.Empty, gradientPointEnd = SKPoint.Empty;
+
+            switch (this.GradientDirection)
+            {
+                case GradientDirection.Horizontal:
+                    gradientPointStart = new SKPoint(rect.Left, 0);
+                    gradientPointEnd = new SKPoint(rect.Right, 0);
+                    break;
+                case GradientDirection.Vertical:
+                    gradientPointStart = new SKPoint(0f, 0f);
+                    gradientPointEnd = new SKPoint(0f, rect.Bottom);
+                    break;
+                default:
+                    break;
+            }
+
+            var shader =
+                SKShader
+                    .CreateLinearGradient(
+                        gradientPointStart, gradientPointEnd,
+                        new SKColor[] { ButtonBackgroundStartColor.ToSKColor(), ButtonBackgroundEndColor.ToSKColor() },
+                        new float[] { 0, 1 },
+                        SKShaderTileMode.Clamp);
+
+            backgroundPaint.IsAntialias = true;
+            backgroundPaint.Style = SKPaintStyle.Fill;
+            backgroundPaint.Shader = shader;
+
+            canvas.Clear();
+
+            if (_backgroundPath is null)
+            {
+                return;
+            }
+
+            _backgroundPath.Reset();
+
+            if (ShadowColor != default(Color) && ShadowLocation != Point.Zero)
+            {
+                using (var shadowPaint = new SKPaint())
+                using (new SKAutoCanvasRestore(canvas))
+                {
+                    shadowPaint.IsAntialias = true;
+                    shadowPaint.Color = ShadowColor.ToSKColor();
+                    shadowPaint.Style = SKPaintStyle.Fill;
+                    shadowPaint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, SKMaskFilter.ConvertRadiusToSigma((float)ShadowBlurRadius));
+
+                    canvas.Translate(ShadowLocation.ToSKPoint());
+                    canvas.DrawRoundRect(rect, info.Height / 2f, info.Height / 2f, shadowPaint);
+                }
+            }
+
+            using (new SKAutoCanvasRestore(canvas))
+            {
+                if (Tapped)
+                {
+                    canvas.Translate(ShadowLocation.ToSKPoint());
+                }
+
+                _backgroundPath.AddRoundRect(rect, info.Height / 2f, info.Height / 2f);
+                canvas.DrawPath(_backgroundPath, backgroundPaint);
+
+                if (_lastTouchLocation != SKPoint.Empty && _rippleAnimationPercentage > 0.0d)
+                {
+                    using (var ripplePath = new SKPath())
+                    using (var ripplePaint = new SKPaint())
+                    {
+                        ripplePaint.IsAntialias = true;
+                        ripplePaint.Style = SKPaintStyle.Fill;
+                        ripplePaint.Color =
+                            ButtonBackgroundStartColor != default(Color)
+                                ? ButtonBackgroundEndColor.AddLuminosity(-.2f).MultiplyAlpha((1 - (float)_rippleAnimationPercentage) * .5f).ToSKColor()
+                                : Colors.Transparent.ToSKColor();
+
+                        var startingRippleSize = Math.Min(info.Width, info.Height) * 1.5f;
+                        var maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * _rippleAnimationPercentage);
+                        var offsetAmount = -maxRippleSize / 2f;
+                        var offsetPoint = new SKPoint(_lastTouchLocation.X + offsetAmount, _lastTouchLocation.Y + offsetAmount);
+                        var rippleSize = SKRect.Create(offsetPoint, new SKSize(maxRippleSize, maxRippleSize));
+                        ripplePath.AddOval(rippleSize);
+
+                        using (var finalRipple = ripplePath.Op(_backgroundPath, SKPathOp.Intersect))
+                        {
+                            canvas.DrawPath(finalRipple, ripplePaint);
+                        }
+                    }
+                }
+
+                if (BorderWidth > 0d && BorderColor != default(Color))
+                {
+                    backgroundPaint.StrokeWidth = (float)BorderWidth;
+                    backgroundPaint.Color = BorderColor.ToSKColor();
+                    backgroundPaint.Shader = null;
+                    backgroundPaint.Style = SKPaintStyle.Stroke;
+
+                    canvas.DrawPath(_backgroundPath, backgroundPaint);
+                }
+
+                if (!string.IsNullOrEmpty(Text))
+                {
+                    using (var fontPaint = new SKPaint())
+                    {
+                        fontPaint.Color = FontColor.ToSKColor();
+                        fontPaint.TextSize = (float)FontSize * scale;
+                        fontPaint.IsAntialias = true;
+                        fontPaint.Typeface = Typeface ?? PlatformInfo.DefaultTypeface;
+
+                        if (IsIconifiedText)
+                        {
+                            canvas.DrawCenteredIconifiedText(Text, rect.MidX, rect.MidY, fontPaint);
+                        }
+                        else
+                        {
+                            canvas.DrawCenteredText(Text, rect.MidX, rect.MidY, fontPaint);
+                        }
+                    }
+                }
+            }
+
+            shader?.Dispose();
+        }
+    }
+
+    /// <summary>
+    /// SKCanvas method that fires on touch.
+    /// </summary>
+    /// <param name="e">Provides data for the SKCanvasView.Touch or SKGLView.Touch event.</param>
+    protected override void OnTouch(SKTouchEventArgs e)
+    {
+        e.Handled = true;
+
+        System.Diagnostics.Debug.WriteLine($"Button: Location - {e.Location}\tAction Type - {e.ActionType}");
+
+        if (e.ActionType == SKTouchAction.Cancelled || e.ActionType == SKTouchAction.Exited)
+        {
+            Tapped = false;
+            AnimateRipple(reset: true);
+            return;
+        }
+
+        var isTapInside = _backgroundPath.Contains(e.Location.X, e.Location.Y);
+
+        if (e.ActionType == SKTouchAction.Released && isTapInside)
+        {
+            Tapped = false;
+
+            if (Ripples)
+            {
+                _lastTouchLocation = e.Location;
+                AnimateRipple();
+            }
+
+            if (Command?.CanExecute(CommandParameter) ?? false)
+            {
+                Command.Execute(CommandParameter);
+            }
+
+            Clicked?.Invoke(this, EventArgs.Empty);
+
+            return;
+        }
+
+        Tapped = e.InContact && isTapInside;
+    }
+
+    /// <summary>
+    /// Fires ripple animation.
+    /// </summary>
+    /// <param name="reset">If set to <c>true</c> reset.</param>
+    private void AnimateRipple(bool reset = false)
+    {
+        if (_lastTouchLocation == SKPoint.Empty)
+        {
+            return;
+        }
+
+        var animName = nameof(Ripples);
+
+        this.AbortAnimation(animName);
+        _rippleAnimationPercentage = 0d;
+
+        if (reset)
+        {
+            return;
+        }
+
+        var rippleAnimation = new Animation(x =>
+        {
+            _rippleAnimationPercentage = x;
+            this.InvalidateSurface();
+        });
+
+        rippleAnimation.Commit(
+            this, animName, length: 500, easing: Easing.CubicOut,
+            finished: (percent, isFinished) =>
+            {
+                _lastTouchLocation = SKPoint.Empty;
+                _rippleAnimationPercentage = 0d;
+                this.InvalidateSurface();
+            });
+    }
+}
