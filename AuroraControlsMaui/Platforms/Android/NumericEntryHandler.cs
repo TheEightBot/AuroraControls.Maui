@@ -1,91 +1,86 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using Microsoft.Maui.Handlers;
-using Microsoft.Maui.Platform;
-#if ANDROID
+using Android.Text;
 using AndroidX.AppCompat.Widget;
-#elif IOS
-using Foundation;
-using UIKit;
-#endif
+using AuroraControls.Platforms.Android;
+using Java.Lang;
+using Microsoft.Maui.Handlers;
 
 namespace AuroraControls;
 
 public partial class NumericEntryHandler : EntryHandler
 {
-    public static PropertyMapper NumericEntryMapper =
-         new PropertyMapper<NumericEntry, NumericEntryHandler>(Mapper)
-         {
-             // [nameof(Entry.Text)] = MapNumericEntryText,
-         };
+#nullable enable
+    private IInputFilter[]? _startingInputFilters;
+#nullable disable
 
-    public NumericEntryHandler()
-        : base(NumericEntryMapper)
-    {
-    }
+    private IInputFilter _numericInputFilter;
 
-#if ANDROID
     protected override void ConnectHandler(AppCompatEditText platformView)
     {
         base.ConnectHandler(platformView);
 
         platformView.InputType = Android.Text.InputTypes.NumberFlagDecimal;
-    }
-#elif IOS
-    protected override void ConnectHandler(MauiTextField platformView)
-    {
-        base.ConnectHandler(platformView);
 
-        platformView.ShouldChangeCharacters += OnShouldChangeCharacters;
+        _startingInputFilters = platformView.GetFilters();
+
+        _numericInputFilter = new NumericInputFilter(NumericEntryVirtualView);
+
+        var allInputFilters = new List<IInputFilter>();
+        allInputFilters.AddRange(_startingInputFilters ?? Enumerable.Empty<IInputFilter>());
+        allInputFilters.Add(_numericInputFilter);
+
+        platformView.SetFilters(allInputFilters.ToArray());
     }
 
-    protected override void DisconnectHandler(MauiTextField platformView)
+    protected override void DisconnectHandler(AppCompatEditText platformView)
     {
-        platformView.ShouldChangeCharacters -= OnShouldChangeCharacters;
+        platformView.SetFilters(_startingInputFilters);
+
+        _numericInputFilter?.Dispose();
 
         base.DisconnectHandler(platformView);
     }
 
-    private bool OnShouldChangeCharacters(UITextField textField, NSRange range, string replacementString)
+    public class NumericInputFilter : Java.Lang.Object, IInputFilter
     {
-        var originalSource = replacementString;
-        var originalDest = textField.Text;
+        private static readonly Java.Lang.String _emptyJavaString = new Java.Lang.String(string.Empty);
 
-        if (string.IsNullOrEmpty(originalDest) && string.IsNullOrEmpty(originalSource))
+        private NumericEntry _numericEntry;
+
+        public NumericInputFilter(NumericEntry numericEntry)
         {
-            return true;
+            _numericEntry = numericEntry;
         }
 
-        var final =
-            originalDest.Substring(0, (int)range.Location) + replacementString + originalDest.Substring((int)range.Location + (int)range.Length);
-
-        if (string.IsNullOrEmpty(final) || final.Equals(".") || final.Equals("-") || final.Equals("+"))
+        public ICharSequence FilterFormatted(ICharSequence source, int start, int end, ISpanned dest, int dstart, int dend)
         {
-            return true;
+            var originalSource = source.ToString();
+            var originalDest = dest.ToString();
+
+            if (string.IsNullOrEmpty(originalDest) && string.IsNullOrEmpty(originalSource))
+            {
+                return null;
+            }
+
+            if (dend > dstart)
+            {
+                originalDest = originalDest.Remove(dstart, dend - dstart);
+            }
+
+            var final = originalDest.Insert(dstart, originalSource);
+
+            return IsValid(final, _numericEntry.CultureInfo, _numericEntry.ValueType)
+                ? null
+                : _emptyJavaString;
         }
 
-        return double.TryParse(final, out var _);
+        protected override void Dispose(bool disposing)
+        {
+            _numericEntry = null;
+
+            base.Dispose(disposing);
+        }
     }
-#endif
-
-    private static void MapNumericEntryText(NumericEntryHandler handler, NumericEntry control)
-    {
-        var controlText = control.Text;
-
-        if (string.IsNullOrEmpty(controlText) || controlText.Equals('.') || controlText.Equals('-') || controlText.Equals('+'))
-        {
-            return;
-        }
-
-        control.Text = NumericValidationRegex().IsMatch(controlText)
-            ? controlText
-            : null;
-
-        System.Diagnostics.Debug.WriteLine($"PV: {handler.PlatformView.Text}\t-\tC: {control.Text}");
-    }
-
-    // [GeneratedRegex("^-?\\d*(\\.\\d+)?$")]
-    [GeneratedRegex("^(?:[+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+))$")]
-    private static partial Regex NumericValidationRegex();
 }

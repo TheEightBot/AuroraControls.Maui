@@ -1,9 +1,26 @@
 using AuroraControls.Gauges;
+using AuroraControls.TestApp.ViewModels;
+using CommunityToolkit.Maui.Markup;
+using ReactiveUI;
+using ReactiveUI.Maui;
 
 namespace AuroraControls.TestApp;
 
-public class MainPage : ContentPage
+public class MainPage : ReactiveContentPage<TestRxViewModel>
 {
+    public static BindableProperty MvvmToolkitViewModelProperty =
+        BindableProperty.Create(nameof(MvvmToolkitViewModel), typeof(TestMvvmToolkitViewModel), typeof(MainPage), default(TestMvvmToolkitViewModel));
+
+    public TestMvvmToolkitViewModel MvvmToolkitViewModel
+    {
+        get => (TestMvvmToolkitViewModel)GetValue(MvvmToolkitViewModelProperty);
+        set => SetValue(MvvmToolkitViewModelProperty, value);
+    }
+
+    private NumericEntry _rxNumericEntry;
+
+    private NumericEntry _rxNumericIntEntry;
+
     private Loading.RainbowRing _rainbowRing;
 
     private bool _isRainbowAnimating;
@@ -26,6 +43,9 @@ public class MainPage : ContentPage
 
     public MainPage()
     {
+        ViewModel = new TestRxViewModel();
+        MvvmToolkitViewModel = new TestMvvmToolkitViewModel();
+
         Content =
             new ScrollView
             {
@@ -55,6 +75,45 @@ public class MainPage : ContentPage
                                         Text = "This is My Entry",
                                         Placeholder = "This is a sample",
                                     },
+                            },
+                            new StyledInputLayout
+                            {
+                                Placeholder = "Numeric Entry",
+                                ActiveColor = Colors.Red,
+                                InactiveColor = Colors.Green,
+                                BorderStyle = ContainerBorderStyle.RoundedUnderline,
+                                Content =
+                                    new NumericEntry
+                                    {
+                                        Placeholder = "This must be a numeric value...",
+                                    },
+                            },
+                            new StyledInputLayout
+                            {
+                                Placeholder = "Numeric Entry (Rx UI)",
+                                ActiveColor = Colors.Red,
+                                InactiveColor = Colors.Green,
+                                BorderStyle = ContainerBorderStyle.RoundedUnderline,
+                                Content =
+                                    new NumericEntry
+                                    {
+                                        Placeholder = "This must be a numeric value...",
+                                    }
+                                        .Assign(out _rxNumericEntry),
+                            },
+                            new StyledInputLayout
+                            {
+                                Placeholder = "Numeric Int Entry (Rx UI)",
+                                ActiveColor = Colors.Red,
+                                InactiveColor = Colors.Green,
+                                BorderStyle = ContainerBorderStyle.RoundedUnderline,
+                                Content =
+                                    new NumericEntry
+                                    {
+                                        Placeholder = "This must be an int value...",
+                                        ValueType = NumericEntryValueType.Int,
+                                    }
+                                        .Assign(out _rxNumericIntEntry),
                             },
                             new StyledInputLayout
                             {
@@ -258,8 +317,13 @@ public class MainPage : ContentPage
                                 ButtonBackgroundEndColor = Colors.Chartreuse,
                                 FontColor = Colors.Black,
                             },
+                            new Image()
+                                .SetSvgIcon("splatoon.svg", 66, Colors.Red),
                         },
                     },
             };
+
+        this.Bind(ViewModel, vm => vm.NullableDoubleValue, ui => ui._rxNumericEntry.Text);
+        this.Bind(ViewModel, vm => vm.NullableIntValue, ui => ui._rxNumericIntEntry.Text);
     }
 }

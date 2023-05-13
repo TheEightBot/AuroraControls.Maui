@@ -5,7 +5,7 @@ namespace AuroraControls;
 
 public static class AuroraControlBuilder
 {
-    public static MauiAppBuilder ConfigureAuroraControls(this MauiAppBuilder mauiAppBuilder)
+    public static MauiAppBuilder UseAuroraControls(this MauiAppBuilder mauiAppBuilder)
     {
         mauiAppBuilder
             .UseSkiaSharp()
@@ -13,6 +13,7 @@ public static class AuroraControlBuilder
                 mauiHandlersCollection =>
                 {
                     mauiHandlersCollection.AddHandler(typeof(StyledInputLayout), typeof(StyledInputLayoutHandler));
+                    mauiHandlersCollection.AddHandler(typeof(NumericEntry), typeof(NumericEntryHandler));
                 });
 
 #if ANDROID

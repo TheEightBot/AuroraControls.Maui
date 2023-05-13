@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net7.0-android;net7.0-ios</TargetFrameworks>
@@ -45,5 +45,12 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\AuroraControlsMaui\AuroraControls.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="ReactiveUI.Maui" Version="18.4.44" />
+	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
+	  <PackageReference Include="ReactiveUI.Fody" Version="18.4.44" />
+	  <PackageReference Include="CommunityToolkit.Maui.Markup" Version="3.1.0" />
+	  <PackageReference Include="CommunityToolkit.Maui" Version="5.1.0" />
 	</ItemGroup>
 </Project>
