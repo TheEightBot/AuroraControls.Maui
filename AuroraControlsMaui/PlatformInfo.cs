@@ -18,6 +18,23 @@ public static class PlatformInfo
 
     private static double _defaultButtonFontSize;
 
+    private static string _iconCacheDirectory;
+
+    public static string IconCacheDirectory
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(_iconCacheDirectory))
+            {
+                return _iconCacheDirectory;
+            }
+
+            _iconCacheDirectory = Path.Combine(FileSystem.CacheDirectory, "AuroraIcons");
+
+            return _iconCacheDirectory;
+        }
+    }
+
     public static double ScalingFactor
     {
         get
