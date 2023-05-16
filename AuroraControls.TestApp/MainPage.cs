@@ -62,6 +62,24 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 VerticalOptions = LayoutOptions.Center,
                                 Text = "Welcome to .NET MAUI!",
                             },
+                            new SegmentedControl
+                            {
+                                Segments =
+                                {
+                                    new Segment
+                                    {
+                                        EmbeddedImageName = "triforce.svg",
+                                        ForegroundColor = Colors.Lime,
+                                        Text = "Test 1",
+                                    },
+                                    new Segment
+                                    {
+                                        EmbeddedImageName = "splatoon.svg",
+                                        ForegroundColor = Colors.Fuchsia,
+                                        Text = "Test 2",
+                                    },
+                                },
+                            },
                             new StyledInputLayout
                             {
                                 Placeholder = "My Placeholder With Rounded Rectangle Placeholder Through",
