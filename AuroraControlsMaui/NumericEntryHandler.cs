@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using Microsoft.Maui.Handlers;
 
@@ -27,23 +27,26 @@ public partial class NumericEntryHandler : EntryHandler
             return true;
         }
 
+        if (value.Equals(cultureInfo.NumberFormat.NegativeSign) ||
+            value.Equals(cultureInfo.NumberFormat.PositiveSign))
+        {
+            return true;
+        }
+
         switch (valueType)
         {
             case NumericEntryValueType.Double:
             case NumericEntryValueType.Decimal:
             case NumericEntryValueType.Float:
-                if (value.Equals(cultureInfo.NumberFormat.NumberDecimalSeparator))
+                if (
+                    value.Equals(cultureInfo.NumberFormat.NumberDecimalSeparator) ||
+                    value.Equals(cultureInfo.NumberFormat.PositiveSign + cultureInfo.NumberFormat.NumberDecimalSeparator) ||
+                    value.Equals(cultureInfo.NumberFormat.NegativeSign + cultureInfo.NumberFormat.NumberDecimalSeparator))
                 {
                     return true;
                 }
 
                 break;
-        }
-
-        if (value.Equals(cultureInfo.NumberFormat.NegativeSign) ||
-            value.Equals(cultureInfo.NumberFormat.PositiveSign))
-        {
-            return true;
         }
 
         switch (valueType)
