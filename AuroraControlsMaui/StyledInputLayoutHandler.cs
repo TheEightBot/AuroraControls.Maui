@@ -1,7 +1,7 @@
 ﻿using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 
-#if IOS
+#if IOS || MACCATALYST
 using CoreGraphics;
 using UIKit;
 #elif ANDROID
@@ -38,7 +38,7 @@ public class StyledInputLayoutHandler : ContentViewHandler, IHavePlatformUnderla
     {
     }
 
-#if IOS
+#if IOS || MACCATALYST
     protected override void ConnectHandler(Microsoft.Maui.Platform.ContentView platformView)
     {
         base.ConnectHandler(platformView);
@@ -139,8 +139,6 @@ public class StyledInputLayoutHandler : ContentViewHandler, IHavePlatformUnderla
 
     private static void MapStyledInputContent(IContentViewHandler elementHandler, IContentView view)
     {
-        System.Diagnostics.Debug.WriteLine($"Content: {view?.Content?.GetType()}");
-
         if (elementHandler is IHavePlatformUnderlayDrawable hpud)
         {
             hpud.PlatformUnderlayDrawable?.ClearSubviews();

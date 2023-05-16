@@ -1,6 +1,6 @@
 ﻿using System;
 
-#if IOS
+#if IOS || MACCATALYST
 using UIKit;
 #endif
 
@@ -46,7 +46,7 @@ public static class PlatformInfo
 
 #if ANDROID
             _scalingFactor = Android.App.Application.Context.Resources.DisplayMetrics.Density;
-#elif IOS
+#elif IOS || MACCATALYST
             _scalingFactor = UIScreen.MainScreen.Scale;
 #endif
 
@@ -66,7 +66,7 @@ public static class PlatformInfo
 #if ANDROID
             // This looks silly, but it should result in grabbing the system default font
             _defaultTypeface = SKTypeface.CreateDefault();
-#elif IOS
+#elif IOS || MACCATALYST
             using var fontFamily = UIKit.UIFont.SystemFontOfSize(UIKit.UIFont.ButtonFontSize);
             _defaultTypeface = SKTypeface.FromFamilyName(fontFamily.FamilyName, SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
 #endif
@@ -83,7 +83,7 @@ public static class PlatformInfo
                 return _defaultButtonFontSize;
             }
 
-#if IOS
+#if IOS || MACCATALYST
             _defaultButtonFontSize = (double)UIFont.ButtonFontSize;
 #elif ANDROID
             using var btn = new Android.Widget.Button(Android.App.Application.Context);
@@ -103,7 +103,7 @@ public static class PlatformInfo
                 return _devicePpi;
             }
 
-#if IOS
+#if IOS || MACCATALYST
             _devicePpi = ScalingFactor * BaselinePpi;
 #elif ANDROID
             _devicePpi = (double)Android.App.Application.Context.Resources.DisplayMetrics.DensityDpi;

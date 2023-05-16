@@ -1,4 +1,4 @@
-﻿using Microsoft.Maui.Animations;
+using Microsoft.Maui.Animations;
 using Microsoft.Maui.Platform;
 
 #if IOS
@@ -39,7 +39,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
     private bool _disposedValue;
 
-#if IOS
+#if IOS || MACCATALYST
     private SKCanvasView _canvas;
 
     private UITapGestureRecognizer _canvasTapped;
@@ -241,7 +241,7 @@ public class PlatformUnderlayDrawable : IDisposable
     {
         if (_platformView is not null)
         {
-#if IOS
+#if IOS || MACCATALYST
             _platformView.ClearSubviews();
 #elif ANDROID
             _platformView.RemoveAllViews();
@@ -254,7 +254,7 @@ public class PlatformUnderlayDrawable : IDisposable
     {
         if (_platformView is not null && _canvas is not null)
         {
-#if IOS
+#if IOS || MACCATALYST
             var addedView = _platformView.Subviews.ElementAtOrDefault(0);
 
             if (addedView is not null)
@@ -413,7 +413,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
     public void PlatformArrange(Rect rect)
     {
-#if IOS
+#if IOS || MACCATALYST
         if (_canvas is not null)
         {
             _canvas.Frame = new CGRect(0, 0, _platformView?.Bounds.Width ?? 0, _platformView?.Bounds.Height ?? 0);
@@ -444,7 +444,7 @@ public class PlatformUnderlayDrawable : IDisposable
             return;
         }
 
-#if IOS
+#if IOS || MACCATALYST
         if (_canvas.Frame == CGRect.Empty)
         {
             return;
@@ -706,7 +706,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
 #if ANDROID
                 _commandButton?.Dispose();
-#elif IOS
+#elif IOS || MACCATALYST
                 _canvasTapped?.Dispose();
                 _commandViewTapped?.Dispose();
                 _commandView?.Dispose();

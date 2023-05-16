@@ -1,0 +1,12 @@
+﻿using System;
+using UIKit;
+
+namespace AuroraControls;
+
+public static class UIViewExtensions
+{
+    public static UIEdgeInsets ToNative(this InsetsF inset)
+    {
+        return new UIEdgeInsets(inset.Top, inset.Left, inset.Bottom, inset.Right);
+    }
+}
