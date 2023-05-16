@@ -18,6 +18,7 @@ public class StyledInputLayout : ContentView, IUnderlayDrawable
 
                             return false;
                         },
+                    ValueChangeProperty = nameof(IPicker.SelectedIndex),
                 },
             [typeof(IDatePicker)] = StyledContentTypeRegistration.Default,
             [typeof(ITimePicker)] = StyledContentTypeRegistration.Default,
@@ -35,6 +36,7 @@ public class StyledInputLayout : ContentView, IUnderlayDrawable
 
                             return false;
                         },
+                    ValueChangeProperty = nameof(Editor.Text),
                 },
             [typeof(InputView)] =
                 new StyledContentTypeRegistration
@@ -49,6 +51,7 @@ public class StyledInputLayout : ContentView, IUnderlayDrawable
 
                             return false;
                         },
+                    ValueChangeProperty = nameof(InputView.Text),
                 },
         };
 
@@ -229,10 +232,12 @@ public struct StyledContentTypeRegistration
 
     public bool AlignPlaceholderToTop { get; set; }
 
+    public string ValueChangeProperty { get; set; }
+
     public static readonly StyledContentTypeRegistration Default =
         new StyledContentTypeRegistration
         {
-            HasValue = x => true,
+            HasValue = _ => true,
             AlignPlaceholderToTop = false,
         };
 }

@@ -1,7 +1,7 @@
-using Microsoft.Maui.Animations;
+﻿using Microsoft.Maui.Animations;
 using Microsoft.Maui.Platform;
 
-#if IOS
+#if IOS || MACCATALYST
 using CoreGraphics;
 using UIKit;
 using PlatformView = UIKit.UIView;
@@ -55,13 +55,20 @@ public class PlatformUnderlayDrawable : IDisposable
 
         if (_canvas is null)
         {
-            _canvas = new SKCanvasView { Opaque = false };
+            _canvas =
+                new SKCanvasView
+                {
+                    Opaque = false,
+                };
 
             _canvas.PaintSurface += OnPaintSurface;
             _canvas.AddGestureRecognizer(
                 _canvasTapped = new UITapGestureRecognizer(() =>
                 {
-                    _virtualView?.Focus();
+                    if (_virtualView is Microsoft.Maui.Controls.ContentView cv && cv.Content is IView view)
+                    {
+                        view.Focus();
+                    }
                 }));
         }
     }
@@ -163,6 +170,7 @@ public class PlatformUnderlayDrawable : IDisposable
             _canvas = new SKCanvasView(platformView.Context);
 
             _canvas.PaintSurface += OnPaintSurface;
+            _canvas.FocusChange += Canvas_FocusChange;
             _canvas.Layout(0, 0, platformView.Width, platformView.Height);
             _canvas.Invalidate();
 
@@ -179,6 +187,7 @@ public class PlatformUnderlayDrawable : IDisposable
         if (_canvas is not null)
         {
             _canvas.PaintSurface -= OnPaintSurface;
+            _canvas.FocusChange -= Canvas_FocusChange;
             _canvas.RemoveFromParent();
             _canvas?.Dispose();
             _canvas = null;
@@ -190,6 +199,14 @@ public class PlatformUnderlayDrawable : IDisposable
             _commandButton.RemoveFromParent();
             _commandButton?.Dispose();
             _commandButton = null;
+        }
+    }
+
+    private void Canvas_FocusChange(object sender, Android.Views.View.FocusChangeEventArgs e)
+    {
+        if (e.HasFocus && _virtualView is Microsoft.Maui.Controls.ContentView cv && cv.Content is IView view)
+        {
+            view.Focus();
         }
     }
 
@@ -296,6 +313,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
                 if (_content is not null)
                 {
+                    _content.PropertyChanged -= Content_PropertyChanged;
                     _content.PropertyChanged += Content_PropertyChanged;
 
                     if (_virtualView is IUnderlayDrawable ud)
@@ -338,11 +356,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
     private void Content_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(InputView.Text))
-        {
-            AnimateHasValue();
-        }
-        else if (e.PropertyName == nameof(IPicker.SelectedIndex))
+        if (_typeRegistration.HasValue && !string.IsNullOrEmpty(_typeRegistration.Value.ValueChangeProperty) && e.PropertyName == _typeRegistration.Value.ValueChangeProperty)
         {
             AnimateHasValue();
         }
