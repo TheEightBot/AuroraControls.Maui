@@ -14,8 +14,8 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
 
     public AuroraViewBase()
     {
-        _scale = (float)DeviceDisplay.Current.MainDisplayInfo.Density;
         MinimumHeightRequest = 1;
+        _scale = (float)PlatformInfo.ScalingFactor;
     }
 
     /// <summary>

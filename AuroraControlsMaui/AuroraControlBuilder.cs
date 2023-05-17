@@ -16,6 +16,8 @@ public static class AuroraControlBuilder
                     mauiHandlersCollection.AddHandler(typeof(NumericEntry), typeof(NumericEntryHandler));
                 });
 
+        PlatformInfo.Init();
+
 #if ANDROID
         mauiAppBuilder.Services.AddSingleton<IIconCache, AuroraControls.Platforms.Android.IconCache>();
 #elif IOS

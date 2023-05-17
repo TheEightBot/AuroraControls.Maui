@@ -20,6 +20,15 @@ public static class PlatformInfo
 
     private static string _iconCacheDirectory;
 
+    public static void Init()
+    {
+        _ = IconCacheDirectory;
+        _ = ScalingFactor;
+        _ = DefaultTypeface;
+        _ = DefaultButtonFontSize;
+        _ = DevicePpi;
+    }
+
     public static string IconCacheDirectory
     {
         get
@@ -44,11 +53,7 @@ public static class PlatformInfo
                 return _scalingFactor;
             }
 
-#if ANDROID
-            _scalingFactor = Android.App.Application.Context.Resources.DisplayMetrics.Density;
-#elif IOS || MACCATALYST
-            _scalingFactor = UIScreen.MainScreen.Scale;
-#endif
+            var density = DeviceDisplay.Current.MainDisplayInfo.Density;
 
             return _scalingFactor;
         }
