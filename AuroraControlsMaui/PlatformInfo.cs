@@ -53,7 +53,7 @@ public static class PlatformInfo
                 return _scalingFactor;
             }
 
-            var density = DeviceDisplay.Current.MainDisplayInfo.Density;
+            _scalingFactor = DeviceDisplay.Current.MainDisplayInfo.Density;
 
             return _scalingFactor;
         }
