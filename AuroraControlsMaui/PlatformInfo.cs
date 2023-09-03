@@ -1,6 +1,9 @@
 ﻿using System;
+using Microsoft.Maui.Platform;
 
-#if IOS || MACCATALYST
+#if ANDROID
+using Android.Views;
+#elif IOS || MACCATALYST
 using UIKit;
 #endif
 
@@ -19,6 +22,8 @@ public static class PlatformInfo
     private static double _defaultButtonFontSize;
 
     private static string _iconCacheDirectory;
+
+    private static Rect _unknownLocation = new Rect(-1d, -1d, -1d, -1d);
 
     public static void Init()
     {
@@ -72,6 +77,7 @@ public static class PlatformInfo
             // This looks silly, but it should result in grabbing the system default font
             _defaultTypeface = SKTypeface.CreateDefault();
 #elif IOS || MACCATALYST
+
             using var fontFamily = UIKit.UIFont.SystemFontOfSize(UIKit.UIFont.ButtonFontSize);
             _defaultTypeface = SKTypeface.FromFamilyName(fontFamily.FamilyName, SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
 #endif
@@ -116,5 +122,45 @@ public static class PlatformInfo
 
             return _devicePpi;
         }
+    }
+
+    public static Rect GetLocationOfView(IElement view)
+    {
+        return GetLocationOfView(view, view.Parent);
+    }
+
+    public static Rect GetLocationOfView(IElement view, IElement parent)
+    {
+        if (view?.Handler?.MauiContext is null || parent?.Handler?.MauiContext is null)
+        {
+            return _unknownLocation;
+        }
+
+        var nativeChild = view.ToPlatform(view.Handler.MauiContext);
+        var nativeParent = parent.ToPlatform(parent.Handler.MauiContext);
+
+        if (nativeChild is null || nativeParent is null)
+        {
+            return _unknownLocation;
+        }
+
+#if ANDROID
+        var location = new Android.Graphics.Rect();
+        nativeChild.GetDrawingRect(location);
+
+        if (nativeParent is ViewGroup vg)
+        {
+            vg.OffsetDescendantRectToMyCoords(nativeChild, location);
+
+            return new Rect(location.Left, location.Top, location.Width(), location.Height());
+        }
+
+        return _unknownLocation;
+#elif IOS || MACCATALYST
+        var rect = nativeParent.ConvertRectFromView(nativeChild.Frame, nativeChild);
+        return rect.ToRectangle();
+#else
+        return _unknownLocation;
+#endif
     }
 }
