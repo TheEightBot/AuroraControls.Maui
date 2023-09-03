@@ -5,11 +5,27 @@
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
 
+    <PropertyGroup>
+		<PackageProjectUrl>https://eight.bot</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/TheEightBot/AuroraControls.Maui</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>.NET MAUI;Custom Controls;SkiaSharp;Eight-Bot</PackageTags>
+    <Description>
+			Provides custom user controls for the .NET MAUI platform
+    </Description>
+    <PackageIcon>logo.png</PackageIcon>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="stylecop.analyzers" Version="1.2.0-beta.435" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.1" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.3" PrivateAssets="all" />
     <PackageReference Include="Roslynator.Analyzers" Version="4.3.0" PrivateAssets="All" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\images\logo.png" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" />
   </ItemGroup>

@@ -84,14 +84,14 @@ public class SegmentedControl : AuroraViewBase
         set => SetValue(FontSizeProperty, value);
     }
 
-    public static BindableProperty TypefaceProperty =
-        BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(SegmentedControl), default(SKTypeface),
+    public static BindableProperty FontFamilyProperty =
+        BindableProperty.Create(nameof(FontFamily), typeof(string), typeof(SegmentedControl), default(string),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
-    public SKTypeface Typeface
+    public string FontFamily
     {
-        get => (SKTypeface)GetValue(TypefaceProperty);
-        set => SetValue(TypefaceProperty, value);
+        get => (string)GetValue(FontFamilyProperty);
+        set => SetValue(FontFamilyProperty, value);
     }
 
     public static BindableProperty CornerRadiusProperty =
@@ -313,7 +313,7 @@ public class SegmentedControl : AuroraViewBase
                                     ? ForegroundTextColor != default(Color) ? ForegroundTextColor.ToSKColor() : backgroundColor
                                     : BackgroundTextColor != default(Color) ? BackgroundTextColor.ToSKColor() : segmentForegroundColor;
                             fontPaint.TextSize = (float)FontSize * _scale;
-                            fontPaint.Typeface = Typeface ?? PlatformInfo.DefaultTypeface;
+                            fontPaint.Typeface = FontCache.Instance.TypefaceFromFontFamily(FontFamily);
                             fontPaint.IsAntialias = true;
 
                             var textMid = (segmentSize * i) + halfSegmentSize;

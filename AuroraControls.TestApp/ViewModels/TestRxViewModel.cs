@@ -1,4 +1,5 @@
-﻿using System.Reactive.Linq;
+﻿using System.Reactive;
+using System.Reactive.Linq;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -12,14 +13,34 @@ public class TestRxViewModel : ReactiveObject
     [Reactive]
     public int? NullableIntValue { get; set; }
 
+    [Reactive]
+    public DateTime? NullableDateTimeValue { get; set; } = DateTime.Now;
+
+    [Reactive]
+    public ReactiveCommand<Unit, Unit> ResetValues { get; private set; }
+
     public TestRxViewModel()
     {
+        ResetValues =
+            ReactiveCommand
+                .Create(
+                    () =>
+                    {
+                        NullableDoubleValue = null;
+                        NullableIntValue = null;
+                        NullableDateTimeValue = null;
+                    });
+
         this.WhenAnyValue(x => x.NullableDoubleValue)
             .Do(x => System.Diagnostics.Debug.WriteLine($"Nullable Double Value: {x}"))
             .Subscribe();
 
         this.WhenAnyValue(x => x.NullableIntValue)
             .Do(x => System.Diagnostics.Debug.WriteLine($"Nullable Int Value: {x}"))
+            .Subscribe();
+
+        this.WhenAnyValue(x => x.NullableDateTimeValue)
+            .Do(x => System.Diagnostics.Debug.WriteLine($"Nullable Date Time Value: {x}"))
             .Subscribe();
     }
 }

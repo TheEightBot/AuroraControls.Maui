@@ -1,3 +1,4 @@
+using System.Reactive.Linq;
 using AuroraControls.Gauges;
 using AuroraControls.TestApp.ViewModels;
 using CommunityToolkit.Maui.Markup;
@@ -41,6 +42,8 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
     private bool _isCaiAnimating;
 
+    private GradientPillButton _pillButton;
+
     public MainPage()
     {
         ViewModel = new TestRxViewModel();
@@ -64,11 +67,14 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                             },
                             new SegmentedControl
                             {
+                                FontFamily = "Clathing",
+                                SegmentControlStyle = SegmentedControlStyle.Cupertino,
+                                ForegroundTextColor = Colors.CadetBlue,
+                                BackgroundTextColor = Colors.DarkSlateGray,
                                 Segments =
                                 {
                                     new Segment
                                     {
-                                        EmbeddedImageName = "triforce.svg",
                                         ForegroundColor = Colors.Lime,
                                         Text = "Test 1",
                                     },
@@ -333,15 +339,34 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 Text = "Gradient Pill Button",
                                 ButtonBackgroundStartColor = Colors.Fuchsia,
                                 ButtonBackgroundEndColor = Colors.Chartreuse,
-                                FontColor = Colors.Black,
-                            },
+                                FontColor = Colors.DarkRed,
+                                FontFamily = "Clathing",
+                            }
+                                .Assign(out _pillButton),
                             new Image()
                                 .SetSvgIcon("splatoon.svg", 66, Colors.Red),
+                            new CupertinoToggleSwitch(),
                         },
                     },
             };
 
         this.Bind(ViewModel, vm => vm.NullableDoubleValue, ui => ui._rxNumericEntry.Text);
         this.Bind(ViewModel, vm => vm.NullableIntValue, ui => ui._rxNumericIntEntry.Text);
+
+        Observable
+            .FromEventPattern(
+                x => this.LayoutChanged += x,
+                x => this.LayoutChanged -= x)
+            .Do(
+                _ =>
+                {
+                    var locationOnPage = PlatformInfo.GetLocationOfView(_pillButton, this);
+                    var locationOnParent = PlatformInfo.GetLocationOfView(_pillButton);
+
+                    System.Diagnostics.Debug.WriteLine($"Location In Page: {locationOnPage}");
+                    System.Diagnostics.Debug.WriteLine($"Location In Parent: {locationOnParent}");
+                    System.Diagnostics.Debug.WriteLine($"MAUI Frame: {_pillButton.Frame}");
+                })
+            .Subscribe();
     }
 }

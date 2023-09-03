@@ -193,7 +193,7 @@ public static class VisualElementExtensions
         return tcs.Task;
     }
 
-    public static Task<bool> VisualTransitionTo<TElement>(this TElement element, string animationName, Action<double> callback, Func<double> start, double end, uint rate = 16, uint length = 250, Easing easing = null)
+    public static Task<bool> TransitionTo<TElement>(this TElement element, string animationName, Action<double> callback, Func<double> start, double end, uint rate = 16, uint length = 250, Easing easing = null)
         where TElement : IAnimatable
     {
         if (element is null)

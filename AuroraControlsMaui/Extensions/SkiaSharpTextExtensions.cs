@@ -113,15 +113,18 @@ public static class SkiaSharpTextExtensions
             fontPaint.Typeface = PlatformInfo.DefaultTypeface;
         }
 
+        // TODO: There is likely a better/faster way to do all of this
         if (!string.IsNullOrEmpty(text) && !fontPaint.Typeface.ContainsGlyphs(text))
         {
-            // Check to see if there are any good matched typefaces
-            foreach (var registeredTypeface in FontCache.RegisteredTypefaces)
+            foreach (var fontFamily in FontCache.Instance.RegisteredFonts)
             {
-                if (registeredTypeface.ContainsGlyphs(text))
+                foreach (var font in fontFamily.Value)
                 {
-                    fontPaint.Typeface = registeredTypeface;
-                    return;
+                    if (font.ContainsGlyphs(text))
+                    {
+                        fontPaint.Typeface = font;
+                        return;
+                    }
                 }
             }
 

@@ -1,75 +1,108 @@
-﻿namespace AuroraControls;
+﻿using System.Collections.Generic;
+using System.Windows.Markup;
+using Topten.RichTextKit;
+
+namespace AuroraControls;
 
 /// <summary>
 /// Font cache.
+/// Ported from https://github.com/toptensoftware/RichTextKit/issues/7.
 /// </summary>
-public static class FontCache
+public class FontCache : Topten.RichTextKit.FontMapper
 {
     /// <summary>
-    /// A dictionary containing a string representing the resource name and the SKTypeface resource.
+    /// Gets a dictionary containing a string representing the resource name and the SKTypeface resource.
     /// </summary>
-    private static readonly Dictionary<string, SKTypeface> _fontDictionary = new Dictionary<string, SKTypeface>();
-    private static SKTypeface[] _registeredTypefaces;
+    public Dictionary<string, List<SKTypeface>> RegisteredFonts { get; } = new Dictionary<string, List<SKTypeface>>();
 
-    public static SKTypeface[] RegisteredTypefaces
+    public static FontCache Instance { get; } = new();
+
+    private FontCache()
     {
-        get
+        FontMapper.Default = this;
+    }
+
+    public void Add(string embeddedResourceName, string shortNameOverride = null)
+    {
+        using (var stream = EmbeddedResourceLoader.Load(embeddedResourceName))
         {
-            if (_registeredTypefaces is not null)
+            Add(SKTypeface.FromStream(stream), shortNameOverride);
+        }
+    }
+
+    public void Add(SKTypeface typeface, string shortNameOverride = null)
+    {
+        var familyName = shortNameOverride ?? typeface.FamilyName;
+
+        if (!RegisteredFonts.ContainsKey(familyName))
+        {
+            RegisteredFonts.Add(familyName, new List<SKTypeface>());
+        }
+
+        RegisteredFonts[familyName].Add(typeface);
+    }
+
+    public void Remove(SKTypeface typeface, string shortNameOverride = null)
+    {
+        var familyName = shortNameOverride ?? typeface.FamilyName;
+
+        if (RegisteredFonts.TryGetValue(familyName, out var values))
+        {
+            values.Remove(typeface);
+
+            typeface?.Dispose();
+        }
+    }
+
+    public SKTypeface TypefaceFromFontFamily(string fontFamily)
+    {
+        var style =
+            new Topten.RichTextKit.Style
             {
-                return _registeredTypefaces;
-            }
+                FontFamily = fontFamily,
+            };
 
-            _registeredTypefaces = _fontDictionary?.Values?.ToArray();
-            return _registeredTypefaces;
-        }
-    }
-
-    public static SKTypeface Add(string resourceName, string shortNameOverride = null)
-    {
-        using (var stream = EmbeddedResourceLoader.Load(resourceName))
-        {
-            var typeface = SKTypeface.FromStream(stream);
-            _fontDictionary.Add(!string.IsNullOrEmpty(shortNameOverride) ? shortNameOverride : resourceName, typeface);
-        }
-
-        _registeredTypefaces = null;
-
-        return _fontDictionary[resourceName];
-    }
-
-    public static void Remove(string resourceName, string shortNameOverride = null)
-    {
-        var cacheName = !string.IsNullOrEmpty(shortNameOverride) ? shortNameOverride : resourceName;
-
-        if (_fontDictionary.TryGetValue(cacheName, out SKTypeface value))
-        {
-            var typeFace = value;
-
-            _fontDictionary.Remove(cacheName);
-
-            typeFace?.Dispose();
-            typeFace = null;
-
-            _registeredTypefaces = null;
-        }
+        return TypefaceFromStyle(style, true);
     }
 
     /// <summary>
-    /// Gets the typeface.
+    /// Map a RichTextKit style to an SKTypeface.
     /// </summary>
-    /// <returns>The typeface.</returns>
-    /// <param name="resourceName">Resource name.</param>
-    /// <param name="shortNameOverride">Optional short name provided for ease of use.</param>
-    public static SKTypeface GetTypeface(string resourceName, string shortNameOverride = null)
+    /// <param name="style">The style.</param>
+    /// <param name="ignoreFontVariants">True to ignore variants (super/subscript).</param>
+    /// <returns>The mapped typeface.</returns>
+    public override SKTypeface TypefaceFromStyle(IStyle style, bool ignoreFontVariants)
     {
-        var cacheName = !string.IsNullOrEmpty(shortNameOverride) ? shortNameOverride : resourceName;
-
-        if (_fontDictionary.TryGetValue(cacheName, out SKTypeface value))
+        // Work out the qualified name
+        var qualifiedName = style.FontFamily;
+        if (style.FontItalic)
         {
-            return value;
+            qualifiedName += "-Italic";
         }
 
-        return Add(resourceName, shortNameOverride);
+        // Look up custom fonts
+        List<SKTypeface> listFonts;
+        if (RegisteredFonts.TryGetValue(qualifiedName, out listFonts))
+        {
+            // Find closest weight
+            return listFonts.MinBy(x => Math.Abs(x.FontWeight - style.FontWeight));
+        }
+
+        // Do default mapping
+        return base.TypefaceFromStyle(style, ignoreFontVariants);
+    }
+}
+
+public static class FontCacheExtensions
+{
+    public static async void AddToAuroraFontCache(this IFontCollection fontDescriptors)
+    {
+        foreach (var fontDescriptor in fontDescriptors)
+        {
+            using (var asset = await FileSystem.OpenAppPackageFileAsync(fontDescriptor.Filename).ConfigureAwait(false))
+            {
+                FontCache.Instance.Add(SKTypeface.FromStream(asset), fontDescriptor.Alias);
+            }
+        }
     }
 }

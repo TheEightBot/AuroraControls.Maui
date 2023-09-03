@@ -88,7 +88,8 @@ internal sealed class SKTextRun
                 runs.Add(new SKTextRun(pre));
             }
 
-            var typeface = FontCache.GetTypeface(segments[0]);
+            var typefaceStyle = new Topten.RichTextKit.Style { FontFamily = segments[0] };
+            var typeface = FontCache.Instance.TypefaceFromStyle(typefaceStyle, false);
 
             var intVal = Convert.ToUInt32(segments[1], 16);
             var converted = Convert.ToChar(intVal).ToString();

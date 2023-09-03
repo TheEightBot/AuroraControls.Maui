@@ -10,14 +10,15 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
 		<AssemblyName>AuroraControls</AssemblyName>
-		<Description>Custom Controls for .NET MAUI</Description>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
 	</PropertyGroup>
+
 	<ItemGroup>
-	  <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.3" />
-	  <PackageReference Include="Svg.Skia" Version="0.6.0-preview8.1" />
+	  <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.5" />
+	  <PackageReference Include="Svg.Skia" Version="1.0.0.1" />
+	  <PackageReference Include="Topten.RichTextKit" Version="0.4.166" />
 	</ItemGroup>
 </Project>
