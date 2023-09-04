@@ -4,7 +4,7 @@ namespace AuroraControls;
 
 public static class UnderlayDrawableElement
 {
-    public static readonly BindableProperty ContainerBorderStyleProperty =
+    public static readonly BindableProperty BorderStyleProperty =
         BindableProperty.Create(nameof(IUnderlayDrawable.BorderStyle), typeof(ContainerBorderStyle), typeof(IUnderlayDrawable), ContainerBorderStyle.Underline);
 
     public static readonly BindableProperty ActiveColorProperty =

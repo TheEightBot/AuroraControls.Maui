@@ -65,12 +65,12 @@ public class StyledInputLayout : ContentView, IUnderlayDrawable
         set { SetValue(InternalMarginProperty, value); }
     }
 
-    public static readonly BindableProperty ContainerBorderStyleProperty = UnderlayDrawableElement.ContainerBorderStyleProperty;
+    public static readonly BindableProperty BorderStyleProperty = UnderlayDrawableElement.BorderStyleProperty;
 
     public ContainerBorderStyle BorderStyle
     {
-        get { return (ContainerBorderStyle)GetValue(ContainerBorderStyleProperty); }
-        set { SetValue(ContainerBorderStyleProperty, value); }
+        get { return (ContainerBorderStyle)GetValue(BorderStyleProperty); }
+        set { SetValue(BorderStyleProperty, value); }
     }
 
     public static readonly BindableProperty ActiveColorProperty = UnderlayDrawableElement.ActiveColorProperty;
