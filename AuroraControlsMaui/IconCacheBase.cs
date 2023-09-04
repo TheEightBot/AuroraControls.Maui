@@ -7,6 +7,8 @@ namespace AuroraControls;
 
 public abstract class IconCacheBase : IIconCache, IDisposable
 {
+    private readonly char _underscore = '_';
+
     private readonly char[] _invalidFilenameChars;
 
     private readonly SemaphoreSlim _iconLock = new SemaphoreSlim(1, 1);
@@ -15,11 +17,14 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
     private readonly SKPaint _paint = new SKPaint { BlendMode = SKBlendMode.SrcATop, Style = SKPaintStyle.Fill };
 
+    private readonly float _platformScalingFactor;
+
     private bool _disposedValue;
 
     public IconCacheBase()
     {
         _invalidFilenameChars = System.IO.Path.GetInvalidFileNameChars();
+        _platformScalingFactor = (float)PlatformInfo.ScalingFactor;
     }
 
     public Task<Image> IconFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color colorOverride = default(Color))
@@ -70,6 +75,12 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
             return new FileImageSource { File = diskCachedImage };
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[SVG Exception]\t {ex}");
+
+            return new FileImageSource();
+        }
         finally
         {
             _iconLock.Release();
@@ -83,11 +94,11 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
     public async Task<ImageSource> SourceFromRawSvg(string svgName, string svgValue, Size size, string additionalCacheKey = "", Color colorOverride = default(Color))
     {
-        var key = CreateIconKey(svgName, size, additionalCacheKey, colorOverride);
-
         try
         {
             await _iconLock.WaitAsync().ConfigureAwait(false);
+
+            var key = CreateIconKey(svgName, size, additionalCacheKey, colorOverride);
 
             if (_resolvedIcons.ContainsKey(key))
             {
@@ -123,11 +134,11 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
     public async Task<FileImageSource> FileImageSourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color colorOverride = default(Color))
     {
-        var key = CreateIconKey(svgName, size, additionalCacheKey, colorOverride);
-
         try
         {
             await _iconLock.WaitAsync().ConfigureAwait(false);
+
+            var key = CreateIconKey(svgName, size, additionalCacheKey, colorOverride);
 
             if (_resolvedIcons.ContainsKey(key))
             {
@@ -150,47 +161,15 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
             return new FileImageSource { File = diskCachedImage };
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[SVG Exception]\t {ex}");
+
+            return new FileImageSource();
+        }
         finally
         {
             _iconLock.Release();
-        }
-    }
-
-    public Image SourceFromRawSvg(string svgName, Size size, int quality = 80)
-    {
-        try
-        {
-            var scale = PlatformInfo.ScalingFactor;
-            var devicePpi = (float)PlatformInfo.DevicePpi;
-
-            var width = (int)Math.Floor(size.Width * scale);
-            var height = (int)Math.Floor(size.Height * scale);
-
-            return new Image
-            {
-                Source = new StreamImageSource
-                {
-                    Stream =
-                        _ =>
-                        {
-                            var skSvg = new SKSvg();
-
-                            using (var stream = EmbeddedResourceLoader.Load(svgName))
-                            {
-                                skSvg.Load(stream);
-                            }
-
-                            using (var image = SKImage.FromPicture(skSvg.Picture, skSvg.Picture.CullRect.Size.ToSizeI()))
-                            {
-                                return Task.FromResult(image.Encode(SKEncodedImageFormat.Png, quality).AsStream(true));
-                            }
-                        },
-                },
-            };
-        }
-        catch (Exception)
-        {
-            return default(Image);
         }
     }
 
@@ -240,48 +219,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
                 await stream.FlushAsync().ConfigureAwait(false);
             }
 
-            var scale = (float)PlatformInfo.ScalingFactor;
-
-            // TODO: Manage resizing...
-            /*
-            if (size != default(Size) && skSvg.Picture.CullRect != default)
-            {
-                var minSize = (float)Math.Min(size.Width, size.Height);
-
-                var scaledCanvas = minSize / Math.Max(skSvg.Picture.CullRect.Width, skSvg.Picture.CullRect.Height);
-
-                skSvg.Picture.CullRect = new SKSize(skSvg.Picture.CullRect.Width * scaledCanvas * scale, skSvg.Picture.CullRect.Height * scaledCanvas * scale);
-            }
-            else if (skSvg.Picture.CullRect != default)
-            {
-                skSvg.Picture.CullRect = new SKSize(skSvg.Picture.CullRect.Width * scale, skSvg.Picture.CullRect.Height * scale);
-            }
-            */
-
-            var imageInfo = new SKImageInfo((int)skSvg.Picture.CullRect.Width, (int)skSvg.Picture.CullRect.Height, SKColorType.Rgba8888, SKAlphaType.Premul);
-
-            using (var bmp = new SKBitmap(imageInfo))
-            using (var canvas = new SKCanvas(bmp))
-            {
-                canvas.Clear();
-
-                canvas.DrawPicture(skSvg.Picture);
-
-                if (colorOverride != default(Color))
-                {
-                    _paint.Color = colorOverride.ToSKColor();
-                    canvas.DrawPaint(_paint);
-                }
-
-                canvas.Flush();
-
-                using (var image = SKImage.FromBitmap(bmp))
-                using (var data = image.Encode())
-                using (var stream = data.AsStream(false))
-                {
-                    await SaveIconToDiskCache(key, stream).ConfigureAwait(false);
-                }
-            }
+            await RenderSvgAsync(skSvg, key, size, colorOverride).ConfigureAwait(false);
 
 #if DEBUG
             stopWatch.Stop();
@@ -293,7 +231,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine("[SVG Exception]" + Environment.NewLine + ex.ToString());
+            Console.WriteLine($"[SVG Exception]\t {ex}");
         }
     }
 
@@ -307,55 +245,13 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
             using var skSvg = new SKSvg();
 
-            var devicePpi = (float)PlatformInfo.DevicePpi;
-
             using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(svgValue)))
             {
+                ms.Seek(0L, SeekOrigin.Begin);
                 skSvg.Load(ms);
             }
 
-            var scale = (float)PlatformInfo.ScalingFactor;
-
-            // TODO: Figure out resizing
-            /*
-            if (size != default(Size) && skSvg.Picture.CullRect != default)
-            {
-                var minSize = (float)Math.Min(size.Width, size.Height);
-
-                var scaledCanvas = minSize / Math.Max(skSvg.Picture.CullRect.Width, skSvg.Picture.CullRect.Height);
-
-                skSvg.Picture.CullRect = new SKSize(skSvg.Picture.CullRect.Width * scaledCanvas * scale, skSvg.Picture.CullRect.Height * scaledCanvas * scale);
-            }
-            else if (skSvg.Picture.CullRect != default)
-            {
-                skSvg.Picture.CullRect = new SKSize(skSvg.Picture.CullRect.Width * scale, skSvg.Picture.CullRect.Height * scale);
-            }
-            */
-
-            var imageInfo = new SKImageInfo((int)skSvg.Picture.CullRect.Width, (int)skSvg.Picture.CullRect.Height, SKColorType.Rgba8888, SKAlphaType.Premul);
-
-            using (var bmp = new SKBitmap(imageInfo))
-            using (var canvas = new SKCanvas(bmp))
-            {
-                canvas.Clear();
-
-                canvas.DrawPicture(skSvg.Picture);
-
-                if (colorOverride != default(Color))
-                {
-                    _paint.Color = colorOverride.ToSKColor();
-                    canvas.DrawPaint(_paint);
-                }
-
-                canvas.Flush();
-
-                using (var image = SKImage.FromBitmap(bmp))
-                using (var data = image.Encode())
-                using (var stream = data.AsStream(false))
-                {
-                    await SaveIconToDiskCache(key, stream).ConfigureAwait(false);
-                }
-            }
+            await RenderSvgAsync(skSvg, key, size, colorOverride).ConfigureAwait(false);
 
 #if DEBUG
             stopWatch.Stop();
@@ -367,7 +263,59 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine("[SVG Exception]" + Environment.NewLine + ex.ToString());
+            Console.WriteLine($"[SVG Exception]\t {ex}");
+        }
+    }
+
+    private async Task RenderSvgAsync(SKSvg skSvg, string key, Size size, Color colorOverride)
+    {
+        var scaledCanvas = _platformScalingFactor;
+
+        SKRect resize = skSvg.Picture.CullRect;
+
+        if (size != default(Size) && skSvg.Picture.CullRect != default)
+        {
+            var minSize = (float)Math.Min(size.Width, size.Height);
+
+            scaledCanvas = (minSize / Math.Max(skSvg.Picture.CullRect.Width, skSvg.Picture.CullRect.Height)) * _platformScalingFactor;
+
+            resize = new SKRect(0, 0, skSvg.Picture.CullRect.Width * scaledCanvas, skSvg.Picture.CullRect.Height * scaledCanvas);
+        }
+        else if (skSvg.Picture.CullRect != default)
+        {
+            resize = new SKRect(0, 0, skSvg.Picture.CullRect.Width * _platformScalingFactor, skSvg.Picture.CullRect.Height * _platformScalingFactor);
+        }
+
+        if (colorOverride == default(Color))
+        {
+            using var memStream = new MemoryStream();
+            skSvg.Picture.ToImage(memStream, SKColors.Empty, SKEncodedImageFormat.Png, 100, scaledCanvas, scaledCanvas, SKColorType.Rgba8888, SKAlphaType.Premul, SKColorSpace.CreateSrgb());
+            memStream.Seek(0L, SeekOrigin.Begin);
+            await SaveIconToDiskCache(key, memStream).ConfigureAwait(false);
+            return;
+        }
+
+        var imageInfo = new SKImageInfo((int)resize.Width, (int)resize.Height, SKColorType.Rgba8888, SKAlphaType.Premul);
+
+        using (var bmp = new SKBitmap(imageInfo))
+        using (var canvas = new SKCanvas(bmp))
+        {
+            skSvg.Picture.Draw(SKColor.Empty, scaledCanvas, scaledCanvas, canvas);
+
+            if (colorOverride != default(Color))
+            {
+                _paint.Color = colorOverride.ToSKColor();
+                canvas.DrawPaint(_paint);
+            }
+
+            canvas.Flush();
+
+            using (var image = SKImage.FromBitmap(bmp))
+            using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
+            using (var stream = data.AsStream(false))
+            {
+                await SaveIconToDiskCache(key, stream).ConfigureAwait(false);
+            }
         }
     }
 
@@ -406,16 +354,14 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
     private string CreateIconKey(string svgName, Size size, string additionalCacheKey = "", Color colorOverride = default(Color))
     {
-        var key = string.Format("{0}_{1}_{2}_{3}_{4}", svgName, additionalCacheKey, size.Width, size.Height, colorOverride.GetHashCode());
+        var key = $"{svgName}_{additionalCacheKey}_{size.Width}_{size.Height}_{colorOverride?.GetHashCode()}".Trim(_underscore);
 
-        var scale = PlatformInfo.ScalingFactor;
-
-        if (scale > 1.01d)
+        if (_platformScalingFactor > 1.01f)
         {
-            key = $"{key}@{scale}x";
+            key = $"{key}@{_platformScalingFactor}x";
         }
 
-        key = string.Join("_", key.Split(_invalidFilenameChars));
+        key = string.Join(_underscore, key.Split(_invalidFilenameChars));
 
         return $"{key}.png";
     }

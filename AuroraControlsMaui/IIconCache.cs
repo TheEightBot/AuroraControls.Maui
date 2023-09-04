@@ -90,15 +90,6 @@ public interface IIconCache
     Task<FileImageSource> FileImageSourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color colorOverride = default(Color));
 
     /// <summary>
-    /// Sources from raw svg.
-    /// </summary>
-    /// <returns>The from raw svg.</returns>
-    /// <param name="svgName">The name of the SVG.</param>
-    /// <param name="size">A Xamarin.Forms.Size representing the desired size of the icon.</param>
-    /// <param name="quality">The encoding quality to assign between 0 - 100.</param>
-    Image SourceFromRawSvg(string svgName, Size size, int quality = 80);
-
-    /// <summary>
     /// Loads the assembly.
     /// </summary>
     /// <param name="assembly">Assembly.</param>
