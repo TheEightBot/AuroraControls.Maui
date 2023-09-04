@@ -293,7 +293,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine("[SVG Exception]" + Environment.NewLine + ex.ToString());
+            Console.WriteLine("[SVG Exception]" + Environment.NewLine + ex.ToString());
         }
     }
 
@@ -367,7 +367,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine("[SVG Exception]" + Environment.NewLine + ex.ToString());
+            Console.WriteLine("[SVG Exception]" + Environment.NewLine + ex.ToString());
         }
     }
 

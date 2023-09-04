@@ -43,7 +43,7 @@ public static class PlatformInfo
                 return _iconCacheDirectory;
             }
 
-            _iconCacheDirectory = Path.Combine(FileSystem.CacheDirectory, "AuroraIcons");
+            _iconCacheDirectory = Path.Combine(FileSystem.CacheDirectory, "aurora.icons");
 
             return _iconCacheDirectory;
         }
