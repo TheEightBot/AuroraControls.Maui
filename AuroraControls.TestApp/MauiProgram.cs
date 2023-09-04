@@ -25,9 +25,7 @@ public static class MauiProgram
 
                     fonts.AddToAuroraFontCache();
                 })
-            .UseAuroraControls();
-
-        EmbeddedResourceLoader.LoadAssembly(typeof(MauiProgram).Assembly);
+            .UseAuroraControls<App>();
 
         return builder.Build();
     }

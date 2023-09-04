@@ -1,11 +1,18 @@
 using System;
+using System.Reflection;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace AuroraControls;
 
 public static class AuroraControlBuilder
 {
-    public static MauiAppBuilder UseAuroraControls(this MauiAppBuilder mauiAppBuilder)
+    public static MauiAppBuilder UseAuroraControls<T>(this MauiAppBuilder mauiAppBuilder)
+        where T : Application
+    {
+        return UseAuroraControls(mauiAppBuilder, typeof(T).Assembly);
+    }
+
+    public static MauiAppBuilder UseAuroraControls(this MauiAppBuilder mauiAppBuilder, params Assembly[] resourceAssemblies)
     {
         mauiAppBuilder
             .UseSkiaSharp()
@@ -15,6 +22,11 @@ public static class AuroraControlBuilder
                     mauiHandlersCollection.AddHandler(typeof(StyledInputLayout), typeof(StyledInputLayoutHandler));
                     mauiHandlersCollection.AddHandler(typeof(NumericEntry), typeof(NumericEntryHandler));
                 });
+
+        foreach (var assembly in resourceAssemblies)
+        {
+            EmbeddedResourceLoader.LoadAssembly(assembly);
+        }
 
         PlatformInfo.Init();
 

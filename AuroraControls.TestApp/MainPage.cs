@@ -65,6 +65,11 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 VerticalOptions = LayoutOptions.Center,
                                 Text = "Welcome to .NET MAUI!",
                             },
+                            new Button
+                            {
+                                BackgroundColor = Colors.Fuchsia,
+                            }
+                                .SetSvgIcon("splatoon.svg", colorOverride: Colors.White),
                             new SegmentedControl
                             {
                                 FontFamily = "Clathing",
