@@ -18,6 +18,7 @@ public class StyledInputLayoutHandler : ContentViewHandler, IHavePlatformUnderla
         {
             [nameof(Microsoft.Maui.Controls.ContentView.Content)] = MapStyledInputContent,
             [nameof(IView.Background)] = MapStyledInputLayoutBackground,
+            [nameof(IView.Opacity)] = MapStyledInputLayoutOpacity,
             [nameof(VisualElement.BackgroundColor)] = MapStyledInputLayoutBackground,
             [nameof(IUnderlayDrawable.Placeholder)] = MapStyledInputLayoutPlaceholder,
             [nameof(IUnderlayDrawable.PlaceholderColor)] = MapStyledInputLayoutPlaceholder,
@@ -93,6 +94,12 @@ public class StyledInputLayoutHandler : ContentViewHandler, IHavePlatformUnderla
 
     private static void MapStyledInputLayoutBackground(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable)
     {
+        Invalidate(elementHandler, underlayDrawable);
+    }
+
+    private static void MapStyledInputLayoutOpacity(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable)
+    {
+        (elementHandler as IHavePlatformUnderlayDrawable)?.PlatformUnderlayDrawable?.UpdateOpacity();
         Invalidate(elementHandler, underlayDrawable);
     }
 

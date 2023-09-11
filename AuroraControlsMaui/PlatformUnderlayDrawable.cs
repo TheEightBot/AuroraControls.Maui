@@ -478,6 +478,17 @@ public class PlatformUnderlayDrawable : IDisposable
         (_virtualView as Microsoft.Maui.Controls.ContentView).Padding = new Thickness(inset.Left, inset.Top, inset.Right, inset.Bottom);
     }
 
+    public void UpdateOpacity()
+    {
+        _content.Opacity = _virtualView.Opacity;
+#if IOS || MACCATALYST
+        _canvas.Alpha = (nfloat)_virtualView.Opacity;
+#elif ANDROID
+        _canvas.Alpha = (float)_virtualView.Opacity;
+#endif
+
+    }
+
     private void DrawUnderlay(IUnderlayDrawable underlayDrawable, View element, Rect controlFrame, SKSurface surface, SKImageInfo imageInfo)
     {
         if (_isDrawing)
