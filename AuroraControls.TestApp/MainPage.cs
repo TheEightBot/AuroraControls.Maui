@@ -18,6 +18,8 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
         set => SetValue(MvvmToolkitViewModelProperty, value);
     }
 
+    private StyledInputLayout _opacitySil;
+
     private NumericEntry _rxNumericEntry;
 
     private NumericEntry _rxNumericIntEntry;
@@ -93,6 +95,7 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                             },
                             new StyledInputLayout
                             {
+                                Opacity = .25d,
                                 Placeholder = "My Placeholder With Rounded Rectangle Placeholder Through",
                                 BackgroundColor = Colors.Fuchsia,
                                 ActiveColor = Colors.Red,
@@ -104,7 +107,15 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                         Text = "This is My Entry",
                                         Placeholder = "This is a sample",
                                     },
-                            },
+                            }
+                                .Assign(out _opacitySil),
+                            new Slider
+                            {
+                                Value = .5d,
+                                Minimum = 0d,
+                                Maximum = 1d,
+                            }
+                                .Bind(nameof(IView.Opacity), source: _opacitySil),
                             new StyledInputLayout
                             {
                                 Placeholder = "Numeric Entry",
