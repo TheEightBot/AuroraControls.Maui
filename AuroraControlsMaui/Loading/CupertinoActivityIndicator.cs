@@ -9,10 +9,6 @@ namespace AuroraControls.Loading;
 public class CupertinoActivityIndicator : SceneViewBase
 #pragma warning restore CA1001 // Types that own disposable fields should be disposable
 {
-    private SKPicture _loadingIndicator;
-
-    private bool _needsRefresh;
-
     private SKPaint _foregroundPaint;
 
     private SKColor _foregroundColor = ((Color)IndicatorColorProperty.DefaultValue).ToSKColor();
@@ -22,8 +18,7 @@ public class CupertinoActivityIndicator : SceneViewBase
     /// </summary>
     public static BindableProperty SegmentsProperty =
         BindableProperty.Create(nameof(Segments), typeof(uint), typeof(CupertinoActivityIndicator), 16u,
-            propertyChanged: static (bindable, _, _) =>
-                (bindable as CupertinoActivityIndicator)._needsRefresh = true);
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets the number of segments in the indicator.
@@ -41,8 +36,7 @@ public class CupertinoActivityIndicator : SceneViewBase
     /// </summary>
     public static BindableProperty LengthPercentProperty =
         BindableProperty.Create(nameof(LengthPercent), typeof(double), typeof(CupertinoActivityIndicator), .2d,
-            propertyChanged: static (bindable, _, _) =>
-                (bindable as CupertinoActivityIndicator)._needsRefresh = true);
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets the length percentage.
@@ -59,8 +53,7 @@ public class CupertinoActivityIndicator : SceneViewBase
     /// </summary>
     public static BindableProperty WidthPercentProperty =
         BindableProperty.Create(nameof(WidthPercent), typeof(double), typeof(CupertinoActivityIndicator), .25d,
-            propertyChanged: static (bindable, _, _) =>
-                (bindable as CupertinoActivityIndicator)._needsRefresh = true);
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets the width percentage.
@@ -81,7 +74,7 @@ public class CupertinoActivityIndicator : SceneViewBase
             {
                 var cai = bindable as CupertinoActivityIndicator;
                 cai._foregroundColor = ((Color)newValue).ToSKColor();
-                cai._needsRefresh = true;
+                cai.InvalidateSurface();
             });
 
     /// <summary>
@@ -99,8 +92,7 @@ public class CupertinoActivityIndicator : SceneViewBase
     /// </summary>
     public static BindableProperty CornerRadiusProperty =
         BindableProperty.Create(nameof(CornerRadius), typeof(double), typeof(CupertinoActivityIndicator), 4d,
-            propertyChanged: static (bindable, _, _) =>
-                (bindable as CupertinoActivityIndicator)._needsRefresh = true);
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets the corner radius.
@@ -134,9 +126,6 @@ public class CupertinoActivityIndicator : SceneViewBase
 
         _foregroundPaint?.Dispose();
         _foregroundPaint = null;
-
-        _loadingIndicator?.Dispose();
-        _loadingIndicator = null;
     }
 
     protected override SKImage PaintScene(SKSurface surface, SKImageInfo info, double percentage)
@@ -148,51 +137,37 @@ public class CupertinoActivityIndicator : SceneViewBase
         var midX = info.Rect.MidX;
         var midY = info.Rect.MidY;
 
-        if (_needsRefresh || _loadingIndicator == null)
-        {
-            using (var recorder = new SKPictureRecorder())
-            using (var recordingCanvas = recorder.BeginRecording(info.Rect))
-            {
-                var minLength = Math.Min(info.Width, info.Height) * .5f;
-                var yStart = info.Rect.MidY - minLength;
-                var length = minLength * (float)LengthPercent;
+        var minLength = Math.Min(info.Width, info.Height) * .5f;
+        var yStart = info.Rect.MidY - minLength;
+        var length = minLength * (float)LengthPercent;
 
-                var width = length * (float)WidthPercent;
+        var width = length * (float)WidthPercent;
 
-                var halfCanvasWidth = info.Width * .5f;
+        var halfCanvasWidth = info.Width * .5f;
 
-                var drawRect = new SKRect(halfCanvasWidth - (width * .5f), yStart, halfCanvasWidth + (width * .5f), yStart + length);
+        var drawRect = new SKRect(halfCanvasWidth - (width * .5f), yStart, halfCanvasWidth + (width * .5f), yStart + length);
 
-                var segments = (float)Segments;
+        var segments = (float)Segments;
 
-                var cornerRadius = (float)CornerRadius * _scale;
+        var cornerRadius = (float)CornerRadius * _scale;
 
-                var rotationAmount = 360f / segments;
-                var alphaAmount = 1f / segments;
+        var rotationAmount = 360f / segments;
+        var alphaAmount = 1f / segments;
 
-                recordingCanvas.Clear();
-
-                for (int i = 0; i < segments; i++)
-                {
-                    _foregroundPaint.Color = _foregroundColor.WithAlpha(alphaAmount * (i + .1f));
-                    recordingCanvas.RotateDegrees(rotationAmount, midX, midY);
-                    recordingCanvas.DrawRoundRect(drawRect, cornerRadius, cornerRadius, _foregroundPaint);
-                }
-
-                _loadingIndicator = recorder.EndRecording();
-            }
-
-            _needsRefresh = false;
-        }
+        canvas.Clear();
 
         using (new SKAutoCanvasRestore(canvas))
         {
-            canvas.Clear();
             canvas.RotateDegrees(startingRotation, midX, midY);
-            canvas.DrawPicture(_loadingIndicator);
+
+            for (int i = 0; i < segments; i++)
+            {
+                _foregroundPaint.Color = _foregroundColor.WithAlpha(alphaAmount * (i + .1f));
+                canvas.RotateDegrees(rotationAmount, midX, midY);
+                canvas.DrawRoundRect(drawRect, cornerRadius, cornerRadius, _foregroundPaint);
+            }
         }
 
-        canvas.Flush();
         return surface.Snapshot();
     }
 }

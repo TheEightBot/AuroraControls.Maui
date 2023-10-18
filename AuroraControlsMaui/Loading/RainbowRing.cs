@@ -11,19 +11,19 @@ public class RainbowRing : SceneViewBase
     private readonly SKColor[] _colors =
         new[]
         {
-                SKColor.Parse("#99f44336"),
-                SKColor.Parse("#99ff5722"),
-                SKColor.Parse("#99ffeb3b"),
-                SKColor.Parse("#9900bcd4"),
-                SKColor.Parse("#993f51b5"),
-                SKColor.Parse("#99673ab7"),
-                SKColor.Parse("#999c27b0"),
-                SKColor.Parse("#bffafafa"),
+            SKColor.Parse("#99f44336"),
+            SKColor.Parse("#99ff5722"),
+            SKColor.Parse("#99ffeb3b"),
+            SKColor.Parse("#9900bcd4"),
+            SKColor.Parse("#993f51b5"),
+            SKColor.Parse("#99673ab7"),
+            SKColor.Parse("#999c27b0"),
+            SKColor.Parse("#bffafafa"),
         };
 
     private readonly Random _rng = new Random(Guid.NewGuid().GetHashCode());
 
-    private Point[] _movementAmount = new Point[RingCount];
+    private readonly Point[] _movementAmount = new Point[RingCount];
 
     private bool _firstRun = true;
 
@@ -41,8 +41,7 @@ public class RainbowRing : SceneViewBase
             propertyChanged:
                 static (bindable, _, newValue) =>
                 {
-                    var current = bindable as RainbowRing;
-                    if (current != null && current._ringPaint != null)
+                    if (bindable is RainbowRing current && current._ringPaint != null)
                     {
                         var value = (float)(double)newValue;
                         current._ringPaint.StrokeWidth = value;
