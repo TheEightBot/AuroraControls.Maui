@@ -82,7 +82,8 @@ public class FontCache : Topten.RichTextKit.FontMapper
 
         // Look up custom fonts
         List<SKTypeface> listFonts;
-        if (RegisteredFonts.TryGetValue(qualifiedName, out listFonts))
+
+        if (qualifiedName is not null && RegisteredFonts.TryGetValue(qualifiedName, out listFonts))
         {
             // Find closest weight
             return listFonts.MinBy(x => Math.Abs(x.FontWeight - style.FontWeight));

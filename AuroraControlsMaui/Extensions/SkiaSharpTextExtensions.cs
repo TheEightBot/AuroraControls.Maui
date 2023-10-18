@@ -108,10 +108,7 @@ public static class SkiaSharpTextExtensions
 
     public static void EnsureHasValidFont(this SKPaint fontPaint, string text)
     {
-        if (fontPaint.Typeface is null)
-        {
-            fontPaint.Typeface = PlatformInfo.DefaultTypeface;
-        }
+        fontPaint.Typeface ??= PlatformInfo.DefaultTypeface;
 
         // TODO: There is likely a better/faster way to do all of this
         if (!string.IsNullOrEmpty(text) && !fontPaint.Typeface.ContainsGlyphs(text))

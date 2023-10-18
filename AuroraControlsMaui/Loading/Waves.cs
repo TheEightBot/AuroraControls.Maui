@@ -5,9 +5,9 @@
 /// </summary>
 public class Waves : LoadingViewBase
 {
-    private Random _rng;
+    private readonly Random _rng;
 
-    private double _randomSeed;
+    private readonly double _randomSeed;
 
     /// <summary>
     /// Specifies the number of waves.

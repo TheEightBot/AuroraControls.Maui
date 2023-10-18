@@ -1,4 +1,4 @@
-﻿using Microsoft.Maui.Animations;
+using Microsoft.Maui.Animations;
 using Microsoft.Maui.Platform;
 
 #if IOS || MACCATALYST
@@ -639,7 +639,7 @@ public class PlatformUnderlayDrawable : IDisposable
                         if (borderSize > 0d)
                         {
                             _placeholderPaint.TextSize = placeholderFontSize;
-                            var placeholderRectSize = canvas.GetTextContainerRectAt(isError ? underlayDrawable.ErrorText : placeholder, new SKPoint((float)controlXLeft, 0.0f),  _placeholderPaint);
+                            var placeholderRectSize = canvas.GetTextContainerRectAt(isError ? underlayDrawable.ErrorText : placeholder, new SKPoint((float)controlXLeft, 0.0f), _placeholderPaint);
 
                             canvas.DrawRoundRect(roundedRectBackgroundPlaceholderThrough, cornerRadiusSize, _borderPaint);
 
@@ -675,7 +675,7 @@ public class PlatformUnderlayDrawable : IDisposable
                 _placeholderPaint.Color = underlayDrawable.ErrorColor.ToSKColor();
                 _placeholderPaint.EnsureHasValidFont(underlayDrawable.ErrorText ?? placeholder);
 
-                canvas.DrawTextCenteredVertically(underlayDrawable.ErrorText ?? placeholder, new SKPoint((float)controlXLeft, focusedPlaceholderCenterY),  _placeholderPaint);
+                canvas.DrawTextCenteredVertically(underlayDrawable.ErrorText ?? placeholder, new SKPoint((float)controlXLeft, focusedPlaceholderCenterY), _placeholderPaint);
             }
             else if (!string.IsNullOrEmpty(placeholder))
             {
@@ -697,13 +697,13 @@ public class PlatformUnderlayDrawable : IDisposable
 
                     _placeholderPaint.EnsureHasValidFont(placeholder);
 
-                    canvas.DrawTextCenteredVertically(placeholder, new SKPoint((float)controlXLeft, (float)placeholderY),  _placeholderPaint);
+                    canvas.DrawTextCenteredVertically(placeholder, new SKPoint((float)controlXLeft, (float)placeholderY), _placeholderPaint);
                 }
 
                 _placeholderPaint.Color = placeholderColor.ToSKColor().WithAlpha(1f - (float)hasValueAnimationPercentage);
                 _placeholderPaint.TextSize = fontSize;
 
-                canvas.DrawTextCenteredVertically(placeholder, new SKPoint((float)controlXLeft, (float)controlYCenter),  _placeholderPaint);
+                canvas.DrawTextCenteredVertically(placeholder, new SKPoint((float)controlXLeft, (float)controlYCenter), _placeholderPaint);
             }
         }
         finally
