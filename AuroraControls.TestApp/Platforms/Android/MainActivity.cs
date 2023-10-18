@@ -8,4 +8,3 @@ namespace AuroraControls.TestApp;
 public class MainActivity : MauiAppCompatActivity
 {
 }
-
