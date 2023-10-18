@@ -67,6 +67,15 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 VerticalOptions = LayoutOptions.Center,
                                 Text = "Welcome to .NET MAUI!",
                             },
+                            new CupertinoTextToggleSwitch()
+                            {
+                                EnabledText = "Enabled",
+                                DisabledText = "Disabled",
+                                TrackDisabledColor = Color.FromRgba("#ef361a"),
+                                TrackEnabledColor = Color.FromRgba("#4694f2"),
+                                DisabledFontColor = Colors.White,
+                                EnabledFontColor = Colors.White,
+                            },
                             new Button
                             {
                                 BackgroundColor = Colors.Fuchsia,
