@@ -445,15 +445,24 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
 
         instanceCalculatedWidth += (float)Math.Max(enabledTextSize.Width, disabledTextSize.Width);
 
-        _thumbPaint.Color = ThumbColor.ToSKColor();
+        var thumbColor = ThumbColor.ToSKColor();
+        _thumbPaint.Color = thumbColor;
         _thumbPaint.Style = SKPaintStyle.Fill;
         _thumbPaint.IsAntialias = true;
+
+        var shadowSigma = SKMaskFilter.ConvertRadiusToSigma(borderWidth);
         _thumbPaint.ImageFilter =
             SKImageFilter
                 .CreateDropShadow(
-                    0, 0, 4f, 4f,
-                    SKColors.DarkGray);
+                    0, 0, shadowSigma, shadowSigma,
+                    trackColor.Lerp(SKColors.Black, .9d));
 
+        canvas.DrawOval(thumbRect, _thumbPaint);
+
+        _thumbPaint.Color = thumbColor.Lerp(SKColors.DarkGray, .6d);
+        _thumbPaint.StrokeWidth = borderWidth * .2f;
+        _thumbPaint.ImageFilter = null;
+        _thumbPaint.Style = SKPaintStyle.Stroke;
         canvas.DrawOval(thumbRect, _thumbPaint);
 
         // This gets calculated 2x because we need it as a buffer for the text.
