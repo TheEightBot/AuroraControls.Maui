@@ -49,3 +49,6 @@ jobs:
 
             - name: Publish the package to GPR
               run: dotnet nuget push ${{ env.NuGetDirectory }}/*.nupkg
+
+            - name: Publish the package to NuGet
+              run: dotnet nuget push ${{ env.NuGetDirectory }}/*.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json
