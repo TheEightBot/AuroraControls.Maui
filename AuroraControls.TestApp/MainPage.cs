@@ -4,6 +4,7 @@ using AuroraControls.TestApp.ViewModels;
 using CommunityToolkit.Maui.Markup;
 using ReactiveUI;
 using ReactiveUI.Maui;
+using static CommunityToolkit.Maui.Markup.GridRowsColumns;
 
 namespace AuroraControls.TestApp;
 
@@ -67,14 +68,23 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 VerticalOptions = LayoutOptions.Center,
                                 Text = "Welcome to .NET MAUI!",
                             },
-                            new CupertinoTextToggleSwitch()
+                            new Grid
                             {
-                                EnabledText = "Enabled",
-                                DisabledText = "Disabled",
-                                TrackDisabledColor = Color.FromRgba("#ef361a"),
-                                TrackEnabledColor = Color.FromRgba("#4694f2"),
-                                DisabledFontColor = Colors.White,
-                                EnabledFontColor = Colors.White,
+                                ColumnDefinitions = Columns.Define(Auto, Star, Auto),
+                                RowDefinitions = Rows.Define(Auto),
+                                Children =
+                                {
+                                    new CupertinoTextToggleSwitch()
+                                    {
+                                        EnabledText = "Enabled",
+                                        DisabledText = "Disabled",
+                                        TrackDisabledColor = Color.FromRgba("#ef361a"),
+                                        TrackEnabledColor = Color.FromRgba("#4694f2"),
+                                        DisabledFontColor = Colors.White,
+                                        EnabledFontColor = Colors.White,
+                                    }
+                                        .Row(0).Column(2),
+                                },
                             },
                             new Button
                             {
