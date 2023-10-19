@@ -9,10 +9,9 @@
         <RepositoryUrl>https://github.com/TheEightBot/AuroraControls.Maui</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>.NET MAUI;Custom Controls;SkiaSharp;Eight-Bot</PackageTags>
-        <Description>
-			Provides custom user controls for the .NET MAUI platform
-    </Description>
+        <Description>Custom user controls for the .NET MAUI platform</Description>
         <PackageIcon>logo.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="stylecop.analyzers"
@@ -27,6 +26,11 @@
     </ItemGroup>
     <ItemGroup>
         <None Include="..\images\logo.png"
+              Pack="true"
+              PackagePath="\" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="..\README.md"
               Pack="true"
               PackagePath="\" />
     </ItemGroup>

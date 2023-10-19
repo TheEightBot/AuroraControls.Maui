@@ -1,1 +1,1 @@
-# AuroraControlsMaui
+# Aurora Controls for .NET MAUI
