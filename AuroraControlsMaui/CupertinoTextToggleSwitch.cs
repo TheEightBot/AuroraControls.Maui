@@ -308,7 +308,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     {
         _animateToggleAnimationName = $"{nameof(AnimateToggle)}_{Guid.NewGuid()}";
         HeightRequest = ToggleMaxHeight;
-        WidthRequest = ToggleMinWidth;
+        MinimumWidthRequest = ToggleMinWidth;
     }
 
     protected override void Attached()
@@ -473,7 +473,15 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
         if (Math.Abs(scaledInstanceCalculatedWidth - _calculatedWidth) > .001f)
         {
             _calculatedWidth = scaledInstanceCalculatedWidth;
-            this.InvalidateMeasure();
+#if ANDROID
+            Dispatcher.Dispatch(
+                () =>
+                {
+                    MinimumWidthRequest = _calculatedWidth;
+                });
+#else
+            MinimumWidthRequest = _calculatedWidth;
+#endif
         }
     }
 
@@ -497,34 +505,6 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
                 Command.Execute(CommandParameter);
             }
         }
-    }
-
-    protected override Size MeasureOverride(double widthConstraint, double heightConstraint)
-    {
-        var sr = base.MeasureOverride(widthConstraint, heightConstraint);
-
-        var neededWidth =
-            _calculatedWidth > 0.0d && _calculatedWidth > sr.Width
-                ? _calculatedWidth
-                : ToggleMinWidth > sr.Width
-                    ? ToggleMinWidth
-                    : sr.Width;
-
-        var neededHeight = ToggleMaxHeight > sr.Height ? this.ToggleMaxHeight : sr.Height;
-
-#if ANDROID
-        Dispatcher.Dispatch(
-            () =>
-            {
-                HeightRequest = neededHeight;
-                WidthRequest = neededWidth;
-            });
-#else
-        HeightRequest = neededHeight;
-        WidthRequest = neededWidth;
-#endif
-
-        return new Size(neededWidth, neededHeight);
     }
 
     private void AnimateToggle(bool toggled)
