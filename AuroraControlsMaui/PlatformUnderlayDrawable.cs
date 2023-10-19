@@ -19,6 +19,7 @@ namespace AuroraControls;
 
 public class PlatformUnderlayDrawable : IDisposable
 {
+#if IOS || MACCATALYST || ANDROID
     private IView _virtualView;
 
     private PlatformView _platformView;
@@ -26,7 +27,7 @@ public class PlatformUnderlayDrawable : IDisposable
     private View _content;
 
     private SKPaint _borderPaint, _backgroundPaint, _placeholderPaint;
-
+#endif
     private bool _isDrawing;
 
     private bool _needsDraw;
@@ -256,6 +257,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
     public void ClearSubviews()
     {
+#if IOS || MACCATALYST || ANDROID
         if (_platformView is not null)
         {
 #if IOS || MACCATALYST
@@ -265,10 +267,12 @@ public class PlatformUnderlayDrawable : IDisposable
 #endif
             Invalidate();
         }
+#endif
     }
 
     public void PrepareForDisplay()
     {
+#if IOS || MACCATALYST || ANDROID
         if (_platformView is not null && _canvas is not null)
         {
 #if IOS || MACCATALYST
@@ -339,6 +343,7 @@ public class PlatformUnderlayDrawable : IDisposable
             AnimateHasFocus();
             Invalidate();
         }
+#endif
     }
 
     private static StyledContentTypeRegistration GetRegistration(Type type)
@@ -369,6 +374,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
     private void AnimateHasFocus()
     {
+#if IOS || MACCATALYST || ANDROID
         if (_virtualView is IUnderlayDrawable ud && _virtualView is Microsoft.Maui.Controls.VisualElement animatable)
         {
             var hasFocus = _content?.IsFocused ?? false;
@@ -394,10 +400,12 @@ public class PlatformUnderlayDrawable : IDisposable
                     easing: Easing.CubicInOut,
                     length: ud.FocusAnimationDuration);
         }
+#endif
     }
 
     private void AnimateHasValue()
     {
+#if IOS || MACCATALYST || ANDROID
         var hasValue = _typeRegistration?.HasValue?.Invoke(_content) ?? false;
 
         if (hasValue == _hadValue)
@@ -423,6 +431,7 @@ public class PlatformUnderlayDrawable : IDisposable
                     easing: Easing.CubicInOut,
                     length: ud.FocusAnimationDuration);
         }
+#endif
     }
 
     public void PlatformArrange(Rect rect)
@@ -453,6 +462,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
     public void Invalidate()
     {
+#if IOS || MACCATALYST || ANDROID
         if (_canvas.CanvasSize == SKSize.Empty)
         {
             return;
@@ -469,24 +479,28 @@ public class PlatformUnderlayDrawable : IDisposable
 
         _canvas.Invalidate();
 #endif
+#endif
     }
 
     public void UpdateLayoutInsets(InsetsF inset)
     {
+#if IOS || MACCATALYST || ANDROID
         var scale = (float)DeviceDisplay.Current.MainDisplayInfo.Density;
 
         (_virtualView as Microsoft.Maui.Controls.ContentView).Padding = new Thickness(inset.Left, inset.Top, inset.Right, inset.Bottom);
+#endif
     }
 
     public void UpdateOpacity()
     {
+#if IOS || MACCATALYST || ANDROID
         _content.Opacity = _virtualView.Opacity;
 #if IOS || MACCATALYST
         _canvas.Alpha = (nfloat)_virtualView.Opacity;
 #elif ANDROID
         _canvas.Alpha = (float)_virtualView.Opacity;
 #endif
-
+#endif
     }
 
     private void DrawUnderlay(IUnderlayDrawable underlayDrawable, View element, Rect controlFrame, SKSurface surface, SKImageInfo imageInfo)
@@ -496,6 +510,8 @@ public class PlatformUnderlayDrawable : IDisposable
             _needsDraw = true;
             return;
         }
+
+#if IOS || MACCATALYST || ANDROID
 
         try
         {
@@ -710,6 +726,7 @@ public class PlatformUnderlayDrawable : IDisposable
         {
             _isDrawing = false;
         }
+#endif
 
         if (_needsDraw)
         {
@@ -724,6 +741,7 @@ public class PlatformUnderlayDrawable : IDisposable
         {
             if (disposing)
             {
+#if IOS || MACCATALYST || ANDROID
                 _backgroundPaint?.Dispose();
                 _borderPaint?.Dispose();
                 _canvas?.Dispose();
@@ -736,7 +754,7 @@ public class PlatformUnderlayDrawable : IDisposable
                 _commandViewTapped?.Dispose();
                 _commandView?.Dispose();
 #endif
-
+#endif
             }
 
             _disposedValue = true;
