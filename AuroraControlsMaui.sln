@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 25.0.1703.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuroraControls", "AuroraControlsMaui\AuroraControls.csproj", "{0D872F55-6D9B-4DF3-89A8-5031456F1E38}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuroraControls.Maui", "AuroraControlsMaui\AuroraControls.Maui.csproj", "{0D872F55-6D9B-4DF3-89A8-5031456F1E38}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuroraControls.TestApp", "AuroraControls.TestApp\AuroraControls.TestApp.csproj", "{B6A2F40F-63BB-4FCD-AEA7-EFB703F1B35B}"
 EndProject

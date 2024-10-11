@@ -3,37 +3,52 @@
 
 name: .NET
 
-on: 
-  push:
-    tags:
-      - 'v**'
+on:
+    push:
+        tags:
+            - "v**"
+
+env:
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+    DOTNET_NOLOGO: true
+    NuGetDirectory: ${{ github.workspace}}/nuget
 
 jobs:
-  build:
+    build:
+        runs-on: macos-latest
 
-    runs-on: macos-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-dotnet@v3
+              with:
+                  dotnet-version: "7.x"
+                  source-url: https://nuget.pkg.github.com/theeightbot/index.json
+              env:
+                  NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '7.x'
-        source-url: https://nuget.pkg.github.com/theeightbot/index.json
-      env:
-        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+            - name: Install MAUI Workloads
+              run: dotnet workload install maui --ignore-failed-sources
 
-    - name: Install MAUI Workloads
-      run: dotnet workload install maui --ignore-failed-sources        
+            - name: Semver Parse
+              id: version
+              uses: release-kit/semver@v1.0.10
 
-    - name: Semver Parse
-      id: version
-      uses: release-kit/semver@v1.0.10        
-        
-    - name: Build Aurora Controls MAUI    
-      run: dotnet build AuroraControlsMaui/AuroraControls.csproj
+            - name: Build Aurora Controls MAUI
+              run: dotnet build AuroraControlsMaui/AuroraControls.Maui.csproj
 
-    - name: Create the package
-      run: dotnet pack --configuration Release  /p:AssemblyVersion=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} /p:Version=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} AuroraControlsMaui/AuroraControls.csproj
-      
-    - name: Publish the package to GPR
-      run: dotnet nuget push AuroraControlsMaui/bin/Release/*.nupkg
+            - name: Create the package
+              run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} /p:AssemblyVersion=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} /p:Version=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} AuroraControlsMaui/AuroraControls.Maui.csproj
+
+              # Publish the NuGet package as an artifact, so they can be used in the following jobs
+            - uses: actions/upload-artifact@v3
+              with:
+                  name: nuget
+                  if-no-files-found: error
+                  retention-days: 7
+                  path: ${{ env.NuGetDirectory }}/*.nupkg
+
+            - name: Publish the package to GPR
+              run: dotnet nuget push ${{ env.NuGetDirectory }}/*.nupkg
+
+            - name: Publish the package to NuGet
+              run: dotnet nuget push ${{ env.NuGetDirectory }}/*.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json
