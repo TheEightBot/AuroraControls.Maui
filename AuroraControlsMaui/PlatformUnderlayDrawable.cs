@@ -698,9 +698,7 @@ public class PlatformUnderlayDrawable : IDisposable
                 _placeholderPaint.Color =
                     placeholderColor
                         .Lerp(
-                            focusAnimationPercentage > 0d
-                                ? underlayDrawable.ActiveColor
-                                : placeholderColor,
+                            underlayDrawable.ActiveColor,
                             focusAnimationPercentage > 0d ? focusAnimationPercentage : hasValueAnimationPercentage)
                         .ToSKColor();
 

@@ -195,6 +195,14 @@ public class StyledInputLayout : ContentView, IUnderlayDrawable
 
     public static readonly BindableProperty PlaceholderColorProperty = HavePlaceholderElement.PlaceholderColorProperty;
 
+    public bool InheritPlaceholderFromContent
+    {
+        get { return (bool)GetValue(InheritPlaceholderFromContentProperty); }
+        set { SetValue(InheritPlaceholderFromContentProperty, value); }
+    }
+
+    public static readonly BindableProperty InheritPlaceholderFromContentProperty = HavePlaceholderElement.InheritPlaceholderFromContentProperty;
+
     public Color PlaceholderColor
     {
         get { return (Color)GetValue(PlaceholderColorProperty); }

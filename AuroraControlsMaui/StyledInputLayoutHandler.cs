@@ -1,5 +1,6 @@
 ﻿using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
+using ContentView = Microsoft.Maui.Controls.ContentView;
 
 #if IOS || MACCATALYST
 using CoreGraphics;
@@ -153,6 +154,14 @@ public class StyledInputLayoutHandler : ContentViewHandler, IHavePlatformUnderla
             MapContent(elementHandler, view);
 
             hpud.PlatformUnderlayDrawable?.PrepareForDisplay();
+        }
+
+        if (view is StyledInputLayout { InheritPlaceholderFromContent: true } && view.Content is InputView inputView)
+        {
+            var placeholderBinding = new Binding(nameof(StyledInputLayout.Placeholder), mode: BindingMode.OneWayToSource, source: view);
+            inputView.SetBinding(InputView.PlaceholderProperty, placeholderBinding);
+
+            inputView.PlaceholderColor = Colors.Transparent;
         }
     }
 }

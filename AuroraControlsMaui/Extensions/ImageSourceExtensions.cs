@@ -21,7 +21,7 @@ public static class ImageSourceExtensions
 
             lock (_iconCacheLock)
             {
-                _iconCache = ServiceProvider.GetService<IIconCache>();
+                _iconCache = IPlatformApplication.Current.Services.GetService<IIconCache>();
             }
 
             return _iconCache;

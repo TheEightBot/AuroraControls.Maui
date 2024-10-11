@@ -2,6 +2,7 @@ using System.Reactive.Linq;
 using AuroraControls.Gauges;
 using AuroraControls.TestApp.ViewModels;
 using CommunityToolkit.Maui.Markup;
+using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Maui;
 using static CommunityToolkit.Maui.Markup.GridRowsColumns;
@@ -47,8 +48,15 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
     private GradientPillButton _pillButton;
 
-    public MainPage()
+    private CupertinoTextToggleSwitch _cupertinoToggleSwitch;
+
+    public MainPage(ILogger<TestRxViewModel> logger)
     {
+        var val = 123;
+        var stuff = new TestMvvmToolkitViewModel();
+        logger.LogError($"My Value: {val}\tMy ViewModel: {stuff}");
+        logger.LogError("My Value: {val}\tMy ViewModel: {stuff}", val, stuff);
+
         ViewModel = new TestRxViewModel();
         MvvmToolkitViewModel = new TestMvvmToolkitViewModel();
 
@@ -83,7 +91,10 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                         DisabledFontColor = Colors.White,
                                         EnabledFontColor = Colors.White,
                                     }
-                                        .Row(0).Column(2),
+                                        .Bind(CupertinoTextToggleSwitch.IsToggledProperty, nameof(TestRxViewModel.IsToggled), mode: BindingMode.TwoWay)
+                                        .TapGesture(() => _cupertinoToggleSwitch.EnabledText += "A")
+                                        .Row(0).Column(2)
+                                        .Assign(out _cupertinoToggleSwitch),
                                 },
                             },
                             new Button
@@ -115,16 +126,16 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                             new StyledInputLayout
                             {
                                 Opacity = .25d,
-                                Placeholder = "My Placeholder With Rounded Rectangle Placeholder Through",
                                 BackgroundColor = Colors.Fuchsia,
                                 ActiveColor = Colors.Red,
                                 InactiveColor = Colors.Green,
+                                PlaceholderColor = Colors.Purple,
                                 BorderStyle = ContainerBorderStyle.RoundedRectanglePlaceholderThrough,
                                 Content =
                                     new Entry
                                     {
+                                        Placeholder = "My Placeholder With Rounded Rectangle Placeholder Through",
                                         Text = "This is My Entry",
-                                        Placeholder = "This is a sample",
                                     },
                             }
                                 .Assign(out _opacitySil),
@@ -166,6 +177,7 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 ActiveColor = Colors.Red,
                                 InactiveColor = Colors.Green,
                                 BorderStyle = ContainerBorderStyle.RoundedUnderline,
+                                InternalMargin = new Thickness(16, 8),
                                 Content =
                                     new NumericEntry
                                     {
