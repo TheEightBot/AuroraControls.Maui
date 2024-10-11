@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using Microsoft.Maui.Controls.Internals;
 
 namespace AuroraControls;
 
@@ -26,7 +27,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The color of the thumb switch.
     /// </summary>
     public static BindableProperty ThumbColorProperty =
-        BindableProperty.Create(nameof(ThumbColor), typeof(Color), typeof(CupertinoToggleSwitch), Colors.White,
+        BindableProperty.Create(nameof(ThumbColor), typeof(Color), typeof(CupertinoTextToggleSwitch), Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -43,7 +44,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The color of the track when enabled.
     /// </summary>
     public static BindableProperty TrackEnabledColorProperty =
-        BindableProperty.Create(nameof(TrackEnabledColor), typeof(Color), typeof(CupertinoToggleSwitch), Color.FromRgba("#5bcd58"),
+        BindableProperty.Create(nameof(TrackEnabledColor), typeof(Color), typeof(CupertinoTextToggleSwitch), Color.FromRgba("#5bcd58"),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -60,7 +61,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The color of the track when disabled.
     /// </summary>
     public static BindableProperty TrackDisabledColorProperty =
-        BindableProperty.Create(nameof(TrackDisabledColor), typeof(Color), typeof(CupertinoToggleSwitch), Color.FromRgba("#e9e9ea"),
+        BindableProperty.Create(nameof(TrackDisabledColor), typeof(Color), typeof(CupertinoTextToggleSwitch), Color.FromRgba("#e9e9ea"),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -77,7 +78,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The border width property.
     /// </summary>
     public static BindableProperty BorderWidthProperty =
-        BindableProperty.Create(nameof(BorderWidth), typeof(double), typeof(CupertinoToggleSwitch), 2d,
+        BindableProperty.Create(nameof(BorderWidth), typeof(double), typeof(CupertinoTextToggleSwitch), 2d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -94,7 +95,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The duration of the toggle animation.
     /// </summary>
     public static BindableProperty ToggleAnimationDurationProperty =
-        BindableProperty.Create(nameof(ToggleAnimationDuration), typeof(uint), typeof(CupertinoToggleSwitch), 240u,
+        BindableProperty.Create(nameof(ToggleAnimationDuration), typeof(uint), typeof(CupertinoTextToggleSwitch), 240u,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -112,13 +113,13 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The command property. Fires on tap.
     /// </summary>
     public static BindableProperty CommandProperty =
-        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(CupertinoToggleSwitch), default(ICommand));
+        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(CupertinoTextToggleSwitch), default(ICommand));
 
     /// <summary>
     /// The toggle maximum width property.
     /// </summary>
     public static BindableProperty ToggleMinWidthProperty =
-        BindableProperty.Create(nameof(ToggleMinWidth), typeof(double), typeof(CupertinoToggleSwitch), 56d,
+        BindableProperty.Create(nameof(ToggleMinWidth), typeof(double), typeof(CupertinoTextToggleSwitch), 56d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -135,7 +136,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The toggle maximum height property.
     /// </summary>
     public static BindableProperty ToggleMaxHeightProperty =
-        BindableProperty.Create(nameof(ToggleMaxHeight), typeof(double), typeof(CupertinoToggleSwitch), 32d,
+        BindableProperty.Create(nameof(ToggleMaxHeight), typeof(double), typeof(CupertinoTextToggleSwitch), 32d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -267,7 +268,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The command parameter property.
     /// </summary>
     public static BindableProperty CommandParameterProperty =
-        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(CupertinoToggleSwitch), default(object));
+        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(CupertinoTextToggleSwitch), default(object));
 
     /// <summary>
     /// Gets or sets the command parameter.
@@ -283,7 +284,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The state of the toggle.
     /// </summary>
     public static BindableProperty IsToggledProperty =
-        BindableProperty.Create(nameof(IsToggled), typeof(bool), typeof(CupertinoToggleSwitch), false,
+        BindableProperty.Create(nameof(IsToggled), typeof(bool), typeof(CupertinoTextToggleSwitch), false,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -473,16 +474,40 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
         if (Math.Abs(scaledInstanceCalculatedWidth - _calculatedWidth) > .001f)
         {
             _calculatedWidth = scaledInstanceCalculatedWidth;
-#if ANDROID
             Dispatcher.Dispatch(
                 () =>
                 {
-                    MinimumWidthRequest = _calculatedWidth;
+                    this.InvalidateMeasureNonVirtual(InvalidationTrigger.HorizontalOptionsChanged);
                 });
-#else
-            MinimumWidthRequest = _calculatedWidth;
-#endif
         }
+    }
+
+    protected override Size MeasureOverride(double widthConstraint, double heightConstraint)
+    {
+        var size = base.MeasureOverride(widthConstraint, heightConstraint);
+
+        if (_calculatedWidth > size.Width)
+        {
+            return new Size(this._calculatedWidth, size.Height);
+        }
+
+        return size;
+    }
+
+    public override SizeRequest Measure(double widthConstraint, double heightConstraint, MeasureFlags flags = MeasureFlags.None)
+    {
+        return base.Measure(widthConstraint, heightConstraint, flags);
+    }
+
+    protected override Size ArrangeOverride(Rect bounds)
+    {
+        return base.ArrangeOverride(bounds);
+    }
+
+    protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint)
+    {
+        var sizeRequest = base.OnMeasure(widthConstraint, heightConstraint);
+        return sizeRequest;
     }
 
     /// <summary>

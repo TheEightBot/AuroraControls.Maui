@@ -27,6 +27,8 @@ public static class MauiProgram
                 })
             .UseAuroraControls<App>();
 
+        builder.Services.AddTransient<MainPage>();
+
         return builder.Build();
     }
 }

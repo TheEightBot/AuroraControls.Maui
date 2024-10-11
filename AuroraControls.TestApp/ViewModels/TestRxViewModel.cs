@@ -19,6 +19,9 @@ public class TestRxViewModel : ReactiveObject
     [Reactive]
     public ReactiveCommand<Unit, Unit> ResetValues { get; private set; }
 
+    [Reactive]
+    public bool IsToggled { get; set; }
+
     public TestRxViewModel()
     {
         ResetValues =

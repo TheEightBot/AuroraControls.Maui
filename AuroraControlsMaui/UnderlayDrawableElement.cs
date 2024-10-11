@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Animations;
-
-namespace AuroraControls;
+﻿namespace AuroraControls;
 
 public static class UnderlayDrawableElement
 {
@@ -8,13 +6,13 @@ public static class UnderlayDrawableElement
         BindableProperty.Create(nameof(IUnderlayDrawable.BorderStyle), typeof(ContainerBorderStyle), typeof(IUnderlayDrawable), ContainerBorderStyle.Underline);
 
     public static readonly BindableProperty ActiveColorProperty =
-        BindableProperty.Create(nameof(IUnderlayDrawable.ActiveColor), typeof(Microsoft.Maui.Graphics.Color), typeof(IUnderlayDrawable), Colors.Black);
+        BindableProperty.Create(nameof(IUnderlayDrawable.ActiveColor), typeof(Color), typeof(IUnderlayDrawable), Colors.Black);
 
     public static readonly BindableProperty InactiveColorProperty =
-        BindableProperty.Create(nameof(IUnderlayDrawable.InactiveColor), typeof(Microsoft.Maui.Graphics.Color), typeof(IUnderlayDrawable), Colors.DimGray);
+        BindableProperty.Create(nameof(IUnderlayDrawable.InactiveColor), typeof(Color), typeof(IUnderlayDrawable), Colors.DimGray);
 
     public static readonly BindableProperty DisabledColorProperty =
-        BindableProperty.Create(nameof(IUnderlayDrawable.DisabledColor), typeof(Microsoft.Maui.Graphics.Color), typeof(IUnderlayDrawable), Colors.LightGray);
+        BindableProperty.Create(nameof(IUnderlayDrawable.DisabledColor), typeof(Color), typeof(IUnderlayDrawable), Colors.LightGray);
 
     public static readonly BindableProperty CornerRadiusProperty =
         BindableProperty.Create(nameof(IUnderlayDrawable.CornerRadius), typeof(float), typeof(IUnderlayDrawable), 4.0f);
@@ -44,7 +42,7 @@ public static class UnderlayDrawableElement
         BindableProperty.Create(nameof(IUnderlayDrawable.ErrorText), typeof(string), typeof(IUnderlayDrawable), null);
 
     public static readonly BindableProperty ErrorColorProperty =
-        BindableProperty.Create(nameof(IUnderlayDrawable.ErrorColor), typeof(Microsoft.Maui.Graphics.Color), typeof(IUnderlayDrawable), Colors.Red);
+        BindableProperty.Create(nameof(IUnderlayDrawable.ErrorColor), typeof(Color), typeof(IUnderlayDrawable), Colors.Red);
 
     public static readonly BindableProperty CommandProperty =
         BindableProperty.Create(nameof(IUnderlayDrawable.Command), typeof(ICommand), typeof(IUnderlayDrawable), default(ICommand));
@@ -70,10 +68,11 @@ public static class UnderlayDrawableExtensions
     public static SizeRequest GetDesiredSize(this IUnderlayDrawable underlayDrawable, SizeRequest sizeRequest, float scale = 1.0f)
     {
         var yOffset = underlayDrawable.ActivePlaceholderFontSize + ((underlayDrawable.BorderSize + underlayDrawable.InternalMargin.Top) * 2f);
+
         yOffset *= scale;
 
-        sizeRequest.Minimum = new Microsoft.Maui.Graphics.Size(sizeRequest.Minimum.Width, sizeRequest.Minimum.Height + yOffset);
-        sizeRequest.Request = new Microsoft.Maui.Graphics.Size(sizeRequest.Request.Width, sizeRequest.Request.Height + yOffset);
+        sizeRequest.Minimum = new Size(sizeRequest.Minimum.Width, sizeRequest.Minimum.Height + yOffset);
+        sizeRequest.Request = new Size(sizeRequest.Request.Width, sizeRequest.Request.Height + yOffset);
 
         return sizeRequest;
     }
@@ -128,6 +127,9 @@ public static class HavePlaceholderElement
 
     public static readonly BindableProperty PlaceholderProperty =
         BindableProperty.Create(nameof(IHavePlaceholder.Placeholder), typeof(string), typeof(IHavePlaceholder), default(string));
+
+    public static readonly BindableProperty InheritPlaceholderFromContentProperty =
+        BindableProperty.Create(nameof(IHavePlaceholder.Placeholder), typeof(bool), typeof(IHavePlaceholder), true);
 
     public static readonly BindableProperty PlaceholderColorProperty =
         BindableProperty.Create(nameof(IHavePlaceholder.PlaceholderColor), typeof(Microsoft.Maui.Graphics.Color), typeof(IHavePlaceholder), default(Microsoft.Maui.Graphics.Color));
