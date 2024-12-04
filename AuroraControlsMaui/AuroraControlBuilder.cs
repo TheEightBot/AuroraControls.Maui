@@ -21,6 +21,15 @@ public static class AuroraControlBuilder
                 {
                     mauiHandlersCollection.AddHandler(typeof(StyledInputLayout), typeof(StyledInputLayoutHandler));
                     mauiHandlersCollection.AddHandler(typeof(NumericEntry), typeof(NumericEntryHandler));
+                })
+            .ConfigureEffects(
+                effects =>
+                {
+#if ANDROID
+                    effects.Add<Effects.ImageProcessingEffect, Effects.ImagePlatformProcessingEffect>();
+#elif IOS || MACCATALYST
+                    effects.Add<Effects.ImageProcessingEffect, Effects.ImagePlatformProcessingEffect>();
+#endif
                 });
 
         foreach (var assembly in resourceAssemblies)

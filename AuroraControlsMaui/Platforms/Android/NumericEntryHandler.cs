@@ -1,15 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Text.RegularExpressions;
-using Android.Text;
+﻿using Android.Text;
 using AndroidX.AppCompat.Widget;
-using AuroraControls.Platforms.Android;
 using Java.Lang;
 using Microsoft.Maui.Handlers;
 
 namespace AuroraControls;
 
-public partial class NumericEntryHandler : EntryHandler
+public partial class NumericEntryHandler : EntryHandler, IDisposable
 {
 #nullable enable
     private IInputFilter[]? _startingInputFilters;
@@ -83,4 +79,20 @@ public partial class NumericEntryHandler : EntryHandler
             base.Dispose(disposing);
         }
     }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            this._numericInputFilter?.Dispose();
+        }
+    }
+
+    ~NumericEntryHandler() => Dispose(false);
 }
