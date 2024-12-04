@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:effects="clr-namespace:AuroraControls.Effects;assembly=AuroraControls"
+             x:Class="AuroraControls.TestApp.ImageProcessing">
+    <ContentPage.Content>
+        <StackLayout HorizontalOptions="FillAndExpand"
+                     VerticalOptions="FillAndExpand">
+            <Button Text="Change Effects"
+                    Clicked="Handle_Clicked" />
+            <Label Text="Blur Amount" />
+            <Slider Minimum="0"
+                    Maximum="10"
+                    ValueChanged="Handle_ValueChanged" />
+            <Image x:Name="image"
+                   Source="https://api.floodmagazine.com/wp-content/uploads/2016/07/Steve_Brule-2016-Marc_Lemoine-2.png"
+                   HorizontalOptions="FillAndExpand"
+                   VerticalOptions="FillAndExpand">
+                <Image.Effects>
+                    <effects:ImageProcessingEffect x:Name="ImageProcessingEffect" />
+                </Image.Effects>
+            </Image>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
