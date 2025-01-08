@@ -3,14 +3,14 @@ using Microsoft.Maui.Graphics;
 
 namespace AuroraControls;
 
-public enum CheckBoxShape
+public enum ToggleBoxShape
 {
     Square,
     Circular,
     RoundedSquare,
 }
 
-public enum CheckBoxCheckType
+public enum ToggleBoxCheckType
 {
     Cross,
     Check,
@@ -19,7 +19,7 @@ public enum CheckBoxCheckType
 }
 
 [ContentProperty(nameof(IsToggled))]
-public class CheckBox : AuroraViewBase
+public class ToggleBox : AuroraViewBase
 {
     private SKRect _rect;
 
@@ -33,10 +33,10 @@ public class CheckBox : AuroraViewBase
             propertyChanged:
                 (bindable, oldValue, newValue) =>
                 {
-                    if (bindable is CheckBox cb && newValue is bool boolVal)
+                    if (bindable is ToggleBox tb && newValue is bool boolVal)
                     {
-                        cb?.InvalidateSurface();
-                        cb?.Toggled?.Invoke(cb, boolVal);
+                        tb?.InvalidateSurface();
+                        tb?.Toggled?.Invoke(tb, boolVal);
                     }
                 });
 
@@ -166,16 +166,16 @@ public class CheckBox : AuroraViewBase
     /// The shape of the checkbox.
     /// </summary>
     public static BindableProperty ShapeProperty =
-        BindableProperty.Create(nameof(Shape), typeof(CheckBoxShape), typeof(CheckBox), CheckBoxShape.Circular,
+        BindableProperty.Create(nameof(Shape), typeof(ToggleBoxShape), typeof(CheckBox), ToggleBoxShape.Circular,
             propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
 
     /// <summary>
     /// Gets or sets shape of the checkbox.
     /// </summary>
     /// <value>Takes a CheckBoxShape. Default is CheckBoxShape.Circular.</value>
-    public CheckBoxShape Shape
+    public ToggleBoxShape Shape
     {
-        get { return (CheckBoxShape)GetValue(ShapeProperty); }
+        get { return (ToggleBoxShape)GetValue(ShapeProperty); }
         set { SetValue(ShapeProperty, value); }
     }
 
@@ -183,16 +183,16 @@ public class CheckBox : AuroraViewBase
     /// The type of checkmark used.
     /// </summary>
     public static BindableProperty CheckTypeProperty =
-        BindableProperty.Create(nameof(CheckType), typeof(CheckBoxCheckType), typeof(CheckBox), CheckBoxCheckType.Check,
+        BindableProperty.Create(nameof(ToggleBoxCheckType), typeof(ToggleBoxCheckType), typeof(CheckBox), ToggleBoxCheckType.Check,
             propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
 
     /// <summary>
     /// Gets or sets type of checkmark.
     /// </summary>
     /// <value>Takes a CheckBoxCheckType. Default is CheckBoxCheckType.Check.</value>
-    public CheckBoxCheckType CheckType
+    public ToggleBoxCheckType ToggleBoxCheckType
     {
-        get { return (CheckBoxCheckType)GetValue(CheckTypeProperty); }
+        get { return (ToggleBoxCheckType)GetValue(CheckTypeProperty); }
         set { SetValue(CheckTypeProperty, value); }
     }
 
@@ -212,7 +212,7 @@ public class CheckBox : AuroraViewBase
         set { SetValue(ValueProperty, value); }
     }
 
-    public CheckBox()
+    public ToggleBox()
     {
         this.EnableTouchEvents = true;
         MinimumHeightRequest = 36;
@@ -261,10 +261,10 @@ public class CheckBox : AuroraViewBase
             // draw fill
             switch (this.Shape)
             {
-                case CheckBoxShape.Circular:
+                case ToggleBoxShape.Circular:
                     canvas.DrawOval(_rect, backgroundPaint);
                     break;
-                case CheckBoxShape.RoundedSquare:
+                case ToggleBoxShape.RoundedSquare:
                     canvas.DrawRoundRect(_rect, cornerRadius, backgroundPaint);
                     break;
                 default:
@@ -298,28 +298,28 @@ public class CheckBox : AuroraViewBase
                     checkPaint.StrokeCap = SKStrokeCap.Square;
                     checkPaint.IsAntialias = true;
 
-                    switch (CheckType)
+                    switch (this.ToggleBoxCheckType)
                     {
-                        case CheckBoxCheckType.Check:
+                        case ToggleBoxCheckType.Check:
                             canvas.DrawLine(_rect.Left + (_rect.Width * .3f), _rect.Top + (_rect.Height * .5f),
                                 _rect.Left + (_rect.Width * .5f), _rect.Top + (_rect.Height * .7f), checkPaint);
                             canvas.DrawLine(_rect.Left + (_rect.Width * .5f), _rect.Top + (_rect.Height * .7f),
                                 _rect.Left + (_rect.Width * .75f), _rect.Top + (_rect.Height * .3f), checkPaint);
                             break;
-                        case CheckBoxCheckType.RoundedCheck:
+                        case ToggleBoxCheckType.RoundedCheck:
                             checkPaint.StrokeCap = SKStrokeCap.Round;
                             canvas.DrawLine(_rect.Left + (_rect.Width * .3f), _rect.Top + (_rect.Height * .5f),
                                 _rect.Left + (_rect.Width * .5f), _rect.Top + (_rect.Height * .7f), checkPaint);
                             canvas.DrawLine(_rect.Left + (_rect.Width * .5f), _rect.Top + (_rect.Height * .7f),
                                 _rect.Left + (_rect.Width * .75f), _rect.Top + (_rect.Height * .3f), checkPaint);
                             break;
-                        case CheckBoxCheckType.Cross:
+                        case ToggleBoxCheckType.Cross:
                             canvas.DrawLine(_rect.Left + MarkWidth, _rect.Top + _rect.Height - MarkWidth,
                                 _rect.Left + _rect.Width - MarkWidth, _rect.Top + MarkWidth, checkPaint);
                             canvas.DrawLine(_rect.Left + _rect.Width - MarkWidth, _rect.Top + _rect.Height - MarkWidth,
                                 _rect.Left + MarkWidth, _rect.Top + MarkWidth, checkPaint);
                             break;
-                        case CheckBoxCheckType.Circular:
+                        case ToggleBoxCheckType.Circular:
                             checkPaint.Style = SKPaintStyle.Fill;
                             canvas.DrawCircle(_rect.MidX, rect.MidY, innerRect.Width * .20f, checkPaint);
                             break;
@@ -333,10 +333,10 @@ public class CheckBox : AuroraViewBase
 
             switch (this.Shape)
             {
-                case CheckBoxShape.Circular:
+                case ToggleBoxShape.Circular:
                     canvas.DrawOval(_rect, backgroundPaint);
                     break;
-                case CheckBoxShape.RoundedSquare:
+                case ToggleBoxShape.RoundedSquare:
                     canvas.DrawRoundRect(_rect, cornerRadius, backgroundPaint);
                     break;
                 default:

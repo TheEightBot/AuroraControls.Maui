@@ -75,7 +75,7 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                             new Button { Text = "View Image Processing", }
                                 .Assign(out _viewImageProcessingButton),
 
-                            new AuroraControls.CheckBox
+                            new ToggleBox
                             {
                               ToggledBackgroundColor = Colors.Fuchsia,
                               CheckColor = Colors.Chartreuse,
