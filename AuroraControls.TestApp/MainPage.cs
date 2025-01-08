@@ -74,6 +74,14 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                         {
                             new Button { Text = "View Image Processing", }
                                 .Assign(out _viewImageProcessingButton),
+
+                            new ToggleBox
+                            {
+                              ToggledBackgroundColor = Colors.Fuchsia,
+                              CheckColor = Colors.Chartreuse,
+                              BorderColor = Colors.Chocolate,
+                              BackgroundColor = Colors.Aquamarine,
+                            },
                             new Grid
                             {
                                 ColumnDefinitions = Columns.Define(Auto, Star, Auto),
