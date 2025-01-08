@@ -22,6 +22,7 @@ public enum ToggleBoxCheckType
 public class ToggleBox : AuroraViewBase
 {
     private SKRect _rect;
+    private bool _holding;
 
     public event EventHandler<bool> Toggled;
 
@@ -29,16 +30,22 @@ public class ToggleBox : AuroraViewBase
     /// The state of the toggle.
     /// </summary>
     public static BindableProperty IsToggledProperty =
-        BindableProperty.Create(nameof(IsToggled), typeof(bool), typeof(CheckBox), false,
+        BindableProperty.Create(
+            nameof(IsToggled),
+            typeof(bool),
+            typeof(ToggleBox),
+            false,
             propertyChanged:
-                (bindable, oldValue, newValue) =>
+            (bindable, _, newValue) =>
+            {
+                if (bindable is not ToggleBox tb || newValue is not bool boolVal)
                 {
-                    if (bindable is ToggleBox tb && newValue is bool boolVal)
-                    {
-                        tb?.InvalidateSurface();
-                        tb?.Toggled?.Invoke(tb, boolVal);
-                    }
-                });
+                    return;
+                }
+
+                tb.InvalidateSurface();
+                tb.Toggled?.Invoke(tb, boolVal);
+            });
 
     /// <summary>
     /// Gets or sets a value indicating whether the box is toggled or not.
@@ -46,16 +53,20 @@ public class ToggleBox : AuroraViewBase
     /// <value><c>false</c> if not toggled, otherwise <c>true</c>.</value>
     public bool IsToggled
     {
-        get { return (bool)GetValue(IsToggledProperty); }
-        set { SetValue(IsToggledProperty, value); }
+        get => (bool)GetValue(IsToggledProperty);
+        set => SetValue(IsToggledProperty, value);
     }
 
     /// <summary>
     /// The border color.
     /// </summary>
     public static BindableProperty BorderColorProperty =
-        BindableProperty.Create(nameof(BorderColor), typeof(Color), typeof(CheckBox), Colors.Transparent,
-            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+        BindableProperty.Create(
+            nameof(BorderColor),
+            typeof(Color),
+            typeof(ToggleBox),
+            Colors.Transparent,
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets the border color.
@@ -63,16 +74,20 @@ public class ToggleBox : AuroraViewBase
     /// <value>Color of the border.</value>
     public Color BorderColor
     {
-        get { return (Color)GetValue(BorderColorProperty); }
-        set { SetValue(BorderColorProperty, value); }
+        get => (Color)GetValue(BorderColorProperty);
+        set => SetValue(BorderColorProperty, value);
     }
 
     /// <summary>
     /// The color of the background.
     /// </summary>
     public static new BindableProperty BackgroundColorProperty =
-        BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(CheckBox), Colors.Transparent,
-            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+        BindableProperty.Create(
+            nameof(BackgroundColor),
+            typeof(Color),
+            typeof(ToggleBox),
+            Colors.Transparent,
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets the background color.
@@ -80,16 +95,20 @@ public class ToggleBox : AuroraViewBase
     /// <value>Expects a Color. Default Color.Transparent.</value>
     public new Color BackgroundColor
     {
-        get { return (Color)GetValue(BackgroundColorProperty); }
-        set { SetValue(BackgroundColorProperty, value); }
+        get => (Color)GetValue(BackgroundColorProperty);
+        set => SetValue(BackgroundColorProperty, value);
     }
 
     /// <summary>
     /// The color of the background when toggled.
     /// </summary>
     public static BindableProperty ToggledBackgroundColorProperty =
-        BindableProperty.Create(nameof(ToggledBackgroundColor), typeof(Color), typeof(CheckBox), Colors.Transparent,
-            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+        BindableProperty.Create(
+            nameof(ToggledBackgroundColor),
+            typeof(Color),
+            typeof(ToggleBox),
+            Colors.Transparent,
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets the background color when toggled.
@@ -97,16 +116,20 @@ public class ToggleBox : AuroraViewBase
     /// <value>Expects a Color. Default Color.Transparent.</value>
     public Color ToggledBackgroundColor
     {
-        get { return (Color)GetValue(ToggledBackgroundColorProperty); }
-        set { SetValue(ToggledBackgroundColorProperty, value); }
+        get => (Color)GetValue(ToggledBackgroundColorProperty);
+        set => SetValue(ToggledBackgroundColorProperty, value);
     }
 
     /// <summary>
     /// The color of the checkmark.
     /// </summary>
     public static BindableProperty CheckColorProperty =
-        BindableProperty.Create(nameof(CheckColor), typeof(Color), typeof(CheckBox), Colors.Black,
-            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+        BindableProperty.Create(
+            nameof(CheckColor),
+            typeof(Color),
+            typeof(ToggleBox),
+            Colors.Black,
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets the checkmark color.
@@ -114,16 +137,20 @@ public class ToggleBox : AuroraViewBase
     /// <value>Expects a Color. Default Color.Black.</value>
     public Color CheckColor
     {
-        get { return (Color)GetValue(CheckColorProperty); }
-        set { SetValue(CheckColorProperty, value); }
+        get => (Color)GetValue(CheckColorProperty);
+        set => SetValue(CheckColorProperty, value);
     }
 
     /// <summary>
     /// The border width.
     /// </summary>
     public static BindableProperty BorderWidthProperty =
-        BindableProperty.Create(nameof(BorderWidth), typeof(int), typeof(CheckBox), 6,
-            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+        BindableProperty.Create(
+            nameof(BorderWidth),
+            typeof(int),
+            typeof(ToggleBox),
+            6,
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets the border width.
@@ -131,16 +158,20 @@ public class ToggleBox : AuroraViewBase
     /// <value>The border width as an int. Default is 6.</value>
     public int BorderWidth
     {
-        get { return (int)GetValue(BorderWidthProperty); }
-        set { SetValue(BorderWidthProperty, value); }
+        get => (int)GetValue(BorderWidthProperty);
+        set => SetValue(BorderWidthProperty, value);
     }
 
     /// <summary>
     /// The width of the checkmark.
     /// </summary>
     public static BindableProperty MarkWidthProperty =
-        BindableProperty.Create(nameof(MarkWidth), typeof(int), typeof(CheckBox), 6,
-            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+        BindableProperty.Create(
+            nameof(MarkWidth),
+            typeof(int),
+            typeof(ToggleBox),
+            6,
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets the width of the checkmark.
@@ -148,13 +179,17 @@ public class ToggleBox : AuroraViewBase
     /// <value>The border width as an int. Default is 6.</value>
     public int MarkWidth
     {
-        get { return (int)GetValue(MarkWidthProperty); }
-        set { SetValue(MarkWidthProperty, value); }
+        get => (int)GetValue(MarkWidthProperty);
+        set => SetValue(MarkWidthProperty, value);
     }
 
     public static BindableProperty CornerRadiusProperty =
-        BindableProperty.Create(nameof(CornerRadius), typeof(double), typeof(CheckBox), 8d,
-            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+        BindableProperty.Create(
+            nameof(CornerRadius),
+            typeof(double),
+            typeof(ToggleBox),
+            8d,
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     public double CornerRadius
     {
@@ -166,8 +201,12 @@ public class ToggleBox : AuroraViewBase
     /// The shape of the checkbox.
     /// </summary>
     public static BindableProperty ShapeProperty =
-        BindableProperty.Create(nameof(Shape), typeof(ToggleBoxShape), typeof(CheckBox), ToggleBoxShape.Circular,
-            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+        BindableProperty.Create(
+            nameof(Shape),
+            typeof(ToggleBoxShape),
+            typeof(ToggleBox),
+            ToggleBoxShape.Circular,
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets shape of the checkbox.
@@ -175,32 +214,36 @@ public class ToggleBox : AuroraViewBase
     /// <value>Takes a CheckBoxShape. Default is CheckBoxShape.Circular.</value>
     public ToggleBoxShape Shape
     {
-        get { return (ToggleBoxShape)GetValue(ShapeProperty); }
-        set { SetValue(ShapeProperty, value); }
+        get => (ToggleBoxShape)GetValue(ShapeProperty);
+        set => SetValue(ShapeProperty, value);
     }
 
     /// <summary>
     /// The type of checkmark used.
     /// </summary>
     public static BindableProperty CheckTypeProperty =
-        BindableProperty.Create(nameof(ToggleBoxCheckType), typeof(ToggleBoxCheckType), typeof(CheckBox), ToggleBoxCheckType.Check,
-            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+        BindableProperty.Create(
+            nameof(ToggleBoxCheckType),
+            typeof(ToggleBoxCheckType),
+            typeof(ToggleBox),
+            ToggleBoxCheckType.Check,
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets type of checkmark.
     /// </summary>
     /// <value>Takes a CheckBoxCheckType. Default is CheckBoxCheckType.Check.</value>
-    public ToggleBoxCheckType ToggleBoxCheckType
+    public ToggleBoxCheckType CheckType
     {
-        get { return (ToggleBoxCheckType)GetValue(CheckTypeProperty); }
-        set { SetValue(CheckTypeProperty, value); }
+        get => (ToggleBoxCheckType)GetValue(CheckTypeProperty);
+        set => SetValue(CheckTypeProperty, value);
     }
 
     /// <summary>
     /// The value of the checkbox.
     /// </summary>
     public static BindableProperty ValueProperty =
-        BindableProperty.Create(nameof(Value), typeof(object), typeof(CheckBox), default(object));
+        BindableProperty.Create(nameof(Value), typeof(object), typeof(ToggleBox));
 
     /// <summary>
     /// Gets or sets the value.
@@ -208,8 +251,8 @@ public class ToggleBox : AuroraViewBase
     /// <value>object's value.</value>
     public object Value
     {
-        get { return (object)GetValue(ValueProperty); }
-        set { SetValue(ValueProperty, value); }
+        get => GetValue(ValueProperty);
+        set => SetValue(ValueProperty, value);
     }
 
     public ToggleBox()
@@ -219,19 +262,20 @@ public class ToggleBox : AuroraViewBase
         MinimumWidthRequest = 36;
     }
 
-    protected override void OnPropertyChanged(string propertyName = null)
+    protected override void OnPropertyChanged(string? propertyName = null)
     {
         base.OnPropertyChanged(propertyName);
 
-        if (propertyName.Equals(VisualElement.HeightProperty.PropertyName) ||
-            propertyName.Equals(VisualElement.WidthProperty.PropertyName) ||
-            propertyName.Equals(View.MarginProperty.PropertyName))
+        if (propertyName != null &&
+            (propertyName.Equals(HeightProperty.PropertyName) ||
+                propertyName.Equals(WidthProperty.PropertyName) ||
+                propertyName.Equals(MarginProperty.PropertyName)))
         {
             this.InvalidateSurface();
         }
     }
 
-    protected override void PaintControl(SkiaSharp.SKSurface surface, SkiaSharp.SKImageInfo info)
+    protected override void PaintControl(SKSurface surface, SKImageInfo info)
     {
         var canvas = surface.Canvas;
 
@@ -280,14 +324,6 @@ public class ToggleBox : AuroraViewBase
                 Bottom = _rect.Bottom - halfBorderWidth,
             };
 
-            var outerRect = new SKRect
-            {
-                Left = _rect.Left - halfBorderWidth,
-                Right = _rect.Right + halfBorderWidth,
-                Top = _rect.Top - halfBorderWidth,
-                Bottom = _rect.Bottom + halfBorderWidth,
-            };
-
             if (IsToggled)
             {
                 using (var checkPaint = new SKPaint())
@@ -298,7 +334,7 @@ public class ToggleBox : AuroraViewBase
                     checkPaint.StrokeCap = SKStrokeCap.Square;
                     checkPaint.IsAntialias = true;
 
-                    switch (this.ToggleBoxCheckType)
+                    switch (CheckType)
                     {
                         case ToggleBoxCheckType.Check:
                             canvas.DrawLine(_rect.Left + (_rect.Width * .3f), _rect.Top + (_rect.Height * .5f),
@@ -346,22 +382,20 @@ public class ToggleBox : AuroraViewBase
         }
     }
 
-    protected bool holding = false;
-
     protected override void OnTouch(SKTouchEventArgs e)
     {
         e.Handled = true;
 
         if (!e.InContact)
         {
-            holding = false;
+            this._holding = false;
             return;
         }
 
-        if (holding == false && _rect.Contains(e.Location))
+        if (this._holding == false && _rect.Contains(e.Location))
         {
             IsToggled = !IsToggled;
-            holding = e.InContact;
+            this._holding = e.InContact;
             this.InvalidateSurface();
         }
     }
