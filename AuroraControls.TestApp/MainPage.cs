@@ -62,6 +62,10 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
         ViewModel = new TestRxViewModel();
         MvvmToolkitViewModel = new TestMvvmToolkitViewModel();
 
+        this.ToolbarItems.Add(
+            new ToolbarItem()
+                .SetSvgIcon("more.svg"));
+
         Content =
             new ScrollView
             {
