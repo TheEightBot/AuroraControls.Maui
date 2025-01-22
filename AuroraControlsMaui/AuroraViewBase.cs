@@ -59,13 +59,14 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
         PaintSurfaceInternal(e.Surface, e.Info);
     }
 
-    protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    protected override void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         base.OnPropertyChanged(propertyName);
 
-        if (propertyName.Equals(HeightProperty.PropertyName) ||
-            propertyName.Equals(WidthProperty.PropertyName) ||
-            propertyName.Equals(MarginProperty.PropertyName))
+        if (propertyName != null &&
+            (propertyName.Equals(HeightProperty.PropertyName) ||
+                propertyName.Equals(WidthProperty.PropertyName) ||
+                propertyName.Equals(MarginProperty.PropertyName)))
         {
             this.InvalidateSurface();
         }

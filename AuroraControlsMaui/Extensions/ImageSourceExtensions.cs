@@ -265,14 +265,14 @@ public static class ImageSourceExtensions
         return imageSource;
     }
 
-    public static Button SetSvgIcon(this Button imageElement, string svgName, double squareSize = 22d, Color colorOverride = default(Color))
+    public static Button SetSvgIcon(this Button imageElement, string svgName, double squareSize = 24d, Color? colorOverride = default(Color))
     {
         return IconCache
             .FileImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
             .AsAsyncSourceFor(imageElement);
     }
 
-    public static ImageButton SetSvgIcon(this ImageButton imageButton, string svgName, double squareSize = 22d, Color colorOverride = default(Color))
+    public static ImageButton SetSvgIcon(this ImageButton imageButton, string svgName, double squareSize = 24d, Color colorOverride = default(Color))
     {
         IconCache
             .FileImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
@@ -281,14 +281,14 @@ public static class ImageSourceExtensions
         return imageButton;
     }
 
-    public static ToolbarItem SetSvgIcon(this ToolbarItem toolbarItem, string svgName, double squareSize = 22d, Color colorOverride = default(Color))
+    public static ToolbarItem SetSvgIcon(this ToolbarItem toolbarItem, string svgName, double squareSize = 24d, Color colorOverride = default(Color))
     {
         return IconCache
             .FileImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
             .AsAsyncSourceFor(toolbarItem);
     }
 
-    public static Image SetSvgIcon(this Image image, string svgName, double squareSize = 22d, Color colorOverride = default(Color))
+    public static Image SetSvgIcon(this Image image, string svgName, double squareSize = 24d, Color colorOverride = default(Color))
     {
         return IconCache
             .FileImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)

@@ -17,7 +17,7 @@ public class StyledInputLayoutHandler : ContentViewHandler, IHavePlatformUnderla
     public static PropertyMapper StyledInputLayoutMapper =
         new PropertyMapper<StyledInputLayout, StyledInputLayoutHandler>(ContentViewHandler.Mapper)
         {
-            [nameof(Microsoft.Maui.Controls.ContentView.Content)] = MapStyledInputContent,
+            [nameof(IContentView.Content)] = MapStyledInputContent,
             [nameof(IView.Background)] = MapStyledInputLayoutBackground,
             [nameof(IView.Opacity)] = MapStyledInputLayoutOpacity,
             [nameof(VisualElement.BackgroundColor)] = MapStyledInputLayoutBackground,

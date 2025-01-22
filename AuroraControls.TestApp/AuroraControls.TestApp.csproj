@@ -47,12 +47,13 @@
         <ProjectReference Include="..\AuroraControlsMaui\AuroraControls.Maui.csproj" />
     </ItemGroup>
     <ItemGroup>
+        <PackageReference Include="NPicker" Version="2.0.5" />
         <PackageReference Include="ReactiveUI.Maui" Version="20.1.63" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
         <PackageReference Include="ReactiveUI.Fody" Version="19.5.41" />
         <PackageReference Include="CommunityToolkit.Maui.Markup" Version="4.1.0" />
         <PackageReference Include="CommunityToolkit.Maui" Version="9.0.3" />
-        <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.90" />
-        <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.90" />
+        <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.100" />
+        <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.100" />
     </ItemGroup>
 </Project>

@@ -35,12 +35,12 @@ public partial class ImageProcessing : ContentPage
         this._imageProcessing.AddRange([_blur, _circular, _grayscale, _invert, _scale, _sepia]);
     }
 
-    private void Handle_ValueChanged(object sender, ValueChangedEventArgs e)
+    private void Handle_ValueChanged(object? sender, ValueChangedEventArgs e)
     {
         _blur.BlurAmount = e.NewValue;
     }
 
-    private void Handle_Clicked(object sender, System.EventArgs e)
+    private void Handle_Clicked(object? sender, System.EventArgs e)
     {
         if (_index > _imageProcessing.Count - 1)
         {

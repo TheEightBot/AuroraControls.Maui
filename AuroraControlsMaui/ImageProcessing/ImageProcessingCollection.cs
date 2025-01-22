@@ -230,7 +230,7 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
     /// </summary>
     /// <param name="sender">Sender.</param>
     /// <param name="e"><c>PropertyChangedEventArgs</c> provides the <see cref="T:PropertyChangedEventArgs.PropertyName"/> property to get the name of the property that changed.</param>
-    private void HandlePropertyChangedEventHandler(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void HandlePropertyChangedEventHandler(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         ClearValue(Effects.ImageProcessingEffect.ProcessorChangedProperty);
         SetValue(Effects.ImageProcessingEffect.ProcessorChangedProperty, sender);

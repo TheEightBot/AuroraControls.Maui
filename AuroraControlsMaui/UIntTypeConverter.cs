@@ -12,18 +12,18 @@ public class UIntTypeConverter : TypeConverter
     public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
             => destinationType == typeof(string);
 
-    public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+    public override object ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
     {
         var strValue = value?.ToString();
         if (string.IsNullOrWhiteSpace(strValue))
         {
-            return null;
+            return 0u;
         }
 
         return uint.Parse(strValue, CultureInfo.InvariantCulture);
     }
 
-    public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+    public override object ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
     {
         if (value is not uint ui)
         {

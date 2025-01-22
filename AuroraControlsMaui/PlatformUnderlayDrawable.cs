@@ -113,7 +113,7 @@ public class PlatformUnderlayDrawable : IDisposable
         }
     }
 
-    private void OnPaintSurface(object sender, SKPaintSurfaceEventArgs e)
+    private void OnPaintSurface(object? sender, SKPaintSurfaceEventArgs e)
     {
         if (_virtualView is IUnderlayDrawable ud && _virtualView is Microsoft.Maui.Controls.ContentView cv && cv.Content is not null)
         {
@@ -203,7 +203,7 @@ public class PlatformUnderlayDrawable : IDisposable
         }
     }
 
-    private void Canvas_FocusChange(object sender, Android.Views.View.FocusChangeEventArgs e)
+    private void Canvas_FocusChange(object? sender, Android.Views.View.FocusChangeEventArgs e)
     {
         if (e.HasFocus && _virtualView is Microsoft.Maui.Controls.ContentView cv && cv.Content is IView view)
         {
@@ -211,7 +211,7 @@ public class PlatformUnderlayDrawable : IDisposable
         }
     }
 
-    private void CommandClicked(object sender, EventArgs e)
+    private void CommandClicked(object? sender, EventArgs e)
     {
         if (_virtualView is IUnderlayDrawable ude && (ude.Command?.CanExecute(ude.CommandParameter) ?? false))
         {
@@ -219,7 +219,7 @@ public class PlatformUnderlayDrawable : IDisposable
         }
     }
 
-    private void OnPaintSurface(object sender, SKPaintSurfaceEventArgs e)
+    private void OnPaintSurface(object? sender, SKPaintSurfaceEventArgs e)
     {
         if (_virtualView is IUnderlayDrawable ud && _virtualView is Microsoft.Maui.Controls.ContentView cv && cv.Content is not null)
         {
@@ -348,8 +348,14 @@ public class PlatformUnderlayDrawable : IDisposable
 
     private static StyledContentTypeRegistration GetRegistration(Type type)
     {
-        foreach (var registration in StyledInputLayout.StyledInputLayoutContentRegistrations)
+        if (StyledInputLayout.StyledInputLayoutContentRegistrations.TryGetValue(type, out var match))
         {
+            return match;
+        }
+
+        for (int i = StyledInputLayout.StyledInputLayoutContentRegistrations.Count - 1; i >= 0; i--)
+        {
+            var registration = StyledInputLayout.StyledInputLayoutContentRegistrations.ElementAt(i);
             if (type.IsAssignableTo(registration.Key))
             {
                 return registration.Value;
@@ -359,7 +365,7 @@ public class PlatformUnderlayDrawable : IDisposable
         return StyledContentTypeRegistration.Default;
     }
 
-    private void Content_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void Content_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (_typeRegistration.HasValue && !string.IsNullOrEmpty(_typeRegistration.Value.ValueChangeProperty) && e.PropertyName == _typeRegistration.Value.ValueChangeProperty)
         {
