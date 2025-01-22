@@ -86,6 +86,14 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                               BorderColor = Colors.Chocolate,
                               BackgroundColor = Colors.Aquamarine,
                             },
+                            new StyledInputLayout
+                            {
+                                Content =
+                                    new NPicker.DatePicker
+                                    {
+                                        Placeholder = "Nullable NDate Picker",
+                                    },
+                            },
                             new Grid
                             {
                                 ColumnDefinitions = Columns.Define(Auto, Star, Auto),

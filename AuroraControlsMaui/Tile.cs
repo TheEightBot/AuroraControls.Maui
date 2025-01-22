@@ -253,8 +253,8 @@ public class Tile : AuroraViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.White.</value>
     public Color FontColor
     {
-        get { return (Color)GetValue(FontColorProperty); }
-        set { SetValue(FontColorProperty, value); }
+        get => (Color)GetValue(FontColorProperty);
+        set => SetValue(FontColorProperty, value);
     }
 
     /// <summary>

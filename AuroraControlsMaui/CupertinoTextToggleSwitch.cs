@@ -494,22 +494,6 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
         return size;
     }
 
-    public override SizeRequest Measure(double widthConstraint, double heightConstraint, MeasureFlags flags = MeasureFlags.None)
-    {
-        return base.Measure(widthConstraint, heightConstraint, flags);
-    }
-
-    protected override Size ArrangeOverride(Rect bounds)
-    {
-        return base.ArrangeOverride(bounds);
-    }
-
-    protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint)
-    {
-        var sizeRequest = base.OnMeasure(widthConstraint, heightConstraint);
-        return sizeRequest;
-    }
-
     /// <summary>
     /// SKCanvas method that fires on touch.
     /// </summary>

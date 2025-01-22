@@ -77,7 +77,7 @@ public class ImagePlatformProcessingEffect : PlatformEffect
         }
     }
 
-    private async void ImageProcessingEffects_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs args)
+    private async void ImageProcessingEffects_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs args)
     {
         var view = Control as ImageView;
 
@@ -227,7 +227,7 @@ public class ImagePlatformProcessingEffect : PlatformEffect
         }
     }
 
-    private async void ImageProcessingEffects_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs args)
+    private async void ImageProcessingEffects_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs args)
     {
         var view = Control as UIImageView;
 

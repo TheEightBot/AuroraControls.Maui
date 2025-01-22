@@ -291,7 +291,13 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         {
             var minSize = (float)Math.Min(size.Width, size.Height);
 
-            scaledCanvas = (float)Math.Round((minSize / Math.Max(skSvg.Picture.CullRect.Width, skSvg.Picture.CullRect.Height)) * platformScalingFactor, 0, MidpointRounding.ToEven);
+            scaledCanvas = (minSize / Math.Max(skSvg.Picture.CullRect.Width, skSvg.Picture.CullRect.Height)) *
+                           platformScalingFactor;
+
+            if (scaledCanvas > 1.0f)
+            {
+                scaledCanvas = (float)Math.Ceiling(scaledCanvas);
+            }
 
             resize = new SKRect(0, 0, skSvg.Picture.CullRect.Width * scaledCanvas, skSvg.Picture.CullRect.Height * scaledCanvas);
         }

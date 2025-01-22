@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Markup;
+using NPicker;
 using SkiaSharp;
 
 namespace AuroraControls.TestApp;
@@ -13,6 +14,28 @@ public static class MauiProgram
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
             .UseMauiCommunityToolkitMarkup()
+            .UseNPicker()
+            .ConfigureMauiHandlers(
+                handlers =>
+                {
+                    StyledInputLayout.StyledInputLayoutContentRegistrations
+                        .Add(
+                            typeof(NPicker.DatePicker),
+                            new StyledContentTypeRegistration
+                            {
+                                HasValue =
+                                    view =>
+                                    {
+                                        if (view is NPicker.DatePicker dp)
+                                        {
+                                            return dp.Date.HasValue;
+                                        }
+
+                                        return false;
+                                    },
+                                ValueChangeProperty = nameof(NPicker.DatePicker.Date),
+                            });
+                })
             .ConfigureFonts(
                 fonts =>
                 {
