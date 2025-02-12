@@ -36,14 +36,6 @@ jobs:
             - name: Create the package
               run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} /p:AssemblyVersion=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} /p:Version=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }}-beta AuroraControlsMaui/AuroraControls.Maui.csproj
 
-              # Publish the NuGet package as an artifact, so they can be used in the following jobs
-            - uses: actions/upload-artifact@v3
-              with:
-                  name: nuget
-                  if-no-files-found: error
-                  retention-days: 7
-                  path: ${{ env.NuGetDirectory }}/*.nupkg
-
             - name: Publish the package to GPR
               run: dotnet nuget push ${{ env.NuGetDirectory }}/*.nupkg --api-key "${{secrets.GITHUB_TOKEN}}" --source https://nuget.pkg.github.com/theeightbot/index.json
 
