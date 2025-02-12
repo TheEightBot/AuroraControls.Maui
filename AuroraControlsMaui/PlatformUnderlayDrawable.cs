@@ -367,7 +367,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
     private void Content_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        if (_typeRegistration.HasValue && !string.IsNullOrEmpty(_typeRegistration.Value.ValueChangeProperty) && e.PropertyName == _typeRegistration.Value.ValueChangeProperty)
+        if (_typeRegistration is not null && !string.IsNullOrEmpty(_typeRegistration.ValueChangeProperty) && e.PropertyName == _typeRegistration.ValueChangeProperty)
         {
             AnimateHasValue();
         }
