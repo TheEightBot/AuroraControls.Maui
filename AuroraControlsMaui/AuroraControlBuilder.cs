@@ -49,4 +49,16 @@ public static class AuroraControlBuilder
 
         return mauiAppBuilder;
     }
+
+    public static MauiAppBuilder RegisterStyledInputLayout<TView>(this MauiAppBuilder mauiAppBuilder, string valueChangedPropertyName, Func<TView, bool> hasValue, bool alignPlaceholderToTop = false)
+        where TView : IView
+    {
+        StyledInputLayout
+            .StyledInputLayoutContentRegistrations
+            .Add(
+                typeof(TView),
+                StyledContentTypeRegistration.Build(valueChangedPropertyName, hasValue, alignPlaceholderToTop));
+
+        return mauiAppBuilder;
+    }
 }

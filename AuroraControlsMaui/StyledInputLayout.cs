@@ -3,56 +3,25 @@
 public class StyledInputLayout : ContentView, IUnderlayDrawable
 {
     public static readonly Dictionary<Type, StyledContentTypeRegistration> StyledInputLayoutContentRegistrations =
-        new Dictionary<Type, StyledContentTypeRegistration>()
+        new()
         {
             [typeof(IPicker)] =
-                new StyledContentTypeRegistration
-                {
-                    HasValue =
-                        view =>
-                        {
-                            if (view is IPicker p)
-                            {
-                                return p.SelectedIndex >= 0;
-                            }
-
-                            return false;
-                        },
-                    ValueChangeProperty = nameof(IPicker.SelectedIndex),
-                },
+                StyledContentTypeRegistration.Build<IPicker>(
+                    nameof(IPicker.SelectedIndex),
+                    view => view.SelectedIndex >= 0,
+                    false),
             [typeof(IDatePicker)] = StyledContentTypeRegistration.Default,
             [typeof(ITimePicker)] = StyledContentTypeRegistration.Default,
             [typeof(Editor)] =
-                new StyledContentTypeRegistration
-                {
-                    AlignPlaceholderToTop = true,
-                    HasValue =
-                        view =>
-                        {
-                            if (view is InputView iv)
-                            {
-                                return !string.IsNullOrEmpty(iv.Text);
-                            }
-
-                            return false;
-                        },
-                    ValueChangeProperty = nameof(Editor.Text),
-                },
+                StyledContentTypeRegistration.Build<Editor>(
+                    nameof(Editor.Text),
+                    view => !string.IsNullOrEmpty(view.Text),
+                    true),
             [typeof(InputView)] =
-                new StyledContentTypeRegistration
-                {
-                    HasValue =
-                        view =>
-                        {
-                            if (view is InputView iv)
-                            {
-                                return !string.IsNullOrEmpty(iv.Text);
-                            }
-
-                            return false;
-                        },
-                    ValueChangeProperty = nameof(InputView.Text),
-                },
+                StyledContentTypeRegistration.Build<InputView>(
+                    nameof(InputView.Text),
+                    view => !string.IsNullOrEmpty(view.Text),
+                    false),
         };
 
     public bool AlignPlaceholderToTop => false;
@@ -234,18 +203,15 @@ public class StyledInputLayout : ContentView, IUnderlayDrawable
     }
 }
 
-public struct StyledContentTypeRegistration
+public record StyledContentTypeRegistration(string ValueChangeProperty, Func<IView, bool> HasValue, bool AlignPlaceholderToTop)
 {
-    public Func<IView, bool> HasValue { get; set; }
-
-    public bool AlignPlaceholderToTop { get; set; }
-
-    public string ValueChangeProperty { get; set; }
-
     public static readonly StyledContentTypeRegistration Default =
-        new StyledContentTypeRegistration
-        {
-            HasValue = _ => true,
-            AlignPlaceholderToTop = false,
-        };
+        new(string.Empty, _ => true, false);
+
+    public static StyledContentTypeRegistration Build<TView>(string valueChangeProperty, Func<TView, bool> hasValue,
+        bool alignPlaceholderToTop)
+    where TView : IView
+    {
+        return new StyledContentTypeRegistration(valueChangeProperty, viewIn => viewIn is TView view && hasValue(view), alignPlaceholderToTop);
+    }
 }
