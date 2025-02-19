@@ -2,7 +2,7 @@
 
 namespace AuroraControls;
 
-public abstract class AuroraViewBase : SKCanvasView, IAuroraView
+public abstract class AuroraGLViewBase : SKGLView, IAuroraView
 {
     private readonly VisualEffects.VisualEffectCollection _visualEffects = new();
 
@@ -19,7 +19,7 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
 
     protected bool IsAttached { get; private set; }
 
-    public AuroraViewBase()
+    public AuroraGLViewBase()
     {
         MinimumHeightRequest = 1;
         _scale = (float)PlatformInfo.ScalingFactor;
@@ -38,54 +38,43 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
         }
     }
 
-    protected abstract void PaintControl(SKSurface surface, SKImageInfo info);
+    protected abstract void PaintControl(SKSurface surface, GRBackendRenderTarget info);
 
-    protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
+    protected override void OnHandlerChanging(HandlerChangingEventArgs args)
     {
-        PaintSurfaceInternal(e.Surface, e.Info);
+        base.OnHandlerChanging(args);
+
+        if (args.NewHandler is null)
+        {
+            IsAttached = false;
+
+            Detached();
+
+            return;
+        }
+
+        IsAttached = true;
+        _attachmentClear = true;
+
+        Attached();
+
+        this.InvalidateSurface();
+    }
+
+    protected override void OnPaintSurface(SKPaintGLSurfaceEventArgs e)
+    {
+        PaintSurfaceInternal(e.Surface, e.BackendRenderTarget);
     }
 
     protected override void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         base.OnPropertyChanged(propertyName);
 
-        if (string.IsNullOrEmpty(propertyName))
+        if (propertyName != null &&
+            (propertyName.Equals(HeightProperty.PropertyName) ||
+                propertyName.Equals(WidthProperty.PropertyName) ||
+                propertyName.Equals(MarginProperty.PropertyName)))
         {
-            return;
-        }
-
-        if (propertyName.Equals(HeightProperty.PropertyName) ||
-             propertyName.Equals(WidthProperty.PropertyName) ||
-             propertyName.Equals(MarginProperty.PropertyName))
-        {
-            this.InvalidateSurface();
-        }
-        else if (propertyName.Equals(WindowProperty.PropertyName))
-        {
-            if (Window is null)
-            {
-                IsAttached = false;
-
-                _visualEffects.EffectPropertyChanged -= VisualEffects_EffectPropertyChanged;
-
-                _visualEffects.CollectionChanged -= VisualEffects_CollectionChanged;
-
-                Detached();
-
-                return;
-            }
-
-            IsAttached = true;
-            _attachmentClear = true;
-
-            _visualEffects.EffectPropertyChanged -= VisualEffects_EffectPropertyChanged;
-            _visualEffects.EffectPropertyChanged += VisualEffects_EffectPropertyChanged;
-
-            _visualEffects.CollectionChanged -= VisualEffects_CollectionChanged;
-            _visualEffects.CollectionChanged += VisualEffects_CollectionChanged;
-
-            Attached();
-
             this.InvalidateSurface();
         }
     }
@@ -98,7 +87,7 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
     {
     }
 
-    private void PaintSurfaceInternal(SKSurface surface, SKImageInfo info)
+    private void PaintSurfaceInternal(SKSurface surface, GRBackendRenderTarget renderTarget)
     {
         if (!IsAttached)
         {
@@ -111,7 +100,7 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
             _attachmentClear = false;
         }
 
-        if (info.Size == SKSize.Empty)
+        if (renderTarget.Size == SKSize.Empty)
         {
             return;
         }
@@ -131,7 +120,7 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
                 return;
             }
 
-            PaintControl(surface, info);
+            PaintControl(surface, renderTarget);
 
             _enabledVisualEffects = VisualEffects.Where(x => x.Enabled).ToList();
 
@@ -158,7 +147,7 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
                             return;
                         }
 
-                        var tmpImage = visualEffect.ApplyEffect(image, surface, info, _overrideDrawableArea);
+                        var tmpImage = visualEffect.ApplyEffect(image, surface, renderTarget, _overrideDrawableArea);
                         image?.Dispose();
                         image = tmpImage;
                     }
@@ -182,15 +171,5 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
                 this.InvalidateSurface();
             }
         }
-    }
-
-    private void VisualEffects_EffectPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        this.InvalidateSurface();
-    }
-
-    private void VisualEffects_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-    {
-        this.InvalidateSurface();
     }
 }

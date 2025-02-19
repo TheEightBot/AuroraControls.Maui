@@ -52,6 +52,12 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
     private Button _viewImageProcessingButton;
 
+    private SvgImageView _svgImageView;
+
+    private Button _svgImageViewTapped;
+
+    private int _imageEffectCounter;
+
     public MainPage(ILogger<TestRxViewModel> logger)
     {
         var val = 123;
@@ -332,7 +338,10 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 },
                             }),
                             new Tile { EmbeddedImageName = "triforce.svg", ButtonBackgroundColor = Colors.Fuchsia, },
-                            new SvgImageView { EmbeddedImageName = "splatoon.svg", OverlayColor = Colors.Chartreuse, },
+                            new SvgImageView { EmbeddedImageName = "splatoon.svg", OverlayColor = Colors.Chartreuse, }
+                                .Assign(out _svgImageView),
+                            new Button { Text = "Update Effects" }
+                                .Assign(out _svgImageViewTapped),
                             new GradientPillButton
                                 {
                                     Text = "Gradient Pill Button",
@@ -351,6 +360,49 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
         this._viewImageProcessingButton.Clicked +=
             async (sender, args) => await this.Navigation.PushAsync(new ImageProcessing());
+
+        this._svgImageViewTapped.Clicked +=
+            (sender, args) =>
+            {
+                this._svgImageView.VisualEffects.Clear();
+
+                var rngesus = new Random(Guid.NewGuid().GetHashCode());
+
+                switch (_imageEffectCounter)
+                {
+                    case 0:
+                        _svgImageView.VisualEffects.Add(new VisualEffects.Pixelate { PixelSize = rngesus.Next(10, 25) });
+                        break;
+                    case 1:
+                        _svgImageView.VisualEffects.Add(new VisualEffects.Sepia());
+                        break;
+                    case 2:
+                        _svgImageView.VisualEffects.Add(new VisualEffects.Grayscale());
+                        break;
+                    case 3:
+                        _svgImageView.VisualEffects.Add(new VisualEffects.BlackAndWhite());
+                        break;
+                    case 4:
+                        _svgImageView.VisualEffects.Add(new VisualEffects.Invert());
+                        break;
+                    case 5:
+                        _svgImageView.VisualEffects.Add(new VisualEffects.HighContrast());
+                        break;
+                    case 6:
+                        _svgImageView.VisualEffects.Add(new VisualEffects.Rotate { RotationDegrees = rngesus.Next(-360, 360) });
+                        break;
+                    case 7:
+                        _svgImageView.VisualEffects.Add(new VisualEffects.Scale { ScaleAmount = (float)(rngesus.Next(0, 2) + rngesus.NextDouble()) });
+                        break;
+                }
+
+                _imageEffectCounter++;
+
+                if (_imageEffectCounter > 7)
+                {
+                    _imageEffectCounter = -1;
+                }
+            };
 
         this.Bind(
             ViewModel,
