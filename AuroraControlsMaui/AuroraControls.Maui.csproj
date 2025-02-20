@@ -24,4 +24,12 @@
         <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.100" />
         <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.100" />
     </ItemGroup>
+    <ItemGroup>
+      <Compile Update="Platforms\MacCatalyst\ShadowPlatformEffect.cs">
+        <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+      </Compile>
+      <Compile Update="Platforms\MacCatalyst\RoundedCornersPlatformEffect.cs">
+        <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+      </Compile>
+    </ItemGroup>
 </Project>
