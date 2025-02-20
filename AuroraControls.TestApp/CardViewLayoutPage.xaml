@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:aurora="http://auroracontrols.maui/controls"
+	x:Class="AuroraControls.TestApp.CardViewLayoutPage"
+    Padding="8">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Button Text="Update Values"
+                Clicked="UpdateValues_Clicked"
+                Grid.Row="0" Grid.Column="0"  />
+        <aurora:CardViewLayout x:Name="control"
+                               Margin="24,24,24,24" BackgroundColor="Fuchsia"
+                               Grid.Row="1" Grid.Column="0">
+            <Grid x:Name="content">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Image Aspect="AspectFill" Source="https://api.floodmagazine.com/wp-content/uploads/2016/07/Steve_Brule-2016-Marc_Lemoine-5-677x1024.jpg"
+                       Grid.Column="0" Grid.Row="0" Grid.RowSpan="4"/>
+                <Label Text="WORLD PREMIERE"
+                       TextColor="White" FontAttributes="Bold" Margin="16"
+                       Grid.Column="0" Grid.Row="0" />
+                <Label Text="The Art of the Dingus"
+                       TextColor="White" FontSize="30" FontAttributes="Bold"  Margin="16"
+                       Grid.Column="0" Grid.Row="1" />
+                <Label Text="Inside the wonderful world of Dr. Steve Brule. For Your Health."
+                       TextColor="White" FontAttributes="Bold" Margin="16"
+                       Grid.Column="0" Grid.Row="3" />
+            </Grid>
+        </aurora:CardViewLayout>
+    </Grid>
+</ContentPage>

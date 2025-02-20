@@ -1,19 +1,14 @@
-﻿using AuroraControls;
+﻿[assembly: XmlnsDefinition(Constants.XamlNamespace, Constants.AuroraNamespace)]
+[assembly: XmlnsDefinition(Constants.XamlNamespace, Constants.AuroraNamespacePrefix + nameof(AuroraControls.Effects))]
+[assembly: XmlnsDefinition(Constants.XamlNamespace, Constants.AuroraNamespacePrefix + nameof(AuroraControls.Gauges))]
+[assembly: XmlnsDefinition(Constants.XamlNamespace, Constants.AuroraNamespacePrefix + nameof(AuroraControls.Loading))]
+[assembly: XmlnsDefinition(Constants.XamlNamespace, Constants.AuroraNamespacePrefix + nameof(AuroraControls.VisualEffects))]
 
-[assembly: Microsoft.Maui.Controls.XmlnsPrefix(Constants.XamlNamespace, Constants.CommunityToolkitNamespacePrefix + nameof(AuroraControls.Gauges))]
-[assembly: Microsoft.Maui.Controls.XmlnsPrefix(Constants.XamlNamespace, Constants.CommunityToolkitNamespacePrefix + nameof(AuroraControls.Loading))]
-[assembly: Microsoft.Maui.Controls.XmlnsPrefix(Constants.XamlNamespace, Constants.CommunityToolkitNamespacePrefix + nameof(AuroraControls.VisualEffects))]
-[assembly: Microsoft.Maui.Controls.XmlnsPrefix(Constants.XamlNamespace, Constants.CommunityToolkitNamespace)]
+[assembly: Microsoft.Maui.Controls.XmlnsPrefix(Constants.XamlNamespace, "aurora")]
 
-[assembly: Microsoft.Maui.Controls.XmlnsDefinition(Constants.XamlNamespace, "aurora")]
-
-namespace AuroraControls;
-
-#pragma warning disable SA1649
-internal static class Constants
-#pragma warning restore SA1649
+public static class Constants
 {
-    public const string XamlNamespace = "http://auroracontrols.maui/schemas/controls";
-    public const string CommunityToolkitNamespace = $"{nameof(AuroraControls)}";
-    public const string CommunityToolkitNamespacePrefix = $"{CommunityToolkitNamespace}.";
+    public const string XamlNamespace = "http://auroracontrols.maui/controls";
+    public const string AuroraNamespace = $"{nameof(AuroraControls)}";
+    public const string AuroraNamespacePrefix = $"{AuroraNamespace}.";
 }

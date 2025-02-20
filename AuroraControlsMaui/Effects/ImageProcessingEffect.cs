@@ -40,7 +40,7 @@ public class ImageProcessingEffect : RoutingEffect
 }
 
 #if ANDROID
-public class ImagePlatformProcessingEffect : PlatformEffect
+public class ImageProcessingPlatformEffect : PlatformEffect
 {
     private SKBitmap _image;
 
@@ -193,7 +193,7 @@ public class ImagePlatformProcessingEffect : PlatformEffect
 #endif
 
 #if IOS || MACCATALYST
-public class ImagePlatformProcessingEffect : PlatformEffect
+public class ImageProcessingPlatformEffect : PlatformEffect
 {
     private SKBitmap _image;
 

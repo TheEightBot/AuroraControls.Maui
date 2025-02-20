@@ -1,5 +1,8 @@
 using System;
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Maui.Controls.Hosting;
+using Microsoft.Maui.Hosting;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace AuroraControls;
@@ -26,9 +29,15 @@ public static class AuroraControlBuilder
                 effects =>
                 {
 #if ANDROID
-                    effects.Add<Effects.ImageProcessingEffect, Effects.ImagePlatformProcessingEffect>();
+                    effects
+                        .Add<Effects.ImageProcessingEffect, Effects.ImageProcessingPlatformEffect>()
+                        .Add<Effects.ShadowEffect, ShadowPlatformEffect>()
+                        .Add<Effects.RoundedCornersEffect, RoundedCornersPlatformEffect>();
 #elif IOS || MACCATALYST
-                    effects.Add<Effects.ImageProcessingEffect, Effects.ImagePlatformProcessingEffect>();
+                    effects
+                        .Add<Effects.ImageProcessingEffect, Effects.ImageProcessingPlatformEffect>()
+                        .Add<Effects.ShadowEffect, ShadowPlatformEffect>()
+                        .Add<Effects.RoundedCornersEffect, RoundedCornersPlatformEffect>();
 #endif
                 });
 
