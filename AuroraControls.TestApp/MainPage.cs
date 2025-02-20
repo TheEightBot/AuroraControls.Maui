@@ -52,6 +52,8 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
     private Button _viewImageProcessingButton;
 
+    private Button _viewCardViewLayoutButton;
+
     private SvgImageView _svgImageView;
 
     private Button _svgImageViewTapped;
@@ -84,6 +86,9 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                         {
                             new Button { Text = "View Image Processing", }
                                 .Assign(out _viewImageProcessingButton),
+
+                            new Button { Text = "View Card View Layout", }
+                                .Assign(out _viewCardViewLayoutButton),
 
                             new ToggleBox
                             {
@@ -360,6 +365,9 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
         this._viewImageProcessingButton.Clicked +=
             async (sender, args) => await this.Navigation.PushAsync(new ImageProcessing());
+
+        this._viewCardViewLayoutButton.Clicked +=
+            async (sender, args) => await this.Navigation.PushAsync(new CardViewLayoutPage());
 
         this._svgImageViewTapped.Clicked +=
             (sender, args) =>
