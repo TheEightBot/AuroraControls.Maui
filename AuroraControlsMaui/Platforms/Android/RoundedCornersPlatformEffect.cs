@@ -60,6 +60,7 @@ public class RoundedCornersPlatformEffect : PlatformEffect
             view.ClipToOutline = _originalClipToOutline;
             view.OutlineProvider = _originalOutlineProvider;
             view.Foreground = this._originalForeground;
+            view.Background = this._originalBackground;
         }
         catch (ObjectDisposedException)
         {
@@ -107,12 +108,12 @@ public class RoundedCornersPlatformEffect : PlatformEffect
 
             var foregroundShape = new GradientDrawable() { };
             foregroundShape.SetColor(0);
-            foregroundShape.SetCornerRadius(scaledCornerRadius * 0.815f /* A magic number for rounding down the corner radius so that it overlaps the clip bounds better */);
+            foregroundShape.SetCornerRadius(scaledCornerRadius * 0.80f /* A magic number for rounding down the corner radius so that it overlaps the clip bounds better */);
             foregroundShape.SetStroke(scaledBorderSize, borderColor.ToAndroid());
 
             var backgroundShape = new GradientDrawable() { };
             backgroundShape.SetColor(ve.BackgroundColor.ToAndroid());
-            backgroundShape.SetCornerRadius(scaledCornerRadius * 0.815f);
+            backgroundShape.SetCornerRadius(scaledCornerRadius);
             backgroundShape.SetStroke(scaledBorderSize, borderColor.ToAndroid());
 
             var background = view.Background;
