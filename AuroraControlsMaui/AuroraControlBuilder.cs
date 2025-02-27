@@ -1,5 +1,7 @@
 using System;
 using System.Reflection;
+using AuroraControls.Effects;
+using AuroraControls.Maui;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
@@ -37,7 +39,8 @@ public static class AuroraControlBuilder
                     effects
                         .Add<Effects.ImageProcessingEffect, Effects.ImageProcessingPlatformEffect>()
                         .Add<Effects.ShadowEffect, ShadowPlatformEffect>()
-                        .Add<Effects.RoundedCornersEffect, RoundedCornersPlatformEffect>();
+                        .Add<Effects.RoundedCornersEffect, RoundedCornersPlatformEffect>()
+                        .Add<Effects.NullableCalendarDatePickerEffect, NullableCalendarDatePickerPlatormEffect>();
 #endif
                 });
 

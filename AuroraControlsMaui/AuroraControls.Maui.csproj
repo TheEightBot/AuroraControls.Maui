@@ -31,5 +31,8 @@
       <Compile Update="Platforms\MacCatalyst\RoundedCornersPlatformEffect.cs">
         <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
       </Compile>
+      <Compile Update="Platforms\MacCatalyst\NullableCalendarDatePickerPlatormEffect.cs">
+        <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+      </Compile>
     </ItemGroup>
 </Project>
