@@ -68,7 +68,7 @@ public class CircularFillGauge : AuroraViewBase
     /// The surface is automatically invalidated/redrawn whenever <c>HeightProperty</c>, <c>WidthProperty</c> or <c>MarginProperty</c> gets updated.
     /// </summary>
     /// <param name="propertyName">The name of the bound property that changed.</param>
-    protected override void OnPropertyChanged(string propertyName = null)
+    protected override void OnPropertyChanged(string? propertyName = null)
     {
         base.OnPropertyChanged(propertyName);
 

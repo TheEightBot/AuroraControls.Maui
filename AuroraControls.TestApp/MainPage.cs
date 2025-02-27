@@ -2,6 +2,7 @@ using System.Reactive.Linq;
 using AuroraControls.Gauges;
 using AuroraControls.TestApp.ViewModels;
 using CommunityToolkit.Maui.Markup;
+using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.Maui;
 using static CommunityToolkit.Maui.Markup.GridRowsColumns;
@@ -47,10 +48,31 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
     private GradientPillButton _pillButton;
 
-    public MainPage()
+    private CupertinoTextToggleSwitch _cupertinoToggleSwitch;
+
+    private Button _viewImageProcessingButton;
+
+    private Button _viewCardViewLayoutButton;
+
+    private SvgImageView _svgImageView;
+
+    private Button _svgImageViewTapped;
+
+    private int _imageEffectCounter;
+
+    public MainPage(ILogger<TestRxViewModel> logger)
     {
+        var val = 123;
+        var stuff = new TestMvvmToolkitViewModel();
+        logger.LogError($"My Value: {val}\tMy ViewModel: {stuff}");
+        logger.LogError("My Value: {val}\tMy ViewModel: {stuff}", val, stuff);
+
         ViewModel = new TestRxViewModel();
         MvvmToolkitViewModel = new TestMvvmToolkitViewModel();
+
+        this.ToolbarItems.Add(
+            new ToolbarItem()
+                .SetSvgIcon("more.svg"));
 
         Content =
             new ScrollView
@@ -62,11 +84,26 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                         Spacing = 16,
                         Children =
                         {
-                            new Label
+                            new Button { Text = "View Image Processing", }
+                                .Assign(out _viewImageProcessingButton),
+
+                            new Button { Text = "View Card View Layout", }
+                                .Assign(out _viewCardViewLayoutButton),
+
+                            new ToggleBox
                             {
-                                HorizontalOptions = LayoutOptions.Center,
-                                VerticalOptions = LayoutOptions.Center,
-                                Text = "Welcome to .NET MAUI!",
+                              ToggledBackgroundColor = Colors.Fuchsia,
+                              CheckColor = Colors.Chartreuse,
+                              BorderColor = Colors.Chocolate,
+                              BackgroundColor = Colors.Aquamarine,
+                            },
+                            new StyledInputLayout
+                            {
+                                Content =
+                                    new NPicker.DatePicker
+                                    {
+                                        Placeholder = "Nullable NDate Picker",
+                                    },
                             },
                             new Grid
                             {
@@ -75,21 +112,21 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 Children =
                                 {
                                     new CupertinoTextToggleSwitch()
-                                    {
-                                        EnabledText = "Enabled",
-                                        DisabledText = "Disabled",
-                                        TrackDisabledColor = Color.FromRgba("#ef361a"),
-                                        TrackEnabledColor = Color.FromRgba("#4694f2"),
-                                        DisabledFontColor = Colors.White,
-                                        EnabledFontColor = Colors.White,
-                                    }
-                                        .Row(0).Column(2),
+                                        {
+                                            EnabledText = "Enabled",
+                                            DisabledText = "Disabled",
+                                            TrackDisabledColor = Color.FromRgba("#ef361a"),
+                                            TrackEnabledColor = Color.FromRgba("#4694f2"),
+                                            DisabledFontColor = Colors.White,
+                                            EnabledFontColor = Colors.White,
+                                        }
+                                        .Bind(CupertinoTextToggleSwitch.IsToggledProperty, nameof(TestRxViewModel.IsToggled), mode: BindingMode.TwoWay)
+                                        .TapGesture(() => _cupertinoToggleSwitch.EnabledText += "A")
+                                        .Row(0).Column(2)
+                                        .Assign(out _cupertinoToggleSwitch),
                                 },
                             },
-                            new Button
-                            {
-                                BackgroundColor = Colors.Fuchsia,
-                            }
+                            new Button { BackgroundColor = Colors.Fuchsia, }
                                 .SetSvgIcon("splatoon.svg", colorOverride: Colors.White),
                             new SegmentedControl
                             {
@@ -97,43 +134,21 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 SegmentControlStyle = SegmentedControlStyle.Cupertino,
                                 ForegroundTextColor = Colors.CadetBlue,
                                 BackgroundTextColor = Colors.DarkSlateGray,
-                                Segments =
-                                {
-                                    new Segment
-                                    {
-                                        ForegroundColor = Colors.Lime,
-                                        Text = "Test 1",
-                                    },
-                                    new Segment
-                                    {
-                                        EmbeddedImageName = "splatoon.svg",
-                                        ForegroundColor = Colors.Fuchsia,
-                                        Text = "Test 2",
-                                    },
-                                },
+                                Segments = { new Segment { ForegroundColor = Colors.Lime, Text = "Test 1", }, new Segment { EmbeddedImageName = "splatoon.svg", ForegroundColor = Colors.Fuchsia, Text = "Test 2", }, },
                             },
                             new StyledInputLayout
-                            {
-                                Opacity = .25d,
-                                Placeholder = "My Placeholder With Rounded Rectangle Placeholder Through",
-                                BackgroundColor = Colors.Fuchsia,
-                                ActiveColor = Colors.Red,
-                                InactiveColor = Colors.Green,
-                                BorderStyle = ContainerBorderStyle.RoundedRectanglePlaceholderThrough,
-                                Content =
-                                    new Entry
-                                    {
-                                        Text = "This is My Entry",
-                                        Placeholder = "This is a sample",
-                                    },
-                            }
+                                {
+                                    Opacity = .25d,
+                                    BackgroundColor = Colors.Fuchsia,
+                                    ActiveColor = Colors.Red,
+                                    InactiveColor = Colors.Green,
+                                    PlaceholderColor = Colors.Purple,
+                                    BorderStyle = ContainerBorderStyle.RoundedRectanglePlaceholderThrough,
+                                    Content =
+                                        new Entry { Placeholder = "My Placeholder With Rounded Rectangle Placeholder Through", Text = "This is My Entry", },
+                                }
                                 .Assign(out _opacitySil),
-                            new Slider
-                            {
-                                Value = .5d,
-                                Minimum = 0d,
-                                Maximum = 1d,
-                            }
+                            new Slider { Value = .5d, Minimum = 0d, Maximum = 1d, }
                                 .Bind(nameof(IView.Opacity), source: _opacitySil),
                             new StyledInputLayout
                             {
@@ -142,10 +157,7 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 InactiveColor = Colors.Green,
                                 BorderStyle = ContainerBorderStyle.RoundedUnderline,
                                 Content =
-                                    new NumericEntry
-                                    {
-                                        Placeholder = "This must be a numeric value...",
-                                    },
+                                    new NumericEntry { Placeholder = "This must be a numeric value...", },
                             },
                             new StyledInputLayout
                             {
@@ -154,10 +166,7 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 InactiveColor = Colors.Green,
                                 BorderStyle = ContainerBorderStyle.RoundedUnderline,
                                 Content =
-                                    new NumericEntry
-                                    {
-                                        Placeholder = "This must be a numeric value...",
-                                    }
+                                    new NumericEntry { Placeholder = "This must be a numeric value...", }
                                         .Assign(out _rxNumericEntry),
                             },
                             new StyledInputLayout
@@ -166,12 +175,9 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 ActiveColor = Colors.Red,
                                 InactiveColor = Colors.Green,
                                 BorderStyle = ContainerBorderStyle.RoundedUnderline,
+                                InternalMargin = new Thickness(16, 8),
                                 Content =
-                                    new NumericEntry
-                                    {
-                                        Placeholder = "This must be an int value...",
-                                        ValueType = NumericEntryValueType.Int,
-                                    }
+                                    new NumericEntry { Placeholder = "This must be an int value...", ValueType = NumericEntryValueType.Int, }
                                         .Assign(out _rxNumericIntEntry),
                             },
                             new StyledInputLayout
@@ -183,13 +189,7 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                     new Picker
                                     {
                                         ItemsSource =
-                                            new[]
-                                            {
-                                                "Item 1",
-                                                "Item 2",
-                                                "Item 3",
-                                                "Item 4",
-                                            },
+                                            new[] { "Item 1", "Item 2", "Item 3", "Item 4", },
                                     },
                             },
                             new StyledInputLayout
@@ -198,9 +198,7 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 BackgroundColor = Colors.Chartreuse,
                                 BorderStyle = ContainerBorderStyle.RoundedRectangle,
                                 Content =
-                                    new DatePicker
-                                    {
-                                    },
+                                    new DatePicker { },
                             },
                             new StyledInputLayout
                             {
@@ -208,31 +206,16 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 BackgroundColor = Colors.Chartreuse,
                                 BorderStyle = ContainerBorderStyle.Rectangle,
                                 Content =
-                                    new Editor
-                                    {
-                                        Placeholder = "Test Entry",
-                                        AutoSize = EditorAutoSizeOption.TextChanges,
-                                    },
+                                    new Editor { Placeholder = "Test Entry", AutoSize = EditorAutoSizeOption.TextChanges, },
                             },
                             new LinearGauge
                             {
-                                 StartingPercent = 10.1d,
-                                 EndingPercent = 40.4d,
-                                 ProgressBackgroundColor = Colors.Fuchsia,
-                                 ProgressColor = Colors.Chartreuse,
+                                StartingPercent = 10.1d, EndingPercent = 40.4d, ProgressBackgroundColor = Colors.Fuchsia, ProgressColor = Colors.Chartreuse,
                             },
-                            new CircularFillGauge
-                            {
-                                 ProgressPercentage = 46.1d,
-                                 ProgressBackgroundColor = Colors.Fuchsia,
-                                 ProgressColor = Colors.Chartreuse,
-                            },
+                            new CircularFillGauge { ProgressPercentage = 46.1d, ProgressBackgroundColor = Colors.Fuchsia, ProgressColor = Colors.Chartreuse, },
                             new CircularGauge
                             {
-                                 StartingDegree = 10.1d,
-                                 EndingDegree = 90.0d,
-                                 ProgressBackgroundColor = Colors.Fuchsia,
-                                 ProgressColor = Colors.Chartreuse,
+                                StartingDegree = 10.1d, EndingDegree = 90.0d, ProgressBackgroundColor = Colors.Fuchsia, ProgressColor = Colors.Chartreuse,
                             },
                             (_rainbowRing = new Loading.RainbowRing
                             {
@@ -359,24 +342,19 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                     },
                                 },
                             }),
-                            new Tile
-                            {
-                                EmbeddedImageName = "triforce.svg",
-                                ButtonBackgroundColor = Colors.Fuchsia,
-                            },
-                            new SvgImageView
-                            {
-                                EmbeddedImageName = "splatoon.svg",
-                                OverlayColor = Colors.Chartreuse,
-                            },
+                            new Tile { EmbeddedImageName = "triforce.svg", ButtonBackgroundColor = Colors.Fuchsia, },
+                            new SvgImageView { EmbeddedImageName = "splatoon.svg", OverlayColor = Colors.Chartreuse, }
+                                .Assign(out _svgImageView),
+                            new Button { Text = "Update Effects" }
+                                .Assign(out _svgImageViewTapped),
                             new GradientPillButton
-                            {
-                                Text = "Gradient Pill Button",
-                                ButtonBackgroundStartColor = Colors.Fuchsia,
-                                ButtonBackgroundEndColor = Colors.Chartreuse,
-                                FontColor = Colors.DarkRed,
-                                FontFamily = "Clathing",
-                            }
+                                {
+                                    Text = "Gradient Pill Button",
+                                    ButtonBackgroundStartColor = Colors.Fuchsia,
+                                    ButtonBackgroundEndColor = Colors.Chartreuse,
+                                    FontColor = Colors.DarkRed,
+                                    FontFamily = "Clathing",
+                                }
                                 .Assign(out _pillButton),
                             new Image()
                                 .SetSvgIcon("splatoon.svg", 66, Colors.Red),
@@ -385,7 +363,61 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                     },
             };
 
-        this.Bind(ViewModel, vm => vm.NullableDoubleValue, ui => ui._rxNumericEntry.Text);
+        this._viewImageProcessingButton.Clicked +=
+            async (sender, args) => await this.Navigation.PushAsync(new ImageProcessing());
+
+        this._viewCardViewLayoutButton.Clicked +=
+            async (sender, args) => await this.Navigation.PushAsync(new CardViewLayoutPage());
+
+        this._svgImageViewTapped.Clicked +=
+            (sender, args) =>
+            {
+                this._svgImageView.VisualEffects.Clear();
+
+                var rngesus = new Random(Guid.NewGuid().GetHashCode());
+
+                switch (_imageEffectCounter)
+                {
+                    case 0:
+                        _svgImageView.VisualEffects.Add(new VisualEffects.Pixelate { PixelSize = rngesus.Next(10, 25) });
+                        break;
+                    case 1:
+                        _svgImageView.VisualEffects.Add(new VisualEffects.Sepia());
+                        break;
+                    case 2:
+                        _svgImageView.VisualEffects.Add(new VisualEffects.Grayscale());
+                        break;
+                    case 3:
+                        _svgImageView.VisualEffects.Add(new VisualEffects.BlackAndWhite());
+                        break;
+                    case 4:
+                        _svgImageView.VisualEffects.Add(new VisualEffects.Invert());
+                        break;
+                    case 5:
+                        _svgImageView.VisualEffects.Add(new VisualEffects.HighContrast());
+                        break;
+                    case 6:
+                        _svgImageView.VisualEffects.Add(new VisualEffects.Rotate { RotationDegrees = rngesus.Next(-360, 360) });
+                        break;
+                    case 7:
+                        _svgImageView.VisualEffects.Add(new VisualEffects.Scale { ScaleAmount = (float)(rngesus.Next(0, 2) + rngesus.NextDouble()) });
+                        break;
+                }
+
+                _imageEffectCounter++;
+
+                if (_imageEffectCounter > 7)
+                {
+                    _imageEffectCounter = -1;
+                }
+            };
+
+        this.Bind(
+            ViewModel,
+            vm => vm.NullableDoubleValue,
+            ui => ui._rxNumericEntry.Text,
+            x => x?.ToString("N2") ?? string.Empty,
+            x => double.TryParse(x, out var parsed) ? parsed : null);
         this.Bind(ViewModel, vm => vm.NullableIntValue, ui => ui._rxNumericIntEntry.Text);
 
         Observable

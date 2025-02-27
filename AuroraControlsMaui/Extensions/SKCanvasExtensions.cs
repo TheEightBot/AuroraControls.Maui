@@ -1,4 +1,7 @@
-﻿namespace AuroraControls;
+﻿using System;
+using System.Collections.Generic;
+
+namespace AuroraControls;
 
 internal static class SKCanvasExtensions
 {

@@ -180,7 +180,7 @@ public class SegmentedControl : AuroraViewBase
         base.Detached();
     }
 
-    protected override void OnPropertyChanged(string propertyName = null)
+    protected override void OnPropertyChanged(string? propertyName = null)
     {
         base.OnPropertyChanged(propertyName);
 
@@ -343,6 +343,7 @@ public class SegmentedControl : AuroraViewBase
                                 while (textBounds.Width > 0 && fontPaint.TextSize > 0 && textBounds.Width > segmentSize - borderSize)
                                 {
                                     fontPaint.TextSize--;
+
                                     fontPaint.MeasureText(segment.Text, ref textBounds);
                                 }
 
@@ -414,7 +415,7 @@ public class SegmentedControl : AuroraViewBase
         }
     }
 
-    private void SegmentsCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+    private void SegmentsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
     {
         if (args.OldItems != null)
         {
@@ -435,7 +436,7 @@ public class SegmentedControl : AuroraViewBase
         this.InvalidateSurface();
     }
 
-    private void Item_PropertyChanged(object sender, PropertyChangedEventArgs args)
+    private void Item_PropertyChanged(object? sender, PropertyChangedEventArgs args)
     {
         this.InvalidateSurface();
     }

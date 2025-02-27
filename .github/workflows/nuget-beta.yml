@@ -1,0 +1,43 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: NuGet - Beta
+
+on:
+    push:
+        tags:
+            - "v**-beta"
+
+env:
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+    DOTNET_NOLOGO: true
+    NuGetDirectory: ${{ github.workspace}}/nuget
+
+jobs:
+    build:
+        runs-on: macos-latest
+
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-dotnet@v3
+              with:
+                  dotnet-version: "8.x"
+
+            - name: Install MAUI Workloads
+              run: dotnet workload install maui --ignore-failed-sources
+
+            - name: Semver Parse
+              id: version
+              uses: release-kit/semver@v1.0.10
+
+            - name: Build Aurora Controls MAUI
+              run: dotnet build AuroraControlsMaui/AuroraControls.Maui.csproj
+
+            - name: Create the package
+              run: dotnet pack --configuration Release --output ${{ env.NuGetDirectory }} /p:AssemblyVersion=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }} /p:Version=${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }}-beta AuroraControlsMaui/AuroraControls.Maui.csproj
+
+            - name: Publish the package to GPR
+              run: dotnet nuget push ${{ env.NuGetDirectory }}/*.nupkg --api-key "${{secrets.GITHUB_TOKEN}}" --source https://nuget.pkg.github.com/theeightbot/index.json
+
+            - name: Publish the package to NuGet
+              run: dotnet nuget push ${{ env.NuGetDirectory }}/*.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json

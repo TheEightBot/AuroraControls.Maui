@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Text;
-using System.Xml;
 using Svg.Skia;
 
 namespace AuroraControls;
@@ -19,6 +18,8 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
     private readonly float _platformScalingFactor;
 
+    private readonly SKColorSpace _colorspace = SKColorSpace.CreateSrgb();
+
     private bool _disposedValue;
 
     public IconCacheBase()
@@ -27,12 +28,12 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         _platformScalingFactor = (float)PlatformInfo.ScalingFactor;
     }
 
-    public Task<Image> IconFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color colorOverride = default(Color))
+    public Task<Image> IconFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null)
     {
         return IconFromSvg(svgName, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
     }
 
-    public async Task<Image> IconFromSvg(string svgName, Size size, string additionalCacheKey = "", Color colorOverride = default(Color))
+    public async Task<Image> IconFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null)
     {
         return
             new Image()
@@ -41,12 +42,12 @@ public abstract class IconCacheBase : IIconCache, IDisposable
             };
     }
 
-    public Task<ImageSource> SourceFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color colorOverride = default(Color))
+    public Task<ImageSource> SourceFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null)
     {
         return SourceFromSvg(svgName, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
     }
 
-    public async Task<ImageSource> SourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color colorOverride = default(Color))
+    public async Task<ImageSource> SourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null)
     {
         var key = CreateIconKey(svgName, size, additionalCacheKey, colorOverride);
 
@@ -87,12 +88,12 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
     }
 
-    public Task<ImageSource> SourceFromRawSvg(string svgName, string svgValue, double squareSize = 22d, string additionalCacheKey = "", Color colorOverride = default(Color))
+    public Task<ImageSource> SourceFromRawSvg(string svgName, string svgValue, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null)
     {
         return SourceFromRawSvg(svgName, svgValue, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
     }
 
-    public async Task<ImageSource> SourceFromRawSvg(string svgName, string svgValue, Size size, string additionalCacheKey = "", Color colorOverride = default(Color))
+    public async Task<ImageSource> SourceFromRawSvg(string svgName, string svgValue, Size size, string additionalCacheKey = "", Color? colorOverride = null)
     {
         try
         {
@@ -127,12 +128,12 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
     }
 
-    public Task<FileImageSource> FileImageSourceFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color colorOverride = default(Color))
+    public Task<FileImageSource> FileImageSourceFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null)
     {
         return FileImageSourceFromSvg(svgName, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
     }
 
-    public async Task<FileImageSource> FileImageSourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color colorOverride = default(Color))
+    public async Task<FileImageSource> FileImageSourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null)
     {
         try
         {
@@ -159,6 +160,11 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
             _resolvedIcons[key] = diskCachedImage;
 
+            if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+            {
+                return new FileImageSource { File = diskCachedImage };
+            }
+
             return new FileImageSource { File = diskCachedImage };
         }
         catch (Exception ex)
@@ -173,7 +179,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
     }
 
-    private string GetImagePathFromDiskCache(string key)
+    private string? GetImagePathFromDiskCache(string key)
     {
         if (!Directory.Exists(PlatformInfo.IconCacheDirectory))
         {
@@ -185,6 +191,12 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         if (!File.Exists(filePath))
         {
             return null;
+        }
+
+        if (DeviceInfo.Current.Platform == DevicePlatform.iOS ||
+            DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst)
+        {
+            return $"{filePath.Split('@')[0]}.png";
         }
 
         return filePath;
@@ -201,7 +213,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
     }
 
-    private async Task GenerateImageFromEmbedded(string key, string svgName, Size size, Color colorOverride)
+    private async Task GenerateImageFromEmbedded(string key, string svgName, Size size, Color? colorOverride = null)
     {
         try
         {
@@ -235,7 +247,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
     }
 
-    private async Task GenerateImageFromRaw(string key, string svgValue, Size size, Color colorOverride)
+    private async Task GenerateImageFromRaw(string key, string svgValue, Size size, Color? colorOverride = null)
     {
         try
         {
@@ -267,9 +279,11 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
     }
 
-    private async Task RenderSvgAsync(SKSvg skSvg, string key, Size size, Color colorOverride)
+    private async Task RenderSvgAsync(SKSvg skSvg, string key, Size size, Color? colorOverride)
     {
-        var scaledCanvas = _platformScalingFactor;
+        var platformScalingFactor = _platformScalingFactor;
+
+        var scaledCanvas = platformScalingFactor;
 
         SKRect resize = skSvg.Picture.CullRect;
 
@@ -277,45 +291,56 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         {
             var minSize = (float)Math.Min(size.Width, size.Height);
 
-            scaledCanvas = (minSize / Math.Max(skSvg.Picture.CullRect.Width, skSvg.Picture.CullRect.Height)) * _platformScalingFactor;
+            scaledCanvas = (minSize / Math.Max(skSvg.Picture.CullRect.Width, skSvg.Picture.CullRect.Height)) *
+                           platformScalingFactor;
+
+            if (scaledCanvas > 1.0f)
+            {
+                scaledCanvas = (float)Math.Ceiling(scaledCanvas);
+            }
 
             resize = new SKRect(0, 0, skSvg.Picture.CullRect.Width * scaledCanvas, skSvg.Picture.CullRect.Height * scaledCanvas);
         }
         else if (skSvg.Picture.CullRect != default)
         {
-            resize = new SKRect(0, 0, skSvg.Picture.CullRect.Width * _platformScalingFactor, skSvg.Picture.CullRect.Height * _platformScalingFactor);
+            resize = new SKRect(0, 0, skSvg.Picture.CullRect.Width * platformScalingFactor, skSvg.Picture.CullRect.Height * platformScalingFactor);
         }
 
-        if (colorOverride == default(Color))
+        if (colorOverride == null)
         {
             using var memStream = new MemoryStream();
+
             skSvg.Picture.ToImage(memStream, SKColors.Empty, SKEncodedImageFormat.Png, 100, scaledCanvas, scaledCanvas, SKColorType.Rgba8888, SKAlphaType.Premul, SKColorSpace.CreateSrgb());
+
+            // var img = SKImage.FromPicture(skSvg.Picture, resize.Size.ToSizeI());
+            // using var encoded = img.Encode(SKEncodedImageFormat.Png, 100);
             memStream.Seek(0L, SeekOrigin.Begin);
+
+            // encoded.SaveTo(memStream);
             await SaveIconToDiskCache(key, memStream).ConfigureAwait(false);
             return;
         }
 
-        var imageInfo = new SKImageInfo((int)resize.Width, (int)resize.Height, SKColorType.Rgba8888, SKAlphaType.Premul);
+        var imageInfo = new SKImageInfo((int)Math.Ceiling(resize.Width), (int)Math.Ceiling(resize.Height), SKColorType.Rgba8888, SKAlphaType.Premul);
 
-        using (var bmp = new SKBitmap(imageInfo))
-        using (var canvas = new SKCanvas(bmp))
+        using var bmp = new SKBitmap(imageInfo);
+        using var canvas = new SKCanvas(bmp);
+
+        skSvg.Picture.Draw(SKColor.Empty, scaledCanvas, scaledCanvas, canvas);
+
+        if (colorOverride != default(Color))
         {
-            skSvg.Picture.Draw(SKColor.Empty, scaledCanvas, scaledCanvas, canvas);
+            this._paint.Color = colorOverride.ToSKColor();
+            canvas.DrawPaint(this._paint);
+        }
 
-            if (colorOverride != default(Color))
-            {
-                _paint.Color = colorOverride.ToSKColor();
-                canvas.DrawPaint(_paint);
-            }
+        canvas.Flush();
 
-            canvas.Flush();
-
-            using (var image = SKImage.FromBitmap(bmp))
-            using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
-            using (var stream = data.AsStream(false))
-            {
-                await SaveIconToDiskCache(key, stream).ConfigureAwait(false);
-            }
+        using (var image = SKImage.FromBitmap(bmp))
+        using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
+        using (var stream = data.AsStream(false))
+        {
+            await this.SaveIconToDiskCache(key, stream).ConfigureAwait(false);
         }
     }
 
@@ -352,14 +377,11 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
     public abstract Task<Stream> StreamFromSource(ImageSource imageSource);
 
-    private string CreateIconKey(string svgName, Size size, string additionalCacheKey = "", Color colorOverride = default(Color))
+    private string CreateIconKey(string svgName, Size size, string additionalCacheKey = "", Color colorOverride = null)
     {
         var key = $"{svgName}_{additionalCacheKey}_{size.Width}_{size.Height}_{colorOverride?.GetHashCode()}".Trim(_underscore);
 
-        if (_platformScalingFactor > 1.01f)
-        {
-            key = $"{key}@{_platformScalingFactor}x";
-        }
+        key = $"{key}@{_platformScalingFactor}x";
 
         key = string.Join(_underscore, key.Split(_invalidFilenameChars));
 
@@ -368,16 +390,16 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-        if (!_disposedValue)
+        if (_disposedValue || !disposing)
         {
-            if (disposing)
-            {
-                _iconLock?.Dispose();
-                _paint.Dispose();
-            }
-
-            _disposedValue = true;
+            return;
         }
+
+        this._iconLock?.Dispose();
+        this._colorspace.Dispose();
+        this._paint.Dispose();
+
+        this._disposedValue = true;
     }
 
     public void Dispose()

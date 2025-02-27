@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AuroraControls.Loading;
+﻿namespace AuroraControls.Loading;
 
 /// <summary>
 /// Material circular loading animation.
@@ -9,10 +7,10 @@ namespace AuroraControls.Loading;
 public class MaterialCircular : SceneViewBase
 #pragma warning restore CA1001 // Types that own disposable fields should be disposable
 {
-    private SKPaint _progressPaint;
-    private SKPath _progressPath;
-    private SKPaint _progressBackgroundPaint;
-    private SKPath _backgroundProgressPath;
+    private SKPaint? _progressPaint;
+    private SKPath? _progressPath;
+    private SKPaint? _progressBackgroundPaint;
+    private SKPath? _backgroundProgressPath;
 
     /// <summary>
     /// The foreground color property. Specifies the foreground color.
@@ -35,8 +33,8 @@ public class MaterialCircular : SceneViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
     public Color ForegroundLoadingColor
     {
-        get { return (Color)GetValue(ForegroundLoadingColorProperty); }
-        set { SetValue(ForegroundLoadingColorProperty, value); }
+        get => (Color)GetValue(ForegroundLoadingColorProperty);
+        set => SetValue(ForegroundLoadingColorProperty, value);
     }
 
     /// <summary>
@@ -60,8 +58,8 @@ public class MaterialCircular : SceneViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
     public Color BackgroundLoadingColor
     {
-        get { return (Color)GetValue(BackgroundLoadingColorProperty); }
-        set { SetValue(BackgroundLoadingColorProperty, value); }
+        get => (Color)GetValue(BackgroundLoadingColorProperty);
+        set => SetValue(BackgroundLoadingColorProperty, value);
     }
 
     /// <summary>
@@ -92,8 +90,8 @@ public class MaterialCircular : SceneViewBase
     /// <value>Takes an EndCapType. Default is EndCapType.Rounded.</value>
     public EndCapType EndCapType
     {
-        get { return (EndCapType)GetValue(EndCapTypeProperty); }
-        set { SetValue(EndCapTypeProperty, value); }
+        get => (EndCapType)GetValue(EndCapTypeProperty);
+        set => SetValue(EndCapTypeProperty, value);
     }
 
     /// <summary>
@@ -118,8 +116,8 @@ public class MaterialCircular : SceneViewBase
     /// <value>Takes a double. Default value is 12d.</value>
     public double ProgressThickness
     {
-        get { return (double)GetValue(ProgressThicknessProperty); }
-        set { SetValue(ProgressThicknessProperty, value); }
+        get => (double)GetValue(ProgressThicknessProperty);
+        set => SetValue(ProgressThicknessProperty, value);
     }
 
     public MaterialCircular()
@@ -144,13 +142,13 @@ public class MaterialCircular : SceneViewBase
         _progressPaint.Color = ForegroundLoadingColor.ToSKColor();
         _progressPaint.StrokeWidth = (float)ProgressThickness * _scale;
 
-        _progressPath = new SKPath { };
+        _progressPath = new SKPath();
 
         _progressBackgroundPaint = new SKPaint { IsAntialias = true, Style = SKPaintStyle.Stroke };
         _progressBackgroundPaint.Color = BackgroundLoadingColor.ToSKColor();
         _progressBackgroundPaint.StrokeWidth = (float)ProgressThickness * _scale;
 
-        _backgroundProgressPath = new SKPath { };
+        _backgroundProgressPath = new SKPath();
 
         base.Attached();
     }
@@ -202,19 +200,27 @@ public class MaterialCircular : SceneViewBase
             progressArcLength = 1;
         }
 
-        _backgroundProgressPath.Reset();
-        _backgroundProgressPath.AddArc(arcRect, 0, 360);
+        _backgroundProgressPath?.Reset();
+        _backgroundProgressPath?.AddArc(arcRect, 0, 360);
 
-        _progressPath.Reset();
-        _progressPath.AddArc(arcRect, progressOfCircle, progressArcLength);
+        _progressPath?.Reset();
+        _progressPath?.AddArc(arcRect, progressOfCircle, progressArcLength);
 
         using (new SKAutoCanvasRestore(canvas))
         {
             var matrix = SKMatrix.CreateRotationDegrees(progressOfCircle - 90f, info.Rect.MidX, info.Rect.MidY);
             canvas.SetMatrix(matrix);
             canvas.Clear();
-            canvas.DrawPath(_backgroundProgressPath, _progressBackgroundPaint);
-            canvas.DrawPath(_progressPath, _progressPaint);
+
+            if (this._backgroundProgressPath != null)
+            {
+                canvas.DrawPath(this._backgroundProgressPath, this._progressBackgroundPaint);
+            }
+
+            if (this._progressPath != null)
+            {
+                canvas.DrawPath(this._progressPath, this._progressPaint);
+            }
         }
 
         canvas.Flush();
