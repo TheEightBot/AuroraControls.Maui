@@ -15,6 +15,7 @@ public class RoundedCornersPlatformEffect : PlatformEffect
     private ViewOutlineProvider _originalOutlineProvider;
     private double _scalingFactor;
     private Drawable _originalBackground;
+    private Drawable _originalForeground;
 
     protected override void OnAttached()
     {
@@ -27,7 +28,8 @@ public class RoundedCornersPlatformEffect : PlatformEffect
 
         _originalClipToOutline = view.ClipToOutline;
         _originalOutlineProvider = view.OutlineProvider;
-        _originalBackground = view.Background;
+        this._originalForeground = view.Foreground;
+        this._originalBackground = view.Background;
 
         view.ClipToOutline = true;
         view.OutlineProvider = ViewOutlineProvider.Bounds;
@@ -57,7 +59,8 @@ public class RoundedCornersPlatformEffect : PlatformEffect
 
             view.ClipToOutline = _originalClipToOutline;
             view.OutlineProvider = _originalOutlineProvider;
-            view.Background = _originalBackground;
+            view.Foreground = this._originalForeground;
+            view.Background = this._originalBackground;
         }
         catch (ObjectDisposedException)
         {
@@ -79,7 +82,7 @@ public class RoundedCornersPlatformEffect : PlatformEffect
 
     private void SetCornerRadius()
     {
-        var view = Container as Android.Views.View;
+        var view = Container;
 
         if (view == null || view.Handle == IntPtr.Zero || Build.VERSION.SdkInt < BuildVersionCodes.Lollipop)
         {
@@ -100,18 +103,25 @@ public class RoundedCornersPlatformEffect : PlatformEffect
 
         if (this.Element is VisualElement ve)
         {
-            var shape = new GradientDrawable() { };
-            shape.SetColor(ve.BackgroundColor.ToAndroid());
-            shape.SetCornerRadius(scaledCornerRadius);
-
             var borderColor = Effects.RoundedCornersEffect.GetBorderColor(this.Element);
             var scaledBorderSize = (int)(Effects.RoundedCornersEffect.GetBorderSize(this.Element) * _scalingFactor);
 
-            shape.SetStroke(scaledBorderSize, borderColor.ToAndroid());
+            var foregroundShape = new GradientDrawable() { };
+            foregroundShape.SetColor(0);
+            foregroundShape.SetCornerRadius(scaledCornerRadius * 0.80f /* A magic number for rounding down the corner radius so that it overlaps the clip bounds better */);
+            foregroundShape.SetStroke(scaledBorderSize, borderColor.ToAndroid());
+
+            var backgroundShape = new GradientDrawable() { };
+            backgroundShape.SetColor(ve.BackgroundColor.ToAndroid());
+            backgroundShape.SetCornerRadius(scaledCornerRadius);
+            backgroundShape.SetStroke(scaledBorderSize, borderColor.ToAndroid());
 
             var background = view.Background;
-            view.SetBackground(shape);
+            var foreground = view.Foreground;
+            view.Background = backgroundShape;
+            view.Foreground = foregroundShape;
             background?.Dispose();
+            foreground?.Dispose();
         }
 
         view.OutlineProvider = new RoundedViewOutline(scaledCornerRadius);
