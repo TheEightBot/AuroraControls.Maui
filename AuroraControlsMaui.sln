@@ -18,6 +18,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[Solution Files]", "[Soluti
 		global.json = global.json
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{9A10F773-6017-4172-876D-44903FC9A5AD}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\nuget-prod.yml = .github\workflows\nuget-prod.yml
+		.github\workflows\nuget-beta.yml = .github\workflows\nuget-beta.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,5 +44,8 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {20E54C83-034C-4A0C-96F5-018555621025}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9A10F773-6017-4172-876D-44903FC9A5AD} = {A8DD4891-4B8D-4C36-99CA-48B557584C23}
 	EndGlobalSection
 EndGlobal
