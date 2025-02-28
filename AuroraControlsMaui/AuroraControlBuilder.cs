@@ -1,10 +1,4 @@
-using System;
 using System.Reflection;
-using AuroraControls.Effects;
-using AuroraControls.Maui;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui.Controls.Hosting;
-using Microsoft.Maui.Hosting;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace AuroraControls;
@@ -26,6 +20,7 @@ public static class AuroraControlBuilder
                 {
                     mauiHandlersCollection.AddHandler(typeof(StyledInputLayout), typeof(StyledInputLayoutHandler));
                     mauiHandlersCollection.AddHandler(typeof(NumericEntry), typeof(NumericEntryHandler));
+                    mauiHandlersCollection.AddHandler(typeof(CalendarPicker), typeof(CalendarPickerHandler));
                 })
             .ConfigureEffects(
                 effects =>
@@ -39,8 +34,7 @@ public static class AuroraControlBuilder
                     effects
                         .Add<Effects.ImageProcessingEffect, Effects.ImageProcessingPlatformEffect>()
                         .Add<Effects.ShadowEffect, ShadowPlatformEffect>()
-                        .Add<Effects.RoundedCornersEffect, RoundedCornersPlatformEffect>()
-                        .Add<Effects.NullableCalendarDatePickerEffect, NullableCalendarDatePickerPlatormEffect>();
+                        .Add<Effects.RoundedCornersEffect, RoundedCornersPlatformEffect>();
 #endif
                 });
 

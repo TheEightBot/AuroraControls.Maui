@@ -10,6 +10,11 @@ public class StyledInputLayout : ContentView, IUnderlayDrawable
                     nameof(IPicker.SelectedIndex),
                     view => view.SelectedIndex >= 0,
                     false),
+            [typeof(CalendarPicker)] =
+                StyledContentTypeRegistration.Build<CalendarPicker>(
+                    nameof(CalendarPicker.Date),
+                    view => view.Date.HasValue,
+                    false),
             [typeof(IDatePicker)] = StyledContentTypeRegistration.Default,
             [typeof(ITimePicker)] = StyledContentTypeRegistration.Default,
             [typeof(Editor)] =

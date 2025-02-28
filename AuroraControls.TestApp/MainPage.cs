@@ -1,4 +1,5 @@
 using System.Reactive.Linq;
+using AuroraControls.Effects;
 using AuroraControls.Gauges;
 using AuroraControls.TestApp.ViewModels;
 using CommunityToolkit.Maui.Markup;
@@ -60,6 +61,10 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
     private int _imageEffectCounter;
 
+    private CalendarPicker _calendarPicker;
+
+    private Button _clearNullableDatePicker;
+
     public MainPage(ILogger<TestRxViewModel> logger)
     {
         var val = 123;
@@ -97,6 +102,18 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                               BorderColor = Colors.Chocolate,
                               BackgroundColor = Colors.Aquamarine,
                             },
+                            new StyledInputLayout
+                            {
+                                Placeholder = "Nullable Date Picker",
+                                Content =
+                                    new CalendarPicker()
+                                        .Assign(out this._calendarPicker),
+                            },
+                            new Button
+                            {
+                                Text = "Clear Nullable Date Picker",
+                            }
+                                .Assign(out _clearNullableDatePicker),
                             new StyledInputLayout
                             {
                                 Content =
@@ -368,6 +385,12 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
         this._viewCardViewLayoutButton.Clicked +=
             async (sender, args) => await this.Navigation.PushAsync(new CardViewLayoutPage());
+
+        this._clearNullableDatePicker.Clicked +=
+            (sender, args) =>
+            {
+                this._calendarPicker.Date = null;
+            };
 
         this._svgImageViewTapped.Clicked +=
             (sender, args) =>

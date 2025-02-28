@@ -15,7 +15,7 @@ public static class MauiProgram
             .UseMauiCommunityToolkit()
             .UseMauiCommunityToolkitMarkup()
             .UseNPicker()
-            .RegisterStyledInputLayout<NPicker.DatePicker>(nameof(NPicker.DatePicker.Date), view => view.Date.HasValue)
+            .RegisterStyledInputLayout<NPicker.DatePicker>(nameof(NPicker.DatePicker.Value), view => view.Value.HasValue)
             .ConfigureFonts(
                 fonts =>
                 {
