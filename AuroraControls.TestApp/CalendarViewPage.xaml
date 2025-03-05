@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             x:Class="AuroraControls.TestApp.CalendarViewPage">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Button Text="Update Values"
+                Clicked="UpdateValues_Clicked"
+                Grid.Row="0" Grid.Column="0" />
+        <Button Text="Toggle Single Selection"
+                Clicked="ToggleSingleSelection_Clicked"
+                Grid.Row="1" Grid.Column="0" />
+        <Button Text="Toggle Spanned Selection"
+                Clicked="ToggleSpannedSelection_Clicked"
+                Grid.Row="2" Grid.Column="0" />
+        <Button Text="Toggle Multiple Selection"
+                Clicked="ToggleMultipleSelection_Clicked"
+                Grid.Row="3" Grid.Column="0" />
+        <Label x:Name="CurrentYear" Text=""
+               Grid.Row="4" Grid.Column="0" HorizontalOptions="CenterAndExpand" />
+        <Stepper x:Name="ChangeCurrentYear" Maximum="2099" Minimum="1900" Increment="1"
+                 ValueChanged="CurrentYear_ValueChanged"
+                 Grid.Row="5" Grid.Column="0" HorizontalOptions="CenterAndExpand" />
+        <Label x:Name="CurrentMonth" Text=""
+               Grid.Row="6" Grid.Column="0" HorizontalOptions="CenterAndExpand" />
+        <Stepper x:Name="ChangeCurrentMonth" Maximum="12" Minimum="1" Increment="1"
+                 ValueChanged="CurrentMonth_ValueChanged"
+                 Grid.Row="7" Grid.Column="0" HorizontalOptions="CenterAndExpand" />
+        <Button Text="Switch Day Display"
+                Clicked="SwitchDayDisplay_Clicked"
+                Grid.Row="8" Grid.Column="0" />
+        <aurora:CalendarView x:Name="control"
+                             DateBackgroundColor="Fuchsia"
+                             CalendarDayDisplayLocation="UpperRight"
+                             Margin="8"
+                             Grid.Row="9" Grid.Column="0" />
+    </Grid>
+</ContentPage>

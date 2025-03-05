@@ -55,6 +55,8 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
     private Button _viewCardViewLayoutButton;
 
+    private Button _viewCalendarViewButton;
+
     private SvgImageView _svgImageView;
 
     private Button _svgImageViewTapped;
@@ -94,6 +96,9 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
                             new Button { Text = "View Card View Layout", }
                                 .Assign(out _viewCardViewLayoutButton),
+
+                            new Button { Text = "View Calendar View", }
+                                .Assign(out _viewCalendarViewButton),
 
                             new ToggleBox
                             {
@@ -385,6 +390,9 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
         this._viewCardViewLayoutButton.Clicked +=
             async (sender, args) => await this.Navigation.PushAsync(new CardViewLayoutPage());
+
+        this._viewCalendarViewButton.Clicked +=
+            async (sender, args) => await this.Navigation.PushAsync(new CalendarViewPage());
 
         this._clearNullableDatePicker.Clicked +=
             (sender, args) =>
