@@ -25,6 +25,60 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
         _scale = (float)PlatformInfo.ScalingFactor;
     }
 
+    public Stream ExportImage(SKEncodedImageFormat imageFormat, int quality = 85, int maxWidth = -1, int maxHeight = -1, SKColorType colorType = SKColorType.Rgba8888)
+    {
+        int width = 0;
+        int height = 0;
+
+        switch (maxWidth)
+        {
+            case <= 0 when maxHeight <= 0:
+                width = (int)this._overrideDrawableArea.Width;
+                height = height = (int)this._overrideDrawableArea.Height;
+                break;
+            case > 0 when maxHeight <= 0:
+                var scaleAmount = maxWidth / this._overrideDrawableArea.Width;
+
+                width = (int)this._overrideDrawableArea.Width;
+                height = (int)(this._overrideDrawableArea.Height * scaleAmount);
+                break;
+            default:
+                if (maxHeight > 0 && maxWidth <= 0)
+                {
+                    var defaultScaleAmount = maxHeight / this._overrideDrawableArea.Height;
+
+                    height = (int)this._overrideDrawableArea.Height;
+                    width = (int)(this._overrideDrawableArea.Width * defaultScaleAmount);
+                }
+                else
+                {
+                    var scaledHeightAmount = maxHeight / this._overrideDrawableArea.Height;
+                    var scaledWidthAmount = maxWidth / this._overrideDrawableArea.Width;
+
+                    var minScale = Math.Min(scaledHeightAmount, scaledWidthAmount);
+
+                    height = (int)(this._overrideDrawableArea.Height * minScale);
+                    width = (int)(this._overrideDrawableArea.Width * minScale);
+                }
+
+                break;
+        }
+
+        var imageInfo = new SKImageInfo(width, height, colorType);
+
+        using var surface = SKSurface.Create(imageInfo);
+        this.PaintSurfaceInternal(surface, imageInfo);
+
+        var snapshot = surface?.Snapshot();
+
+        var encoded = snapshot?.Encode(imageFormat, quality)?.AsStream() ?? Stream.Null;
+
+        snapshot.Dispose();
+        snapshot = null;
+
+        return encoded;
+    }
+
     /// <summary>
     /// Invoked whenever the Parent of an element is set.
     /// </summary>
@@ -135,41 +189,43 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
 
             _enabledVisualEffects = VisualEffects.Where(x => x.Enabled).ToList();
 
-            if (_enabledVisualEffects.Any())
+            if (!this._enabledVisualEffects.Any())
             {
-                if (!IsAttached)
+                return;
+            }
+
+            if (!this.IsAttached)
+            {
+                return;
+            }
+
+            using (new SKAutoCanvasRestore(surface.Canvas))
+            {
+                var image = surface.Snapshot();
+
+                if (this._overrideDrawableArea != default(SKRect))
                 {
-                    return;
+                    surface.Canvas.ClipRect(this._overrideDrawableArea);
                 }
 
-                using (new SKAutoCanvasRestore(surface.Canvas))
+                foreach (var visualEffect in this._enabledVisualEffects)
                 {
-                    var image = surface.Snapshot();
-
-                    if (_overrideDrawableArea != default(SKRect))
-                    {
-                        surface.Canvas.ClipRect(_overrideDrawableArea);
-                    }
-
-                    foreach (var visualEffect in _enabledVisualEffects)
-                    {
-                        if (!IsAttached)
-                        {
-                            return;
-                        }
-
-                        var tmpImage = visualEffect.ApplyEffect(image, surface, info, _overrideDrawableArea);
-                        image?.Dispose();
-                        image = tmpImage;
-                    }
-
-                    if (!IsAttached)
+                    if (!this.IsAttached)
                     {
                         return;
                     }
 
-                    surface.Canvas.DrawImage(image, SKPoint.Empty);
+                    var tmpImage = visualEffect.ApplyEffect(image, surface, info, this._overrideDrawableArea);
+                    image?.Dispose();
+                    image = tmpImage;
                 }
+
+                if (!this.IsAttached)
+                {
+                    return;
+                }
+
+                surface.Canvas.DrawImage(image, SKPoint.Empty);
             }
         }
         finally
