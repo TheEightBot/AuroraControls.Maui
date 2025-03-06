@@ -29,6 +29,7 @@ public class StyledInputLayoutHandler : ContentViewHandler, IHavePlatformUnderla
             [nameof(IUnderlayDrawable.InternalMargin)] = MapStyledInputLayoutInternalMargin,
             [nameof(IUnderlayDrawable.FocusAnimationPercentage)] = MapFocusAnimationPercentage,
             [nameof(IUnderlayDrawable.HasValueAnimationPercentage)] = MapHasValueAnimationPercentage,
+            [nameof(IUnderlayDrawable.Command)] = MapCommand,
         };
 
     public bool PreviousHasValue { get; set; }
@@ -85,6 +86,11 @@ public class StyledInputLayoutHandler : ContentViewHandler, IHavePlatformUnderla
     {
         base.UpdateValue(property);
 
+        if (property is nameof(IUnderlayDrawable.Command) or nameof(IUnderlayDrawable.CommandParameter))
+        {
+            this.PlatformUnderlayDrawable?.OnCommandSet();
+        }
+
         this.PlatformUnderlayDrawable?.Invalidate();
     }
 
@@ -140,9 +146,9 @@ public class StyledInputLayoutHandler : ContentViewHandler, IHavePlatformUnderla
         Invalidate(elementHandler, underlayDrawable);
     }
 
-    private static void Invalidate(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable)
+    private static void MapCommand(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable)
     {
-        (elementHandler as IHavePlatformUnderlayDrawable)?.PlatformUnderlayDrawable?.Invalidate();
+        (elementHandler as IHavePlatformUnderlayDrawable)?.PlatformUnderlayDrawable?.OnCommandSet();
     }
 
     private static void MapStyledInputContent(IContentViewHandler elementHandler, IContentView view)
@@ -163,5 +169,10 @@ public class StyledInputLayoutHandler : ContentViewHandler, IHavePlatformUnderla
 
             inputView.PlaceholderColor = Colors.Transparent;
         }
+    }
+
+    private static void Invalidate(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable)
+    {
+        (elementHandler as IHavePlatformUnderlayDrawable)?.PlatformUnderlayDrawable?.Invalidate();
     }
 }
