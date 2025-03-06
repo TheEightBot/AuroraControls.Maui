@@ -109,6 +109,15 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                             },
                             new StyledInputLayout
                             {
+                                Command = new Command(() => this.DisplayAlert("Command Tapped", "You have successfully tapped the command", "Great, Thanks!")),
+                                Content =
+                                    new Entry
+                                    {
+                                        Placeholder = "Styled input layout with command",
+                                    },
+                            },
+                            new StyledInputLayout
+                            {
                                 Placeholder = "Nullable Date Picker",
                                 Content =
                                     new CalendarPicker()
