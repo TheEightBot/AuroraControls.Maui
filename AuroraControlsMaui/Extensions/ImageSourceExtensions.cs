@@ -294,4 +294,9 @@ public static class ImageSourceExtensions
             .FileImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
             .AsAsyncSourceFor(image);
     }
+
+    public static Task<SKBitmap> BitmapFromSource(this ImageSource imageSource)
+    {
+        return IconCache.SKBitmapFromSource(imageSource);
+    }
 }
