@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             x:Class="AuroraControls.TestApp.TouchDrawLettersImagePage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Button Text="Add Letter" Clicked="AddLetter_Clicked" />
+            <Button Text="Export" Clicked="Export_Clicked" />
+            <aurora:TouchDrawLettersImage
+                x:Name="control"
+                Grid.Row="1"
+                Source="https://api.floodmagazine.com/wp-content/uploads/2016/07/Steve_Brule-2016-Marc_Lemoine-5-677x1024.jpg"
+                HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" >
+                <aurora:TouchDrawLettersImage.TouchDrawLetters>
+                    <aurora:TouchDrawLetter Value="A" Location="50, 50" ForegroundColorOverride="Fuchsia" BackgroundColorOverride="White" />
+                </aurora:TouchDrawLettersImage.TouchDrawLetters>
+            </aurora:TouchDrawLettersImage>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

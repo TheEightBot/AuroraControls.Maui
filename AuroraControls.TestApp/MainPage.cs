@@ -61,6 +61,8 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
     private Button _svgImageViewTapped;
 
+    private Button _touchDrawImage;
+
     private int _imageEffectCounter;
 
     private CalendarPicker _calendarPicker;
@@ -99,6 +101,9 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
                             new Button { Text = "View Calendar View", }
                                 .Assign(out _viewCalendarViewButton),
+
+                            new Button { Text = "View touch Draw Image", }
+                                .Assign(out _touchDrawImage),
 
                             new ToggleBox
                             {
@@ -402,6 +407,9 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
         this._viewCalendarViewButton.Clicked +=
             async (sender, args) => await this.Navigation.PushAsync(new CalendarViewPage());
+
+        this._touchDrawImage.Clicked +=
+            async (sender, args) => await this.Navigation.PushAsync(new TouchDrawLettersImagePage());
 
         this._clearNullableDatePicker.Clicked +=
             (sender, args) =>
