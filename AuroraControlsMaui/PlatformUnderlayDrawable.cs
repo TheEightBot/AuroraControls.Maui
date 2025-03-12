@@ -124,12 +124,15 @@ public class PlatformUnderlayDrawable : IDisposable
         {
             if (this._commandView is null)
             {
+                float width = this._virtualView.Width > 0d ? (float)this._virtualView.Width : 0f;
+                float height = this._virtualView.Height > 0d ? (float)this._virtualView.Height : 0f;
+
                 this._commandView =
                     new UIView
                     {
                         BackgroundColor = UIColor.Clear,
                         UserInteractionEnabled = true,
-                        Frame = new CGRect(0f, 0f, (float)this._virtualView.Width, (float)this._virtualView.Height),
+                        Frame = new CGRect(0f, 0f, width, height),
                     };
                 this._commandView.AddGestureRecognizer(
                     this._commandViewTapped = new UITapGestureRecognizer(() =>
