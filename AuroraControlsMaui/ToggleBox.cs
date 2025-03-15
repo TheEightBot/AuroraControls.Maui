@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Maui.Controls.Internals;
 using Microsoft.Maui.Graphics;
 
 namespace AuroraControls;
@@ -258,21 +259,13 @@ public class ToggleBox : AuroraViewBase
     public ToggleBox()
     {
         this.EnableTouchEvents = true;
-        MinimumHeightRequest = 36;
-        MinimumWidthRequest = 36;
+        MinimumHeightRequest = IAuroraView.SmallControlHeight;
+        MinimumWidthRequest = IAuroraView.SmallControlWidth;
     }
 
-    protected override void OnPropertyChanged(string? propertyName = null)
+    public override Size CustomMeasuredSize(double widthConstraint, double heightConstraint)
     {
-        base.OnPropertyChanged(propertyName);
-
-        if (propertyName != null &&
-            (propertyName.Equals(HeightProperty.PropertyName) ||
-                propertyName.Equals(WidthProperty.PropertyName) ||
-                propertyName.Equals(MarginProperty.PropertyName)))
-        {
-            this.InvalidateSurface();
-        }
+        return new Size(IAuroraView.SmallControlWidth, IAuroraView.SmallControlHeight);
     }
 
     protected override void PaintControl(SKSurface surface, SKImageInfo info)

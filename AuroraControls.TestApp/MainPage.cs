@@ -13,7 +13,8 @@ namespace AuroraControls.TestApp;
 public class MainPage : ReactiveContentPage<TestRxViewModel>
 {
     public static BindableProperty MvvmToolkitViewModelProperty =
-        BindableProperty.Create(nameof(MvvmToolkitViewModel), typeof(TestMvvmToolkitViewModel), typeof(MainPage), default(TestMvvmToolkitViewModel));
+        BindableProperty.Create(nameof(MvvmToolkitViewModel), typeof(TestMvvmToolkitViewModel), typeof(MainPage),
+            default(TestMvvmToolkitViewModel));
 
     public TestMvvmToolkitViewModel MvvmToolkitViewModel
     {
@@ -57,6 +58,8 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
     private Button _viewCalendarViewButton;
 
+    private Button _viewToggleIssueButton;
+
     private SvgImageView _svgImageView;
 
     private Button _svgImageViewTapped;
@@ -94,32 +97,34 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                         Children =
                         {
                             new Button { Text = "View Image Processing", }
+                                .BindClicked(async () => await this.Navigation.PushAsync(new ImageProcessing()))
                                 .Assign(out _viewImageProcessingButton),
-
                             new Button { Text = "View Card View Layout", }
+                                .BindClicked(async () => await this.Navigation.PushAsync(new CardViewLayoutPage()))
                                 .Assign(out _viewCardViewLayoutButton),
-
                             new Button { Text = "View Calendar View", }
+                                .BindClicked(async () => await this.Navigation.PushAsync(new CalendarViewPage()))
                                 .Assign(out _viewCalendarViewButton),
-
                             new Button { Text = "View touch Draw Image", }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new TouchDrawLettersImagePage()))
                                 .Assign(out _touchDrawImage),
-
+                            new Button { Text = "View Toggle Issue Page", }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new ToggleBoxCollectionViewIssuePage()))
+                                .Assign(out _viewToggleIssueButton),
                             new ToggleBox
                             {
-                              ToggledBackgroundColor = Colors.Fuchsia,
-                              CheckColor = Colors.Chartreuse,
-                              BorderColor = Colors.Chocolate,
-                              BackgroundColor = Colors.Aquamarine,
+                                ToggledBackgroundColor = Colors.Fuchsia,
+                                CheckColor = Colors.Chartreuse,
+                                BorderColor = Colors.Chocolate,
+                                BackgroundColor = Colors.Aquamarine,
                             },
                             new StyledInputLayout
                             {
                                 Command = new Command(() => this.DisplayAlert("Command Tapped", "You have successfully tapped the command", "Great, Thanks!")),
                                 Content =
-                                    new Entry
-                                    {
-                                        Placeholder = "Styled input layout with command",
-                                    },
+                                    new Entry { Placeholder = "Styled input layout with command", },
                             },
                             new StyledInputLayout
                             {
@@ -128,18 +133,12 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                     new CalendarPicker()
                                         .Assign(out this._calendarPicker),
                             },
-                            new Button
-                            {
-                                Text = "Clear Nullable Date Picker",
-                            }
+                            new Button { Text = "Clear Nullable Date Picker", }
                                 .Assign(out _clearNullableDatePicker),
                             new StyledInputLayout
                             {
                                 Content =
-                                    new NPicker.DatePicker
-                                    {
-                                        Placeholder = "Nullable NDate Picker",
-                                    },
+                                    new NPicker.DatePicker { Placeholder = "Nullable NDate Picker", },
                             },
                             new Grid
                             {
@@ -156,7 +155,10 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                             DisabledFontColor = Colors.White,
                                             EnabledFontColor = Colors.White,
                                         }
-                                        .Bind(CupertinoTextToggleSwitch.IsToggledProperty, nameof(TestRxViewModel.IsToggled), mode: BindingMode.TwoWay)
+                                        .Bind(
+                                            CupertinoTextToggleSwitch.IsToggledProperty,
+                                            nameof(TestRxViewModel.IsToggled),
+                                            mode: BindingMode.TwoWay)
                                         .TapGesture(() => _cupertinoToggleSwitch.EnabledText += "A")
                                         .Row(0).Column(2)
                                         .Assign(out _cupertinoToggleSwitch),
@@ -170,7 +172,16 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 SegmentControlStyle = SegmentedControlStyle.Cupertino,
                                 ForegroundTextColor = Colors.CadetBlue,
                                 BackgroundTextColor = Colors.DarkSlateGray,
-                                Segments = { new Segment { ForegroundColor = Colors.Lime, Text = "Test 1", }, new Segment { EmbeddedImageName = "splatoon.svg", ForegroundColor = Colors.Fuchsia, Text = "Test 2", }, },
+                                Segments =
+                                {
+                                    new Segment { ForegroundColor = Colors.Lime, Text = "Test 1", },
+                                    new Segment
+                                    {
+                                        EmbeddedImageName = "splatoon.svg",
+                                        ForegroundColor = Colors.Fuchsia,
+                                        Text = "Test 2",
+                                    },
+                                },
                             },
                             new StyledInputLayout
                                 {
@@ -181,7 +192,12 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                     PlaceholderColor = Colors.Purple,
                                     BorderStyle = ContainerBorderStyle.RoundedRectanglePlaceholderThrough,
                                     Content =
-                                        new Entry { Placeholder = "My Placeholder With Rounded Rectangle Placeholder Through", Text = "This is My Entry", },
+                                        new Entry
+                                        {
+                                            Placeholder =
+                                                "My Placeholder With Rounded Rectangle Placeholder Through",
+                                            Text = "This is My Entry",
+                                        },
                                 }
                                 .Assign(out _opacitySil),
                             new Slider { Value = .5d, Minimum = 0d, Maximum = 1d, }
@@ -213,7 +229,11 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 BorderStyle = ContainerBorderStyle.RoundedUnderline,
                                 InternalMargin = new Thickness(16, 8),
                                 Content =
-                                    new NumericEntry { Placeholder = "This must be an int value...", ValueType = NumericEntryValueType.Int, }
+                                    new NumericEntry
+                                        {
+                                            Placeholder = "This must be an int value...",
+                                            ValueType = NumericEntryValueType.Int,
+                                        }
                                         .Assign(out _rxNumericIntEntry),
                             },
                             new StyledInputLayout
@@ -242,16 +262,30 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 BackgroundColor = Colors.Chartreuse,
                                 BorderStyle = ContainerBorderStyle.Rectangle,
                                 Content =
-                                    new Editor { Placeholder = "Test Entry", AutoSize = EditorAutoSizeOption.TextChanges, },
+                                    new Editor
+                                    {
+                                        Placeholder = "Test Entry", AutoSize = EditorAutoSizeOption.TextChanges,
+                                    },
                             },
                             new LinearGauge
                             {
-                                StartingPercent = 10.1d, EndingPercent = 40.4d, ProgressBackgroundColor = Colors.Fuchsia, ProgressColor = Colors.Chartreuse,
+                                StartingPercent = 10.1d,
+                                EndingPercent = 40.4d,
+                                ProgressBackgroundColor = Colors.Fuchsia,
+                                ProgressColor = Colors.Chartreuse,
                             },
-                            new CircularFillGauge { ProgressPercentage = 46.1d, ProgressBackgroundColor = Colors.Fuchsia, ProgressColor = Colors.Chartreuse, },
+                            new CircularFillGauge
+                            {
+                                ProgressPercentage = 46.1d,
+                                ProgressBackgroundColor = Colors.Fuchsia,
+                                ProgressColor = Colors.Chartreuse,
+                            },
                             new CircularGauge
                             {
-                                StartingDegree = 10.1d, EndingDegree = 90.0d, ProgressBackgroundColor = Colors.Fuchsia, ProgressColor = Colors.Chartreuse,
+                                StartingDegree = 10.1d,
+                                EndingDegree = 90.0d,
+                                ProgressBackgroundColor = Colors.Fuchsia,
+                                ProgressColor = Colors.Chartreuse,
                             },
                             (_rainbowRing = new Loading.RainbowRing
                             {
@@ -399,23 +433,8 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                     },
             };
 
-        this._viewImageProcessingButton.Clicked +=
-            async (sender, args) => await this.Navigation.PushAsync(new ImageProcessing());
-
-        this._viewCardViewLayoutButton.Clicked +=
-            async (sender, args) => await this.Navigation.PushAsync(new CardViewLayoutPage());
-
-        this._viewCalendarViewButton.Clicked +=
-            async (sender, args) => await this.Navigation.PushAsync(new CalendarViewPage());
-
-        this._touchDrawImage.Clicked +=
-            async (sender, args) => await this.Navigation.PushAsync(new TouchDrawLettersImagePage());
-
         this._clearNullableDatePicker.Clicked +=
-            (sender, args) =>
-            {
-                this._calendarPicker.Date = null;
-            };
+            (sender, args) => { this._calendarPicker.Date = null; };
 
         this._svgImageViewTapped.Clicked +=
             (sender, args) =>
@@ -427,7 +446,11 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                 switch (_imageEffectCounter)
                 {
                     case 0:
-                        _svgImageView.VisualEffects.Add(new VisualEffects.Pixelate { PixelSize = rngesus.Next(10, 25) });
+                        _svgImageView.VisualEffects.Add(
+                            new VisualEffects.Pixelate
+                            {
+                                PixelSize = rngesus.Next(10, 25),
+                            });
                         break;
                     case 1:
                         _svgImageView.VisualEffects.Add(new VisualEffects.Sepia());
@@ -445,10 +468,18 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                         _svgImageView.VisualEffects.Add(new VisualEffects.HighContrast());
                         break;
                     case 6:
-                        _svgImageView.VisualEffects.Add(new VisualEffects.Rotate { RotationDegrees = rngesus.Next(-360, 360) });
+                        _svgImageView.VisualEffects.Add(
+                            new VisualEffects.Rotate
+                            {
+                                RotationDegrees = rngesus.Next(-360, 360),
+                            });
                         break;
                     case 7:
-                        _svgImageView.VisualEffects.Add(new VisualEffects.Scale { ScaleAmount = (float)(rngesus.Next(0, 2) + rngesus.NextDouble()) });
+                        _svgImageView.VisualEffects.Add(
+                            new VisualEffects.Scale
+                            {
+                                ScaleAmount = (float)(rngesus.Next(0, 2) + rngesus.NextDouble()),
+                            });
                         break;
                 }
 
