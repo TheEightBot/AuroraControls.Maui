@@ -16,11 +16,12 @@ public static class AuroraControlBuilder
         mauiAppBuilder
             .UseSkiaSharp()
             .ConfigureMauiHandlers(
-                mauiHandlersCollection =>
+                handlers =>
                 {
-                    mauiHandlersCollection.AddHandler(typeof(StyledInputLayout), typeof(StyledInputLayoutHandler));
-                    mauiHandlersCollection.AddHandler(typeof(NumericEntry), typeof(NumericEntryHandler));
-                    mauiHandlersCollection.AddHandler(typeof(CalendarPicker), typeof(CalendarPickerHandler));
+                    handlers.AddHandler<AuroraViewBase, AutoHeightSKCanvasViewHandler>();
+                    handlers.AddHandler<StyledInputLayout, StyledInputLayoutHandler>();
+                    handlers.AddHandler<NumericEntry, NumericEntryHandler>();
+                    handlers.AddHandler<CalendarPicker, CalendarPickerHandler>();
                 })
             .ConfigureEffects(
                 effects =>

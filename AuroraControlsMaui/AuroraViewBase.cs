@@ -25,6 +25,11 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
         _scale = (float)PlatformInfo.ScalingFactor;
     }
 
+    public virtual Size CustomMeasuredSize(double widthConstraint, double heightConstraint)
+    {
+        return Size.Zero;
+    }
+
     public Stream ExportImage(SKEncodedImageFormat imageFormat, int quality = 85, int maxWidth = -1, int maxHeight = -1, SKColorType colorType = SKColorType.Rgba8888)
     {
         int width = 0;
