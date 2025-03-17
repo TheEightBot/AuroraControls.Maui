@@ -33,15 +33,9 @@ public class Contrast : VisualEffect
         set => SetValue(ContrastAmountProperty, value.Clamp(-100, 100));
     }
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect)
-    {
-        return InternalApplyEffect(surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect) => InternalApplyEffect(surface, info.Rect);
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect)
-    {
-        return InternalApplyEffect(surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect) => InternalApplyEffect(surface, info.Rect);
 
     private SKImage InternalApplyEffect(SKSurface surface, SKRect rect)
     {

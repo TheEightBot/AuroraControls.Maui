@@ -217,10 +217,7 @@ public class NotificationBadge : AuroraViewBase
         base.Detached();
     }
 
-    protected override void PaintControl(SKSurface surface, SKImageInfo info)
-    {
-        DrawNotificationBadge(surface, info.Rect, true);
-    }
+    protected override void PaintControl(SKSurface surface, SKImageInfo info) => DrawNotificationBadge(surface, info.Rect, true);
 
     public void DrawNotificationBadge(SKSurface surface, SKRect rect, bool clear = true)
     {

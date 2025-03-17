@@ -18,8 +18,8 @@ public class NumericEntry : Entry
 
     public CultureInfo CultureInfo
     {
-        get { return (CultureInfo)GetValue(CultureInfoProperty); }
-        set { SetValue(CultureInfoProperty, value); }
+        get => (CultureInfo)GetValue(CultureInfoProperty);
+        set => SetValue(CultureInfoProperty, value);
     }
 
     public static readonly BindableProperty ValueTypeProperty =

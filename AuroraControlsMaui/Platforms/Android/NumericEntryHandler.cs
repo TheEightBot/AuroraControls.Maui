@@ -45,10 +45,7 @@ public partial class NumericEntryHandler : EntryHandler, IDisposable
 
         private NumericEntry _numericEntry;
 
-        public NumericInputFilter(NumericEntry numericEntry)
-        {
-            _numericEntry = numericEntry;
-        }
+        public NumericInputFilter(NumericEntry numericEntry) => _numericEntry = numericEntry;
 
         public ICharSequence FilterFormatted(ICharSequence source, int start, int end, ISpanned dest, int dstart, int dend)
         {

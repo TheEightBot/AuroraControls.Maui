@@ -20,8 +20,8 @@ public class CircularFillGauge : AuroraViewBase
     /// <value>The progress percentage as a double. Default is default(double).</value>
     public double ProgressPercentage
     {
-        get { return (double)GetValue(ProgressPercentageProperty); }
-        set { SetValue(ProgressPercentageProperty, value.Clamp(0, 100)); }
+        get => (double)GetValue(ProgressPercentageProperty);
+        set => SetValue(ProgressPercentageProperty, value.Clamp(0, 100));
     }
 
     /// <summary>
@@ -37,8 +37,8 @@ public class CircularFillGauge : AuroraViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is Color.Default.</value>
     public Color ProgressColor
     {
-        get { return (Color)GetValue(ProgressColorProperty); }
-        set { SetValue(ProgressColorProperty, value); }
+        get => (Color)GetValue(ProgressColorProperty);
+        set => SetValue(ProgressColorProperty, value);
     }
 
     /// <summary>
@@ -54,14 +54,11 @@ public class CircularFillGauge : AuroraViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is Color.Default.</value>
     public Color ProgressBackgroundColor
     {
-        get { return (Color)GetValue(ProgressBackgroundColorProperty); }
-        set { SetValue(ProgressBackgroundColorProperty, value); }
+        get => (Color)GetValue(ProgressBackgroundColorProperty);
+        set => SetValue(ProgressBackgroundColorProperty, value);
     }
 
-    public CircularFillGauge()
-    {
-        MinimumHeightRequest = IAuroraView.StandardControlHeight;
-    }
+    public CircularFillGauge() => MinimumHeightRequest = IAuroraView.StandardControlHeight;
 
     /// <summary>
     /// Method that is called when the property that is specified by propertyName is changed.
@@ -137,8 +134,5 @@ public class CircularFillGauge : AuroraViewBase
     /// <param name="rate">The time, in milliseconds, between frames.</param>
     /// <param name="length">The number of milliseconds over which to interpolate the animation.</param>
     /// <param name="easing">The easing function to use to transision in, out, or in and out of the animation.</param>
-    public Task<bool> TransitionTo(double progressPercentage, uint rate = 16, uint length = 250, Easing easing = null)
-    {
-        return this.TransitionTo(x => x.ProgressPercentage, progressPercentage, rate, length, easing);
-    }
+    public Task<bool> TransitionTo(double progressPercentage, uint rate = 16, uint length = 250, Easing easing = null) => this.TransitionTo(x => x.ProgressPercentage, progressPercentage, rate, length, easing);
 }

@@ -19,8 +19,8 @@ public class Nofriendo : LoadingViewBase
     /// <value>Current step as an int. Default is 0.</value>
     public int CurrentAnimationStep
     {
-        get { return (int)GetValue(CurrentAnimationStepProperty); }
-        private set { SetValue(CurrentAnimationStepProperty, value); }
+        get => (int)GetValue(CurrentAnimationStepProperty);
+        private set => SetValue(CurrentAnimationStepProperty, value);
     }
 
     /// <summary>
@@ -36,8 +36,8 @@ public class Nofriendo : LoadingViewBase
     /// <value>An int representing the step count. Default count is 1.</value>
     public int StepCount
     {
-        get { return (int)GetValue(StepCountProperty); }
-        set { SetValue(StepCountProperty, value); }
+        get => (int)GetValue(StepCountProperty);
+        set => SetValue(StepCountProperty, value);
     }
 
     /// <summary>
@@ -52,8 +52,8 @@ public class Nofriendo : LoadingViewBase
     /// <value>Maximum animation steps as an int. Default is 3.</value>
     public int MaxAnimationSteps
     {
-        get { return (int)GetValue(MaxAnimationStepsProperty); }
-        set { SetValue(MaxAnimationStepsProperty, value); }
+        get => (int)GetValue(MaxAnimationStepsProperty);
+        set => SetValue(MaxAnimationStepsProperty, value);
     }
 
     /// <summary>
@@ -69,8 +69,8 @@ public class Nofriendo : LoadingViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default is default(Xamarin.Forms.Color).</value>
     public Color LoadingStartColor
     {
-        get { return (Color)GetValue(LoadingStartColorProperty); }
-        set { SetValue(LoadingStartColorProperty, value); }
+        get => (Color)GetValue(LoadingStartColorProperty);
+        set => SetValue(LoadingStartColorProperty, value);
     }
 
     /// <summary>
@@ -86,8 +86,8 @@ public class Nofriendo : LoadingViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default is default(Xamarin.Forms.Color).</value>
     public Color LoadingEndColor
     {
-        get { return (Color)GetValue(LoadingEndColorProperty); }
-        set { SetValue(LoadingEndColorProperty, value); }
+        get => (Color)GetValue(LoadingEndColorProperty);
+        set => SetValue(LoadingEndColorProperty, value);
     }
 
     /// <summary>
@@ -163,10 +163,7 @@ public class Nofriendo : LoadingViewBase
         }
     }
 
-    protected override void StartAnimationValues()
-    {
-        CurrentAnimationStep = 0;
-    }
+    protected override void StartAnimationValues() => CurrentAnimationStep = 0;
 
     protected override void UpdateAnimationValues()
     {

@@ -120,10 +120,7 @@ public class MaterialCircular : SceneViewBase
         set => SetValue(ProgressThicknessProperty, value);
     }
 
-    public MaterialCircular()
-    {
-        this.MinimumHeightRequest = 44;
-    }
+    public MaterialCircular() => this.MinimumHeightRequest = 44;
 
     protected override void Attached()
     {

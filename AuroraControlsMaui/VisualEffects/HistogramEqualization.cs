@@ -2,15 +2,9 @@
 
 public class HistogramEqualization : VisualEffect
 {
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect)
-    {
-        return InternalApplyEffect(image, surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect) => InternalApplyEffect(image, surface, info.Rect);
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect)
-    {
-        return InternalApplyEffect(image, surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect) => InternalApplyEffect(image, surface, info.Rect);
 
     private SKImage InternalApplyEffect(SKImage image, SKSurface surface, SKRect rect)
     {

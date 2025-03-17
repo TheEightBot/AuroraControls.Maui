@@ -22,8 +22,8 @@ public class Waves : LoadingViewBase
     /// <value>The wave count int. Default wave count value is 5.</value>
     public int WaveCount
     {
-        get { return (int)GetValue(WaveCountProperty); }
-        set { SetValue(WaveCountProperty, value); }
+        get => (int)GetValue(WaveCountProperty);
+        set => SetValue(WaveCountProperty, value);
     }
 
     /// <summary>
@@ -39,8 +39,8 @@ public class Waves : LoadingViewBase
     /// <value>Height as a double. Default is 40d.</value>
     public double WaveHeight
     {
-        get { return (double)GetValue(WaveHeightProperty); }
-        set { SetValue(WaveHeightProperty, value); }
+        get => (double)GetValue(WaveHeightProperty);
+        set => SetValue(WaveHeightProperty, value);
     }
 
     /// <summary>
@@ -56,8 +56,8 @@ public class Waves : LoadingViewBase
     /// <value>The wave stacks. Default value is 3.</value>
     public int WaveStacks
     {
-        get { return (int)GetValue(WaveStacksProperty); }
-        set { SetValue(WaveStacksProperty, value); }
+        get => (int)GetValue(WaveStacksProperty);
+        set => SetValue(WaveStacksProperty, value);
     }
 
     /// <summary>
@@ -73,8 +73,8 @@ public class Waves : LoadingViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
     public Color ForegroundWaveColor
     {
-        get { return (Color)GetValue(ForegroundWaveColorProperty); }
-        set { SetValue(ForegroundWaveColorProperty, value); }
+        get => (Color)GetValue(ForegroundWaveColorProperty);
+        set => SetValue(ForegroundWaveColorProperty, value);
     }
 
     /// <summary>
@@ -90,8 +90,8 @@ public class Waves : LoadingViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
     public Color BackgroundWaveColor
     {
-        get { return (Color)GetValue(BackgroundWaveColorProperty); }
-        set { SetValue(BackgroundWaveColorProperty, value); }
+        get => (Color)GetValue(BackgroundWaveColorProperty);
+        set => SetValue(BackgroundWaveColorProperty, value);
     }
 
     public Waves()

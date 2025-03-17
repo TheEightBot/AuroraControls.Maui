@@ -33,8 +33,8 @@ public class LinearGauge : AuroraViewBase
     /// <value>Percent as a double. Default is default(double).</value>
     public double StartingPercent
     {
-        get { return (double)GetValue(StartingPercentProperty); }
-        set { SetValue(StartingPercentProperty, value.Clamp(0, 100)); }
+        get => (double)GetValue(StartingPercentProperty);
+        set => SetValue(StartingPercentProperty, value.Clamp(0, 100));
     }
 
     /// <summary>
@@ -50,8 +50,8 @@ public class LinearGauge : AuroraViewBase
     /// <value>Percent as a double. Default is default(double).</value>
     public double EndingPercent
     {
-        get { return (double)GetValue(EndingPercentProperty); }
-        set { SetValue(EndingPercentProperty, value.Clamp(0, 100)); }
+        get => (double)GetValue(EndingPercentProperty);
+        set => SetValue(EndingPercentProperty, value.Clamp(0, 100));
     }
 
     /// <summary>
@@ -67,8 +67,8 @@ public class LinearGauge : AuroraViewBase
     /// <value>Thickness as a double. Default is 12d.</value>
     public double ProgressThickness
     {
-        get { return (double)GetValue(ProgressThicknessProperty); }
-        set { SetValue(ProgressThicknessProperty, value); }
+        get => (double)GetValue(ProgressThicknessProperty);
+        set => SetValue(ProgressThicknessProperty, value);
     }
 
     /// <summary>
@@ -84,8 +84,8 @@ public class LinearGauge : AuroraViewBase
     /// <value>Expects a Xamarin.Forms.Color. Default is Xamarin.Forms.Color.Default.</value>
     public Color ProgressColor
     {
-        get { return (Color)GetValue(ProgressColorProperty); }
-        set { SetValue(ProgressColorProperty, value); }
+        get => (Color)GetValue(ProgressColorProperty);
+        set => SetValue(ProgressColorProperty, value);
     }
 
     /// <summary>
@@ -101,8 +101,8 @@ public class LinearGauge : AuroraViewBase
     /// <value>Takes a LinearGaugeOrientation. Default is LinearGaugeOrientation.Horizontal.</value>
     public LinearGaugeOrientation Orientation
     {
-        get { return (LinearGaugeOrientation)GetValue(OrientationProperty); }
-        set { SetValue(OrientationProperty, value); }
+        get => (LinearGaugeOrientation)GetValue(OrientationProperty);
+        set => SetValue(OrientationProperty, value);
     }
 
     /// <summary>
@@ -118,8 +118,8 @@ public class LinearGauge : AuroraViewBase
     /// <value>Takes an EndCapType. Default is EndCapType.Rounded.</value>
     public EndCapType EndCapType
     {
-        get { return (EndCapType)GetValue(EndCapTypeProperty); }
-        set { SetValue(EndCapTypeProperty, value); }
+        get => (EndCapType)GetValue(EndCapTypeProperty);
+        set => SetValue(EndCapTypeProperty, value);
     }
 
     /// <summary>
@@ -135,14 +135,11 @@ public class LinearGauge : AuroraViewBase
     /// <value>Expects a Xamarin.Forms.Color. Default is Xamarin.Forms.Color.Default.</value>
     public Color ProgressBackgroundColor
     {
-        get { return (Color)GetValue(ProgressBackgroundColorProperty); }
-        set { SetValue(ProgressBackgroundColorProperty, value); }
+        get => (Color)GetValue(ProgressBackgroundColorProperty);
+        set => SetValue(ProgressBackgroundColorProperty, value);
     }
 
-    public LinearGauge()
-    {
-        MinimumHeightRequest = 22;
-    }
+    public LinearGauge() => MinimumHeightRequest = 22;
 
     /// <summary>
     /// This is the method used to draw our control on the SKCanvas. This method is fired every time <c>this.InvalidateSurface();</c> is called, resulting in a "redrawing" of the control.

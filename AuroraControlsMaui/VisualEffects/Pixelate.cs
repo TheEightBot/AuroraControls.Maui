@@ -21,8 +21,8 @@ public class Pixelate : VisualEffect
     /// <value>Pixel size as an int. Default is 10.</value>
     public int PixelSize
     {
-        get { return (int)GetValue(PixelSizeProperty); }
-        set { SetValue(PixelSizeProperty, value); }
+        get => (int)GetValue(PixelSizeProperty);
+        set => SetValue(PixelSizeProperty, value);
     }
 
     /// <summary>
@@ -37,19 +37,13 @@ public class Pixelate : VisualEffect
     /// <value>Takes a PixelationPixelType. Default is PixelationPixelType.Square.</value>
     public PixelationPixelType PixelType
     {
-        get { return (PixelationPixelType)GetValue(PixelTypeProperty); }
-        set { SetValue(PixelTypeProperty, value); }
+        get => (PixelationPixelType)GetValue(PixelTypeProperty);
+        set => SetValue(PixelTypeProperty, value);
     }
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect)
-    {
-        return ApplyEffectInternal(surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect) => ApplyEffectInternal(surface, info.Rect);
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect)
-    {
-        return ApplyEffectInternal(surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect) => ApplyEffectInternal(surface, info.Rect);
 
     private SKImage ApplyEffectInternal(SKSurface surface, SKRect rect)
     {

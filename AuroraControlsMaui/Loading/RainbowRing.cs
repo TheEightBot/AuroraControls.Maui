@@ -62,10 +62,7 @@ public class RainbowRing : SceneViewBase
     /// <summary>
     /// Initializes a new instance of the <see cref="RainbowRing"/> class.
     /// </summary>
-    public RainbowRing()
-    {
-        MinimumHeightRequest = 88;
-    }
+    public RainbowRing() => MinimumHeightRequest = 88;
 
     protected override void Attached()
     {

@@ -249,10 +249,7 @@ internal static class SKCanvasExtensions
         }
     }
 
-    public static void DrawCenteredIconifiedText(this SKCanvas canvas, string text, float x, float y, SKPaint paint, bool toUppercase = false)
-    {
-        DrawCenteredIconifiedText(canvas, text, x, y, SKTextRunLookup.Instance, paint, toUppercase);
-    }
+    public static void DrawCenteredIconifiedText(this SKCanvas canvas, string text, float x, float y, SKPaint paint, bool toUppercase = false) => DrawCenteredIconifiedText(canvas, text, x, y, SKTextRunLookup.Instance, paint, toUppercase);
 
     public static void DrawCenteredIconifiedText(SKCanvas canvas, string text, float x, float y, SKTextRunLookup lookup, SKPaint paint, bool toUppercase = false)
     {
@@ -367,10 +364,7 @@ internal static class SKCanvasExtensions
         }
     }
 
-    public static void DrawIconifiedText(this SKCanvas canvas, string text, float x, float y, SKPaint paint)
-    {
-        canvas.DrawIconifiedText(text, x, y, SKTextRunLookup.Instance, paint);
-    }
+    public static void DrawIconifiedText(this SKCanvas canvas, string text, float x, float y, SKPaint paint) => canvas.DrawIconifiedText(text, x, y, SKTextRunLookup.Instance, paint);
 
     private static void DrawIconifiedText(this SKCanvas canvas, string text, float x, float y, SKTextRunLookup lookup, SKPaint paint)
     {

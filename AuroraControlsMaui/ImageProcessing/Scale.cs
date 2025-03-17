@@ -26,8 +26,8 @@ public class Scale : ImageProcessingBase, IImageProcessor
     /// <value>Expects a double. Default value is 1d.</value>
     public double ScaleAmount
     {
-        get { return (double)GetValue(ScaleAmountProperty); }
-        set { SetValue(ScaleAmountProperty, value); }
+        get => (double)GetValue(ScaleAmountProperty);
+        set => SetValue(ScaleAmountProperty, value);
     }
 
     /// <summary>

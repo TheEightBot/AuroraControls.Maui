@@ -264,10 +264,7 @@ public class ToggleBox : AuroraViewBase
         MinimumWidthRequest = IAuroraView.SmallControlWidth;
     }
 
-    public override Size CustomMeasuredSize(double widthConstraint, double heightConstraint)
-    {
-        return new Size(IAuroraView.SmallControlWidth, IAuroraView.SmallControlHeight);
-    }
+    public override Size CustomMeasuredSize(double widthConstraint, double heightConstraint) => new(IAuroraView.SmallControlWidth, IAuroraView.SmallControlHeight);
 
     protected override void PaintControl(SKSurface surface, SKImageInfo info)
     {

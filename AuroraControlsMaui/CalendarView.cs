@@ -86,8 +86,8 @@ public class CalendarView : AuroraViewBase
     /// <value>The current year.</value>
     public int CurrentYear
     {
-        get { return (int)GetValue(CurrentYearProperty); }
-        set { SetValue(CurrentYearProperty, value); }
+        get => (int)GetValue(CurrentYearProperty);
+        set => SetValue(CurrentYearProperty, value);
     }
 
     /// <summary>
@@ -130,8 +130,8 @@ public class CalendarView : AuroraViewBase
     /// <value>int value that represents the current month.</value>
     public int CurrentMonth
     {
-        get { return (int)GetValue(CurrentMonthProperty); }
-        set { SetValue(CurrentMonthProperty, value); }
+        get => (int)GetValue(CurrentMonthProperty);
+        set => SetValue(CurrentMonthProperty, value);
     }
 
     /// <summary>
@@ -146,8 +146,8 @@ public class CalendarView : AuroraViewBase
     /// <value>The Maximum DateTime.</value>
     public DateTime MaximumDate
     {
-        get { return (DateTime)GetValue(MaximumDateProperty); }
-        set { SetValue(MaximumDateProperty, value); }
+        get => (DateTime)GetValue(MaximumDateProperty);
+        set => SetValue(MaximumDateProperty, value);
     }
 
     /// <summary>
@@ -162,8 +162,8 @@ public class CalendarView : AuroraViewBase
     /// <value>The Minimum DateTime.</value>
     public DateTime MinimumDate
     {
-        get { return (DateTime)GetValue(MinimumDateProperty); }
-        set { SetValue(MinimumDateProperty, value); }
+        get => (DateTime)GetValue(MinimumDateProperty);
+        set => SetValue(MinimumDateProperty, value);
     }
 
     public static readonly BindableProperty HeaderTextColorProperty =
@@ -189,8 +189,8 @@ public class CalendarView : AuroraViewBase
     /// <value>The Color.</value>
     public Color SeparatorColor
     {
-        get { return (Color)GetValue(SeparatorColorProperty); }
-        set { SetValue(SeparatorColorProperty, value); }
+        get => (Color)GetValue(SeparatorColorProperty);
+        set => SetValue(SeparatorColorProperty, value);
     }
 
     public static readonly BindableProperty UnavailableDateColorProperty =
@@ -203,8 +203,8 @@ public class CalendarView : AuroraViewBase
     /// <value>The Color.</value>
     public Color UnavailableDateColor
     {
-        get { return (Color)GetValue(UnavailableDateColorProperty); }
-        set { SetValue(UnavailableDateColorProperty, value); }
+        get => (Color)GetValue(UnavailableDateColorProperty);
+        set => SetValue(UnavailableDateColorProperty, value);
     }
 
     /// <summary>
@@ -220,8 +220,8 @@ public class CalendarView : AuroraViewBase
     /// <value>The Color.</value>
     public Color AvailableDateColor
     {
-        get { return (Color)GetValue(AvailableDateColorProperty); }
-        set { SetValue(AvailableDateColorProperty, value); }
+        get => (Color)GetValue(AvailableDateColorProperty);
+        set => SetValue(AvailableDateColorProperty, value);
     }
 
     /// <summary>
@@ -237,8 +237,8 @@ public class CalendarView : AuroraViewBase
     /// <value>The Color.</value>
     public Color DateColor
     {
-        get { return (Color)GetValue(DateColorProperty); }
-        set { SetValue(DateColorProperty, value); }
+        get => (Color)GetValue(DateColorProperty);
+        set => SetValue(DateColorProperty, value);
     }
 
     public static readonly BindableProperty SelectedDateColorProperty =
@@ -251,8 +251,8 @@ public class CalendarView : AuroraViewBase
     /// <value>The Color.</value>
     public Color SelectedDateColor
     {
-        get { return (Color)GetValue(SelectedDateColorProperty); }
-        set { SetValue(SelectedDateColorProperty, value); }
+        get => (Color)GetValue(SelectedDateColorProperty);
+        set => SetValue(SelectedDateColorProperty, value);
     }
 
     /// <summary>
@@ -268,8 +268,8 @@ public class CalendarView : AuroraViewBase
     /// <value>The Color.</value>
     public Color DateTextColor
     {
-        get { return (Color)GetValue(DateTextColorProperty); }
-        set { SetValue(DateTextColorProperty, value); }
+        get => (Color)GetValue(DateTextColorProperty);
+        set => SetValue(DateTextColorProperty, value);
     }
 
     /// <summary>
@@ -285,8 +285,8 @@ public class CalendarView : AuroraViewBase
     /// <value>The Color.</value>
     public Color SelectedDateTextColor
     {
-        get { return (Color)GetValue(SelectedDateTextColorProperty); }
-        set { SetValue(SelectedDateTextColorProperty, value); }
+        get => (Color)GetValue(SelectedDateTextColorProperty);
+        set => SetValue(SelectedDateTextColorProperty, value);
     }
 
     /// <summary>
@@ -302,8 +302,8 @@ public class CalendarView : AuroraViewBase
     /// <value>The Color.</value>
     public Color DateBackgroundColor
     {
-        get { return (Color)GetValue(DateBackgroundColorProperty); }
-        set { SetValue(DateBackgroundColorProperty, value); }
+        get => (Color)GetValue(DateBackgroundColorProperty);
+        set => SetValue(DateBackgroundColorProperty, value);
     }
 
     /// <summary>
@@ -393,8 +393,8 @@ public class CalendarView : AuroraViewBase
     /// <value>The type of the selection.</value>
     public CalendarSelectionType SelectionType
     {
-        get { return (CalendarSelectionType)GetValue(SelectionTypeProperty); }
-        set { SetValue(SelectionTypeProperty, value); }
+        get => (CalendarSelectionType)GetValue(SelectionTypeProperty);
+        set => SetValue(SelectionTypeProperty, value);
     }
 
     /// <summary>
@@ -491,10 +491,7 @@ public class CalendarView : AuroraViewBase
         base.Detached();
     }
 
-    private void Events_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        this.InvalidateSurface();
-    }
+    private void Events_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => this.InvalidateSurface();
 
     protected override void OnPropertyChanged(string propertyName = null)
     {
@@ -1206,8 +1203,5 @@ public class CalendarSelectedDatesChangedEventArgs : EventArgs
 {
     public IEnumerable<DateTime> SelectedDates { get; private set; }
 
-    public CalendarSelectedDatesChangedEventArgs(IEnumerable<DateTime> selectedDates)
-    {
-        SelectedDates = selectedDates;
-    }
+    public CalendarSelectedDatesChangedEventArgs(IEnumerable<DateTime> selectedDates) => SelectedDates = selectedDates;
 }

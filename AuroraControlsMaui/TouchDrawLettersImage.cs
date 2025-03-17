@@ -30,8 +30,8 @@ public class TouchDrawLettersImage : AuroraViewBase
     /// <value>Takes a Xamarin.Forms.ImageSource. Default value is null.</value>
     public ImageSource Source
     {
-        get { return (ImageSource)GetValue(SourceProperty); }
-        set { SetValue(SourceProperty, value); }
+        get => (ImageSource)GetValue(SourceProperty);
+        set => SetValue(SourceProperty, value);
     }
 
     public static readonly BindableProperty DrawItemForegroundColorProperty =
@@ -92,10 +92,7 @@ public class TouchDrawLettersImage : AuroraViewBase
     /// Gets the user-selected TouchDrawLetter.
     /// </summary>h
     /// <value>A collection of <see cref="TouchDrawLetter"/>.</value>
-    public IList<TouchDrawLetter> TouchDrawLetters
-    {
-        get { return _touchDrawLetters; }
-    }
+    public IList<TouchDrawLetter> TouchDrawLetters => _touchDrawLetters;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TouchDrawLettersImage"/> class.

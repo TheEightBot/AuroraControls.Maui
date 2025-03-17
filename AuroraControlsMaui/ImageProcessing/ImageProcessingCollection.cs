@@ -43,10 +43,7 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
     /// </summary>
     /// <returns>The index of the processor.</returns>
     /// <param name="item">Item.</param>
-    public int IndexOf(ImageProcessingBase item)
-    {
-        return this._items.IndexOf(item);
-    }
+    public int IndexOf(ImageProcessingBase item) => this._items.IndexOf(item);
 
     /// <summary>
     /// Inserts the processor at the specified index.
@@ -83,10 +80,7 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
     /// <param name="index">Index.</param>
     public ImageProcessingBase this[int index]
     {
-        get
-        {
-            return this._items[index];
-        }
+        get => this._items[index];
 
         set
         {
@@ -141,10 +135,7 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
     /// </summary>
     /// <returns>Returns <c>true</c> if the item exists in the list, otherwise <c>false</c>.</returns>
     /// <param name="item">Item.</param>
-    public bool Contains(ImageProcessingBase item)
-    {
-        return this._items.Contains(item);
-    }
+    public bool Contains(ImageProcessingBase item) => this._items.Contains(item);
 
     /// <summary>
     /// Copies items to list.
@@ -186,44 +177,26 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
     /// Gets the count.
     /// </summary>
     /// <value>The count.</value>
-    public int Count
-    {
-        get
-        {
-            return this._items.Count;
-        }
-    }
+    public int Count => this._items.Count;
 
     /// <summary>
     /// Gets a value indicating whether this <see cref="T:AuroraControls.ImageProcessing.ImageProcessingCollection"/> is
     /// read only.
     /// </summary>
     /// <value><c>true</c> if is read only; otherwise, <c>false</c>.</value>
-    public bool IsReadOnly
-    {
-        get
-        {
-            return false;
-        }
-    }
+    public bool IsReadOnly => false;
 
     /// <summary>
     /// Gets the enumerator.
     /// </summary>
     /// <returns>The enumerator.</returns>
-    public IEnumerator<ImageProcessingBase> GetEnumerator()
-    {
-        return this._items.GetEnumerator();
-    }
+    public IEnumerator<ImageProcessingBase> GetEnumerator() => this._items.GetEnumerator();
 
     /// <summary>
     /// System.s the collections. IE numerable. get enumerator.
     /// </summary>
     /// <returns>The collections. IE numerable. get enumerator.</returns>
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     /// <summary>
     /// Handles the property changed event handler.

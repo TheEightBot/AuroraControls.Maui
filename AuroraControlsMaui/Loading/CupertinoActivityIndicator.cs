@@ -104,10 +104,7 @@ public class CupertinoActivityIndicator : SceneViewBase
         set => SetValue(CornerRadiusProperty, value);
     }
 
-    public CupertinoActivityIndicator()
-    {
-        MinimumHeightRequest = IAuroraView.StandardControlHeight;
-    }
+    public CupertinoActivityIndicator() => MinimumHeightRequest = IAuroraView.StandardControlHeight;
 
     protected override void Attached()
     {

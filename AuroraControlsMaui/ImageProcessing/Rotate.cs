@@ -85,10 +85,7 @@ public class Rotate : ImageProcessingBase, IImageProcessor
     /// <param name="quality">Quality.</param>
     /// <param name="imageFormat">Image format; default is PNG.</param>
     /// <param name="streamDisposesData">If set to <c>true</c> stream disposes data.</param>
-    public static Stream ResizeImageForExportAsStream(byte[] imageBytes, int maxHeight = 100, int maxWidth = 100, int quality = 80, SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Png, bool streamDisposesData = true)
-    {
-        return ResizeImageInternal(imageBytes, maxHeight, maxWidth, quality, imageFormat).AsStream(streamDisposesData);
-    }
+    public static Stream ResizeImageForExportAsStream(byte[] imageBytes, int maxHeight = 100, int maxWidth = 100, int quality = 80, SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Png, bool streamDisposesData = true) => ResizeImageInternal(imageBytes, maxHeight, maxWidth, quality, imageFormat).AsStream(streamDisposesData);
 
     /// <summary>
     /// Resizes the image for export as byte[].
@@ -99,10 +96,7 @@ public class Rotate : ImageProcessingBase, IImageProcessor
     /// <param name="maxWidth">Max width.</param>
     /// <param name="quality">Quality.</param>
     /// <param name="imageFormat">Image format.</param>
-    public static byte[] ResizeImageForExport(byte[] imageBytes, int maxHeight = 100, int maxWidth = 100, int quality = 80, SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Png)
-    {
-        return ResizeImageInternal(imageBytes, maxHeight, maxWidth, quality, imageFormat).ToArray();
-    }
+    public static byte[] ResizeImageForExport(byte[] imageBytes, int maxHeight = 100, int maxWidth = 100, int quality = 80, SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Png) => ResizeImageInternal(imageBytes, maxHeight, maxWidth, quality, imageFormat).ToArray();
 
     /// <summary>
     /// Internal method used for resizeing the image.

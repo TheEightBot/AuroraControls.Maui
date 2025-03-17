@@ -18,15 +18,9 @@ public class Brightness : VisualEffect
         set => SetValue(BrightnessAmountProperty, value.Clamp(-255d, 255d));
     }
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect)
-    {
-        return InternalApplyEffect(surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect) => InternalApplyEffect(surface, info.Rect);
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect)
-    {
-        return InternalApplyEffect(surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect) => InternalApplyEffect(surface, info.Rect);
 
     private SKImage InternalApplyEffect(SKSurface surface, SKRect rect)
     {
@@ -42,14 +36,11 @@ public class Brightness : VisualEffect
         return surface.Snapshot();
     }
 
-    private float[] GetBrightnessMatrix(float brightnessAdjustment)
-    {
-        return
-        [
-            1f, 0f, 0f, 0f, brightnessAdjustment,
-            0f, 1f, 0f, 0f, brightnessAdjustment,
-            0f, 0f, 1f, 0f, brightnessAdjustment,
-            0f, 0f, 0f, 1f, 0f,
-        ];
-    }
+    private float[] GetBrightnessMatrix(float brightnessAdjustment) =>
+    [
+        1f, 0f, 0f, 0f, brightnessAdjustment,
+        0f, 1f, 0f, 0f, brightnessAdjustment,
+        0f, 0f, 1f, 0f, brightnessAdjustment,
+        0f, 0f, 0f, 1f, 0f,
+    ];
 }

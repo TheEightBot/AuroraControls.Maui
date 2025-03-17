@@ -35,10 +35,7 @@ public abstract class SceneViewBase : AuroraViewBase
 
     public bool Processing
     {
-        get
-        {
-            return Interlocked.CompareExchange(ref _processing, 1, 1) == 1;
-        }
+        get => Interlocked.CompareExchange(ref _processing, 1, 1) == 1;
 
         set
         {
@@ -91,10 +88,7 @@ public abstract class SceneViewBase : AuroraViewBase
         set => SetValue(RateProperty, value);
     }
 
-    public bool IsRunning
-    {
-        get => _ticker?.IsRunning ?? false;
-    }
+    public bool IsRunning => _ticker?.IsRunning ?? false;
 
     public static readonly BindableProperty EasingFunctionProperty =
         BindableProperty.Create(nameof(EasingFunction), typeof(Easings.Functions), typeof(SceneViewBase), default(Easings.Functions),

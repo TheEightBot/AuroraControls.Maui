@@ -30,8 +30,8 @@ public class GradientPillButton : AuroraViewBase
     /// <value>Expects a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Default.</value>
     public Color ButtonBackgroundStartColor
     {
-        get { return (Color)GetValue(ButtonBackgroundStartColorProperty); }
-        set { SetValue(ButtonBackgroundStartColorProperty, value); }
+        get => (Color)GetValue(ButtonBackgroundStartColorProperty);
+        set => SetValue(ButtonBackgroundStartColorProperty, value);
     }
 
     /// <summary>
@@ -47,8 +47,8 @@ public class GradientPillButton : AuroraViewBase
     /// <value>Expects a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Default.</value>
     public Color ButtonBackgroundEndColor
     {
-        get { return (Color)GetValue(ButtonBackgroundEndColorProperty); }
-        set { SetValue(ButtonBackgroundEndColorProperty, value); }
+        get => (Color)GetValue(ButtonBackgroundEndColorProperty);
+        set => SetValue(ButtonBackgroundEndColorProperty, value);
     }
 
     /// <summary>
@@ -64,8 +64,8 @@ public class GradientPillButton : AuroraViewBase
     /// <value>Expects GradientDirection enum case. Default value is GradientDirection.Horizontal.</value>
     public GradientDirection GradientDirection
     {
-        get { return (GradientDirection)GetValue(GradientDirectionProperty); }
-        set { SetValue(GradientDirectionProperty, value); }
+        get => (GradientDirection)GetValue(GradientDirectionProperty);
+        set => SetValue(GradientDirectionProperty, value);
     }
 
     /// <summary>
@@ -81,8 +81,8 @@ public class GradientPillButton : AuroraViewBase
     /// <value>Expects a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Default.</value>
     public Color BorderColor
     {
-        get { return (Color)GetValue(BorderColorProperty); }
-        set { SetValue(BorderColorProperty, value); }
+        get => (Color)GetValue(BorderColorProperty);
+        set => SetValue(BorderColorProperty, value);
     }
 
     /// <summary>
@@ -98,8 +98,8 @@ public class GradientPillButton : AuroraViewBase
     /// <value>Expects a Xamarin.Forms.Color. Default value is Color.FromRgba(0d, 0d, 0d, .33d).</value>
     public Color ShadowColor
     {
-        get { return (Color)GetValue(ShadowColorProperty); }
-        set { SetValue(ShadowColorProperty, value); }
+        get => (Color)GetValue(ShadowColorProperty);
+        set => SetValue(ShadowColorProperty, value);
     }
 
     /// <summary>
@@ -115,8 +115,8 @@ public class GradientPillButton : AuroraViewBase
     /// <value>Takes a point with x and y offsets. Default value is new Point(0, 3).</value>
     public Point ShadowLocation
     {
-        get { return (Point)GetValue(ShadowLocationProperty); }
-        set { SetValue(ShadowLocationProperty, value); }
+        get => (Point)GetValue(ShadowLocationProperty);
+        set => SetValue(ShadowLocationProperty, value);
     }
 
     /// <summary>
@@ -132,8 +132,8 @@ public class GradientPillButton : AuroraViewBase
     /// <value>The shadow blur radius. Default value is default(double).</value>
     public double ShadowBlurRadius
     {
-        get { return (double)GetValue(ShadowBlurRadiusProperty); }
-        set { SetValue(ShadowBlurRadiusProperty, value); }
+        get => (double)GetValue(ShadowBlurRadiusProperty);
+        set => SetValue(ShadowBlurRadiusProperty, value);
     }
 
     /// <summary>
@@ -149,8 +149,8 @@ public class GradientPillButton : AuroraViewBase
     /// <value>Expects a double value. Default is 0d.</value>
     public double BorderWidth
     {
-        get { return (double)GetValue(BorderWidthProperty); }
-        set { SetValue(BorderWidthProperty, value); }
+        get => (double)GetValue(BorderWidthProperty);
+        set => SetValue(BorderWidthProperty, value);
     }
 
     /// <summary>
@@ -166,8 +166,8 @@ public class GradientPillButton : AuroraViewBase
     /// <value>string value for text. Default is default(string).</value>
     public string Text
     {
-        get { return (string)GetValue(TextProperty); }
-        set { SetValue(TextProperty, value); }
+        get => (string)GetValue(TextProperty);
+        set => SetValue(TextProperty, value);
     }
 
     /// <summary>
@@ -183,8 +183,8 @@ public class GradientPillButton : AuroraViewBase
     /// <value>Expects a Xamarin.Forms.Color. Default value is Color.White.</value>
     public Color FontColor
     {
-        get { return (Color)GetValue(FontColorProperty); }
-        set { SetValue(FontColorProperty, value); }
+        get => (Color)GetValue(FontColorProperty);
+        set => SetValue(FontColorProperty, value);
     }
 
     public static readonly BindableProperty FontSizeProperty =
@@ -210,8 +210,8 @@ public class GradientPillButton : AuroraViewBase
     /// <value>Expects a string. Dfault default(string).</value>
     public string FontFamily
     {
-        get { return (string)GetValue(FontFamilyProperty); }
-        set { SetValue(FontFamilyProperty, value); }
+        get => (string)GetValue(FontFamilyProperty);
+        set => SetValue(FontFamilyProperty, value);
     }
 
     public static readonly BindableProperty IsIconifiedTextProperty =
@@ -237,8 +237,8 @@ public class GradientPillButton : AuroraViewBase
     /// <value><c>true</c> if ripples; otherwise, <c>false</c>.</value>
     public bool Ripples
     {
-        get { return (bool)GetValue(RipplesProperty); }
-        set { SetValue(RipplesProperty, value); }
+        get => (bool)GetValue(RipplesProperty);
+        set => SetValue(RipplesProperty, value);
     }
 
     /// <summary>
@@ -253,8 +253,8 @@ public class GradientPillButton : AuroraViewBase
     /// <value>The command.</value>
     public ICommand Command
     {
-        get { return (ICommand)GetValue(CommandProperty); }
-        set { SetValue(CommandProperty, value); }
+        get => (ICommand)GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
     }
 
     /// <summary>
@@ -269,8 +269,8 @@ public class GradientPillButton : AuroraViewBase
     /// <value>The command parameter. default value is default(object).</value>
     public object CommandParameter
     {
-        get { return (object)GetValue(CommandParameterProperty); }
-        set { SetValue(CommandParameterProperty, value); }
+        get => (object)GetValue(CommandParameterProperty);
+        set => SetValue(CommandParameterProperty, value);
     }
 
     /// <summary>
@@ -279,10 +279,7 @@ public class GradientPillButton : AuroraViewBase
     /// <value><c>true</c> if tapped; otherwise, <c>false</c>.</value>
     public bool Tapped
     {
-        get
-        {
-            return _tapped;
-        }
+        get => _tapped;
 
         set
         {
@@ -297,10 +294,7 @@ public class GradientPillButton : AuroraViewBase
     /// <summary>
     /// Initializes a new instance of the <see cref="GradientPillButton"/> class.
     /// </summary>
-    public GradientPillButton()
-    {
-        MinimumHeightRequest = IAuroraView.StandardControlHeight;
-    }
+    public GradientPillButton() => MinimumHeightRequest = IAuroraView.StandardControlHeight;
 
     protected override void Attached()
     {

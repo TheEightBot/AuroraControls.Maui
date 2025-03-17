@@ -94,15 +94,9 @@ public class StyledInputLayoutHandler : ContentViewHandler, IHavePlatformUnderla
         this.PlatformUnderlayDrawable?.Invalidate();
     }
 
-    private static void MapStyledInputLayoutPlaceholder(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable)
-    {
-        Invalidate(elementHandler, underlayDrawable);
-    }
+    private static void MapStyledInputLayoutPlaceholder(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable) => Invalidate(elementHandler, underlayDrawable);
 
-    private static void MapStyledInputLayoutBackground(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable)
-    {
-        Invalidate(elementHandler, underlayDrawable);
-    }
+    private static void MapStyledInputLayoutBackground(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable) => Invalidate(elementHandler, underlayDrawable);
 
     private static void MapStyledInputLayoutOpacity(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable)
     {
@@ -110,35 +104,17 @@ public class StyledInputLayoutHandler : ContentViewHandler, IHavePlatformUnderla
         Invalidate(elementHandler, underlayDrawable);
     }
 
-    private static void MapStyledInputLayoutActivePlaceholderFontSize(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable)
-    {
-        UpdateLayoutInsets(elementHandler, underlayDrawable);
-    }
+    private static void MapStyledInputLayoutActivePlaceholderFontSize(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable) => UpdateLayoutInsets(elementHandler, underlayDrawable);
 
-    private static void MapStyledInputLayoutBorderSize(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable)
-    {
-        UpdateLayoutInsets(elementHandler, underlayDrawable);
-    }
+    private static void MapStyledInputLayoutBorderSize(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable) => UpdateLayoutInsets(elementHandler, underlayDrawable);
 
-    private static void MapStyledInputLayoutContainerBorderStyle(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable)
-    {
-        UpdateLayoutInsets(elementHandler, underlayDrawable);
-    }
+    private static void MapStyledInputLayoutContainerBorderStyle(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable) => UpdateLayoutInsets(elementHandler, underlayDrawable);
 
-    private static void MapStyledInputLayoutInternalMargin(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable)
-    {
-        UpdateLayoutInsets(elementHandler, underlayDrawable);
-    }
+    private static void MapStyledInputLayoutInternalMargin(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable) => UpdateLayoutInsets(elementHandler, underlayDrawable);
 
-    private static void MapFocusAnimationPercentage(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable)
-    {
-        Invalidate(elementHandler, underlayDrawable);
-    }
+    private static void MapFocusAnimationPercentage(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable) => Invalidate(elementHandler, underlayDrawable);
 
-    private static void MapHasValueAnimationPercentage(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable)
-    {
-        Invalidate(elementHandler, underlayDrawable);
-    }
+    private static void MapHasValueAnimationPercentage(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable) => Invalidate(elementHandler, underlayDrawable);
 
     private static void UpdateLayoutInsets(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable)
     {
@@ -146,10 +122,7 @@ public class StyledInputLayoutHandler : ContentViewHandler, IHavePlatformUnderla
         Invalidate(elementHandler, underlayDrawable);
     }
 
-    private static void MapCommand(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable)
-    {
-        (elementHandler as IHavePlatformUnderlayDrawable)?.PlatformUnderlayDrawable?.OnCommandSet();
-    }
+    private static void MapCommand(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable) => (elementHandler as IHavePlatformUnderlayDrawable)?.PlatformUnderlayDrawable?.OnCommandSet();
 
     private static void MapStyledInputContent(IContentViewHandler elementHandler, IContentView view)
     {
@@ -171,8 +144,5 @@ public class StyledInputLayoutHandler : ContentViewHandler, IHavePlatformUnderla
         }
     }
 
-    private static void Invalidate(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable)
-    {
-        (elementHandler as IHavePlatformUnderlayDrawable)?.PlatformUnderlayDrawable?.Invalidate();
-    }
+    private static void Invalidate(IContentViewHandler elementHandler, IUnderlayDrawable underlayDrawable) => (elementHandler as IHavePlatformUnderlayDrawable)?.PlatformUnderlayDrawable?.Invalidate();
 }

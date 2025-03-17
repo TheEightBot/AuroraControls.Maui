@@ -129,9 +129,6 @@ public class RoundedCornersPlatformEffect : PlatformEffect
 
     internal class RoundedViewOutline(int radius) : ViewOutlineProvider
     {
-        public override void GetOutline(Android.Views.View view, Outline outline)
-        {
-            outline.SetRoundRect(0, 0, view.Width, view.Height, radius);
-        }
+        public override void GetOutline(Android.Views.View view, Outline outline) => outline.SetRoundRect(0, 0, view.Width, view.Height, radius);
     }
 }

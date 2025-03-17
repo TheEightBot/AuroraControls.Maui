@@ -19,10 +19,7 @@ public class LoadingViewBase : AuroraViewBase
     /// <value>The animating percentage as a double. Default is 0d.</value>
     public double AnimatingPercentage
     {
-        get
-        {
-            return (double)GetValue(AnimatingPercentageProperty);
-        }
+        get => (double)GetValue(AnimatingPercentageProperty);
 
         set
         {
@@ -40,14 +37,11 @@ public class LoadingViewBase : AuroraViewBase
 
     public bool Animating
     {
-        get { return (bool)GetValue(AnimatingProperty); }
-        private set { SetValue(AnimatingProperty, value); }
+        get => (bool)GetValue(AnimatingProperty);
+        private set => SetValue(AnimatingProperty, value);
     }
 
-    public LoadingViewBase()
-    {
-        _animationName = $"{this.GetType().Name}_{Guid.NewGuid().ToString()}";
-    }
+    public LoadingViewBase() => _animationName = $"{this.GetType().Name}_{Guid.NewGuid().ToString()}";
 
     protected override void Detached()
     {

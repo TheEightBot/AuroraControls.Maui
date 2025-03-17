@@ -53,8 +53,8 @@ public class Tile : AuroraViewBase
     /// <value>Takes a string. Default value is null.</value>
     public string EmbeddedImageName
     {
-        get { return (string)GetValue(EmbeddedImageNameProperty); }
-        set { SetValue(EmbeddedImageNameProperty, value); }
+        get => (string)GetValue(EmbeddedImageNameProperty);
+        set => SetValue(EmbeddedImageNameProperty, value);
     }
 
     /// <summary>
@@ -100,8 +100,8 @@ public class Tile : AuroraViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Transparent.</value>
     public Color OverlayColor
     {
-        get { return (Color)GetValue(OverlayColorProperty); }
-        set { SetValue(OverlayColorProperty, value); }
+        get => (Color)GetValue(OverlayColorProperty);
+        set => SetValue(OverlayColorProperty, value);
     }
 
     /// <summary>
@@ -117,8 +117,8 @@ public class Tile : AuroraViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is Xamarin.Forms.Colors.White.</value>
     public Color ButtonBackgroundColor
     {
-        get { return (Color)GetValue(ButtonBackgroundColorProperty); }
-        set { SetValue(ButtonBackgroundColorProperty, value); }
+        get => (Color)GetValue(ButtonBackgroundColorProperty);
+        set => SetValue(ButtonBackgroundColorProperty, value);
     }
 
     /// <summary>
@@ -134,8 +134,8 @@ public class Tile : AuroraViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is Xamarin.Forms.Colors.White.</value>
     public Color BorderColor
     {
-        get { return (Color)GetValue(BorderColorProperty); }
-        set { SetValue(BorderColorProperty, value); }
+        get => (Color)GetValue(BorderColorProperty);
+        set => SetValue(BorderColorProperty, value);
     }
 
     /// <summary>
@@ -151,8 +151,8 @@ public class Tile : AuroraViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.FromRgba(0d, 0d, 0d, .33d).</value>
     public Color ShadowColor
     {
-        get { return (Color)GetValue(ShadowColorProperty); }
-        set { SetValue(ShadowColorProperty, value); }
+        get => (Color)GetValue(ShadowColorProperty);
+        set => SetValue(ShadowColorProperty, value);
     }
 
     /// <summary>
@@ -168,8 +168,8 @@ public class Tile : AuroraViewBase
     /// <value>Takes a Xamarin.Forms.Point. Default value is Point(0, 3).</value>
     public Point ShadowLocation
     {
-        get { return (Point)GetValue(ShadowLocationProperty); }
-        set { SetValue(ShadowLocationProperty, value); }
+        get => (Point)GetValue(ShadowLocationProperty);
+        set => SetValue(ShadowLocationProperty, value);
     }
 
     /// <summary>
@@ -185,8 +185,8 @@ public class Tile : AuroraViewBase
     /// <value>Takes a double value. Default value is default(double).</value>
     public double ShadowBlurRadius
     {
-        get { return (double)GetValue(ShadowBlurRadiusProperty); }
-        set { SetValue(ShadowBlurRadiusProperty, value); }
+        get => (double)GetValue(ShadowBlurRadiusProperty);
+        set => SetValue(ShadowBlurRadiusProperty, value);
     }
 
     /// <summary>
@@ -202,8 +202,8 @@ public class Tile : AuroraViewBase
     /// <value>Takes a double. Default value is 0d.</value>
     public double BorderWidth
     {
-        get { return (double)GetValue(BorderWidthProperty); }
-        set { SetValue(BorderWidthProperty, value); }
+        get => (double)GetValue(BorderWidthProperty);
+        set => SetValue(BorderWidthProperty, value);
     }
 
     /// <summary>
@@ -219,8 +219,8 @@ public class Tile : AuroraViewBase
     /// <value>Takes a double. Default value is 4d.</value>
     public double CornerRadius
     {
-        get { return (double)GetValue(CornerRadiusProperty); }
-        set { SetValue(CornerRadiusProperty, value); }
+        get => (double)GetValue(CornerRadiusProperty);
+        set => SetValue(CornerRadiusProperty, value);
     }
 
     /// <summary>
@@ -236,8 +236,8 @@ public class Tile : AuroraViewBase
     /// <value>Expects a string value. Default value is default(string).</value>
     public string Text
     {
-        get { return (string)GetValue(TextProperty); }
-        set { SetValue(TextProperty, value); }
+        get => (string)GetValue(TextProperty);
+        set => SetValue(TextProperty, value);
     }
 
     /// <summary>
@@ -270,8 +270,8 @@ public class Tile : AuroraViewBase
     /// <value>Size as a double.</value>
     public double FontSize
     {
-        get { return (double)GetValue(FontSizeProperty); }
-        set { SetValue(FontSizeProperty, value); }
+        get => (double)GetValue(FontSizeProperty);
+        set => SetValue(FontSizeProperty, value);
     }
 
     /// <summary>
@@ -287,8 +287,8 @@ public class Tile : AuroraViewBase
     /// <value>Takes an SKTypeface. Default value is default(SKTypeface).</value>
     public SKTypeface Typeface
     {
-        get { return (SKTypeface)GetValue(TypefaceProperty); }
-        set { SetValue(TypefaceProperty, value); }
+        get => (SKTypeface)GetValue(TypefaceProperty);
+        set => SetValue(TypefaceProperty, value);
     }
 
     public static readonly BindableProperty IsIconifiedTextProperty =
@@ -314,8 +314,8 @@ public class Tile : AuroraViewBase
     /// <value><c>true</c> if ripples; otherwise, <c>false</c>.</value>
     public bool Ripples
     {
-        get { return (bool)GetValue(RipplesProperty); }
-        set { SetValue(RipplesProperty, value); }
+        get => (bool)GetValue(RipplesProperty);
+        set => SetValue(RipplesProperty, value);
     }
 
     /// <summary>
@@ -331,8 +331,8 @@ public class Tile : AuroraViewBase
     /// <value>Duration as an uint. Default is 40u.</value>
     public uint TapAnimationDuration
     {
-        get { return (uint)GetValue(TapAnimationDurationProperty); }
-        set { SetValue(TapAnimationDurationProperty, value); }
+        get => (uint)GetValue(TapAnimationDurationProperty);
+        set => SetValue(TapAnimationDurationProperty, value);
     }
 
     /// <summary>
@@ -347,8 +347,8 @@ public class Tile : AuroraViewBase
     /// <value>Takes a System.Windows.Input.ICommand. Default value is default(ICommand).</value>
     public ICommand Command
     {
-        get { return (ICommand)GetValue(CommandProperty); }
-        set { SetValue(CommandProperty, value); }
+        get => (ICommand)GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
     }
 
     /// <summary>
@@ -363,8 +363,8 @@ public class Tile : AuroraViewBase
     /// <value>The command parameter.</value>
     public object CommandParameter
     {
-        get { return (object)GetValue(CommandParameterProperty); }
-        set { SetValue(CommandParameterProperty, value); }
+        get => (object)GetValue(CommandParameterProperty);
+        set => SetValue(CommandParameterProperty, value);
     }
 
     /// <summary>
@@ -373,10 +373,7 @@ public class Tile : AuroraViewBase
     /// <value><c>true</c> if tapped; otherwise, <c>false</c>.</value>
     public bool Tapped
     {
-        get
-        {
-            return _tapped;
-        }
+        get => _tapped;
 
         set
         {
@@ -394,8 +391,8 @@ public class Tile : AuroraViewBase
 
     public Thickness ContentPadding
     {
-        get { return (Thickness)GetValue(ContentPaddingProperty); }
-        set { SetValue(ContentPaddingProperty, value); }
+        get => (Thickness)GetValue(ContentPaddingProperty);
+        set => SetValue(ContentPaddingProperty, value);
     }
 
     public static readonly BindableProperty NotificationBadgeProperty =

@@ -26,8 +26,8 @@ public class GradientColorView : AuroraViewBase
     /// <value>Rotation angle as a double. Default is 0d.</value>
     public double GradientRotationAngle
     {
-        get { return (double)GetValue(GradientRotationAngleProperty); }
-        set { SetValue(GradientRotationAngleProperty, value.Clamp(-360, 360)); }
+        get => (double)GetValue(GradientRotationAngleProperty);
+        set => SetValue(GradientRotationAngleProperty, value.Clamp(-360, 360));
     }
 
     /// <summary>
@@ -43,8 +43,8 @@ public class GradientColorView : AuroraViewBase
     /// <value>Expects a Xamarin.Forms.Color. Default color is Xamarin.Forms.Color.Default.</value>
     public Color GradientStartColor
     {
-        get { return (Color)GetValue(GradientStartColorProperty); }
-        set { SetValue(GradientStartColorProperty, value); }
+        get => (Color)GetValue(GradientStartColorProperty);
+        set => SetValue(GradientStartColorProperty, value);
     }
 
     /// <summary>
@@ -60,8 +60,8 @@ public class GradientColorView : AuroraViewBase
     /// <value>Expects a Xamarin.Forms.Color. Default color is Xamarin.Forms.Color.Default.</value>
     public Color GradientStopColor
     {
-        get { return (Color)GetValue(GradientStopColorProperty); }
-        set { SetValue(GradientStopColorProperty, value); }
+        get => (Color)GetValue(GradientStopColorProperty);
+        set => SetValue(GradientStopColorProperty, value);
     }
 
     /// <summary>
@@ -77,8 +77,8 @@ public class GradientColorView : AuroraViewBase
     /// <value><c>true</c> if ripples; otherwise, <c>false</c>.</value>
     public bool Ripples
     {
-        get { return (bool)GetValue(RipplesProperty); }
-        set { SetValue(RipplesProperty, value); }
+        get => (bool)GetValue(RipplesProperty);
+        set => SetValue(RipplesProperty, value);
     }
 
     /// <summary>
@@ -95,8 +95,8 @@ public class GradientColorView : AuroraViewBase
     [TypeConverter(typeof(UIntTypeConverter))]
     public uint TapAnimationDuration
     {
-        get { return (uint)GetValue(TapAnimationDurationProperty); }
-        set { SetValue(TapAnimationDurationProperty, value); }
+        get => (uint)GetValue(TapAnimationDurationProperty);
+        set => SetValue(TapAnimationDurationProperty, value);
     }
 
     /// <summary>
@@ -111,8 +111,8 @@ public class GradientColorView : AuroraViewBase
     /// <value>Takes a System.Windows.Input.ICommand. Default value is default(ICommand).</value>
     public ICommand Command
     {
-        get { return (ICommand)GetValue(CommandProperty); }
-        set { SetValue(CommandProperty, value); }
+        get => (ICommand)GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
     }
 
     /// <summary>
@@ -127,8 +127,8 @@ public class GradientColorView : AuroraViewBase
     /// <value>The command parameter.</value>
     public object CommandParameter
     {
-        get { return (object)GetValue(CommandParameterProperty); }
-        set { SetValue(CommandParameterProperty, value); }
+        get => (object)GetValue(CommandParameterProperty);
+        set => SetValue(CommandParameterProperty, value);
     }
 
     /// <summary>
@@ -137,10 +137,7 @@ public class GradientColorView : AuroraViewBase
     /// <value><c>true</c> if tapped; otherwise, <c>false</c>.</value>
     public bool Tapped
     {
-        get
-        {
-            return _tapped;
-        }
+        get => _tapped;
 
         set
         {

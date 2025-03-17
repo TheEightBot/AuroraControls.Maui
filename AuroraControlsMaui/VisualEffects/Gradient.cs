@@ -17,8 +17,8 @@ public class Gradient : VisualEffect
     /// <value>Rotation angle as a double. Default is 0d.</value>
     public double GradientRotationAngle
     {
-        get { return (double)GetValue(GradientRotationAngleProperty); }
-        set { SetValue(GradientRotationAngleProperty, value.Clamp(-360, 360)); }
+        get => (double)GetValue(GradientRotationAngleProperty);
+        set => SetValue(GradientRotationAngleProperty, value.Clamp(-360, 360));
     }
 
     /// <summary>
@@ -33,8 +33,8 @@ public class Gradient : VisualEffect
     /// <value>Expects a Xamarin.Forms.Color. Default is Xamarin.Forms.Color.Default.</value>
     public Color GradientStartColor
     {
-        get { return (Color)GetValue(GradientStartColorProperty); }
-        set { SetValue(GradientStartColorProperty, value); }
+        get => (Color)GetValue(GradientStartColorProperty);
+        set => SetValue(GradientStartColorProperty, value);
     }
 
     /// <summary>
@@ -49,19 +49,13 @@ public class Gradient : VisualEffect
     /// <value>Expects a Xamarin.Forms.Color. Default is Xamarin.Forms.Color.Default.</value>
     public Color GradientStopColor
     {
-        get { return (Color)GetValue(GradientStopColorProperty); }
-        set { SetValue(GradientStopColorProperty, value); }
+        get => (Color)GetValue(GradientStopColorProperty);
+        set => SetValue(GradientStopColorProperty, value);
     }
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect)
-    {
-        return ApplyEffectInternal(surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect) => ApplyEffectInternal(surface, info.Rect);
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect)
-    {
-        return ApplyEffectInternal(surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect) => ApplyEffectInternal(surface, info.Rect);
 
     private SKImage ApplyEffectInternal(SKSurface surface, SKRect rect)
     {

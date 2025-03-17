@@ -27,10 +27,7 @@ public class CalendarPicker : DatePicker
     /// <value>The date.</value>
     public new DateTime? Date
     {
-        get
-        {
-            return (DateTime?)GetValue(DateProperty);
-        }
+        get => (DateTime?)GetValue(DateProperty);
 
         set
         {

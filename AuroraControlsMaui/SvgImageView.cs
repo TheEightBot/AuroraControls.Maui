@@ -47,8 +47,8 @@ public class SvgImageView : AuroraViewBase
     /// <value>string value. default value is null.</value>
     public string EmbeddedImageName
     {
-        get { return (string)GetValue(EmbeddedImageNameProperty); }
-        set { SetValue(EmbeddedImageNameProperty, value); }
+        get => (string)GetValue(EmbeddedImageNameProperty);
+        set => SetValue(EmbeddedImageNameProperty, value);
     }
 
     /// <summary>
@@ -70,8 +70,8 @@ public class SvgImageView : AuroraViewBase
     /// <value>Expects a Xamarin.Forms.Color. Default is Transparent.</value>
     public Color OverlayColor
     {
-        get { return (Color)GetValue(OverlayColorProperty); }
-        set { SetValue(OverlayColorProperty, value); }
+        get => (Color)GetValue(OverlayColorProperty);
+        set => SetValue(OverlayColorProperty, value);
     }
 
     /// <summary>
@@ -101,10 +101,7 @@ public class SvgImageView : AuroraViewBase
     /// <summary>
     /// Initializes a new instance of the <see cref="SvgImageView"/> class.
     /// </summary>
-    public SvgImageView()
-    {
-        MinimumHeightRequest = IAuroraView.StandardControlHeight;
-    }
+    public SvgImageView() => MinimumHeightRequest = IAuroraView.StandardControlHeight;
 
     protected override void Attached()
     {

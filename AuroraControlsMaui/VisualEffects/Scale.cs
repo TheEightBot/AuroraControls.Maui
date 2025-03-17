@@ -14,19 +14,13 @@ public class Scale : VisualEffect
     /// <value>Scale amount as a float. Default is 1f.</value>
     public float ScaleAmount
     {
-        get { return (float)GetValue(ScaleAmountProperty); }
-        set { SetValue(ScaleAmountProperty, value); }
+        get => (float)GetValue(ScaleAmountProperty);
+        set => SetValue(ScaleAmountProperty, value);
     }
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect)
-    {
-        return InternalApplyEffect(surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect) => InternalApplyEffect(surface, info.Rect);
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect)
-    {
-        return InternalApplyEffect(surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect) => InternalApplyEffect(surface, info.Rect);
 
     private SKImage InternalApplyEffect(SKSurface surface, SKRect rect)
     {

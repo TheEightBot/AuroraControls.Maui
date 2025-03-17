@@ -14,19 +14,13 @@ public class Rotate : VisualEffect
     /// <value>Degress as a float. Default is default(float).</value>
     public float RotationDegrees
     {
-        get { return (float)GetValue(RotationDegreesProperty); }
-        set { SetValue(RotationDegreesProperty, value.Clamp(-360, 360)); }
+        get => (float)GetValue(RotationDegreesProperty);
+        set => SetValue(RotationDegreesProperty, value.Clamp(-360, 360));
     }
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect)
-    {
-        return InternalApplyEffect(surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect) => InternalApplyEffect(surface, info.Rect);
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect)
-    {
-        return InternalApplyEffect(surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect) => InternalApplyEffect(surface, info.Rect);
 
     private SKImage InternalApplyEffect(SKSurface surface, SKRect rect)
     {

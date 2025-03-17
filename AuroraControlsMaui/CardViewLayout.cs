@@ -32,8 +32,8 @@ public class CardViewLayout : ContentView
     /// <value>The corner radius.</value>
     public double CornerRadius
     {
-        get { return (double)GetValue(CornerRadiusProperty); }
-        set { SetValue(CornerRadiusProperty, value); }
+        get => (double)GetValue(CornerRadiusProperty);
+        set => SetValue(CornerRadiusProperty, value);
     }
 
     /// <summary>
@@ -69,8 +69,8 @@ public class CardViewLayout : ContentView
     /// <value>The content to displa.</value>
     public new View Content
     {
-        get { return (View)GetValue(ContentProperty); }
-        set { SetValue(ContentProperty, value); }
+        get => (View)GetValue(ContentProperty);
+        set => SetValue(ContentProperty, value);
     }
 
     /// <summary>
@@ -92,8 +92,8 @@ public class CardViewLayout : ContentView
     /// <value>The color of the card background.</value>
     public new Color BackgroundColor
     {
-        get { return (Color)GetValue(BackgroundColorProperty); }
-        set { SetValue(BackgroundColorProperty, value); }
+        get => (Color)GetValue(BackgroundColorProperty);
+        set => SetValue(BackgroundColorProperty, value);
     }
 
     /// <summary>
@@ -158,8 +158,8 @@ public class CardViewLayout : ContentView
     /// <value>The evevation.</value>
     public double Elevation
     {
-        get { return (double)GetValue(ElevationProperty); }
-        set { SetValue(ElevationProperty, value); }
+        get => (double)GetValue(ElevationProperty);
+        set => SetValue(ElevationProperty, value);
     }
 
     public CardViewLayout()

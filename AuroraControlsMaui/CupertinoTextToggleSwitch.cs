@@ -87,8 +87,8 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <value>Expects a double value. Default is 2d.</value>
     public double BorderWidth
     {
-        get { return (double)GetValue(BorderWidthProperty); }
-        set { SetValue(BorderWidthProperty, value); }
+        get => (double)GetValue(BorderWidthProperty);
+        set => SetValue(BorderWidthProperty, value);
     }
 
     /// <summary>
@@ -105,8 +105,8 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     [TypeConverter(typeof(UIntTypeConverter))]
     public uint ToggleAnimationDuration
     {
-        get { return (uint)GetValue(ToggleAnimationDurationProperty); }
-        set { SetValue(ToggleAnimationDurationProperty, value); }
+        get => (uint)GetValue(ToggleAnimationDurationProperty);
+        set => SetValue(ToggleAnimationDurationProperty, value);
     }
 
     /// <summary>
@@ -260,8 +260,8 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <value>The command.</value>
     public ICommand Command
     {
-        get { return (ICommand)GetValue(CommandProperty); }
-        set { SetValue(CommandProperty, value); }
+        get => (ICommand)GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
     }
 
     /// <summary>
@@ -276,8 +276,8 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <value>The command parameter. default value is default(object).</value>
     public object CommandParameter
     {
-        get { return (object)GetValue(CommandParameterProperty); }
-        set { SetValue(CommandParameterProperty, value); }
+        get => (object)GetValue(CommandParameterProperty);
+        set => SetValue(CommandParameterProperty, value);
     }
 
     /// <summary>
@@ -305,10 +305,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     public bool IsToggled
     {
         get => (bool)GetValue(IsToggledProperty);
-        set
-        {
-            SetValue(IsToggledProperty, value);
-        }
+        set => SetValue(IsToggledProperty, value);
     }
 
     /// <summary>
@@ -526,8 +523,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
         }
     }
 
-    private void AnimateToggle(bool toggled)
-    {
+    private void AnimateToggle(bool toggled) =>
         this.TransitionTo(
             _animateToggleAnimationName,
             x =>
@@ -539,5 +535,4 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
             toggled ? 1f : 0f,
             easing: Easing.CubicInOut,
             length: ToggleAnimationDuration);
-    }
 }

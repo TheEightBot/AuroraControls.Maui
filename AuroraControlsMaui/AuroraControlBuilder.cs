@@ -6,10 +6,8 @@ namespace AuroraControls;
 public static class AuroraControlBuilder
 {
     public static MauiAppBuilder UseAuroraControls<T>(this MauiAppBuilder mauiAppBuilder)
-        where T : Application
-    {
-        return UseAuroraControls(mauiAppBuilder, typeof(T).Assembly);
-    }
+        where T : Application =>
+        UseAuroraControls(mauiAppBuilder, typeof(T).Assembly);
 
     public static MauiAppBuilder UseAuroraControls(this MauiAppBuilder mauiAppBuilder, params Assembly[] resourceAssemblies)
     {

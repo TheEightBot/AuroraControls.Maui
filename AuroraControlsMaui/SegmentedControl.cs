@@ -15,7 +15,7 @@ public class SegmentedControl : AuroraViewBase
 
     public event EventHandler<SelectedItemChangedEventArgs> ItemSelected;
 
-    public IList<Segment> Segments { get => _segments; }
+    public IList<Segment> Segments => _segments;
 
     public static readonly BindableProperty SegmentControlStyleProperty =
         BindableProperty.Create(nameof(SegmentControlStyle), typeof(SegmentedControlStyle), typeof(SegmentedControl), SegmentedControlStyle.Cupertino);
@@ -147,10 +147,7 @@ public class SegmentedControl : AuroraViewBase
         set => SetValue(SelectedItemProperty, value);
     }
 
-    public SegmentedControl()
-    {
-        MinimumHeightRequest = IAuroraView.StandardControlHeight;
-    }
+    public SegmentedControl() => MinimumHeightRequest = IAuroraView.StandardControlHeight;
 
     protected override void Attached()
     {
@@ -436,10 +433,7 @@ public class SegmentedControl : AuroraViewBase
         this.InvalidateSurface();
     }
 
-    private void Item_PropertyChanged(object? sender, PropertyChangedEventArgs args)
-    {
-        this.InvalidateSurface();
-    }
+    private void Item_PropertyChanged(object? sender, PropertyChangedEventArgs args) => this.InvalidateSurface();
 }
 
 public enum SegmentedControlStyle
