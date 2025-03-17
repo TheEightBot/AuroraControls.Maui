@@ -1,8 +1,4 @@
-using System;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui.Controls.Hosting;
-using Microsoft.Maui.Hosting;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace AuroraControls;
@@ -10,20 +6,20 @@ namespace AuroraControls;
 public static class AuroraControlBuilder
 {
     public static MauiAppBuilder UseAuroraControls<T>(this MauiAppBuilder mauiAppBuilder)
-        where T : Application
-    {
-        return UseAuroraControls(mauiAppBuilder, typeof(T).Assembly);
-    }
+        where T : Application =>
+        UseAuroraControls(mauiAppBuilder, typeof(T).Assembly);
 
     public static MauiAppBuilder UseAuroraControls(this MauiAppBuilder mauiAppBuilder, params Assembly[] resourceAssemblies)
     {
         mauiAppBuilder
             .UseSkiaSharp()
             .ConfigureMauiHandlers(
-                mauiHandlersCollection =>
+                handlers =>
                 {
-                    mauiHandlersCollection.AddHandler(typeof(StyledInputLayout), typeof(StyledInputLayoutHandler));
-                    mauiHandlersCollection.AddHandler(typeof(NumericEntry), typeof(NumericEntryHandler));
+                    handlers.AddHandler<AuroraViewBase, AutoHeightSKCanvasViewHandler>();
+                    handlers.AddHandler<StyledInputLayout, StyledInputLayoutHandler>();
+                    handlers.AddHandler<NumericEntry, NumericEntryHandler>();
+                    handlers.AddHandler<CalendarPicker, CalendarPickerHandler>();
                 })
             .ConfigureEffects(
                 effects =>

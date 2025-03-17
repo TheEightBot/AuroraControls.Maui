@@ -124,10 +124,7 @@ public static class PlatformInfo
         }
     }
 
-    public static Rect GetLocationOfView(IElement view)
-    {
-        return GetLocationOfView(view, view.Parent);
-    }
+    public static Rect GetLocationOfView(IElement view) => GetLocationOfView(view, view.Parent);
 
     public static Rect GetLocationOfView(IElement view, IElement parent)
     {

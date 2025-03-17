@@ -18,7 +18,7 @@ public class ResizeImage : ImageProcessingBase, IImageProcessor
     /// <summary>
     /// The max height property.
     /// </summary>
-    public static BindableProperty MaxHeightProperty =
+    public static readonly BindableProperty MaxHeightProperty =
         BindableProperty.Create(nameof(MaxHeight), typeof(int), typeof(ResizeImage), 100);
 
     /// <summary>
@@ -27,14 +27,14 @@ public class ResizeImage : ImageProcessingBase, IImageProcessor
     /// <value>int value representing the desired max height.</value>
     public int MaxHeight
     {
-        get { return (int)GetValue(MaxHeightProperty); }
-        set { SetValue(MaxHeightProperty, value); }
+        get => (int)GetValue(MaxHeightProperty);
+        set => SetValue(MaxHeightProperty, value);
     }
 
     /// <summary>
     /// The max width property.
     /// </summary>
-    public static BindableProperty MaxWidthProperty =
+    public static readonly BindableProperty MaxWidthProperty =
         BindableProperty.Create(nameof(MaxWidth), typeof(int), typeof(ResizeImage), 100);
 
     /// <summary>
@@ -43,8 +43,8 @@ public class ResizeImage : ImageProcessingBase, IImageProcessor
     /// <value>int value processing the desired max width.</value>
     public int MaxWidth
     {
-        get { return (int)GetValue(MaxWidthProperty); }
-        set { SetValue(MaxWidthProperty, value); }
+        get => (int)GetValue(MaxWidthProperty);
+        set => SetValue(MaxWidthProperty, value);
     }
 
     /// <summary>
@@ -91,10 +91,7 @@ public class ResizeImage : ImageProcessingBase, IImageProcessor
     /// <param name="quality">Quality.</param>
     /// <param name="imageFormat">Image format; default is PNG.</param>
     /// <param name="streamDisposesData">If set to <c>true</c> stream disposes data.</param>
-    public static Stream ResizeImageForExportAsStream(byte[] imageBytes, int maxHeight = 100, int maxWidth = 100, int quality = 80, SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Png, bool streamDisposesData = true)
-    {
-        return ResizeImageInternal(imageBytes, maxHeight, maxWidth, quality, imageFormat).AsStream(streamDisposesData);
-    }
+    public static Stream ResizeImageForExportAsStream(byte[] imageBytes, int maxHeight = 100, int maxWidth = 100, int quality = 80, SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Png, bool streamDisposesData = true) => ResizeImageInternal(imageBytes, maxHeight, maxWidth, quality, imageFormat).AsStream(streamDisposesData);
 
     /// <summary>
     /// Resizes the image for export as byte[].
@@ -105,10 +102,7 @@ public class ResizeImage : ImageProcessingBase, IImageProcessor
     /// <param name="maxWidth">Max width.</param>
     /// <param name="quality">Quality.</param>
     /// <param name="imageFormat">Image format.</param>
-    public static byte[] ResizeImageForExport(byte[] imageBytes, int maxHeight = 100, int maxWidth = 100, int quality = 80, SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Png)
-    {
-        return ResizeImageInternal(imageBytes, maxHeight, maxWidth, quality, imageFormat).ToArray();
-    }
+    public static byte[] ResizeImageForExport(byte[] imageBytes, int maxHeight = 100, int maxWidth = 100, int quality = 80, SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Png) => ResizeImageInternal(imageBytes, maxHeight, maxWidth, quality, imageFormat).ToArray();
 
     /// <summary>
     /// Internal method used for resizeing the image.

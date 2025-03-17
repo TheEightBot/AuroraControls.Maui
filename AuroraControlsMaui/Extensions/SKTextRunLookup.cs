@@ -96,5 +96,6 @@ public class SKTextRunLookup : IDisposable
     public void Dispose()
     {
         Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }

@@ -12,31 +12,31 @@ public class Watermark : ImageProcessingBase, IImageProcessor
         End,
     }
 
-    public static BindableProperty BackgroundColorProperty =
+    public static readonly BindableProperty BackgroundColorProperty =
         BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(Watermark));
 
-    public static BindableProperty BackgroundCornerRadiusProperty =
+    public static readonly BindableProperty BackgroundCornerRadiusProperty =
         BindableProperty.Create(nameof(BackgroundCornerRadius), typeof(double), typeof(Watermark), 4d);
 
-    public static BindableProperty FontSizeProperty =
+    public static readonly BindableProperty FontSizeProperty =
         BindableProperty.Create(nameof(FontSize), typeof(double), typeof(Watermark), 24d);
 
-    public static BindableProperty ForegroundColorProperty =
+    public static readonly BindableProperty ForegroundColorProperty =
         BindableProperty.Create(nameof(ForegroundColor), typeof(Color), typeof(Watermark), Colors.White.MultiplyAlpha(.5f));
 
-    public static BindableProperty HorizontalWatermarkLocationProperty =
+    public static readonly BindableProperty HorizontalWatermarkLocationProperty =
         BindableProperty.Create(nameof(HorizontalWatermarkLocation), typeof(WatermarkLocation), typeof(Watermark), WatermarkLocation.End);
 
-    public static BindableProperty TypefaceProperty =
+    public static readonly BindableProperty TypefaceProperty =
         BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(Watermark));
 
-    public static BindableProperty VerticalWatermarkLocationProperty =
+    public static readonly BindableProperty VerticalWatermarkLocationProperty =
         BindableProperty.Create(nameof(VerticalWatermarkLocation), typeof(WatermarkLocation), typeof(Watermark), WatermarkLocation.End);
 
-    public static BindableProperty WatermarkPaddingProperty =
+    public static readonly BindableProperty WatermarkPaddingProperty =
         BindableProperty.Create(nameof(WatermarkPadding), typeof(double), typeof(Watermark), 8d);
 
-    public static BindableProperty WatermarkTextProperty =
+    public static readonly BindableProperty WatermarkTextProperty =
         BindableProperty.Create(nameof(WatermarkText), typeof(string), typeof(Watermark));
 
     /// <summary>

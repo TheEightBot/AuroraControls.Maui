@@ -45,5 +45,9 @@ public class TestRxViewModel : ReactiveObject
         this.WhenAnyValue(x => x.NullableDateTimeValue)
             .Do(x => System.Diagnostics.Debug.WriteLine($"Nullable Date Time Value: {x}"))
             .Subscribe();
+
+        this.WhenAnyValue(x => x.IsToggled)
+            .Do(x => System.Diagnostics.Debug.WriteLine($"Is Toggled: {x}"))
+            .Subscribe();
     }
 }

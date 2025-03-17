@@ -28,24 +28,15 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         _platformScalingFactor = (float)PlatformInfo.ScalingFactor;
     }
 
-    public Task<Image> IconFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null)
-    {
-        return IconFromSvg(svgName, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
-    }
+    public Task<Image> IconFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null) => IconFromSvg(svgName, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
 
-    public async Task<Image> IconFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null)
-    {
-        return
-            new Image()
-            {
-                Source = await SourceFromSvg(svgName, size, additionalCacheKey, colorOverride),
-            };
-    }
+    public async Task<Image> IconFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null) =>
+        new()
+        {
+            Source = await SourceFromSvg(svgName, size, additionalCacheKey, colorOverride),
+        };
 
-    public Task<ImageSource> SourceFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null)
-    {
-        return SourceFromSvg(svgName, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
-    }
+    public Task<ImageSource> SourceFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null) => SourceFromSvg(svgName, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
 
     public async Task<ImageSource> SourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null)
     {
@@ -88,10 +79,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
     }
 
-    public Task<ImageSource> SourceFromRawSvg(string svgName, string svgValue, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null)
-    {
-        return SourceFromRawSvg(svgName, svgValue, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
-    }
+    public Task<ImageSource> SourceFromRawSvg(string svgName, string svgValue, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null) => SourceFromRawSvg(svgName, svgValue, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
 
     public async Task<ImageSource> SourceFromRawSvg(string svgName, string svgValue, Size size, string additionalCacheKey = "", Color? colorOverride = null)
     {
@@ -128,10 +116,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
     }
 
-    public Task<FileImageSource> FileImageSourceFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null)
-    {
-        return FileImageSourceFromSvg(svgName, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
-    }
+    public Task<FileImageSource> FileImageSourceFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null) => FileImageSourceFromSvg(svgName, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
 
     public async Task<FileImageSource> FileImageSourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null)
     {
@@ -344,10 +329,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
     }
 
-    public void LoadAssembly(Assembly assembly)
-    {
-        EmbeddedResourceLoader.LoadAssembly(assembly);
-    }
+    public void LoadAssembly(Assembly assembly) => EmbeddedResourceLoader.LoadAssembly(assembly);
 
     public Task ClearCache()
     {

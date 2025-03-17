@@ -5,7 +5,7 @@ public class Hue : VisualEffect
     /// <summary>
     /// The amount of hue.
     /// </summary>
-    public static BindableProperty HueAmountProperty =
+    public static readonly BindableProperty HueAmountProperty =
         BindableProperty.Create(nameof(HueAmount), typeof(double), typeof(Hue), 0d);
 
     /// <summary>
@@ -18,15 +18,9 @@ public class Hue : VisualEffect
         set => SetValue(HueAmountProperty, value.Clamp(-180, 180d));
     }
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect)
-    {
-        return InternalApplyEffect(surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect) => InternalApplyEffect(surface, info.Rect);
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect)
-    {
-        return InternalApplyEffect(surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect) => InternalApplyEffect(surface, info.Rect);
 
     private SKImage InternalApplyEffect(SKSurface surface, SKRect rect)
     {

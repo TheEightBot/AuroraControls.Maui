@@ -12,7 +12,7 @@ public class Waves : LoadingViewBase
     /// <summary>
     /// Specifies the number of waves.
     /// </summary>
-    public static BindableProperty WaveCountProperty =
+    public static readonly BindableProperty WaveCountProperty =
         BindableProperty.Create(nameof(WaveCount), typeof(int), typeof(Waves), 5,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -22,14 +22,14 @@ public class Waves : LoadingViewBase
     /// <value>The wave count int. Default wave count value is 5.</value>
     public int WaveCount
     {
-        get { return (int)GetValue(WaveCountProperty); }
-        set { SetValue(WaveCountProperty, value); }
+        get => (int)GetValue(WaveCountProperty);
+        set => SetValue(WaveCountProperty, value);
     }
 
     /// <summary>
     /// The wave height property. Specifies the height of the wave.
     /// </summary>
-    public static BindableProperty WaveHeightProperty =
+    public static readonly BindableProperty WaveHeightProperty =
         BindableProperty.Create(nameof(WaveHeight), typeof(double), typeof(Waves), 40d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -39,14 +39,14 @@ public class Waves : LoadingViewBase
     /// <value>Height as a double. Default is 40d.</value>
     public double WaveHeight
     {
-        get { return (double)GetValue(WaveHeightProperty); }
-        set { SetValue(WaveHeightProperty, value); }
+        get => (double)GetValue(WaveHeightProperty);
+        set => SetValue(WaveHeightProperty, value);
     }
 
     /// <summary>
     /// The wave stacks property.
     /// </summary>
-    public static BindableProperty WaveStacksProperty =
+    public static readonly BindableProperty WaveStacksProperty =
         BindableProperty.Create(nameof(WaveStacks), typeof(int), typeof(Waves), 3,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -56,14 +56,14 @@ public class Waves : LoadingViewBase
     /// <value>The wave stacks. Default value is 3.</value>
     public int WaveStacks
     {
-        get { return (int)GetValue(WaveStacksProperty); }
-        set { SetValue(WaveStacksProperty, value); }
+        get => (int)GetValue(WaveStacksProperty);
+        set => SetValue(WaveStacksProperty, value);
     }
 
     /// <summary>
     /// The foreground wave color property. Specifies the foreground wave color.
     /// </summary>
-    public static BindableProperty ForegroundWaveColorProperty =
+    public static readonly BindableProperty ForegroundWaveColorProperty =
         BindableProperty.Create(nameof(ForegroundWaveColor), typeof(Color), typeof(Waves), Colors.SkyBlue,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -73,14 +73,14 @@ public class Waves : LoadingViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
     public Color ForegroundWaveColor
     {
-        get { return (Color)GetValue(ForegroundWaveColorProperty); }
-        set { SetValue(ForegroundWaveColorProperty, value); }
+        get => (Color)GetValue(ForegroundWaveColorProperty);
+        set => SetValue(ForegroundWaveColorProperty, value);
     }
 
     /// <summary>
     /// The background wave color property.
     /// </summary>
-    public static BindableProperty BackgroundWaveColorProperty =
+    public static readonly BindableProperty BackgroundWaveColorProperty =
         BindableProperty.Create(nameof(BackgroundWaveColor), typeof(Color), typeof(Waves), Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -90,8 +90,8 @@ public class Waves : LoadingViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
     public Color BackgroundWaveColor
     {
-        get { return (Color)GetValue(BackgroundWaveColorProperty); }
-        set { SetValue(BackgroundWaveColorProperty, value); }
+        get => (Color)GetValue(BackgroundWaveColorProperty);
+        set => SetValue(BackgroundWaveColorProperty, value);
     }
 
     public Waves()

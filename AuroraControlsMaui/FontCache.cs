@@ -17,10 +17,7 @@ public class FontCache : Topten.RichTextKit.FontMapper
 
     public static FontCache Instance { get; } = new();
 
-    private FontCache()
-    {
-        FontMapper.Default = this;
-    }
+    private FontCache() => FontMapper.Default = this;
 
     public void Add(string embeddedResourceName, string shortNameOverride = null)
     {
@@ -85,7 +82,7 @@ public class FontCache : Topten.RichTextKit.FontMapper
 
         if (qualifiedName is not null && RegisteredFonts.TryGetValue(qualifiedName, out listFonts))
         {
-            // Find closest weight
+            // Find the closest weight
             return listFonts.MinBy(x => Math.Abs(x.FontWeight - style.FontWeight));
         }
 
@@ -100,10 +97,16 @@ public static class FontCacheExtensions
     {
         foreach (var fontDescriptor in fontDescriptors)
         {
-            using (var asset = await FileSystem.OpenAppPackageFileAsync(fontDescriptor.Filename).ConfigureAwait(false))
+            bool fontExists = await FileSystem.Current.AppPackageFileExistsAsync(fontDescriptor.Filename).ConfigureAwait(false);
+
+            if (!fontExists)
             {
-                FontCache.Instance.Add(SKTypeface.FromStream(asset), fontDescriptor.Alias);
+                continue;
             }
+
+            await using var asset = await FileSystem.Current.OpenAppPackageFileAsync(fontDescriptor.Filename).ConfigureAwait(false);
+
+            FontCache.Instance.Add(SKTypeface.FromStream(asset), fontDescriptor.Alias);
         }
     }
 }

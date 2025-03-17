@@ -553,10 +553,8 @@ public static class VisualElementExtensions
         return null;
     }
 
-    public static Thickness Scale(this Thickness thickness, double scale)
-    {
-        return new Thickness(
+    public static Thickness Scale(this Thickness thickness, double scale) =>
+        new(
             thickness.Left * scale, thickness.Top * scale,
             thickness.Right * scale, thickness.Bottom * scale);
-    }
 }

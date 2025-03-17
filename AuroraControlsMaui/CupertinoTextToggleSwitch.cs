@@ -26,7 +26,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <summary>
     /// The color of the thumb switch.
     /// </summary>
-    public static BindableProperty ThumbColorProperty =
+    public static readonly BindableProperty ThumbColorProperty =
         BindableProperty.Create(nameof(ThumbColor), typeof(Color), typeof(CupertinoTextToggleSwitch), Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -43,7 +43,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <summary>
     /// The color of the track when enabled.
     /// </summary>
-    public static BindableProperty TrackEnabledColorProperty =
+    public static readonly BindableProperty TrackEnabledColorProperty =
         BindableProperty.Create(nameof(TrackEnabledColor), typeof(Color), typeof(CupertinoTextToggleSwitch), Color.FromRgba("#5bcd58"),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -60,7 +60,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <summary>
     /// The color of the track when disabled.
     /// </summary>
-    public static BindableProperty TrackDisabledColorProperty =
+    public static readonly BindableProperty TrackDisabledColorProperty =
         BindableProperty.Create(nameof(TrackDisabledColor), typeof(Color), typeof(CupertinoTextToggleSwitch), Color.FromRgba("#e9e9ea"),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -77,7 +77,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <summary>
     /// The border width property.
     /// </summary>
-    public static BindableProperty BorderWidthProperty =
+    public static readonly BindableProperty BorderWidthProperty =
         BindableProperty.Create(nameof(BorderWidth), typeof(double), typeof(CupertinoTextToggleSwitch), 2d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -87,14 +87,14 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <value>Expects a double value. Default is 2d.</value>
     public double BorderWidth
     {
-        get { return (double)GetValue(BorderWidthProperty); }
-        set { SetValue(BorderWidthProperty, value); }
+        get => (double)GetValue(BorderWidthProperty);
+        set => SetValue(BorderWidthProperty, value);
     }
 
     /// <summary>
     /// The duration of the toggle animation.
     /// </summary>
-    public static BindableProperty ToggleAnimationDurationProperty =
+    public static readonly BindableProperty ToggleAnimationDurationProperty =
         BindableProperty.Create(nameof(ToggleAnimationDuration), typeof(uint), typeof(CupertinoTextToggleSwitch), 240u,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -105,20 +105,20 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     [TypeConverter(typeof(UIntTypeConverter))]
     public uint ToggleAnimationDuration
     {
-        get { return (uint)GetValue(ToggleAnimationDurationProperty); }
-        set { SetValue(ToggleAnimationDurationProperty, value); }
+        get => (uint)GetValue(ToggleAnimationDurationProperty);
+        set => SetValue(ToggleAnimationDurationProperty, value);
     }
 
     /// <summary>
     /// The command property. Fires on tap.
     /// </summary>
-    public static BindableProperty CommandProperty =
+    public static readonly BindableProperty CommandProperty =
         BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(CupertinoTextToggleSwitch), default(ICommand));
 
     /// <summary>
     /// The toggle maximum width property.
     /// </summary>
-    public static BindableProperty ToggleMinWidthProperty =
+    public static readonly BindableProperty ToggleMinWidthProperty =
         BindableProperty.Create(nameof(ToggleMinWidth), typeof(double), typeof(CupertinoTextToggleSwitch), 56d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -135,7 +135,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <summary>
     /// The toggle maximum height property.
     /// </summary>
-    public static BindableProperty ToggleMaxHeightProperty =
+    public static readonly BindableProperty ToggleMaxHeightProperty =
         BindableProperty.Create(nameof(ToggleMaxHeight), typeof(double), typeof(CupertinoTextToggleSwitch), 32d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -152,7 +152,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <summary>
     /// The text on the toggle switch.
     /// </summary>
-    public static BindableProperty EnabledTextProperty =
+    public static readonly BindableProperty EnabledTextProperty =
         BindableProperty.Create(nameof(EnabledText), typeof(string), typeof(CupertinoTextToggleSwitch), default(string),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -169,7 +169,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <summary>
     /// The text on the toggle switch.
     /// </summary>
-    public static BindableProperty DisabledTextProperty =
+    public static readonly BindableProperty DisabledTextProperty =
         BindableProperty.Create(nameof(DisabledText), typeof(string), typeof(CupertinoTextToggleSwitch), default(string),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -186,7 +186,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <summary>
     /// The font color of the text.
     /// </summary>
-    public static BindableProperty DisabledFontColorProperty =
+    public static readonly BindableProperty DisabledFontColorProperty =
         BindableProperty.Create(nameof(DisabledFontColor), typeof(Color), typeof(CupertinoTextToggleSwitch), Color.FromArgb("#272727"),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -200,7 +200,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
         set => SetValue(DisabledFontColorProperty, value);
     }
 
-    public static BindableProperty EnabledFontColorProperty =
+    public static readonly BindableProperty EnabledFontColorProperty =
         BindableProperty.Create(nameof(EnabledFontColor), typeof(Color), typeof(CupertinoTextToggleSwitch), default(Color),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -213,7 +213,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <summary>
     /// The font size of the text.
     /// </summary>
-    public static BindableProperty FontSizeProperty =
+    public static readonly BindableProperty FontSizeProperty =
         BindableProperty.Create(nameof(FontSize), typeof(double), typeof(CupertinoTextToggleSwitch), PlatformInfo.DefaultButtonFontSize,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -230,7 +230,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <summary>
     /// The typeface of the text.
     /// </summary>
-    public static BindableProperty TypefaceProperty =
+    public static readonly BindableProperty TypefaceProperty =
         BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(CupertinoTextToggleSwitch), default(SKTypeface),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -244,7 +244,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
         set => SetValue(TypefaceProperty, value);
     }
 
-    public static BindableProperty IsIconifiedTextProperty =
+    public static readonly BindableProperty IsIconifiedTextProperty =
         BindableProperty.Create(nameof(IsIconifiedText), typeof(bool), typeof(CupertinoTextToggleSwitch), default(bool),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -260,14 +260,14 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <value>The command.</value>
     public ICommand Command
     {
-        get { return (ICommand)GetValue(CommandProperty); }
-        set { SetValue(CommandProperty, value); }
+        get => (ICommand)GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
     }
 
     /// <summary>
     /// The command parameter property.
     /// </summary>
-    public static BindableProperty CommandParameterProperty =
+    public static readonly BindableProperty CommandParameterProperty =
         BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(CupertinoTextToggleSwitch), default(object));
 
     /// <summary>
@@ -276,16 +276,27 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <value>The command parameter. default value is default(object).</value>
     public object CommandParameter
     {
-        get { return (object)GetValue(CommandParameterProperty); }
-        set { SetValue(CommandParameterProperty, value); }
+        get => (object)GetValue(CommandParameterProperty);
+        set => SetValue(CommandParameterProperty, value);
     }
 
     /// <summary>
     /// The state of the toggle.
     /// </summary>
-    public static BindableProperty IsToggledProperty =
+    public static readonly BindableProperty IsToggledProperty =
         BindableProperty.Create(nameof(IsToggled), typeof(bool), typeof(CupertinoTextToggleSwitch), false,
-            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
+            defaultBindingMode: BindingMode.TwoWay,
+            propertyChanged:
+                (bindable, value, newValue) =>
+                {
+                    if (bindable is not CupertinoTextToggleSwitch ctts || newValue is not bool nvBool)
+                    {
+                        return;
+                    }
+
+                    ctts.Toggled?.Invoke(ctts, new ToggledEventArgs(nvBool));
+                    ctts.AnimateToggle(nvBool);
+                });
 
     /// <summary>
     /// Gets or sets a value indicating whether the switch is toggled or not.
@@ -294,12 +305,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     public bool IsToggled
     {
         get => (bool)GetValue(IsToggledProperty);
-        set
-        {
-            SetValue(IsToggledProperty, value);
-            AnimateToggle(value);
-            Toggled?.Invoke(this, new ToggledEventArgs(value));
-        }
+        set => SetValue(IsToggledProperty, value);
     }
 
     /// <summary>
@@ -504,22 +510,22 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
 
         var isTapInside = _backgroundPath.Contains(e.Location.X, e.Location.Y);
 
-        if (e.ActionType == SKTouchAction.Released && isTapInside)
+        if (e.ActionType != SKTouchAction.Released || !isTapInside)
         {
-            IsToggled = !IsToggled;
-            AnimateToggle(IsToggled);
+            return;
+        }
 
-            if (Command?.CanExecute(CommandParameter) ?? false)
-            {
-                Command.Execute(CommandParameter);
-            }
+        this.IsToggled = !this.IsToggled;
+
+        if (this.Command?.CanExecute(this.CommandParameter) ?? false)
+        {
+            this.Command.Execute(this.CommandParameter);
         }
     }
 
-    private void AnimateToggle(bool toggled)
-    {
+    private void AnimateToggle(bool toggled) =>
         this.TransitionTo(
-            nameof(_toggleAnimationPercentage),
+            _animateToggleAnimationName,
             x =>
             {
                 _toggleAnimationPercentage = x;
@@ -529,5 +535,4 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
             toggled ? 1f : 0f,
             easing: Easing.CubicInOut,
             length: ToggleAnimationDuration);
-    }
 }

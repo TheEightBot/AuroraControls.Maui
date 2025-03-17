@@ -5,7 +5,7 @@ public class Skew : VisualEffect
     /// <summary>
     /// The skew degrees X property.
     /// </summary>
-    public static BindableProperty SkewDegreesXProperty =
+    public static readonly BindableProperty SkewDegreesXProperty =
         BindableProperty.Create(nameof(SkewDegreesX), typeof(double), typeof(Skew), default(double));
 
     /// <summary>
@@ -21,7 +21,7 @@ public class Skew : VisualEffect
     /// <summary>
     /// The skew degrees Y property.
     /// </summary>
-    public static BindableProperty SkewDegreesYProperty =
+    public static readonly BindableProperty SkewDegreesYProperty =
         BindableProperty.Create(nameof(SkewDegreesY), typeof(double), typeof(Skew), default(double));
 
     /// <summary>
@@ -38,7 +38,7 @@ public class Skew : VisualEffect
     /// The location of the skew as a percentage of the canvas
     /// Values are valid between 0..1.
     /// </summary>
-    public static BindableProperty LocationProperty =
+    public static readonly BindableProperty LocationProperty =
         BindableProperty.Create(nameof(Location), typeof(Point), typeof(Skew), new Point(.5d, .5d));
 
     /// <summary>
@@ -51,15 +51,9 @@ public class Skew : VisualEffect
         set => SetValue(LocationProperty, value);
     }
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect)
-    {
-        return InternalApplyEffect(surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect) => InternalApplyEffect(surface, info.Rect);
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect)
-    {
-        return InternalApplyEffect(surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect) => InternalApplyEffect(surface, info.Rect);
 
     private SKImage InternalApplyEffect(SKSurface surface, SKRect rect)
     {
@@ -87,10 +81,8 @@ public class Skew : VisualEffect
         return surface.Snapshot();
     }
 
-    private void SkewDegrees(SKCanvas canvas, double xDegrees, double yDegrees)
-    {
+    private void SkewDegrees(SKCanvas canvas, double xDegrees, double yDegrees) =>
         canvas.Skew(
             (float)Math.Tan(Math.PI * xDegrees / 180f),
             (float)Math.Tan(Math.PI * yDegrees / 180f));
-    }
 }

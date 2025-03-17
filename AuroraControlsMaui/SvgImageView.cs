@@ -21,7 +21,7 @@ public class SvgImageView : AuroraViewBase
     /// <summary>
     /// The name of the embedded image to display.
     /// </summary>
-    public static BindableProperty EmbeddedImageNameProperty =
+    public static readonly BindableProperty EmbeddedImageNameProperty =
         BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(SvgImageView), null,
             propertyChanged:
                 (bindable, oldValue, newValue) =>
@@ -47,14 +47,14 @@ public class SvgImageView : AuroraViewBase
     /// <value>string value. default value is null.</value>
     public string EmbeddedImageName
     {
-        get { return (string)GetValue(EmbeddedImageNameProperty); }
-        set { SetValue(EmbeddedImageNameProperty, value); }
+        get => (string)GetValue(EmbeddedImageNameProperty);
+        set => SetValue(EmbeddedImageNameProperty, value);
     }
 
     /// <summary>
     /// The overlay color property.
     /// </summary>
-    public static BindableProperty OverlayColorProperty =
+    public static readonly BindableProperty OverlayColorProperty =
         BindableProperty.Create(nameof(OverlayColor), typeof(Color), typeof(SvgImageView), Colors.Transparent,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
@@ -70,14 +70,14 @@ public class SvgImageView : AuroraViewBase
     /// <value>Expects a Xamarin.Forms.Color. Default is Transparent.</value>
     public Color OverlayColor
     {
-        get { return (Color)GetValue(OverlayColorProperty); }
-        set { SetValue(OverlayColorProperty, value); }
+        get => (Color)GetValue(OverlayColorProperty);
+        set => SetValue(OverlayColorProperty, value);
     }
 
     /// <summary>
     /// The maximum embedded image size property.
     /// </summary>
-    public static BindableProperty MaxImageSizeProperty =
+    public static readonly BindableProperty MaxImageSizeProperty =
         BindableProperty.Create(nameof(MaxImageSize), typeof(Size), typeof(SvgImageView), default(Size),
             propertyChanged:
                 (bindable, oldValue, newValue) =>
@@ -101,10 +101,7 @@ public class SvgImageView : AuroraViewBase
     /// <summary>
     /// Initializes a new instance of the <see cref="SvgImageView"/> class.
     /// </summary>
-    public SvgImageView()
-    {
-        MinimumHeightRequest = IAuroraView.StandardControlHeight;
-    }
+    public SvgImageView() => MinimumHeightRequest = IAuroraView.StandardControlHeight;
 
     protected override void Attached()
     {

@@ -113,46 +113,51 @@ public class PlatformUnderlayDrawable : IDisposable
         }
     }
 
+    public void OnCommandSet()
+    {
+        if (this._virtualView is not IUnderlayDrawable ud)
+        {
+            return;
+        }
+
+        if (ud.Command is not null)
+        {
+            if (this._commandView is null)
+            {
+                float width = this._virtualView.Width > 0d ? (float)this._virtualView.Width : 0f;
+                float height = this._virtualView.Height > 0d ? (float)this._virtualView.Height : 0f;
+
+                this._commandView =
+                    new UIView
+                    {
+                        BackgroundColor = UIColor.Clear,
+                        UserInteractionEnabled = true,
+                        Frame = new CGRect(0f, 0f, width, height),
+                    };
+                this._commandView.AddGestureRecognizer(
+                    this._commandViewTapped = new UITapGestureRecognizer(() =>
+                    {
+                        if (this._virtualView is IUnderlayDrawable ude && (ude.Command?.CanExecute(ude.CommandParameter) ?? false))
+                        {
+                            ude.Command.Execute(ude.CommandParameter);
+                        }
+                    }));
+            }
+
+            this._platformView.AddSubview(this._commandView);
+            this._platformView.BringSubviewToFront(this._commandView);
+        }
+        else if (ud.Command is null && this._commandView is not null)
+        {
+            this._commandView?.RemoveFromSuperview();
+        }
+    }
+
     private void OnPaintSurface(object? sender, SKPaintSurfaceEventArgs e)
     {
         if (_virtualView is IUnderlayDrawable ud && _virtualView is Microsoft.Maui.Controls.ContentView cv && cv.Content is not null)
         {
             DrawUnderlay(ud, cv, cv.Content.Frame, e.Surface, e.Info);
-        }
-    }
-
-    private void OnCommandSet()
-    {
-        if (_virtualView is IUnderlayDrawable ud)
-        {
-            if (ud.Command is not null)
-            {
-                if (_commandView is null)
-                {
-                    _commandView =
-                        new UIView
-                        {
-                            BackgroundColor = UIColor.Clear,
-                            UserInteractionEnabled = true,
-                            Frame = new CGRect(0f, 0f, (float)_virtualView.Width, (float)_virtualView.Height),
-                        };
-                    _commandView.AddGestureRecognizer(
-                        _commandViewTapped = new UITapGestureRecognizer(() =>
-                        {
-                            if (_virtualView is IUnderlayDrawable ude && (ude.Command?.CanExecute(ude.CommandParameter) ?? false))
-                            {
-                                ude.Command.Execute(ude.CommandParameter);
-                            }
-                        }));
-                }
-
-                _platformView.AddSubview(_commandView);
-                _platformView.BringSubviewToFront(_commandView);
-            }
-            else if (ud.Command is null && _commandView is not null)
-            {
-                _commandView?.RemoveFromSuperview();
-            }
         }
     }
 
@@ -166,17 +171,19 @@ public class PlatformUnderlayDrawable : IDisposable
         _platformView = platformView;
         _virtualView = virtualView;
 
-        if (_canvas is null)
+        if (this._canvas is not null)
         {
-            _canvas = new SKCanvasView(platformView.Context);
-
-            _canvas.PaintSurface += OnPaintSurface;
-            _canvas.FocusChange += Canvas_FocusChange;
-            _canvas.Layout(0, 0, platformView.Width, platformView.Height);
-            _canvas.Invalidate();
-
-            Invalidate();
+            return;
         }
+
+        this._canvas = new SKCanvasView(platformView.Context);
+
+        this._canvas.PaintSurface += this.OnPaintSurface;
+        this._canvas.FocusChange += this.Canvas_FocusChange;
+        this._canvas.Layout(0, 0, platformView.Width, platformView.Height);
+        this._canvas.Invalidate();
+
+        this.Invalidate();
     }
 
     public void DisconnectHandler()
@@ -203,6 +210,35 @@ public class PlatformUnderlayDrawable : IDisposable
         }
     }
 
+    public void OnCommandSet()
+    {
+        if (this._virtualView is not IUnderlayDrawable ud)
+        {
+            return;
+        }
+
+        if (ud.Command is not null)
+        {
+            if (this._commandButton is null)
+            {
+                this._commandButton =
+                    new Android.Widget.Button(this._platformView.Context)
+                    {
+                        Background = new ColorDrawable(Android.Graphics.Color.Transparent),
+                    };
+
+                this._commandButton.Click += this.CommandClicked;
+            }
+
+            this._platformView.AddView(this._commandButton);
+            this._commandButton.Layout(0, 0, this._platformView.Width, this._platformView.Height);
+        }
+        else if (ud.Command is null && this._commandButton is not null)
+        {
+            this._commandButton?.RemoveFromParent();
+        }
+    }
+
     private void Canvas_FocusChange(object? sender, Android.Views.View.FocusChangeEventArgs e)
     {
         if (e.HasFocus && _virtualView is Microsoft.Maui.Controls.ContentView cv && cv.Content is IView view)
@@ -226,32 +262,9 @@ public class PlatformUnderlayDrawable : IDisposable
             DrawUnderlay(ud, cv, cv.Content.Frame, e.Surface, e.Info);
         }
     }
-
-    private void OnCommandSet()
+#else
+    public void OnCommandSet()
     {
-        if (_virtualView is IUnderlayDrawable ud)
-        {
-            if (ud.Command is not null)
-            {
-                if (_commandButton is null)
-                {
-                    _commandButton =
-                        new Android.Widget.Button(_platformView.Context)
-                        {
-                            Background = new ColorDrawable(Android.Graphics.Color.Transparent),
-                        };
-
-                    _commandButton.Click += CommandClicked;
-                }
-
-                _platformView.AddView(_commandButton);
-                _commandButton.Layout(0, 0, _platformView.Width, _platformView.Height);
-            }
-            else if (ud.Command is null && _commandButton is not null)
-            {
-                _commandButton?.RemoveFromParent();
-            }
-        }
     }
 #endif
 

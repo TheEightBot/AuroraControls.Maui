@@ -10,15 +10,9 @@ public static class SkiaShapeExtensions
     /// </summary>
     /// <returns>The center of the provided SKRect.</returns>
     /// <param name="rect">Rect.</param>
-    public static SKPoint Center(this SKRect rect)
-    {
-        return new SKPoint(rect.MidX, rect.MidY);
-    }
+    public static SKPoint Center(this SKRect rect) => new(rect.MidX, rect.MidY);
 
-    public static bool IsDistanceGreaterThan(this SKPoint pointA, SKPoint pointB, int maxDistance)
-    {
-        return Math.Abs(pointA.X - pointB.X) > maxDistance || Math.Abs(pointA.Y - pointB.Y) > maxDistance;
-    }
+    public static bool IsDistanceGreaterThan(this SKPoint pointA, SKPoint pointB, int maxDistance) => Math.Abs(pointA.X - pointB.X) > maxDistance || Math.Abs(pointA.Y - pointB.Y) > maxDistance;
 
     public static SKRect Inflate(this SKRect rect, Thickness thickness)
     {

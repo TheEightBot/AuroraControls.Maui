@@ -12,10 +12,9 @@ public class IconCache : IconCacheBase
             return null;
         }
 
-        using (var image = await imageSource.GetHandler().LoadImageAsync(imageSource).ConfigureAwait(false))
-        {
-            return image.ToSKBitmap();
-        }
+        using var image = await imageSource.GetHandler().LoadImageAsync(imageSource).ConfigureAwait(false);
+
+        return image?.ToSKBitmap() ?? new SKBitmap();
     }
 
     public override async Task<byte[]> ByteArrayFromSource(ImageSource imageSource)
