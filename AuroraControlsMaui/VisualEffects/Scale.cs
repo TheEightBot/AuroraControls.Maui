@@ -5,7 +5,7 @@ public class Scale : VisualEffect
     /// <summary>
     /// The scale amount property.
     /// </summary>
-    public static BindableProperty ScaleAmountProperty =
+    public static readonly BindableProperty ScaleAmountProperty =
         BindableProperty.Create(nameof(ScaleAmount), typeof(float), typeof(Scale), 1f);
 
     /// <summary>

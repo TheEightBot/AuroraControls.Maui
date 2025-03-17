@@ -16,7 +16,7 @@ public class CupertinoActivityIndicator : SceneViewBase
     /// <summary>
     /// The number of segments to display.
     /// </summary>
-    public static BindableProperty SegmentsProperty =
+    public static readonly BindableProperty SegmentsProperty =
         BindableProperty.Create(nameof(Segments), typeof(uint), typeof(CupertinoActivityIndicator), 16u,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -34,7 +34,7 @@ public class CupertinoActivityIndicator : SceneViewBase
     /// <summary>
     /// The length of the segments.
     /// </summary>
-    public static BindableProperty LengthPercentProperty =
+    public static readonly BindableProperty LengthPercentProperty =
         BindableProperty.Create(nameof(LengthPercent), typeof(double), typeof(CupertinoActivityIndicator), .2d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -51,7 +51,7 @@ public class CupertinoActivityIndicator : SceneViewBase
     /// <summary>
     /// The width of the segments.
     /// </summary>
-    public static BindableProperty WidthPercentProperty =
+    public static readonly BindableProperty WidthPercentProperty =
         BindableProperty.Create(nameof(WidthPercent), typeof(double), typeof(CupertinoActivityIndicator), .25d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -68,7 +68,7 @@ public class CupertinoActivityIndicator : SceneViewBase
     /// <summary>
     /// The indicator color.
     /// </summary>
-    public static BindableProperty IndicatorColorProperty =
+    public static readonly BindableProperty IndicatorColorProperty =
         BindableProperty.Create(nameof(IndicatorColor), typeof(Color), typeof(CupertinoActivityIndicator), Color.FromArgb("#C7C7C9"),
             propertyChanged: static (bindable, _, newValue) =>
             {
@@ -90,7 +90,7 @@ public class CupertinoActivityIndicator : SceneViewBase
     /// <summary>
     /// The corner radius.
     /// </summary>
-    public static BindableProperty CornerRadiusProperty =
+    public static readonly BindableProperty CornerRadiusProperty =
         BindableProperty.Create(nameof(CornerRadius), typeof(double), typeof(CupertinoActivityIndicator), 4d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 

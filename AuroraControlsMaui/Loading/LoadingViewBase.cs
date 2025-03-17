@@ -9,7 +9,7 @@ public class LoadingViewBase : AuroraViewBase
     /// <summary>
     /// The animating percentage property.
     /// </summary>
-    public static BindableProperty AnimatingPercentageProperty =
+    public static readonly BindableProperty AnimatingPercentageProperty =
         BindableProperty.Create(nameof(AnimatingPercentage), typeof(double), typeof(LoadingViewBase), 0d, BindingMode.OneWayToSource,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -35,7 +35,7 @@ public class LoadingViewBase : AuroraViewBase
     /// <summary>
     /// The animating property.
     /// </summary>
-    public static BindableProperty AnimatingProperty =
+    public static readonly BindableProperty AnimatingProperty =
         BindableProperty.Create(nameof(Animating), typeof(bool), typeof(LoadingViewBase), default(bool), BindingMode.OneWayToSource);
 
     public bool Animating

@@ -17,7 +17,7 @@ public class SegmentedControl : AuroraViewBase
 
     public IList<Segment> Segments { get => _segments; }
 
-    public static BindableProperty SegmentControlStyleProperty =
+    public static readonly BindableProperty SegmentControlStyleProperty =
         BindableProperty.Create(nameof(SegmentControlStyle), typeof(SegmentedControlStyle), typeof(SegmentedControl), SegmentedControlStyle.Cupertino);
 
     public SegmentedControlStyle SegmentControlStyle
@@ -26,7 +26,7 @@ public class SegmentedControl : AuroraViewBase
         set => SetValue(SegmentControlStyleProperty, value);
     }
 
-    public static BindableProperty ControlForegroundColorProperty =
+    public static readonly BindableProperty ControlForegroundColorProperty =
         BindableProperty.Create(nameof(ControlForegroundColor), typeof(Color), typeof(SegmentedControl), Color.FromArgb("#FF007AFF"),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -36,7 +36,7 @@ public class SegmentedControl : AuroraViewBase
         set => SetValue(ControlForegroundColorProperty, value);
     }
 
-    public static BindableProperty ControlBackgroundColorProperty =
+    public static readonly BindableProperty ControlBackgroundColorProperty =
         BindableProperty.Create(nameof(ControlBackgroundColor), typeof(Color), typeof(SegmentedControl), Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -46,7 +46,7 @@ public class SegmentedControl : AuroraViewBase
         set => SetValue(ControlBackgroundColorProperty, value);
     }
 
-    public static BindableProperty BorderSizeProperty =
+    public static readonly BindableProperty BorderSizeProperty =
         BindableProperty.Create(nameof(BorderSize), typeof(double), typeof(SegmentedControl), 2d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -56,7 +56,7 @@ public class SegmentedControl : AuroraViewBase
         set => SetValue(BorderSizeProperty, value);
     }
 
-    public static BindableProperty ForegroundTextColorProperty =
+    public static readonly BindableProperty ForegroundTextColorProperty =
         BindableProperty.Create(nameof(ForegroundTextColor), typeof(Color), typeof(SegmentedControl), Colors.White);
 
     public Color ForegroundTextColor
@@ -65,7 +65,7 @@ public class SegmentedControl : AuroraViewBase
         set => SetValue(ForegroundTextColorProperty, value);
     }
 
-    public static BindableProperty BackgroundTextColorProperty =
+    public static readonly BindableProperty BackgroundTextColorProperty =
         BindableProperty.Create(nameof(BackgroundTextColor), typeof(Color), typeof(SegmentedControl), Colors.Transparent);
 
     public Color BackgroundTextColor
@@ -74,7 +74,7 @@ public class SegmentedControl : AuroraViewBase
         set => SetValue(BackgroundTextColorProperty, value);
     }
 
-    public static BindableProperty FontSizeProperty =
+    public static readonly BindableProperty FontSizeProperty =
         BindableProperty.Create(nameof(FontSize), typeof(double), typeof(SegmentedControl), PlatformInfo.DefaultButtonFontSize,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -84,7 +84,7 @@ public class SegmentedControl : AuroraViewBase
         set => SetValue(FontSizeProperty, value);
     }
 
-    public static BindableProperty FontFamilyProperty =
+    public static readonly BindableProperty FontFamilyProperty =
         BindableProperty.Create(nameof(FontFamily), typeof(string), typeof(SegmentedControl), default(string),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -94,7 +94,7 @@ public class SegmentedControl : AuroraViewBase
         set => SetValue(FontFamilyProperty, value);
     }
 
-    public static BindableProperty CornerRadiusProperty =
+    public static readonly BindableProperty CornerRadiusProperty =
         BindableProperty.Create(nameof(CornerRadius), typeof(int), typeof(SegmentedControl), 4,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -104,8 +104,8 @@ public class SegmentedControl : AuroraViewBase
         set => SetValue(CornerRadiusProperty, value);
     }
 
-    public static BindableProperty SelectedIndexProperty =
-        BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(SegmentedControl), -1,
+    public static readonly BindableProperty SelectedIndexProperty =
+        BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(SegmentedControl), -1, BindingMode.TwoWay,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 if (bindable is SegmentedControl sc)
@@ -457,7 +457,7 @@ public class Segment : BindableObject, IDisposable
 
     private bool _disposedValue;
 
-    public static BindableProperty TextProperty =
+    public static readonly BindableProperty TextProperty =
         BindableProperty.Create(nameof(Text), typeof(string), typeof(Segment), default(string));
 
     public string Text
@@ -466,7 +466,7 @@ public class Segment : BindableObject, IDisposable
         set => SetValue(TextProperty, value);
     }
 
-    public static BindableProperty IsIconifiedTextProperty =
+    public static readonly BindableProperty IsIconifiedTextProperty =
         BindableProperty.Create(nameof(IsIconifiedText), typeof(bool), typeof(Segment), default(bool));
 
     public bool IsIconifiedText
@@ -475,7 +475,7 @@ public class Segment : BindableObject, IDisposable
         set => SetValue(IsIconifiedTextProperty, value);
     }
 
-    public static BindableProperty EmbeddedImageNameProperty =
+    public static readonly BindableProperty EmbeddedImageNameProperty =
         BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(Segment), string.Empty,
             propertyChanged:
             (bindable, oldValue, newValue) =>
@@ -494,7 +494,7 @@ public class Segment : BindableObject, IDisposable
 
     public SKSvg SVG => _svg;
 
-    public static BindableProperty ValueProperty =
+    public static readonly BindableProperty ValueProperty =
         BindableProperty.Create(nameof(Value), typeof(object), typeof(Segment), default(object));
 
     public object Value
@@ -503,7 +503,7 @@ public class Segment : BindableObject, IDisposable
         set => SetValue(ValueProperty, value);
     }
 
-    public static BindableProperty ForegroundColorProperty =
+    public static readonly BindableProperty ForegroundColorProperty =
         BindableProperty.Create(nameof(ForegroundColor), typeof(Color), typeof(Segment), default(Color));
 
     public Color ForegroundColor
@@ -512,7 +512,7 @@ public class Segment : BindableObject, IDisposable
         set => SetValue(ForegroundColorProperty, value);
     }
 
-    public static BindableProperty IsSpacerProperty =
+    public static readonly BindableProperty IsSpacerProperty =
         BindableProperty.Create(nameof(IsSpacer), typeof(bool), typeof(Segment), default(bool));
 
     public bool IsSpacer

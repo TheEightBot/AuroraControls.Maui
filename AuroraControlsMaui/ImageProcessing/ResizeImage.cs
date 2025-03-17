@@ -18,7 +18,7 @@ public class ResizeImage : ImageProcessingBase, IImageProcessor
     /// <summary>
     /// The max height property.
     /// </summary>
-    public static BindableProperty MaxHeightProperty =
+    public static readonly BindableProperty MaxHeightProperty =
         BindableProperty.Create(nameof(MaxHeight), typeof(int), typeof(ResizeImage), 100);
 
     /// <summary>
@@ -34,7 +34,7 @@ public class ResizeImage : ImageProcessingBase, IImageProcessor
     /// <summary>
     /// The max width property.
     /// </summary>
-    public static BindableProperty MaxWidthProperty =
+    public static readonly BindableProperty MaxWidthProperty =
         BindableProperty.Create(nameof(MaxWidth), typeof(int), typeof(ResizeImage), 100);
 
     /// <summary>

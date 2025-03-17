@@ -23,7 +23,7 @@ public class LinearGauge : AuroraViewBase
     /// <summary>
     /// The starting percent property.
     /// </summary>
-    public static BindableProperty StartingPercentProperty =
+    public static readonly BindableProperty StartingPercentProperty =
         BindableProperty.Create(nameof(StartingPercent), typeof(double), typeof(LinearGauge), default(double),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -40,7 +40,7 @@ public class LinearGauge : AuroraViewBase
     /// <summary>
     /// The ending percent property.
     /// </summary>
-    public static BindableProperty EndingPercentProperty =
+    public static readonly BindableProperty EndingPercentProperty =
         BindableProperty.Create(nameof(EndingPercent), typeof(double), typeof(LinearGauge), default(double),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -57,7 +57,7 @@ public class LinearGauge : AuroraViewBase
     /// <summary>
     /// The progress thickness property.
     /// </summary>
-    public static BindableProperty ProgressThicknessProperty =
+    public static readonly BindableProperty ProgressThicknessProperty =
         BindableProperty.Create(nameof(ProgressThickness), typeof(double), typeof(LinearGauge), 12d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -74,7 +74,7 @@ public class LinearGauge : AuroraViewBase
     /// <summary>
     /// The progress color property.
     /// </summary>
-    public static BindableProperty ProgressColorProperty =
+    public static readonly BindableProperty ProgressColorProperty =
         BindableProperty.Create(nameof(ProgressColor), typeof(Color), typeof(LinearGauge), Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -91,7 +91,7 @@ public class LinearGauge : AuroraViewBase
     /// <summary>
     /// The orientation property.
     /// </summary>
-    public static BindableProperty OrientationProperty =
+    public static readonly BindableProperty OrientationProperty =
         BindableProperty.Create(nameof(Orientation), typeof(LinearGaugeOrientation), typeof(LinearGauge), LinearGaugeOrientation.Horizontal,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -108,7 +108,7 @@ public class LinearGauge : AuroraViewBase
     /// <summary>
     /// The end cap type property.
     /// </summary>
-    public static BindableProperty EndCapTypeProperty =
+    public static readonly BindableProperty EndCapTypeProperty =
         BindableProperty.Create(nameof(EndCapType), typeof(EndCapType), typeof(LinearGauge), EndCapType.Rounded,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -125,7 +125,7 @@ public class LinearGauge : AuroraViewBase
     /// <summary>
     /// The progress background color property.
     /// </summary>
-    public static BindableProperty ProgressBackgroundColorProperty =
+    public static readonly BindableProperty ProgressBackgroundColorProperty =
         BindableProperty.Create(nameof(ProgressBackgroundColor), typeof(Color), typeof(LinearGauge), Colors.Gray,
                                 propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 

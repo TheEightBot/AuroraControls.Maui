@@ -12,7 +12,7 @@ public class Waves : LoadingViewBase
     /// <summary>
     /// Specifies the number of waves.
     /// </summary>
-    public static BindableProperty WaveCountProperty =
+    public static readonly BindableProperty WaveCountProperty =
         BindableProperty.Create(nameof(WaveCount), typeof(int), typeof(Waves), 5,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -29,7 +29,7 @@ public class Waves : LoadingViewBase
     /// <summary>
     /// The wave height property. Specifies the height of the wave.
     /// </summary>
-    public static BindableProperty WaveHeightProperty =
+    public static readonly BindableProperty WaveHeightProperty =
         BindableProperty.Create(nameof(WaveHeight), typeof(double), typeof(Waves), 40d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -46,7 +46,7 @@ public class Waves : LoadingViewBase
     /// <summary>
     /// The wave stacks property.
     /// </summary>
-    public static BindableProperty WaveStacksProperty =
+    public static readonly BindableProperty WaveStacksProperty =
         BindableProperty.Create(nameof(WaveStacks), typeof(int), typeof(Waves), 3,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -63,7 +63,7 @@ public class Waves : LoadingViewBase
     /// <summary>
     /// The foreground wave color property. Specifies the foreground wave color.
     /// </summary>
-    public static BindableProperty ForegroundWaveColorProperty =
+    public static readonly BindableProperty ForegroundWaveColorProperty =
         BindableProperty.Create(nameof(ForegroundWaveColor), typeof(Color), typeof(Waves), Colors.SkyBlue,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -80,7 +80,7 @@ public class Waves : LoadingViewBase
     /// <summary>
     /// The background wave color property.
     /// </summary>
-    public static BindableProperty BackgroundWaveColorProperty =
+    public static readonly BindableProperty BackgroundWaveColorProperty =
         BindableProperty.Create(nameof(BackgroundWaveColor), typeof(Color), typeof(Waves), Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 

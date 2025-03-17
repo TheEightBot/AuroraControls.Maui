@@ -10,7 +10,7 @@ public class CircularGauge : AuroraViewBase
     /// <summary>
     /// The progress starting degree property.
     /// </summary>
-    public static BindableProperty StartingDegreeProperty =
+    public static readonly BindableProperty StartingDegreeProperty =
         BindableProperty.Create(nameof(StartingDegree), typeof(double), typeof(CircularGauge), default(double),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -27,7 +27,7 @@ public class CircularGauge : AuroraViewBase
     /// <summary>
     /// The progress ending degree property.
     /// </summary>
-    public static BindableProperty EndingDegreeProperty =
+    public static readonly BindableProperty EndingDegreeProperty =
         BindableProperty.Create(nameof(EndingDegree), typeof(double), typeof(CircularGauge), default(double),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -44,7 +44,7 @@ public class CircularGauge : AuroraViewBase
     /// <summary>
     /// The progress thickness property.
     /// </summary>
-    public static BindableProperty ProgressThicknessProperty =
+    public static readonly BindableProperty ProgressThicknessProperty =
         BindableProperty.Create(nameof(ProgressThickness), typeof(double), typeof(CircularGauge), 12d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -61,7 +61,7 @@ public class CircularGauge : AuroraViewBase
     /// <summary>
     /// The progress color property.
     /// </summary>
-    public static BindableProperty ProgressColorProperty =
+    public static readonly BindableProperty ProgressColorProperty =
         BindableProperty.Create(nameof(ProgressColor), typeof(Color), typeof(CircularGauge), Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -78,7 +78,7 @@ public class CircularGauge : AuroraViewBase
     /// <summary>
     /// The progress background color property.
     /// </summary>
-    public static BindableProperty ProgressBackgroundColorProperty =
+    public static readonly BindableProperty ProgressBackgroundColorProperty =
         BindableProperty.Create(nameof(ProgressBackgroundColor), typeof(Color), typeof(CircularGauge), Colors.Gray,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -95,7 +95,7 @@ public class CircularGauge : AuroraViewBase
     /// <summary>
     /// The end cap type property.
     /// </summary>
-    public static BindableProperty EndCapTypeProperty =
+    public static readonly BindableProperty EndCapTypeProperty =
         BindableProperty.Create(nameof(EndCapType), typeof(EndCapType), typeof(CircularGauge), EndCapType.Rounded,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 

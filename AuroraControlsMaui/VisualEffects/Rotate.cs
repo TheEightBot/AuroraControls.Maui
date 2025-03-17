@@ -5,7 +5,7 @@ public class Rotate : VisualEffect
     /// <summary>
     /// The rotation degrees property.
     /// </summary>
-    public static BindableProperty RotationDegreesProperty =
+    public static readonly BindableProperty RotationDegreesProperty =
         BindableProperty.Create(nameof(RotationDegrees), typeof(float), typeof(Rotate), default(float));
 
     /// <summary>

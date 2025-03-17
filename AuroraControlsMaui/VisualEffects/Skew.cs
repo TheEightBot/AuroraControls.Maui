@@ -5,7 +5,7 @@ public class Skew : VisualEffect
     /// <summary>
     /// The skew degrees X property.
     /// </summary>
-    public static BindableProperty SkewDegreesXProperty =
+    public static readonly BindableProperty SkewDegreesXProperty =
         BindableProperty.Create(nameof(SkewDegreesX), typeof(double), typeof(Skew), default(double));
 
     /// <summary>
@@ -21,7 +21,7 @@ public class Skew : VisualEffect
     /// <summary>
     /// The skew degrees Y property.
     /// </summary>
-    public static BindableProperty SkewDegreesYProperty =
+    public static readonly BindableProperty SkewDegreesYProperty =
         BindableProperty.Create(nameof(SkewDegreesY), typeof(double), typeof(Skew), default(double));
 
     /// <summary>
@@ -38,7 +38,7 @@ public class Skew : VisualEffect
     /// The location of the skew as a percentage of the canvas
     /// Values are valid between 0..1.
     /// </summary>
-    public static BindableProperty LocationProperty =
+    public static readonly BindableProperty LocationProperty =
         BindableProperty.Create(nameof(Location), typeof(Point), typeof(Skew), new Point(.5d, .5d));
 
     /// <summary>

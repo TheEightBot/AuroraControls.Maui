@@ -9,7 +9,7 @@ public class Watermark : VisualEffect
         End,
     }
 
-    public static BindableProperty HorizontalWatermarkLocationProperty =
+    public static readonly BindableProperty HorizontalWatermarkLocationProperty =
         BindableProperty.Create(nameof(HorizontalWatermarkLocation), typeof(WatermarkLocation), typeof(Watermark), WatermarkLocation.End);
 
     public WatermarkLocation HorizontalWatermarkLocation
@@ -18,7 +18,7 @@ public class Watermark : VisualEffect
         set => SetValue(HorizontalWatermarkLocationProperty, value);
     }
 
-    public static BindableProperty VerticalWatermarkLocationProperty =
+    public static readonly BindableProperty VerticalWatermarkLocationProperty =
         BindableProperty.Create(nameof(VerticalWatermarkLocation), typeof(WatermarkLocation), typeof(Watermark), WatermarkLocation.End);
 
     public WatermarkLocation VerticalWatermarkLocation
@@ -27,7 +27,7 @@ public class Watermark : VisualEffect
         set => SetValue(VerticalWatermarkLocationProperty, value);
     }
 
-    public static BindableProperty WatermarkPaddingProperty =
+    public static readonly BindableProperty WatermarkPaddingProperty =
         BindableProperty.Create(nameof(WatermarkPadding), typeof(double), typeof(Watermark), 8d);
 
     public double WatermarkPadding
@@ -36,7 +36,7 @@ public class Watermark : VisualEffect
         set => SetValue(WatermarkPaddingProperty, value);
     }
 
-    public static BindableProperty WatermarkTextProperty =
+    public static readonly BindableProperty WatermarkTextProperty =
         BindableProperty.Create(nameof(WatermarkText), typeof(string), typeof(Watermark), default(string));
 
     public string WatermarkText
@@ -45,7 +45,7 @@ public class Watermark : VisualEffect
         set => SetValue(WatermarkTextProperty, value);
     }
 
-    public static BindableProperty FontSizeProperty =
+    public static readonly BindableProperty FontSizeProperty =
         BindableProperty.Create(nameof(FontSize), typeof(double), typeof(Watermark), 24d);
 
     public double FontSize
@@ -54,7 +54,7 @@ public class Watermark : VisualEffect
         set => SetValue(FontSizeProperty, value);
     }
 
-    public static BindableProperty TypefaceProperty =
+    public static readonly BindableProperty TypefaceProperty =
         BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(Watermark), default(SKTypeface));
 
     public SKTypeface Typeface
@@ -63,7 +63,7 @@ public class Watermark : VisualEffect
         set => SetValue(TypefaceProperty, value);
     }
 
-    public static BindableProperty ForegroundColorProperty =
+    public static readonly BindableProperty ForegroundColorProperty =
         BindableProperty.Create(nameof(ForegroundColor), typeof(Color), typeof(Watermark), Colors.White.MultiplyAlpha(.5f));
 
     public Color ForegroundColor
@@ -72,7 +72,7 @@ public class Watermark : VisualEffect
         set => SetValue(ForegroundColorProperty, value);
     }
 
-    public static BindableProperty BackgroundColorProperty =
+    public static readonly BindableProperty BackgroundColorProperty =
         BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(Watermark), default(Color));
 
     public Color BackgroundColor
@@ -81,7 +81,7 @@ public class Watermark : VisualEffect
         set => SetValue(BackgroundColorProperty, value);
     }
 
-    public static BindableProperty BackgroundCornerRadiusProperty =
+    public static readonly BindableProperty BackgroundCornerRadiusProperty =
         BindableProperty.Create(nameof(BackgroundCornerRadius), typeof(double), typeof(Watermark), 4d);
 
     public double BackgroundCornerRadius

@@ -5,7 +5,7 @@ public class Hue : VisualEffect
     /// <summary>
     /// The amount of hue.
     /// </summary>
-    public static BindableProperty HueAmountProperty =
+    public static readonly BindableProperty HueAmountProperty =
         BindableProperty.Create(nameof(HueAmount), typeof(double), typeof(Hue), 0d);
 
     /// <summary>

@@ -23,7 +23,7 @@ public class Rotate : ImageProcessingBase, IImageProcessor
     /// <value>The "ResizeImage" key.</value>
     public override string Key => nameof(Rotate);
 
-    public static BindableProperty RotationAmountProperty =
+    public static readonly BindableProperty RotationAmountProperty =
         BindableProperty.Create(nameof(RotationDegrees), typeof(object), typeof(Rotate), RotationDegrees.Zero);
 
     public RotationDegrees RotationAmount

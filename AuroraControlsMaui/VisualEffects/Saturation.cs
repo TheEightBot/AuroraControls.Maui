@@ -5,7 +5,7 @@ public class Saturation : VisualEffect
     /// <summary>
     /// The saturation amount property.
     /// </summary>
-    public static BindableProperty SaturationAmountProperty =
+    public static readonly BindableProperty SaturationAmountProperty =
         BindableProperty.Create(nameof(SaturationAmount), typeof(double), typeof(Saturation), 0d);
 
     /// <summary>

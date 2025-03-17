@@ -10,7 +10,7 @@ public class TouchDrawLettersImage : AuroraViewBase
     /// <summary>
     /// The source property.
     /// </summary>
-    public static BindableProperty SourceProperty =
+    public static readonly BindableProperty SourceProperty =
         BindableProperty.Create(nameof(Source), typeof(ImageSource), typeof(TouchDrawLettersImage), null,
             propertyChanged: async (bindable, oldValue, newValue) =>
             {
@@ -34,7 +34,7 @@ public class TouchDrawLettersImage : AuroraViewBase
         set { SetValue(SourceProperty, value); }
     }
 
-    public static BindableProperty DrawItemForegroundColorProperty =
+    public static readonly BindableProperty DrawItemForegroundColorProperty =
         BindableProperty.Create(nameof(DrawItemForegroundColor), typeof(Color), typeof(TouchDrawLettersImage),
             Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
@@ -45,7 +45,7 @@ public class TouchDrawLettersImage : AuroraViewBase
         set => SetValue(DrawItemForegroundColorProperty, value);
     }
 
-    public static BindableProperty DrawItemBackgroundColorProperty =
+    public static readonly BindableProperty DrawItemBackgroundColorProperty =
         BindableProperty.Create(nameof(DrawItemBackgroundColor), typeof(Color), typeof(TouchDrawLettersImage),
             Colors.Transparent,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
@@ -56,7 +56,7 @@ public class TouchDrawLettersImage : AuroraViewBase
         set => SetValue(DrawItemBackgroundColorProperty, value);
     }
 
-    public static BindableProperty BorderSizeProperty =
+    public static readonly BindableProperty BorderSizeProperty =
         BindableProperty.Create(nameof(BorderSize), typeof(double), typeof(TouchDrawLettersImage), 2d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -66,7 +66,7 @@ public class TouchDrawLettersImage : AuroraViewBase
         set => SetValue(BorderSizeProperty, value);
     }
 
-    public static BindableProperty FontSizeProperty =
+    public static readonly BindableProperty FontSizeProperty =
         BindableProperty.Create(nameof(FontSize), typeof(double), typeof(TouchDrawLettersImage),
             PlatformInfo.DefaultButtonFontSize,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
@@ -77,7 +77,7 @@ public class TouchDrawLettersImage : AuroraViewBase
         set => SetValue(FontSizeProperty, value);
     }
 
-    public static BindableProperty TypefaceProperty =
+    public static readonly BindableProperty TypefaceProperty =
         BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(TouchDrawLettersImage),
             default(SKTypeface),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
@@ -275,7 +275,7 @@ public class TouchDrawLettersImage : AuroraViewBase
 
 public class TouchDrawLetter : BindableObject
 {
-    public static BindableProperty ValueProperty =
+    public static readonly BindableProperty ValueProperty =
         BindableProperty.Create(nameof(Value), typeof(string), typeof(TouchDrawLetter), string.Empty);
 
     public string Value
@@ -284,7 +284,7 @@ public class TouchDrawLetter : BindableObject
         set => SetValue(ValueProperty, value);
     }
 
-    public static BindableProperty LocationProperty =
+    public static readonly BindableProperty LocationProperty =
         BindableProperty.Create(nameof(Location), typeof(Point), typeof(TouchDrawLetter), default(Point));
 
     public Point Location
@@ -293,7 +293,7 @@ public class TouchDrawLetter : BindableObject
         set => SetValue(LocationProperty, value);
     }
 
-    public static BindableProperty ForegroundColorOverrideProperty =
+    public static readonly BindableProperty ForegroundColorOverrideProperty =
         BindableProperty.Create(nameof(ForegroundColorOverride), typeof(Color), typeof(TouchDrawLetter),
             Colors.Transparent);
 
@@ -303,7 +303,7 @@ public class TouchDrawLetter : BindableObject
         set => SetValue(ForegroundColorOverrideProperty, value);
     }
 
-    public static BindableProperty BackgroundColorOverrideProperty =
+    public static readonly BindableProperty BackgroundColorOverrideProperty =
         BindableProperty.Create(nameof(BackgroundColorOverride), typeof(Color), typeof(TouchDrawLetter),
             Colors.Transparent);
 

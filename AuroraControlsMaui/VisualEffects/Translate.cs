@@ -5,7 +5,7 @@ public class Translate : VisualEffect
     /// <summary>
     /// The translation property.
     /// </summary>
-    public static BindableProperty TranslationProperty =
+    public static readonly BindableProperty TranslationProperty =
         BindableProperty.Create(nameof(Translation), typeof(Point), typeof(Translate), default(Point));
 
     /// <summary>

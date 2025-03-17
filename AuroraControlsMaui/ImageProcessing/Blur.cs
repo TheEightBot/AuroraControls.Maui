@@ -26,7 +26,7 @@ public class Blur : ImageProcessingBase, IImageProcessor
     /// <summary>
     /// The blur amount property.
     /// </summary>
-    public static BindableProperty BlurAmountProperty =
+    public static readonly BindableProperty BlurAmountProperty =
         BindableProperty.Create(nameof(BlurAmount), typeof(double), typeof(Blur), default(double));
 
     /// <summary>
@@ -42,7 +42,7 @@ public class Blur : ImageProcessingBase, IImageProcessor
     /// <summary>
     /// The blurring location property.
     /// </summary>
-    public static BindableProperty BlurringLocationProperty =
+    public static readonly BindableProperty BlurringLocationProperty =
         BindableProperty.Create(nameof(BlurringLocation), typeof(object), typeof(BlurLocation), BlurLocation.Full);
 
     /// <summary>

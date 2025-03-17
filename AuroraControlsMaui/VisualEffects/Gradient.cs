@@ -8,7 +8,7 @@ public class Gradient : VisualEffect
     /// <summary>
     /// The gradient rotation angle property.
     /// </summary>
-    public static BindableProperty GradientRotationAngleProperty =
+    public static readonly BindableProperty GradientRotationAngleProperty =
         BindableProperty.Create(nameof(GradientRotationAngle), typeof(double), typeof(Gradient), 0d);
 
     /// <summary>
@@ -24,7 +24,7 @@ public class Gradient : VisualEffect
     /// <summary>
     /// The gradient start color property.
     /// </summary>
-    public static BindableProperty GradientStartColorProperty =
+    public static readonly BindableProperty GradientStartColorProperty =
         BindableProperty.Create(nameof(GradientStartColor), typeof(Color), typeof(Gradient), default(Color));
 
     /// <summary>
@@ -40,7 +40,7 @@ public class Gradient : VisualEffect
     /// <summary>
     /// The gradient stop color property.
     /// </summary>
-    public static BindableProperty GradientStopColorProperty =
+    public static readonly BindableProperty GradientStopColorProperty =
         BindableProperty.Create(nameof(GradientStopColor), typeof(Color), typeof(Gradient), default(Color));
 
     /// <summary>

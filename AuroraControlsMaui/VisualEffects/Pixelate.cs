@@ -12,7 +12,7 @@ public class Pixelate : VisualEffect
     /// <summary>
     /// The pixel size property.
     /// </summary>
-    public static BindableProperty PixelSizeProperty =
+    public static readonly BindableProperty PixelSizeProperty =
         BindableProperty.Create(nameof(PixelSize), typeof(int), typeof(Pixelate), 10);
 
     /// <summary>
@@ -28,7 +28,7 @@ public class Pixelate : VisualEffect
     /// <summary>
     /// The pixel type property.
     /// </summary>
-    public static BindableProperty PixelTypeProperty =
+    public static readonly BindableProperty PixelTypeProperty =
         BindableProperty.Create(nameof(PixelType), typeof(PixelationPixelType), typeof(Pixelate), PixelationPixelType.Square);
 
     /// <summary>

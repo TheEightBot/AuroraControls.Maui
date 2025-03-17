@@ -13,7 +13,7 @@ public class NotificationBadge : AuroraViewBase
     /// <summary>
     /// The color of the badge.
     /// </summary>
-    public static BindableProperty BadgeColorProperty =
+    public static readonly BindableProperty BadgeColorProperty =
         BindableProperty.Create(nameof(BadgeColor), typeof(Color), typeof(NotificationBadge), Colors.Red.MultiplyAlpha(.8f),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -30,7 +30,7 @@ public class NotificationBadge : AuroraViewBase
     /// <summary>
     /// The font color.
     /// </summary>
-    public static BindableProperty FontColorProperty =
+    public static readonly BindableProperty FontColorProperty =
         BindableProperty.Create(nameof(FontColor), typeof(Color), typeof(NotificationBadge), Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -47,7 +47,7 @@ public class NotificationBadge : AuroraViewBase
     /// <summary>
     /// The symbol for when there are too many notifications.
     /// </summary>
-    public static BindableProperty TooManyNotificationsSymbolProperty =
+    public static readonly BindableProperty TooManyNotificationsSymbolProperty =
         BindableProperty.Create(nameof(TooManyNotificationsSymbol), typeof(string), typeof(NotificationBadge), "∞",
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -64,7 +64,7 @@ public class NotificationBadge : AuroraViewBase
     /// <summary>
     /// The font size.
     /// </summary>
-    public static BindableProperty FontSizeProperty =
+    public static readonly BindableProperty FontSizeProperty =
         BindableProperty.Create(nameof(FontSize), typeof(double), typeof(NotificationBadge), 16d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -81,7 +81,7 @@ public class NotificationBadge : AuroraViewBase
     /// <summary>
     /// The typeface.
     /// </summary>
-    public static BindableProperty TypefaceProperty =
+    public static readonly BindableProperty TypefaceProperty =
         BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(NotificationBadge), default(SKTypeface),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -98,7 +98,7 @@ public class NotificationBadge : AuroraViewBase
     /// <summary>
     /// The maximum badge size.
     /// </summary>
-    public static BindableProperty MaxBadgeSizeProperty =
+    public static readonly BindableProperty MaxBadgeSizeProperty =
         BindableProperty.Create(nameof(MaxBadgeSize), typeof(double), typeof(NotificationBadge), 0d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -115,7 +115,7 @@ public class NotificationBadge : AuroraViewBase
     /// <summary>
     /// The minimum badge size.
     /// </summary>
-    public static BindableProperty MinBadgeSizeProperty =
+    public static readonly BindableProperty MinBadgeSizeProperty =
         BindableProperty.Create(nameof(MinBadgeSize), typeof(double), typeof(NotificationBadge), 0d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -132,7 +132,7 @@ public class NotificationBadge : AuroraViewBase
     /// <summary>
     /// The property to hide the badge if the value is zero.
     /// </summary>
-    public static BindableProperty HideBadgeIfZeroProperty =
+    public static readonly BindableProperty HideBadgeIfZeroProperty =
         BindableProperty.Create(nameof(HideBadgeIfZero), typeof(bool), typeof(NotificationBadge), true,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -149,7 +149,7 @@ public class NotificationBadge : AuroraViewBase
     /// <summary>
     /// The has shadow property.
     /// </summary>
-    public static BindableProperty HasShadowProperty =
+    public static readonly BindableProperty HasShadowProperty =
         BindableProperty.Create(nameof(HasShadow), typeof(bool), typeof(NotificationBadge), true,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -166,7 +166,7 @@ public class NotificationBadge : AuroraViewBase
     /// <summary>
     /// The spread of the shadow.
     /// </summary>
-    public static BindableProperty ShadowSpreadProperty =
+    public static readonly BindableProperty ShadowSpreadProperty =
         BindableProperty.Create(nameof(ShadowSpread), typeof(double), typeof(NotificationBadge), 2d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -183,7 +183,7 @@ public class NotificationBadge : AuroraViewBase
     /// <summary>
     /// The notification count.
     /// </summary>
-    public static BindableProperty NotificationCountProperty =
+    public static readonly BindableProperty NotificationCountProperty =
         BindableProperty.Create(nameof(NotificationCount), typeof(int), typeof(NotificationBadge), default(int),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 

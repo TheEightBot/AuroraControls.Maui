@@ -17,7 +17,7 @@ public class Scale : ImageProcessingBase, IImageProcessor
     /// <summary>
     /// The scale amount property.
     /// </summary>
-    public static BindableProperty ScaleAmountProperty =
+    public static readonly BindableProperty ScaleAmountProperty =
         BindableProperty.Create(nameof(ScaleAmount), typeof(double), typeof(Scale), 1d);
 
     /// <summary>

@@ -9,7 +9,7 @@ public class Nofriendo : LoadingViewBase
     /// <summary>
     /// The step count property.
     /// </summary>
-    public static BindableProperty CurrentAnimationStepProperty =
+    public static readonly BindableProperty CurrentAnimationStepProperty =
         BindableProperty.Create(nameof(CurrentAnimationStep), typeof(int), typeof(Nofriendo), 0, BindingMode.OneWayToSource,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -26,7 +26,7 @@ public class Nofriendo : LoadingViewBase
     /// <summary>
     /// The step count property.
     /// </summary>
-    public static BindableProperty StepCountProperty =
+    public static readonly BindableProperty StepCountProperty =
         BindableProperty.Create(nameof(StepCount), typeof(int), typeof(Nofriendo), 1,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -43,7 +43,7 @@ public class Nofriendo : LoadingViewBase
     /// <summary>
     /// The maximum animation steps property.
     /// </summary>
-    public static BindableProperty MaxAnimationStepsProperty =
+    public static readonly BindableProperty MaxAnimationStepsProperty =
         BindableProperty.Create(nameof(MaxAnimationSteps), typeof(int), typeof(Nofriendo), 3);
 
     /// <summary>
@@ -59,7 +59,7 @@ public class Nofriendo : LoadingViewBase
     /// <summary>
     /// The loading start color property.
     /// </summary>
-    public static BindableProperty LoadingStartColorProperty =
+    public static readonly BindableProperty LoadingStartColorProperty =
         BindableProperty.Create(nameof(LoadingStartColor), typeof(Color), typeof(Nofriendo), default(Color),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -76,7 +76,7 @@ public class Nofriendo : LoadingViewBase
     /// <summary>
     /// The loading end color property.
     /// </summary>
-    public static BindableProperty LoadingEndColorProperty =
+    public static readonly BindableProperty LoadingEndColorProperty =
         BindableProperty.Create(nameof(LoadingEndColor), typeof(Color), typeof(Nofriendo), default(Color),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 

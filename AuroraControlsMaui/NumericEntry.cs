@@ -13,7 +13,7 @@ public enum NumericEntryValueType
 
 public class NumericEntry : Entry
 {
-    public static BindableProperty CultureInfoProperty =
+    public static readonly BindableProperty CultureInfoProperty =
         BindableProperty.Create(nameof(CultureInfo), typeof(CultureInfo), typeof(NumericEntry), CultureInfo.CurrentUICulture);
 
     public CultureInfo CultureInfo
@@ -22,7 +22,7 @@ public class NumericEntry : Entry
         set { SetValue(CultureInfoProperty, value); }
     }
 
-    public static BindableProperty ValueTypeProperty =
+    public static readonly BindableProperty ValueTypeProperty =
         BindableProperty.Create(nameof(ValueType), typeof(NumericEntryValueType), typeof(NumericEntry), NumericEntryValueType.Double);
 
     public NumericEntryValueType ValueType

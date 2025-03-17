@@ -30,23 +30,24 @@ public class ToggleBox : AuroraViewBase
     /// <summary>
     /// The state of the toggle.
     /// </summary>
-    public static BindableProperty IsToggledProperty =
+    public static readonly BindableProperty IsToggledProperty =
         BindableProperty.Create(
             nameof(IsToggled),
             typeof(bool),
             typeof(ToggleBox),
             false,
+            BindingMode.TwoWay,
             propertyChanged:
-            (bindable, _, newValue) =>
-            {
-                if (bindable is not ToggleBox tb || newValue is not bool boolVal)
+                (bindable, _, newValue) =>
                 {
-                    return;
-                }
+                    if (bindable is not ToggleBox tb || newValue is not bool boolVal)
+                    {
+                        return;
+                    }
 
-                tb.InvalidateSurface();
-                tb.Toggled?.Invoke(tb, boolVal);
-            });
+                    tb.InvalidateSurface();
+                    tb.Toggled?.Invoke(tb, boolVal);
+                });
 
     /// <summary>
     /// Gets or sets a value indicating whether the box is toggled or not.
@@ -61,7 +62,7 @@ public class ToggleBox : AuroraViewBase
     /// <summary>
     /// The border color.
     /// </summary>
-    public static BindableProperty BorderColorProperty =
+    public static readonly BindableProperty BorderColorProperty =
         BindableProperty.Create(
             nameof(BorderColor),
             typeof(Color),
@@ -103,7 +104,7 @@ public class ToggleBox : AuroraViewBase
     /// <summary>
     /// The color of the background when toggled.
     /// </summary>
-    public static BindableProperty ToggledBackgroundColorProperty =
+    public static readonly BindableProperty ToggledBackgroundColorProperty =
         BindableProperty.Create(
             nameof(ToggledBackgroundColor),
             typeof(Color),
@@ -124,7 +125,7 @@ public class ToggleBox : AuroraViewBase
     /// <summary>
     /// The color of the checkmark.
     /// </summary>
-    public static BindableProperty CheckColorProperty =
+    public static readonly BindableProperty CheckColorProperty =
         BindableProperty.Create(
             nameof(CheckColor),
             typeof(Color),
@@ -145,7 +146,7 @@ public class ToggleBox : AuroraViewBase
     /// <summary>
     /// The border width.
     /// </summary>
-    public static BindableProperty BorderWidthProperty =
+    public static readonly BindableProperty BorderWidthProperty =
         BindableProperty.Create(
             nameof(BorderWidth),
             typeof(int),
@@ -166,7 +167,7 @@ public class ToggleBox : AuroraViewBase
     /// <summary>
     /// The width of the checkmark.
     /// </summary>
-    public static BindableProperty MarkWidthProperty =
+    public static readonly BindableProperty MarkWidthProperty =
         BindableProperty.Create(
             nameof(MarkWidth),
             typeof(int),
@@ -184,7 +185,7 @@ public class ToggleBox : AuroraViewBase
         set => SetValue(MarkWidthProperty, value);
     }
 
-    public static BindableProperty CornerRadiusProperty =
+    public static readonly BindableProperty CornerRadiusProperty =
         BindableProperty.Create(
             nameof(CornerRadius),
             typeof(double),
@@ -201,7 +202,7 @@ public class ToggleBox : AuroraViewBase
     /// <summary>
     /// The shape of the checkbox.
     /// </summary>
-    public static BindableProperty ShapeProperty =
+    public static readonly BindableProperty ShapeProperty =
         BindableProperty.Create(
             nameof(Shape),
             typeof(ToggleBoxShape),
@@ -222,7 +223,7 @@ public class ToggleBox : AuroraViewBase
     /// <summary>
     /// The type of checkmark used.
     /// </summary>
-    public static BindableProperty CheckTypeProperty =
+    public static readonly BindableProperty CheckTypeProperty =
         BindableProperty.Create(
             nameof(ToggleBoxCheckType),
             typeof(ToggleBoxCheckType),
@@ -243,7 +244,7 @@ public class ToggleBox : AuroraViewBase
     /// <summary>
     /// The value of the checkbox.
     /// </summary>
-    public static BindableProperty ValueProperty =
+    public static readonly BindableProperty ValueProperty =
         BindableProperty.Create(nameof(Value), typeof(object), typeof(ToggleBox));
 
     /// <summary>

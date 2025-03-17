@@ -5,7 +5,7 @@ namespace AuroraControls.Effects;
 /// </summary>
 public class RoundedCornersEffect : RoutingEffect
 {
-    public static BindableProperty HasRoundedCornersProperty =
+    public static readonly BindableProperty HasRoundedCornersProperty =
         BindableProperty.Create("HasRoundedCorners", typeof(bool), typeof(RoundedCornersEffect), default(bool),
             propertyChanged:
             (BindableObject bindable, object oldValue, object newValue) =>

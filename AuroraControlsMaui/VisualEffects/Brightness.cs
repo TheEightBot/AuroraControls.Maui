@@ -5,7 +5,7 @@ public class Brightness : VisualEffect
     /// <summary>
     /// The brightness amount property.
     /// </summary>
-    public static BindableProperty BrightnessAmountProperty =
+    public static readonly BindableProperty BrightnessAmountProperty =
         BindableProperty.Create(nameof(BrightnessAmount), typeof(double), typeof(Brightness), 0d);
 
     /// <summary>

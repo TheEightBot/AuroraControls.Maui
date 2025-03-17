@@ -20,7 +20,7 @@ public class Contrast : VisualEffect
     /// <summary>
     /// The contrast amount property.
     /// </summary>
-    public static BindableProperty ContrastAmountProperty =
+    public static readonly BindableProperty ContrastAmountProperty =
         BindableProperty.Create(nameof(ContrastAmount), typeof(int), typeof(Contrast), 0);
 
     /// <summary>

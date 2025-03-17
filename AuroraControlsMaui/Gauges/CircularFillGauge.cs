@@ -10,7 +10,7 @@ public class CircularFillGauge : AuroraViewBase
     /// <summary>
     /// The progress percentage property.
     /// </summary>
-    public static BindableProperty ProgressPercentageProperty =
+    public static readonly BindableProperty ProgressPercentageProperty =
         BindableProperty.Create(nameof(ProgressPercentage), typeof(double), typeof(CircularFillGauge), default(double),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -27,7 +27,7 @@ public class CircularFillGauge : AuroraViewBase
     /// <summary>
     /// The progress color property.
     /// </summary>
-    public static BindableProperty ProgressColorProperty =
+    public static readonly BindableProperty ProgressColorProperty =
         BindableProperty.Create(nameof(ProgressColor), typeof(Color), typeof(CircularFillGauge), Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -44,7 +44,7 @@ public class CircularFillGauge : AuroraViewBase
     /// <summary>
     /// The progress background color property.
     /// </summary>
-    public static BindableProperty ProgressBackgroundColorProperty =
+    public static readonly BindableProperty ProgressBackgroundColorProperty =
         BindableProperty.Create(nameof(ProgressBackgroundColor), typeof(Color), typeof(CircularFillGauge), Colors.Gray,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 

@@ -15,7 +15,7 @@ public class MaterialCircular : SceneViewBase
     /// <summary>
     /// The foreground color property. Specifies the foreground color.
     /// </summary>
-    public static BindableProperty ForegroundLoadingColorProperty =
+    public static readonly BindableProperty ForegroundLoadingColorProperty =
         BindableProperty.Create(nameof(ForegroundLoadingColor), typeof(Color), typeof(MaterialCircular), Colors.LightBlue,
             propertyChanged:
                 static (bindable, _, newValue) =>
@@ -40,7 +40,7 @@ public class MaterialCircular : SceneViewBase
     /// <summary>
     /// The background color property.
     /// </summary>
-    public static BindableProperty BackgroundLoadingColorProperty =
+    public static readonly BindableProperty BackgroundLoadingColorProperty =
         BindableProperty.Create(nameof(BackgroundLoadingColor), typeof(Color), typeof(MaterialCircular), Colors.White,
             propertyChanged:
                 static (bindable, _, newValue) =>
@@ -65,7 +65,7 @@ public class MaterialCircular : SceneViewBase
     /// <summary>
     /// The end cap type property.
     /// </summary>
-    public static BindableProperty EndCapTypeProperty =
+    public static readonly BindableProperty EndCapTypeProperty =
         BindableProperty.Create(nameof(EndCapType), typeof(EndCapType), typeof(MaterialCircular), EndCapType.Rounded,
             propertyChanged:
                 static (bindable, _, newValue) =>
@@ -97,7 +97,7 @@ public class MaterialCircular : SceneViewBase
     /// <summary>
     /// The progress thickness property.
     /// </summary>
-    public static BindableProperty ProgressThicknessProperty =
+    public static readonly BindableProperty ProgressThicknessProperty =
         BindableProperty.Create(nameof(ProgressThickness), typeof(double), typeof(MaterialCircular), 6d,
             propertyChanged:
                 static (bindable, _, newValue) =>

@@ -16,7 +16,7 @@ public class GradientColorView : AuroraViewBase
     /// <summary>
     /// The gradient rotation angle property.
     /// </summary>
-    public static BindableProperty GradientRotationAngleProperty =
+    public static readonly BindableProperty GradientRotationAngleProperty =
         BindableProperty.Create(nameof(GradientRotationAngle), typeof(double), typeof(GradientColorView), 0d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -33,7 +33,7 @@ public class GradientColorView : AuroraViewBase
     /// <summary>
     /// The gradient start color property.
     /// </summary>
-    public static BindableProperty GradientStartColorProperty =
+    public static readonly BindableProperty GradientStartColorProperty =
         BindableProperty.Create(nameof(GradientStartColor), typeof(Color), typeof(GradientColorView), default(Color),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -50,7 +50,7 @@ public class GradientColorView : AuroraViewBase
     /// <summary>
     /// The gradient stop color property.
     /// </summary>
-    public static BindableProperty GradientStopColorProperty =
+    public static readonly BindableProperty GradientStopColorProperty =
         BindableProperty.Create(nameof(GradientStopColor), typeof(Color), typeof(GradientColorView), default(Color),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -67,7 +67,7 @@ public class GradientColorView : AuroraViewBase
     /// <summary>
     /// The ripples property specifies whether the ripple animation should be performed.
     /// </summary>
-    public static BindableProperty RipplesProperty =
+    public static readonly BindableProperty RipplesProperty =
         BindableProperty.Create(nameof(Ripples), typeof(bool), typeof(GradientColorView), true,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -84,7 +84,7 @@ public class GradientColorView : AuroraViewBase
     /// <summary>
     /// The tap animation duration property.
     /// </summary>
-    public static BindableProperty TapAnimationDurationProperty =
+    public static readonly BindableProperty TapAnimationDurationProperty =
         BindableProperty.Create(nameof(TapAnimationDuration), typeof(uint), typeof(GradientColorView), 40u,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -102,7 +102,7 @@ public class GradientColorView : AuroraViewBase
     /// <summary>
     /// The command property. Fires on tap.
     /// </summary>
-    public static BindableProperty CommandProperty =
+    public static readonly BindableProperty CommandProperty =
         BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(GradientColorView), default(ICommand));
 
     /// <summary>
@@ -118,7 +118,7 @@ public class GradientColorView : AuroraViewBase
     /// <summary>
     /// The command parameter property.
     /// </summary>
-    public static BindableProperty CommandParameterProperty =
+    public static readonly BindableProperty CommandParameterProperty =
         BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(GradientColorView), default(object));
 
     /// <summary>

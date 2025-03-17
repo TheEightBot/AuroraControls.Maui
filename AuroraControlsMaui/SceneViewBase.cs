@@ -53,7 +53,7 @@ public abstract class SceneViewBase : AuroraViewBase
         }
     }
 
-    public static BindableProperty LengthProperty =
+    public static readonly BindableProperty LengthProperty =
         BindableProperty
             .Create(
                 nameof(Length), typeof(uint), typeof(SceneViewBase), 1600u,
@@ -72,7 +72,7 @@ public abstract class SceneViewBase : AuroraViewBase
         set => SetValue(LengthProperty, value);
     }
 
-    public static BindableProperty RateProperty =
+    public static readonly BindableProperty RateProperty =
         BindableProperty
             .Create(
                 nameof(Rate), typeof(uint), typeof(SceneViewBase), 16u,
@@ -96,7 +96,7 @@ public abstract class SceneViewBase : AuroraViewBase
         get => _ticker?.IsRunning ?? false;
     }
 
-    public static BindableProperty EasingFunctionProperty =
+    public static readonly BindableProperty EasingFunctionProperty =
         BindableProperty.Create(nameof(EasingFunction), typeof(Easings.Functions), typeof(SceneViewBase), default(Easings.Functions),
                 propertyChanged:
                     static (bindable, _, newValue) =>

@@ -35,7 +35,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// The embedded svg image name property.
     /// </summary>
-    public static BindableProperty EmbeddedImageNameProperty =
+    public static readonly BindableProperty EmbeddedImageNameProperty =
         BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(Tile), null,
             propertyChanged:
                 static (bindable, _, _) =>
@@ -60,7 +60,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// The maximum embedded image size property.
     /// </summary>
-    public static BindableProperty MaxImageSizeProperty =
+    public static readonly BindableProperty MaxImageSizeProperty =
         BindableProperty.Create(nameof(MaxImageSize), typeof(Size), typeof(Tile), default(Size),
             propertyChanged:
                 static (bindable, _, _) =>
@@ -84,7 +84,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// The overlay color property.
     /// </summary>
-    public static BindableProperty OverlayColorProperty =
+    public static readonly BindableProperty OverlayColorProperty =
         BindableProperty.Create(nameof(OverlayColor), typeof(Color), typeof(Tile), Colors.Transparent,
             propertyChanged: static (bindable, _, _) =>
             {
@@ -107,7 +107,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// The button background color property.
     /// </summary>
-    public static BindableProperty ButtonBackgroundColorProperty =
+    public static readonly BindableProperty ButtonBackgroundColorProperty =
         BindableProperty.Create(nameof(ButtonBackgroundColor), typeof(Color), typeof(Tile), Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -124,7 +124,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// The color property of the border.
     /// </summary>
-    public static BindableProperty BorderColorProperty =
+    public static readonly BindableProperty BorderColorProperty =
         BindableProperty.Create(nameof(BorderColor), typeof(Color), typeof(Tile), Colors.White,
                                 propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -141,7 +141,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// The shadow color property.
     /// </summary>
-    public static BindableProperty ShadowColorProperty =
+    public static readonly BindableProperty ShadowColorProperty =
         BindableProperty.Create(nameof(ShadowColor), typeof(Color), typeof(Tile), Color.FromRgba(0d, 0d, 0d, .33d),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -158,7 +158,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// The shadow location property.
     /// </summary>
-    public static BindableProperty ShadowLocationProperty =
+    public static readonly BindableProperty ShadowLocationProperty =
         BindableProperty.Create(nameof(ShadowLocation), typeof(Point), typeof(Tile), new Point(0, 3),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -175,7 +175,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// The shadow blur radius property.
     /// </summary>
-    public static BindableProperty ShadowBlurRadiusProperty =
+    public static readonly BindableProperty ShadowBlurRadiusProperty =
         BindableProperty.Create(nameof(ShadowBlurRadius), typeof(double), typeof(Tile), default(double),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -192,7 +192,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// The border width property.
     /// </summary>
-    public static BindableProperty BorderWidthProperty =
+    public static readonly BindableProperty BorderWidthProperty =
         BindableProperty.Create(nameof(BorderWidth), typeof(double), typeof(Tile), 0d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -209,7 +209,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// The corner radius property.
     /// </summary>
-    public static BindableProperty CornerRadiusProperty =
+    public static readonly BindableProperty CornerRadiusProperty =
         BindableProperty.Create(nameof(CornerRadius), typeof(double), typeof(Tile), 4d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -226,7 +226,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// The tiles text property.
     /// </summary>
-    public static BindableProperty TextProperty =
+    public static readonly BindableProperty TextProperty =
         BindableProperty.Create(nameof(Text), typeof(string), typeof(Tile), default(string),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -243,7 +243,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// The font color property.
     /// </summary>
-    public static BindableProperty FontColorProperty =
+    public static readonly BindableProperty FontColorProperty =
         BindableProperty.Create(nameof(FontColor), typeof(Color), typeof(Tile), Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -260,7 +260,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// The font size property.
     /// </summary>
-    public static BindableProperty FontSizeProperty =
+    public static readonly BindableProperty FontSizeProperty =
         BindableProperty.Create(nameof(FontSize), typeof(double), typeof(Tile), PlatformInfo.DefaultButtonFontSize,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -277,7 +277,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// The typeface property.
     /// </summary>
-    public static BindableProperty TypefaceProperty =
+    public static readonly BindableProperty TypefaceProperty =
         BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(Tile), default(SKTypeface),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -291,7 +291,7 @@ public class Tile : AuroraViewBase
         set { SetValue(TypefaceProperty, value); }
     }
 
-    public static BindableProperty IsIconifiedTextProperty =
+    public static readonly BindableProperty IsIconifiedTextProperty =
         BindableProperty.Create(nameof(IsIconifiedText), typeof(bool), typeof(Tile), default(bool),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -304,7 +304,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// The ripples property specifies whether the ripple animation should be performed.
     /// </summary>
-    public static BindableProperty RipplesProperty =
+    public static readonly BindableProperty RipplesProperty =
         BindableProperty.Create(nameof(Ripples), typeof(bool), typeof(Tile), true,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -321,7 +321,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// The tap animation duration property.
     /// </summary>
-    public static BindableProperty TapAnimationDurationProperty =
+    public static readonly BindableProperty TapAnimationDurationProperty =
         BindableProperty.Create(nameof(TapAnimationDuration), typeof(uint), typeof(Tile), 40u,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -338,7 +338,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// The command property. Fires on tap.
     /// </summary>
-    public static BindableProperty CommandProperty =
+    public static readonly BindableProperty CommandProperty =
         BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(Tile), default(ICommand));
 
     /// <summary>
@@ -354,7 +354,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// The command parameter property.
     /// </summary>
-    public static BindableProperty CommandParameterProperty =
+    public static readonly BindableProperty CommandParameterProperty =
         BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(Tile), default(object));
 
     /// <summary>
@@ -388,7 +388,7 @@ public class Tile : AuroraViewBase
         }
     }
 
-    public static BindableProperty ContentPaddingProperty =
+    public static readonly BindableProperty ContentPaddingProperty =
         BindableProperty.Create(nameof(ContentPadding), typeof(Thickness), typeof(Tile), default(Thickness),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -398,7 +398,7 @@ public class Tile : AuroraViewBase
         set { SetValue(ContentPaddingProperty, value); }
     }
 
-    public static BindableProperty NotificationBadgeProperty =
+    public static readonly BindableProperty NotificationBadgeProperty =
         BindableProperty.Create(nameof(NotificationBadge), typeof(NotificationBadge), typeof(Tile), default(NotificationBadge));
 
     public NotificationBadge NotificationBadge
