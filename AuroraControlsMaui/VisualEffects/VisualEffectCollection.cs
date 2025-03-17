@@ -23,10 +23,7 @@ public class VisualEffectCollection : BindableObject, IList<VisualEffect>, INoti
         }
     }
 
-    public int IndexOf(VisualEffect item)
-    {
-        return this._items.IndexOf(item);
-    }
+    public int IndexOf(VisualEffect item) => this._items.IndexOf(item);
 
     public void Insert(int index, VisualEffect item)
     {
@@ -52,10 +49,7 @@ public class VisualEffectCollection : BindableObject, IList<VisualEffect>, INoti
 
     public VisualEffect this[int index]
     {
-        get
-        {
-            return this._items[index];
-        }
+        get => this._items[index];
 
         set
         {
@@ -103,10 +97,7 @@ public class VisualEffectCollection : BindableObject, IList<VisualEffect>, INoti
         CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
     }
 
-    public bool Contains(VisualEffect item)
-    {
-        return this._items.Contains(item);
-    }
+    public bool Contains(VisualEffect item) => this._items.Contains(item);
 
     public void CopyTo(VisualEffect[] array, int arrayIndex)
     {
@@ -135,28 +126,13 @@ public class VisualEffectCollection : BindableObject, IList<VisualEffect>, INoti
         return false;
     }
 
-    public int Count
-    {
-        get { return this._items.Count; }
-    }
+    public int Count => this._items.Count;
 
-    public bool IsReadOnly
-    {
-        get { return false; }
-    }
+    public bool IsReadOnly => false;
 
-    public IEnumerator<VisualEffect> GetEnumerator()
-    {
-        return this._items.GetEnumerator();
-    }
+    public IEnumerator<VisualEffect> GetEnumerator() => this._items.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-    private void HandlePropertyChangedEventHandler(object sender, PropertyChangedEventArgs e)
-    {
-        EffectPropertyChanged?.Invoke(sender, e);
-    }
+    private void HandlePropertyChangedEventHandler(object sender, PropertyChangedEventArgs e) => EffectPropertyChanged?.Invoke(sender, e);
 }

@@ -8,7 +8,7 @@ public abstract class VisualEffect : BindableObject
     /// <summary>
     /// The enabled property.
     /// </summary>
-    public static BindableProperty EnabledProperty =
+    public static readonly BindableProperty EnabledProperty =
         BindableProperty.Create(nameof(Enabled), typeof(bool), typeof(VisualEffect), true);
 
     /// <summary>

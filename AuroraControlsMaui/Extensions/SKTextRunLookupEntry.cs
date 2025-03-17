@@ -49,20 +49,11 @@ public class SKTextRunLookupEntry : IDisposable
         return assembly.GetManifestResourceStream(resourceName);
     }
 
-    public Stream GetManifestFontStream(string resourceName)
-    {
-        return GetManifestFontStream(GetType(), resourceName);
-    }
+    public Stream GetManifestFontStream(string resourceName) => GetManifestFontStream(GetType(), resourceName);
 
-    public static SKTypeface GetManifestTypeface(Type type, string resourceName)
-    {
-        return SKTypeface.FromStream(GetManifestFontStream(type, resourceName));
-    }
+    public static SKTypeface GetManifestTypeface(Type type, string resourceName) => SKTypeface.FromStream(GetManifestFontStream(type, resourceName));
 
-    public SKTypeface GetManifestTypeface(string resourceName)
-    {
-        return GetManifestTypeface(GetType(), resourceName);
-    }
+    public SKTypeface GetManifestTypeface(string resourceName) => GetManifestTypeface(GetType(), resourceName);
 
     protected virtual void Dispose(bool disposing)
     {
@@ -75,5 +66,6 @@ public class SKTextRunLookupEntry : IDisposable
     public void Dispose()
     {
         Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }

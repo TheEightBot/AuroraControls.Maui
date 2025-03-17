@@ -114,14 +114,8 @@ public class ShadowPlatformEffect : PlatformEffect
     {
         private int _radius;
 
-        public RoundedViewOutline(int radius)
-        {
-            _radius = radius;
-        }
+        public RoundedViewOutline(int radius) => _radius = radius;
 
-        public override void GetOutline(Android.Views.View view, Outline outline)
-        {
-            outline.SetRoundRect(0, 0, view.Width, view.Height, _radius);
-        }
+        public override void GetOutline(Android.Views.View view, Outline outline) => outline.SetRoundRect(0, 0, view.Width, view.Height, _radius);
     }
 }

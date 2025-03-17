@@ -30,18 +30,12 @@ public static class RegisteredImageProcessors
     /// </summary>
     /// <returns>result as an IImageProcessor.</returns>
     /// <param name="key">Key/name of processor.</param>
-    public static IImageProcessor GetProcessor(string key)
-    {
-        return _imageProcessors.ContainsKey(key) ? _imageProcessors[key] : null;
-    }
+    public static IImageProcessor GetProcessor(string key) => _imageProcessors.ContainsKey(key) ? _imageProcessors[key] : null;
 
     /// <summary>
     /// Sets the processor.
     /// </summary>
     /// <param name="key">Key.</param>
     /// <param name="imageProcessor">Image processor.</param>
-    public static void SetProcessor(string key, IImageProcessor imageProcessor)
-    {
-        _imageProcessors[key] = imageProcessor;
-    }
+    public static void SetProcessor(string key, IImageProcessor imageProcessor) => _imageProcessors[key] = imageProcessor;
 }

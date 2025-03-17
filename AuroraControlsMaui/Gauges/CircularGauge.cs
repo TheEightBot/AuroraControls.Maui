@@ -10,7 +10,7 @@ public class CircularGauge : AuroraViewBase
     /// <summary>
     /// The progress starting degree property.
     /// </summary>
-    public static BindableProperty StartingDegreeProperty =
+    public static readonly BindableProperty StartingDegreeProperty =
         BindableProperty.Create(nameof(StartingDegree), typeof(double), typeof(CircularGauge), default(double),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -20,14 +20,14 @@ public class CircularGauge : AuroraViewBase
     /// <value>The starting degree as a double. Default value is default(double).</value>
     public double StartingDegree
     {
-        get { return (double)GetValue(StartingDegreeProperty); }
-        set { SetValue(StartingDegreeProperty, value.Clamp(-360, 360)); }
+        get => (double)GetValue(StartingDegreeProperty);
+        set => SetValue(StartingDegreeProperty, value.Clamp(-360, 360));
     }
 
     /// <summary>
     /// The progress ending degree property.
     /// </summary>
-    public static BindableProperty EndingDegreeProperty =
+    public static readonly BindableProperty EndingDegreeProperty =
         BindableProperty.Create(nameof(EndingDegree), typeof(double), typeof(CircularGauge), default(double),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -37,14 +37,14 @@ public class CircularGauge : AuroraViewBase
     /// <value>The ending degree as a double. Default value is default(double).</value>
     public double EndingDegree
     {
-        get { return (double)GetValue(EndingDegreeProperty); }
-        set { SetValue(EndingDegreeProperty, value.Clamp(-360, 360)); }
+        get => (double)GetValue(EndingDegreeProperty);
+        set => SetValue(EndingDegreeProperty, value.Clamp(-360, 360));
     }
 
     /// <summary>
     /// The progress thickness property.
     /// </summary>
-    public static BindableProperty ProgressThicknessProperty =
+    public static readonly BindableProperty ProgressThicknessProperty =
         BindableProperty.Create(nameof(ProgressThickness), typeof(double), typeof(CircularGauge), 12d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -54,14 +54,14 @@ public class CircularGauge : AuroraViewBase
     /// <value>Takes a double. Default value is 12d.</value>
     public double ProgressThickness
     {
-        get { return (double)GetValue(ProgressThicknessProperty); }
-        set { SetValue(ProgressThicknessProperty, value); }
+        get => (double)GetValue(ProgressThicknessProperty);
+        set => SetValue(ProgressThicknessProperty, value);
     }
 
     /// <summary>
     /// The progress color property.
     /// </summary>
-    public static BindableProperty ProgressColorProperty =
+    public static readonly BindableProperty ProgressColorProperty =
         BindableProperty.Create(nameof(ProgressColor), typeof(Color), typeof(CircularGauge), Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -71,14 +71,14 @@ public class CircularGauge : AuroraViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Default.</value>
     public Color ProgressColor
     {
-        get { return (Color)GetValue(ProgressColorProperty); }
-        set { SetValue(ProgressColorProperty, value); }
+        get => (Color)GetValue(ProgressColorProperty);
+        set => SetValue(ProgressColorProperty, value);
     }
 
     /// <summary>
     /// The progress background color property.
     /// </summary>
-    public static BindableProperty ProgressBackgroundColorProperty =
+    public static readonly BindableProperty ProgressBackgroundColorProperty =
         BindableProperty.Create(nameof(ProgressBackgroundColor), typeof(Color), typeof(CircularGauge), Colors.Gray,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -88,14 +88,14 @@ public class CircularGauge : AuroraViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Default.</value>
     public Color ProgressBackgroundColor
     {
-        get { return (Color)GetValue(ProgressBackgroundColorProperty); }
-        set { SetValue(ProgressBackgroundColorProperty, value); }
+        get => (Color)GetValue(ProgressBackgroundColorProperty);
+        set => SetValue(ProgressBackgroundColorProperty, value);
     }
 
     /// <summary>
     /// The end cap type property.
     /// </summary>
-    public static BindableProperty EndCapTypeProperty =
+    public static readonly BindableProperty EndCapTypeProperty =
         BindableProperty.Create(nameof(EndCapType), typeof(EndCapType), typeof(CircularGauge), EndCapType.Rounded,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -105,14 +105,11 @@ public class CircularGauge : AuroraViewBase
     /// <value>Takes an EndCapType. Default is EndCapType.Rounded.</value>
     public EndCapType EndCapType
     {
-        get { return (EndCapType)GetValue(EndCapTypeProperty); }
-        set { SetValue(EndCapTypeProperty, value); }
+        get => (EndCapType)GetValue(EndCapTypeProperty);
+        set => SetValue(EndCapTypeProperty, value);
     }
 
-    public CircularGauge()
-    {
-        MinimumHeightRequest = IAuroraView.StandardControlHeight;
-    }
+    public CircularGauge() => MinimumHeightRequest = IAuroraView.StandardControlHeight;
 
     /// <summary>
     /// This is the method used to draw our control on the SKCanvas. This method is fired every time <c>this.InvalidateSurface();</c> is called, resulting in a "redrawing" of the control.

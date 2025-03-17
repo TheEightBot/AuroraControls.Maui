@@ -17,7 +17,7 @@ public class Scale : ImageProcessingBase, IImageProcessor
     /// <summary>
     /// The scale amount property.
     /// </summary>
-    public static BindableProperty ScaleAmountProperty =
+    public static readonly BindableProperty ScaleAmountProperty =
         BindableProperty.Create(nameof(ScaleAmount), typeof(double), typeof(Scale), 1d);
 
     /// <summary>
@@ -26,8 +26,8 @@ public class Scale : ImageProcessingBase, IImageProcessor
     /// <value>Expects a double. Default value is 1d.</value>
     public double ScaleAmount
     {
-        get { return (double)GetValue(ScaleAmountProperty); }
-        set { SetValue(ScaleAmountProperty, value); }
+        get => (double)GetValue(ScaleAmountProperty);
+        set => SetValue(ScaleAmountProperty, value);
     }
 
     /// <summary>

@@ -49,7 +49,7 @@ public class CalendarView : AuroraViewBase
     /// <summary>
     /// The current year property. Updating this property causes the surface to redraw.
     /// </summary>
-    public static BindableProperty CurrentYearProperty =
+    public static readonly BindableProperty CurrentYearProperty =
         BindableProperty.Create(nameof(CurrentYear), typeof(int), typeof(CalendarView), DateTime.Now.Year,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
@@ -86,14 +86,14 @@ public class CalendarView : AuroraViewBase
     /// <value>The current year.</value>
     public int CurrentYear
     {
-        get { return (int)GetValue(CurrentYearProperty); }
-        set { SetValue(CurrentYearProperty, value); }
+        get => (int)GetValue(CurrentYearProperty);
+        set => SetValue(CurrentYearProperty, value);
     }
 
     /// <summary>
     /// The current month property. Updating this property causes the surface to redraw.
     /// </summary>
-    public static BindableProperty CurrentMonthProperty =
+    public static readonly BindableProperty CurrentMonthProperty =
         BindableProperty.Create(nameof(CurrentMonth), typeof(int), typeof(CalendarView), DateTime.Now.Month,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
@@ -130,14 +130,14 @@ public class CalendarView : AuroraViewBase
     /// <value>int value that represents the current month.</value>
     public int CurrentMonth
     {
-        get { return (int)GetValue(CurrentMonthProperty); }
-        set { SetValue(CurrentMonthProperty, value); }
+        get => (int)GetValue(CurrentMonthProperty);
+        set => SetValue(CurrentMonthProperty, value);
     }
 
     /// <summary>
     /// The maximum date property used to define the maximum date.
     /// </summary>
-    public static BindableProperty MaximumDateProperty =
+    public static readonly BindableProperty MaximumDateProperty =
         BindableProperty.Create(nameof(MaximumDate), typeof(DateTime), typeof(CalendarView), DateTime.MaxValue);
 
     /// <summary>
@@ -146,14 +146,14 @@ public class CalendarView : AuroraViewBase
     /// <value>The Maximum DateTime.</value>
     public DateTime MaximumDate
     {
-        get { return (DateTime)GetValue(MaximumDateProperty); }
-        set { SetValue(MaximumDateProperty, value); }
+        get => (DateTime)GetValue(MaximumDateProperty);
+        set => SetValue(MaximumDateProperty, value);
     }
 
     /// <summary>
     /// The minimum date property used to define the minimum date.
     /// </summary>
-    public static BindableProperty MinimumDateProperty =
+    public static readonly BindableProperty MinimumDateProperty =
         BindableProperty.Create(nameof(MinimumDate), typeof(DateTime), typeof(CalendarView), DateTime.MinValue);
 
     /// <summary>
@@ -162,11 +162,11 @@ public class CalendarView : AuroraViewBase
     /// <value>The Minimum DateTime.</value>
     public DateTime MinimumDate
     {
-        get { return (DateTime)GetValue(MinimumDateProperty); }
-        set { SetValue(MinimumDateProperty, value); }
+        get => (DateTime)GetValue(MinimumDateProperty);
+        set => SetValue(MinimumDateProperty, value);
     }
 
-    public static BindableProperty HeaderTextColorProperty =
+    public static readonly BindableProperty HeaderTextColorProperty =
         BindableProperty.Create(nameof(HeaderTextColor), typeof(Color), typeof(CalendarView), Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -179,7 +179,7 @@ public class CalendarView : AuroraViewBase
     /// <summary>
     /// The separator color property.
     /// </summary>
-    public static BindableProperty SeparatorColorProperty =
+    public static readonly BindableProperty SeparatorColorProperty =
         BindableProperty.Create(nameof(SeparatorColor), typeof(Color), typeof(CalendarView), Colors.LightGray,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -189,11 +189,11 @@ public class CalendarView : AuroraViewBase
     /// <value>The Color.</value>
     public Color SeparatorColor
     {
-        get { return (Color)GetValue(SeparatorColorProperty); }
-        set { SetValue(SeparatorColorProperty, value); }
+        get => (Color)GetValue(SeparatorColorProperty);
+        set => SetValue(SeparatorColorProperty, value);
     }
 
-    public static BindableProperty UnavailableDateColorProperty =
+    public static readonly BindableProperty UnavailableDateColorProperty =
         BindableProperty.Create(nameof(UnavailableDateColor), typeof(Color), typeof(CalendarView), Colors.LightGray,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -203,14 +203,14 @@ public class CalendarView : AuroraViewBase
     /// <value>The Color.</value>
     public Color UnavailableDateColor
     {
-        get { return (Color)GetValue(UnavailableDateColorProperty); }
-        set { SetValue(UnavailableDateColorProperty, value); }
+        get => (Color)GetValue(UnavailableDateColorProperty);
+        set => SetValue(UnavailableDateColorProperty, value);
     }
 
     /// <summary>
     /// The available date color property. Represents the dates that are available.
     /// </summary>
-    public static BindableProperty AvailableDateColorProperty =
+    public static readonly BindableProperty AvailableDateColorProperty =
         BindableProperty.Create(nameof(AvailableDateColor), typeof(Color), typeof(CalendarView), Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -220,14 +220,14 @@ public class CalendarView : AuroraViewBase
     /// <value>The Color.</value>
     public Color AvailableDateColor
     {
-        get { return (Color)GetValue(AvailableDateColorProperty); }
-        set { SetValue(AvailableDateColorProperty, value); }
+        get => (Color)GetValue(AvailableDateColorProperty);
+        set => SetValue(AvailableDateColorProperty, value);
     }
 
     /// <summary>
     /// The date color property.
     /// </summary>
-    public static BindableProperty DateColorProperty =
+    public static readonly BindableProperty DateColorProperty =
         BindableProperty.Create(nameof(DateColor), typeof(Color), typeof(CalendarView), Colors.DarkGray,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -237,11 +237,11 @@ public class CalendarView : AuroraViewBase
     /// <value>The Color.</value>
     public Color DateColor
     {
-        get { return (Color)GetValue(DateColorProperty); }
-        set { SetValue(DateColorProperty, value); }
+        get => (Color)GetValue(DateColorProperty);
+        set => SetValue(DateColorProperty, value);
     }
 
-    public static BindableProperty SelectedDateColorProperty =
+    public static readonly BindableProperty SelectedDateColorProperty =
         BindableProperty.Create(nameof(SelectedDateColor), typeof(Color), typeof(CalendarView), Colors.MediumBlue,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -251,14 +251,14 @@ public class CalendarView : AuroraViewBase
     /// <value>The Color.</value>
     public Color SelectedDateColor
     {
-        get { return (Color)GetValue(SelectedDateColorProperty); }
-        set { SetValue(SelectedDateColorProperty, value); }
+        get => (Color)GetValue(SelectedDateColorProperty);
+        set => SetValue(SelectedDateColorProperty, value);
     }
 
     /// <summary>
     /// The date text color property.
     /// </summary>
-    public static BindableProperty DateTextColorProperty =
+    public static readonly BindableProperty DateTextColorProperty =
         BindableProperty.Create(nameof(DateTextColor), typeof(Color), typeof(CalendarView), Colors.DarkGray,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -268,14 +268,14 @@ public class CalendarView : AuroraViewBase
     /// <value>The Color.</value>
     public Color DateTextColor
     {
-        get { return (Color)GetValue(DateTextColorProperty); }
-        set { SetValue(DateTextColorProperty, value); }
+        get => (Color)GetValue(DateTextColorProperty);
+        set => SetValue(DateTextColorProperty, value);
     }
 
     /// <summary>
     /// The selected date text color property.
     /// </summary>
-    public static BindableProperty SelectedDateTextColorProperty =
+    public static readonly BindableProperty SelectedDateTextColorProperty =
         BindableProperty.Create(nameof(SelectedDateTextColor), typeof(Color), typeof(CalendarView), Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -285,14 +285,14 @@ public class CalendarView : AuroraViewBase
     /// <value>The Color.</value>
     public Color SelectedDateTextColor
     {
-        get { return (Color)GetValue(SelectedDateTextColorProperty); }
-        set { SetValue(SelectedDateTextColorProperty, value); }
+        get => (Color)GetValue(SelectedDateTextColorProperty);
+        set => SetValue(SelectedDateTextColorProperty, value);
     }
 
     /// <summary>
     /// The date background color property.
     /// </summary>
-    public static BindableProperty DateBackgroundColorProperty =
+    public static readonly BindableProperty DateBackgroundColorProperty =
         BindableProperty.Create(nameof(DateBackgroundColor), typeof(Color), typeof(CalendarView), Colors.DarkGray,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -302,14 +302,14 @@ public class CalendarView : AuroraViewBase
     /// <value>The Color.</value>
     public Color DateBackgroundColor
     {
-        get { return (Color)GetValue(DateBackgroundColorProperty); }
-        set { SetValue(DateBackgroundColorProperty, value); }
+        get => (Color)GetValue(DateBackgroundColorProperty);
+        set => SetValue(DateBackgroundColorProperty, value);
     }
 
     /// <summary>
     /// The selection type property. Sets the selection mode based on the provided type.
     /// </summary>
-    public static BindableProperty SelectionTypeProperty =
+    public static readonly BindableProperty SelectionTypeProperty =
         BindableProperty.Create(nameof(SelectionType), typeof(CalendarSelectionType), typeof(CalendarView),
             CalendarSelectionType.Single,
             propertyChanged: (bindable, oldValue, newValue) =>
@@ -393,18 +393,18 @@ public class CalendarView : AuroraViewBase
     /// <value>The type of the selection.</value>
     public CalendarSelectionType SelectionType
     {
-        get { return (CalendarSelectionType)GetValue(SelectionTypeProperty); }
-        set { SetValue(SelectionTypeProperty, value); }
+        get => (CalendarSelectionType)GetValue(SelectionTypeProperty);
+        set => SetValue(SelectionTypeProperty, value);
     }
 
     /// <summary>
     /// The selected dates property key.
     /// </summary>
-    public static BindablePropertyKey SelectedDatesPropertyKey = BindableProperty.CreateReadOnly(
+    public static readonly BindablePropertyKey SelectedDatesPropertyKey = BindableProperty.CreateReadOnly(
         nameof(SelectedDates),
         typeof(List<DateTime>), typeof(CalendarView), new List<DateTime>());
 
-    public static BindableProperty DayOfWeekDisplayTypeProperty =
+    public static readonly BindableProperty DayOfWeekDisplayTypeProperty =
         BindableProperty.Create(nameof(DayOfWeekDisplayType), typeof(CalendarDayOfWeekDisplayType),
             typeof(CalendarView), CalendarDayOfWeekDisplayType.Abbreviated,
             propertyChanged:
@@ -420,7 +420,7 @@ public class CalendarView : AuroraViewBase
         set => SetValue(DayOfWeekDisplayTypeProperty, value);
     }
 
-    public static BindableProperty CalendarDayDisplayLocationProperty =
+    public static readonly BindableProperty CalendarDayDisplayLocationProperty =
         BindableProperty.Create(nameof(CalendarDayDisplayLocation), typeof(CalendarDayDisplayLocationType),
             typeof(CalendarView), CalendarDayDisplayLocationType.Centered,
             propertyChanged:
@@ -491,10 +491,7 @@ public class CalendarView : AuroraViewBase
         base.Detached();
     }
 
-    private void Events_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        this.InvalidateSurface();
-    }
+    private void Events_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => this.InvalidateSurface();
 
     protected override void OnPropertyChanged(string propertyName = null)
     {
@@ -1155,7 +1152,7 @@ public enum CalendarEventDisplayType
 
 public class CalendarEvent : BindableObject
 {
-    public static BindableProperty EventDateProperty =
+    public static readonly BindableProperty EventDateProperty =
         BindableProperty.Create(nameof(EventDate), typeof(DateTime), typeof(CalendarEvent), default(DateTime));
 
     public DateTime EventDate
@@ -1164,7 +1161,7 @@ public class CalendarEvent : BindableObject
         set => SetValue(EventDateProperty, value);
     }
 
-    public static BindableProperty DisplayTextProperty =
+    public static readonly BindableProperty DisplayTextProperty =
         BindableProperty.Create(nameof(DisplayText), typeof(string), typeof(CalendarEvent), default(string));
 
     public string DisplayText
@@ -1173,7 +1170,7 @@ public class CalendarEvent : BindableObject
         set => SetValue(DisplayTextProperty, value);
     }
 
-    public static BindableProperty ColorProperty =
+    public static readonly BindableProperty ColorProperty =
         BindableProperty.Create(nameof(Color), typeof(Color), typeof(CalendarEvent), Colors.Red);
 
     public Color Color
@@ -1182,7 +1179,7 @@ public class CalendarEvent : BindableObject
         set => SetValue(ColorProperty, value);
     }
 
-    public static BindableProperty TextColorProperty =
+    public static readonly BindableProperty TextColorProperty =
         BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(CalendarEvent), Colors.White);
 
     public Color TextColor
@@ -1191,7 +1188,7 @@ public class CalendarEvent : BindableObject
         set => SetValue(TextColorProperty, value);
     }
 
-    public static BindableProperty CalendarEventDisplayProperty =
+    public static readonly BindableProperty CalendarEventDisplayProperty =
         BindableProperty.Create(nameof(CalendarEventDisplay), typeof(CalendarEventDisplayType), typeof(CalendarEvent),
             CalendarEventDisplayType.NotificationDot);
 
@@ -1206,8 +1203,5 @@ public class CalendarSelectedDatesChangedEventArgs : EventArgs
 {
     public IEnumerable<DateTime> SelectedDates { get; private set; }
 
-    public CalendarSelectedDatesChangedEventArgs(IEnumerable<DateTime> selectedDates)
-    {
-        SelectedDates = selectedDates;
-    }
+    public CalendarSelectedDatesChangedEventArgs(IEnumerable<DateTime> selectedDates) => SelectedDates = selectedDates;
 }

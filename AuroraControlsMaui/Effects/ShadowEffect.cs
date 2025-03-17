@@ -9,15 +9,9 @@ public class ShadowEffect : RoutingEffect
         BindableProperty.CreateAttached("HasShadow", typeof(bool), typeof(ShadowEffect), true,
             propertyChanged: OnHasShadowChanged);
 
-    public static double GetHasShadow(BindableObject view)
-    {
-        return (double)view.GetValue(HasShadowProperty);
-    }
+    public static double GetHasShadow(BindableObject view) => (double)view.GetValue(HasShadowProperty);
 
-    public static void SetHasShadow(BindableObject view, bool value)
-    {
-        view.SetValue(HasShadowProperty, value);
-    }
+    public static void SetHasShadow(BindableObject view, bool value) => view.SetValue(HasShadowProperty, value);
 
     private static void OnHasShadowChanged(BindableObject bindable, object oldValue, object newValue)
     {
@@ -51,20 +45,14 @@ public class ShadowEffect : RoutingEffect
     /// </summary>
     /// <returns>The elevation distance.</returns>
     /// <param name="view">View.</param>
-    public static double GetElevation(BindableObject view)
-    {
-        return (double)view.GetValue(ElevationProperty);
-    }
+    public static double GetElevation(BindableObject view) => (double)view.GetValue(ElevationProperty);
 
     /// <summary>
     /// Sets the elevation distance.
     /// </summary>
     /// <param name="view">View to set elevation on.</param>
     /// <param name="value">Amount of elevation.</param>
-    public static void SetElevation(BindableObject view, double value)
-    {
-        view.SetValue(ElevationProperty, value);
-    }
+    public static void SetElevation(BindableObject view, double value) => view.SetValue(ElevationProperty, value);
 
     /// <summary>
     /// The corner radius property.
@@ -77,18 +65,12 @@ public class ShadowEffect : RoutingEffect
     /// </summary>
     /// <returns>The corner radius.</returns>
     /// <param name="view">View to get corder radius from.</param>
-    public static double GetCornerRadius(BindableObject view)
-    {
-        return (double)view.GetValue(CornerRadiusProperty);
-    }
+    public static double GetCornerRadius(BindableObject view) => (double)view.GetValue(CornerRadiusProperty);
 
     /// <summary>
     /// Sets the corner radius.
     /// </summary>
     /// <param name="view">View to apply rounding to.</param>
     /// <param name="value">Amount of rounding to apply.</param>
-    public static void SetCornerRadius(BindableObject view, double value)
-    {
-        view.SetValue(CornerRadiusProperty, value);
-    }
+    public static void SetCornerRadius(BindableObject view, double value) => view.SetValue(CornerRadiusProperty, value);
 }

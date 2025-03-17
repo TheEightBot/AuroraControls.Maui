@@ -61,10 +61,7 @@ public abstract class AuroraGLViewBase : SKGLView, IAuroraView
         this.InvalidateSurface();
     }
 
-    protected override void OnPaintSurface(SKPaintGLSurfaceEventArgs e)
-    {
-        PaintSurfaceInternal(e.Surface, e.BackendRenderTarget);
-    }
+    protected override void OnPaintSurface(SKPaintGLSurfaceEventArgs e) => PaintSurfaceInternal(e.Surface, e.BackendRenderTarget);
 
     protected override void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {

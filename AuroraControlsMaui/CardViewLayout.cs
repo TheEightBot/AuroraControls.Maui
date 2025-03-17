@@ -8,7 +8,7 @@ public class CardViewLayout : ContentView
     /// <summary>
     /// The corner radius property.
     /// </summary>
-    public static BindableProperty CornerRadiusProperty =
+    public static readonly BindableProperty CornerRadiusProperty =
         BindableProperty.Create(nameof(CornerRadius), typeof(double), typeof(CardViewLayout),
             ShadowEffect.CornerRadiusProperty.DefaultValue,
             propertyChanged: (bindable, oldValue, newValue) =>
@@ -32,14 +32,14 @@ public class CardViewLayout : ContentView
     /// <value>The corner radius.</value>
     public double CornerRadius
     {
-        get { return (double)GetValue(CornerRadiusProperty); }
-        set { SetValue(CornerRadiusProperty, value); }
+        get => (double)GetValue(CornerRadiusProperty);
+        set => SetValue(CornerRadiusProperty, value);
     }
 
     /// <summary>
     /// The elevation property.
     /// </summary>
-    public static BindableProperty ElevationProperty =
+    public static readonly BindableProperty ElevationProperty =
         BindableProperty.Create(nameof(Elevation), typeof(double), typeof(CardViewLayout),
             ShadowEffect.ElevationProperty.DefaultValue,
             propertyChanged: (bindable, oldValue, newValue) =>
@@ -69,8 +69,8 @@ public class CardViewLayout : ContentView
     /// <value>The content to displa.</value>
     public new View Content
     {
-        get { return (View)GetValue(ContentProperty); }
-        set { SetValue(ContentProperty, value); }
+        get => (View)GetValue(ContentProperty);
+        set => SetValue(ContentProperty, value);
     }
 
     /// <summary>
@@ -92,14 +92,14 @@ public class CardViewLayout : ContentView
     /// <value>The color of the card background.</value>
     public new Color BackgroundColor
     {
-        get { return (Color)GetValue(BackgroundColorProperty); }
-        set { SetValue(BackgroundColorProperty, value); }
+        get => (Color)GetValue(BackgroundColorProperty);
+        set => SetValue(BackgroundColorProperty, value);
     }
 
     /// <summary>
     /// The card border color property.
     /// </summary>
-    public static BindableProperty BorderColorProperty =
+    public static readonly BindableProperty BorderColorProperty =
         BindableProperty.Create(nameof(BorderColor), typeof(Color), typeof(CardViewLayout), Colors.Transparent,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
@@ -127,7 +127,7 @@ public class CardViewLayout : ContentView
     /// <summary>
     /// The card border size property.
     /// </summary>
-    public static BindableProperty BorderSizeProperty =
+    public static readonly BindableProperty BorderSizeProperty =
         BindableProperty.Create(nameof(BorderSize), typeof(double), typeof(CardViewLayout), 0d,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
@@ -158,8 +158,8 @@ public class CardViewLayout : ContentView
     /// <value>The evevation.</value>
     public double Elevation
     {
-        get { return (double)GetValue(ElevationProperty); }
-        set { SetValue(ElevationProperty, value); }
+        get => (double)GetValue(ElevationProperty);
+        set => SetValue(ElevationProperty, value);
     }
 
     public CardViewLayout()

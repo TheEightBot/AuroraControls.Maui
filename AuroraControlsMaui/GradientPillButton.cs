@@ -20,7 +20,7 @@ public class GradientPillButton : AuroraViewBase
     /// <summary>
     /// The button background start color property.
     /// </summary>
-    public static BindableProperty ButtonBackgroundStartColorProperty =
+    public static readonly BindableProperty ButtonBackgroundStartColorProperty =
         BindableProperty.Create(nameof(ButtonBackgroundStartColor), typeof(Color), typeof(GradientPillButton), Colors.Transparent,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -30,14 +30,14 @@ public class GradientPillButton : AuroraViewBase
     /// <value>Expects a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Default.</value>
     public Color ButtonBackgroundStartColor
     {
-        get { return (Color)GetValue(ButtonBackgroundStartColorProperty); }
-        set { SetValue(ButtonBackgroundStartColorProperty, value); }
+        get => (Color)GetValue(ButtonBackgroundStartColorProperty);
+        set => SetValue(ButtonBackgroundStartColorProperty, value);
     }
 
     /// <summary>
     /// The button background end color property.
     /// </summary>
-    public static BindableProperty ButtonBackgroundEndColorProperty =
+    public static readonly BindableProperty ButtonBackgroundEndColorProperty =
         BindableProperty.Create(nameof(ButtonBackgroundEndColor), typeof(Color), typeof(GradientPillButton), default(Color),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -47,14 +47,14 @@ public class GradientPillButton : AuroraViewBase
     /// <value>Expects a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Default.</value>
     public Color ButtonBackgroundEndColor
     {
-        get { return (Color)GetValue(ButtonBackgroundEndColorProperty); }
-        set { SetValue(ButtonBackgroundEndColorProperty, value); }
+        get => (Color)GetValue(ButtonBackgroundEndColorProperty);
+        set => SetValue(ButtonBackgroundEndColorProperty, value);
     }
 
     /// <summary>
     /// The gradient direction property.
     /// </summary>
-    public static BindableProperty GradientDirectionProperty =
+    public static readonly BindableProperty GradientDirectionProperty =
         BindableProperty.Create(nameof(GradientDirection), typeof(GradientDirection), typeof(GradientPillButton), GradientDirection.Horizontal,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -64,14 +64,14 @@ public class GradientPillButton : AuroraViewBase
     /// <value>Expects GradientDirection enum case. Default value is GradientDirection.Horizontal.</value>
     public GradientDirection GradientDirection
     {
-        get { return (GradientDirection)GetValue(GradientDirectionProperty); }
-        set { SetValue(GradientDirectionProperty, value); }
+        get => (GradientDirection)GetValue(GradientDirectionProperty);
+        set => SetValue(GradientDirectionProperty, value);
     }
 
     /// <summary>
     /// The border color property.
     /// </summary>
-    public static BindableProperty BorderColorProperty =
+    public static readonly BindableProperty BorderColorProperty =
         BindableProperty.Create(nameof(BorderColor), typeof(Color), typeof(GradientPillButton), default(Color),
                                 propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -81,14 +81,14 @@ public class GradientPillButton : AuroraViewBase
     /// <value>Expects a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Default.</value>
     public Color BorderColor
     {
-        get { return (Color)GetValue(BorderColorProperty); }
-        set { SetValue(BorderColorProperty, value); }
+        get => (Color)GetValue(BorderColorProperty);
+        set => SetValue(BorderColorProperty, value);
     }
 
     /// <summary>
     /// The shadow color property.
     /// </summary>
-    public static BindableProperty ShadowColorProperty =
+    public static readonly BindableProperty ShadowColorProperty =
         BindableProperty.Create(nameof(ShadowColor), typeof(Color), typeof(GradientPillButton), Color.FromRgba(0d, 0d, 0d, .33d),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -98,14 +98,14 @@ public class GradientPillButton : AuroraViewBase
     /// <value>Expects a Xamarin.Forms.Color. Default value is Color.FromRgba(0d, 0d, 0d, .33d).</value>
     public Color ShadowColor
     {
-        get { return (Color)GetValue(ShadowColorProperty); }
-        set { SetValue(ShadowColorProperty, value); }
+        get => (Color)GetValue(ShadowColorProperty);
+        set => SetValue(ShadowColorProperty, value);
     }
 
     /// <summary>
     /// The shadow location property.
     /// </summary>
-    public static BindableProperty ShadowLocationProperty =
+    public static readonly BindableProperty ShadowLocationProperty =
         BindableProperty.Create(nameof(ShadowLocation), typeof(Point), typeof(GradientPillButton), new Point(0, 3),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -115,14 +115,14 @@ public class GradientPillButton : AuroraViewBase
     /// <value>Takes a point with x and y offsets. Default value is new Point(0, 3).</value>
     public Point ShadowLocation
     {
-        get { return (Point)GetValue(ShadowLocationProperty); }
-        set { SetValue(ShadowLocationProperty, value); }
+        get => (Point)GetValue(ShadowLocationProperty);
+        set => SetValue(ShadowLocationProperty, value);
     }
 
     /// <summary>
     /// The shadow blur radius property.
     /// </summary>
-    public static BindableProperty ShadowBlurRadiusProperty =
+    public static readonly BindableProperty ShadowBlurRadiusProperty =
         BindableProperty.Create(nameof(ShadowBlurRadius), typeof(double), typeof(GradientPillButton), default(double),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -132,14 +132,14 @@ public class GradientPillButton : AuroraViewBase
     /// <value>The shadow blur radius. Default value is default(double).</value>
     public double ShadowBlurRadius
     {
-        get { return (double)GetValue(ShadowBlurRadiusProperty); }
-        set { SetValue(ShadowBlurRadiusProperty, value); }
+        get => (double)GetValue(ShadowBlurRadiusProperty);
+        set => SetValue(ShadowBlurRadiusProperty, value);
     }
 
     /// <summary>
     /// The border width property.
     /// </summary>
-    public static BindableProperty BorderWidthProperty =
+    public static readonly BindableProperty BorderWidthProperty =
         BindableProperty.Create(nameof(BorderWidth), typeof(double), typeof(GradientPillButton), 0d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -149,14 +149,14 @@ public class GradientPillButton : AuroraViewBase
     /// <value>Expects a double value. Default is 0d.</value>
     public double BorderWidth
     {
-        get { return (double)GetValue(BorderWidthProperty); }
-        set { SetValue(BorderWidthProperty, value); }
+        get => (double)GetValue(BorderWidthProperty);
+        set => SetValue(BorderWidthProperty, value);
     }
 
     /// <summary>
     /// The text property.
     /// </summary>
-    public static BindableProperty TextProperty =
+    public static readonly BindableProperty TextProperty =
         BindableProperty.Create(nameof(Text), typeof(string), typeof(GradientPillButton), default(string),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -166,14 +166,14 @@ public class GradientPillButton : AuroraViewBase
     /// <value>string value for text. Default is default(string).</value>
     public string Text
     {
-        get { return (string)GetValue(TextProperty); }
-        set { SetValue(TextProperty, value); }
+        get => (string)GetValue(TextProperty);
+        set => SetValue(TextProperty, value);
     }
 
     /// <summary>
     /// The font color property.
     /// </summary>
-    public static BindableProperty FontColorProperty =
+    public static readonly BindableProperty FontColorProperty =
         BindableProperty.Create(nameof(FontColor), typeof(Color), typeof(GradientPillButton), Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -183,11 +183,11 @@ public class GradientPillButton : AuroraViewBase
     /// <value>Expects a Xamarin.Forms.Color. Default value is Color.White.</value>
     public Color FontColor
     {
-        get { return (Color)GetValue(FontColorProperty); }
-        set { SetValue(FontColorProperty, value); }
+        get => (Color)GetValue(FontColorProperty);
+        set => SetValue(FontColorProperty, value);
     }
 
-    public static BindableProperty FontSizeProperty =
+    public static readonly BindableProperty FontSizeProperty =
         BindableProperty.Create(nameof(FontSize), typeof(double), typeof(GradientPillButton), PlatformInfo.DefaultButtonFontSize,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -200,7 +200,7 @@ public class GradientPillButton : AuroraViewBase
     /// <summary>
     /// The typeface property.
     /// </summary>
-    public static BindableProperty FontFamilyProperty =
+    public static readonly BindableProperty FontFamilyProperty =
         BindableProperty.Create(nameof(FontFamily), typeof(string), typeof(GradientPillButton), default(string),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -210,11 +210,11 @@ public class GradientPillButton : AuroraViewBase
     /// <value>Expects a string. Dfault default(string).</value>
     public string FontFamily
     {
-        get { return (string)GetValue(FontFamilyProperty); }
-        set { SetValue(FontFamilyProperty, value); }
+        get => (string)GetValue(FontFamilyProperty);
+        set => SetValue(FontFamilyProperty, value);
     }
 
-    public static BindableProperty IsIconifiedTextProperty =
+    public static readonly BindableProperty IsIconifiedTextProperty =
         BindableProperty.Create(nameof(IsIconifiedText), typeof(bool), typeof(GradientPillButton), default(bool),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -227,7 +227,7 @@ public class GradientPillButton : AuroraViewBase
     /// <summary>
     /// The ripples property.
     /// </summary>
-    public static BindableProperty RipplesProperty =
+    public static readonly BindableProperty RipplesProperty =
         BindableProperty.Create(nameof(Ripples), typeof(bool), typeof(GradientPillButton), true,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -237,14 +237,14 @@ public class GradientPillButton : AuroraViewBase
     /// <value><c>true</c> if ripples; otherwise, <c>false</c>.</value>
     public bool Ripples
     {
-        get { return (bool)GetValue(RipplesProperty); }
-        set { SetValue(RipplesProperty, value); }
+        get => (bool)GetValue(RipplesProperty);
+        set => SetValue(RipplesProperty, value);
     }
 
     /// <summary>
     /// The command property. Fires on tap.
     /// </summary>
-    public static BindableProperty CommandProperty =
+    public static readonly BindableProperty CommandProperty =
         BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(GradientPillButton), default(ICommand));
 
     /// <summary>
@@ -253,14 +253,14 @@ public class GradientPillButton : AuroraViewBase
     /// <value>The command.</value>
     public ICommand Command
     {
-        get { return (ICommand)GetValue(CommandProperty); }
-        set { SetValue(CommandProperty, value); }
+        get => (ICommand)GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
     }
 
     /// <summary>
     /// The command parameter property.
     /// </summary>
-    public static BindableProperty CommandParameterProperty =
+    public static readonly BindableProperty CommandParameterProperty =
         BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(GradientPillButton), default(object));
 
     /// <summary>
@@ -269,8 +269,8 @@ public class GradientPillButton : AuroraViewBase
     /// <value>The command parameter. default value is default(object).</value>
     public object CommandParameter
     {
-        get { return (object)GetValue(CommandParameterProperty); }
-        set { SetValue(CommandParameterProperty, value); }
+        get => (object)GetValue(CommandParameterProperty);
+        set => SetValue(CommandParameterProperty, value);
     }
 
     /// <summary>
@@ -279,10 +279,7 @@ public class GradientPillButton : AuroraViewBase
     /// <value><c>true</c> if tapped; otherwise, <c>false</c>.</value>
     public bool Tapped
     {
-        get
-        {
-            return _tapped;
-        }
+        get => _tapped;
 
         set
         {
@@ -297,10 +294,7 @@ public class GradientPillButton : AuroraViewBase
     /// <summary>
     /// Initializes a new instance of the <see cref="GradientPillButton"/> class.
     /// </summary>
-    public GradientPillButton()
-    {
-        MinimumHeightRequest = IAuroraView.StandardControlHeight;
-    }
+    public GradientPillButton() => MinimumHeightRequest = IAuroraView.StandardControlHeight;
 
     protected override void Attached()
     {

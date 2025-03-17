@@ -52,10 +52,7 @@ public partial class CalendarPickerHandler : DatePickerHandler
         }
     }
 
-    public static void MapDate(CalendarPickerHandler handler, CalendarPicker view)
-    {
-        handler.TryShowEmptyState();
-    }
+    public static void MapDate(CalendarPickerHandler handler, CalendarPicker view) => handler.TryShowEmptyState();
 
     public void TryShowEmptyState()
     {

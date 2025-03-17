@@ -36,7 +36,7 @@ public class RainbowRing : SceneViewBase
     /// <summary>
     /// Specifies the ring thickness.
     /// </summary>
-    public static BindableProperty RingThicknessProperty =
+    public static readonly BindableProperty RingThicknessProperty =
         BindableProperty.Create(nameof(RingThickness), typeof(double), typeof(RainbowRing), 12d,
             propertyChanged:
                 static (bindable, _, newValue) =>
@@ -62,10 +62,7 @@ public class RainbowRing : SceneViewBase
     /// <summary>
     /// Initializes a new instance of the <see cref="RainbowRing"/> class.
     /// </summary>
-    public RainbowRing()
-    {
-        MinimumHeightRequest = 88;
-    }
+    public RainbowRing() => MinimumHeightRequest = 88;
 
     protected override void Attached()
     {

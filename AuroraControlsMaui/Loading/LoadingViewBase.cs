@@ -9,7 +9,7 @@ public class LoadingViewBase : AuroraViewBase
     /// <summary>
     /// The animating percentage property.
     /// </summary>
-    public static BindableProperty AnimatingPercentageProperty =
+    public static readonly BindableProperty AnimatingPercentageProperty =
         BindableProperty.Create(nameof(AnimatingPercentage), typeof(double), typeof(LoadingViewBase), 0d, BindingMode.OneWayToSource,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -19,10 +19,7 @@ public class LoadingViewBase : AuroraViewBase
     /// <value>The animating percentage as a double. Default is 0d.</value>
     public double AnimatingPercentage
     {
-        get
-        {
-            return (double)GetValue(AnimatingPercentageProperty);
-        }
+        get => (double)GetValue(AnimatingPercentageProperty);
 
         set
         {
@@ -35,19 +32,16 @@ public class LoadingViewBase : AuroraViewBase
     /// <summary>
     /// The animating property.
     /// </summary>
-    public static BindableProperty AnimatingProperty =
+    public static readonly BindableProperty AnimatingProperty =
         BindableProperty.Create(nameof(Animating), typeof(bool), typeof(LoadingViewBase), default(bool), BindingMode.OneWayToSource);
 
     public bool Animating
     {
-        get { return (bool)GetValue(AnimatingProperty); }
-        private set { SetValue(AnimatingProperty, value); }
+        get => (bool)GetValue(AnimatingProperty);
+        private set => SetValue(AnimatingProperty, value);
     }
 
-    public LoadingViewBase()
-    {
-        _animationName = $"{this.GetType().Name}_{Guid.NewGuid().ToString()}";
-    }
+    public LoadingViewBase() => _animationName = $"{this.GetType().Name}_{Guid.NewGuid().ToString()}";
 
     protected override void Detached()
     {

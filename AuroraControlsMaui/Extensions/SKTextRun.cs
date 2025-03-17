@@ -5,10 +5,7 @@ internal sealed class SKTextRun
     private const string IconTemplateBegin = "{{";
     private const string IconTemplateEnd = "}}";
 
-    public SKTextRun(string text)
-    {
-        Text = text;
-    }
+    public SKTextRun(string text) => Text = text;
 
     public string Text { get; }
 
@@ -20,10 +17,7 @@ internal sealed class SKTextRun
 
     public SKColor? Color { get; set; }
 
-    public override string ToString()
-    {
-        return Text;
-    }
+    public override string ToString() => Text;
 
     public static IEnumerable<SKTextRun> Create(string text, SKTextRunLookup lookup, bool toUppercase = false)
     {

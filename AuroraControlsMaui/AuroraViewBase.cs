@@ -25,10 +25,7 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
         _scale = (float)PlatformInfo.ScalingFactor;
     }
 
-    public virtual Size CustomMeasuredSize(double widthConstraint, double heightConstraint)
-    {
-        return Size.Zero;
-    }
+    public virtual Size CustomMeasuredSize(double widthConstraint, double heightConstraint) => Size.Zero;
 
     public Stream ExportImage(SKEncodedImageFormat imageFormat, int quality = 85, int maxWidth = -1, int maxHeight = -1, SKColorType colorType = SKColorType.Rgba8888)
     {
@@ -99,10 +96,7 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
 
     protected abstract void PaintControl(SKSurface surface, SKImageInfo info);
 
-    protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
-    {
-        PaintSurfaceInternal(e.Surface, e.Info);
-    }
+    protected override void OnPaintSurface(SKPaintSurfaceEventArgs e) => PaintSurfaceInternal(e.Surface, e.Info);
 
     protected override void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
@@ -245,13 +239,7 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
         }
     }
 
-    private void VisualEffects_EffectPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        this.InvalidateSurface();
-    }
+    private void VisualEffects_EffectPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) => this.InvalidateSurface();
 
-    private void VisualEffects_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-    {
-        this.InvalidateSurface();
-    }
+    private void VisualEffects_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) => this.InvalidateSurface();
 }

@@ -12,7 +12,7 @@ namespace AuroraControls.TestApp;
 
 public class MainPage : ReactiveContentPage<TestRxViewModel>
 {
-    public static BindableProperty MvvmToolkitViewModelProperty =
+    public static readonly BindableProperty MvvmToolkitViewModelProperty =
         BindableProperty.Create(nameof(MvvmToolkitViewModel), typeof(TestMvvmToolkitViewModel), typeof(MainPage),
             default(TestMvvmToolkitViewModel));
 
@@ -143,7 +143,7 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                             new Grid
                             {
                                 ColumnDefinitions = Columns.Define(Auto, Star, Auto),
-                                RowDefinitions = Rows.Define(Auto),
+                                RowDefinitions = Rows.Define(Auto, Auto, Auto),
                                 Children =
                                 {
                                     new CupertinoTextToggleSwitch()
@@ -159,9 +159,28 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                             CupertinoTextToggleSwitch.IsToggledProperty,
                                             nameof(TestRxViewModel.IsToggled),
                                             mode: BindingMode.TwoWay)
-                                        .TapGesture(() => _cupertinoToggleSwitch.EnabledText += "A")
                                         .Row(0).Column(2)
                                         .Assign(out _cupertinoToggleSwitch),
+                                    new CupertinoTextToggleSwitch()
+                                        {
+                                            EnabledText = "Enabled",
+                                            DisabledText = "Disabled",
+                                            TrackDisabledColor = Color.FromRgba("#ef361a"),
+                                            TrackEnabledColor = Color.FromRgba("#4694f2"),
+                                            DisabledFontColor = Colors.White,
+                                            EnabledFontColor = Colors.White,
+                                        }
+                                        .Bind(
+                                            CupertinoTextToggleSwitch.IsToggledProperty,
+                                            nameof(TestRxViewModel.IsToggled),
+                                            mode: BindingMode.TwoWay)
+                                        .Row(1).Column(2),
+                                    new Switch()
+                                        .Bind(
+                                            Switch.IsToggledProperty,
+                                            nameof(TestRxViewModel.IsToggled),
+                                            mode: BindingMode.TwoWay)
+                                        .Row(2).Column(2),
                                 },
                             },
                             new Button { BackgroundColor = Colors.Fuchsia, }
@@ -497,6 +516,7 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
             ui => ui._rxNumericEntry.Text,
             x => x?.ToString("N2") ?? string.Empty,
             x => double.TryParse(x, out var parsed) ? parsed : null);
+
         this.Bind(ViewModel, vm => vm.NullableIntValue, ui => ui._rxNumericIntEntry.Text);
 
         Observable

@@ -9,7 +9,7 @@ public class Nofriendo : LoadingViewBase
     /// <summary>
     /// The step count property.
     /// </summary>
-    public static BindableProperty CurrentAnimationStepProperty =
+    public static readonly BindableProperty CurrentAnimationStepProperty =
         BindableProperty.Create(nameof(CurrentAnimationStep), typeof(int), typeof(Nofriendo), 0, BindingMode.OneWayToSource,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -19,14 +19,14 @@ public class Nofriendo : LoadingViewBase
     /// <value>Current step as an int. Default is 0.</value>
     public int CurrentAnimationStep
     {
-        get { return (int)GetValue(CurrentAnimationStepProperty); }
-        private set { SetValue(CurrentAnimationStepProperty, value); }
+        get => (int)GetValue(CurrentAnimationStepProperty);
+        private set => SetValue(CurrentAnimationStepProperty, value);
     }
 
     /// <summary>
     /// The step count property.
     /// </summary>
-    public static BindableProperty StepCountProperty =
+    public static readonly BindableProperty StepCountProperty =
         BindableProperty.Create(nameof(StepCount), typeof(int), typeof(Nofriendo), 1,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -36,14 +36,14 @@ public class Nofriendo : LoadingViewBase
     /// <value>An int representing the step count. Default count is 1.</value>
     public int StepCount
     {
-        get { return (int)GetValue(StepCountProperty); }
-        set { SetValue(StepCountProperty, value); }
+        get => (int)GetValue(StepCountProperty);
+        set => SetValue(StepCountProperty, value);
     }
 
     /// <summary>
     /// The maximum animation steps property.
     /// </summary>
-    public static BindableProperty MaxAnimationStepsProperty =
+    public static readonly BindableProperty MaxAnimationStepsProperty =
         BindableProperty.Create(nameof(MaxAnimationSteps), typeof(int), typeof(Nofriendo), 3);
 
     /// <summary>
@@ -52,14 +52,14 @@ public class Nofriendo : LoadingViewBase
     /// <value>Maximum animation steps as an int. Default is 3.</value>
     public int MaxAnimationSteps
     {
-        get { return (int)GetValue(MaxAnimationStepsProperty); }
-        set { SetValue(MaxAnimationStepsProperty, value); }
+        get => (int)GetValue(MaxAnimationStepsProperty);
+        set => SetValue(MaxAnimationStepsProperty, value);
     }
 
     /// <summary>
     /// The loading start color property.
     /// </summary>
-    public static BindableProperty LoadingStartColorProperty =
+    public static readonly BindableProperty LoadingStartColorProperty =
         BindableProperty.Create(nameof(LoadingStartColor), typeof(Color), typeof(Nofriendo), default(Color),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -69,14 +69,14 @@ public class Nofriendo : LoadingViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default is default(Xamarin.Forms.Color).</value>
     public Color LoadingStartColor
     {
-        get { return (Color)GetValue(LoadingStartColorProperty); }
-        set { SetValue(LoadingStartColorProperty, value); }
+        get => (Color)GetValue(LoadingStartColorProperty);
+        set => SetValue(LoadingStartColorProperty, value);
     }
 
     /// <summary>
     /// The loading end color property.
     /// </summary>
-    public static BindableProperty LoadingEndColorProperty =
+    public static readonly BindableProperty LoadingEndColorProperty =
         BindableProperty.Create(nameof(LoadingEndColor), typeof(Color), typeof(Nofriendo), default(Color),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -86,8 +86,8 @@ public class Nofriendo : LoadingViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default is default(Xamarin.Forms.Color).</value>
     public Color LoadingEndColor
     {
-        get { return (Color)GetValue(LoadingEndColorProperty); }
-        set { SetValue(LoadingEndColorProperty, value); }
+        get => (Color)GetValue(LoadingEndColorProperty);
+        set => SetValue(LoadingEndColorProperty, value);
     }
 
     /// <summary>
@@ -163,10 +163,7 @@ public class Nofriendo : LoadingViewBase
         }
     }
 
-    protected override void StartAnimationValues()
-    {
-        CurrentAnimationStep = 0;
-    }
+    protected override void StartAnimationValues() => CurrentAnimationStep = 0;
 
     protected override void UpdateAnimationValues()
     {

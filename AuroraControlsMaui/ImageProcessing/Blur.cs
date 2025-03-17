@@ -26,7 +26,7 @@ public class Blur : ImageProcessingBase, IImageProcessor
     /// <summary>
     /// The blur amount property.
     /// </summary>
-    public static BindableProperty BlurAmountProperty =
+    public static readonly BindableProperty BlurAmountProperty =
         BindableProperty.Create(nameof(BlurAmount), typeof(double), typeof(Blur), default(double));
 
     /// <summary>
@@ -35,14 +35,14 @@ public class Blur : ImageProcessingBase, IImageProcessor
     /// <value>A double value representing the blur amount. Default value is default(double).</value>
     public double BlurAmount
     {
-        get { return (double)GetValue(BlurAmountProperty); }
-        set { SetValue(BlurAmountProperty, value); }
+        get => (double)GetValue(BlurAmountProperty);
+        set => SetValue(BlurAmountProperty, value);
     }
 
     /// <summary>
     /// The blurring location property.
     /// </summary>
-    public static BindableProperty BlurringLocationProperty =
+    public static readonly BindableProperty BlurringLocationProperty =
         BindableProperty.Create(nameof(BlurringLocation), typeof(object), typeof(BlurLocation), BlurLocation.Full);
 
     /// <summary>
@@ -51,8 +51,8 @@ public class Blur : ImageProcessingBase, IImageProcessor
     /// <value>Takes a BlurLocation enum. Default value is BlurLocation.Full.</value>
     public BlurLocation BlurringLocation
     {
-        get { return (BlurLocation)GetValue(BlurringLocationProperty); }
-        set { SetValue(BlurringLocationProperty, value); }
+        get => (BlurLocation)GetValue(BlurringLocationProperty);
+        set => SetValue(BlurringLocationProperty, value);
     }
 
     /// <summary>

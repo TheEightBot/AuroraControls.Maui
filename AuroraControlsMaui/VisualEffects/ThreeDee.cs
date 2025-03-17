@@ -5,7 +5,7 @@ public class ThreeDee : VisualEffect
     /// <summary>
     /// The x-axis rotation property.
     /// </summary>
-    public static BindableProperty RotationXDegreesProperty =
+    public static readonly BindableProperty RotationXDegreesProperty =
         BindableProperty.Create(nameof(RotationXDegrees), typeof(double), typeof(ThreeDee), default(double));
 
     /// <summary>
@@ -21,7 +21,7 @@ public class ThreeDee : VisualEffect
     /// <summary>
     /// The y-axis rotation property.
     /// </summary>
-    public static BindableProperty RotationYDegreesProperty =
+    public static readonly BindableProperty RotationYDegreesProperty =
         BindableProperty.Create(nameof(RotationYDegrees), typeof(double), typeof(ThreeDee), default(double));
 
     /// <summary>
@@ -37,7 +37,7 @@ public class ThreeDee : VisualEffect
     /// <summary>
     /// The z-axis rotation property.
     /// </summary>
-    public static BindableProperty RotationZDegreesProperty =
+    public static readonly BindableProperty RotationZDegreesProperty =
         BindableProperty.Create(nameof(RotationZDegrees), typeof(double), typeof(ThreeDee), default(double));
 
     /// <summary>
@@ -54,7 +54,7 @@ public class ThreeDee : VisualEffect
     /// The location of the skew as a percentage of the canvas
     /// Values are valid between 0..1.
     /// </summary>
-    public static BindableProperty LocationProperty =
+    public static readonly BindableProperty LocationProperty =
         BindableProperty.Create(nameof(Location), typeof(Point), typeof(ThreeDee), new Point(.5d, .5d));
 
     /// <summary>
@@ -67,15 +67,9 @@ public class ThreeDee : VisualEffect
         set => SetValue(LocationProperty, value);
     }
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect)
-    {
-        return InternalApplyEffect(surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, SKImageInfo info, SKRect overrideRect) => InternalApplyEffect(surface, info.Rect);
 
-    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect)
-    {
-        return InternalApplyEffect(surface, info.Rect);
-    }
+    public override SKImage ApplyEffect(SKImage image, SKSurface surface, GRBackendRenderTarget info, SKRect overrideRect) => InternalApplyEffect(surface, info.Rect);
 
     private SKImage InternalApplyEffect(SKSurface surface, SKRect rect)
     {

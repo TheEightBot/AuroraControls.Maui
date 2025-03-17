@@ -23,7 +23,7 @@ public class LinearGauge : AuroraViewBase
     /// <summary>
     /// The starting percent property.
     /// </summary>
-    public static BindableProperty StartingPercentProperty =
+    public static readonly BindableProperty StartingPercentProperty =
         BindableProperty.Create(nameof(StartingPercent), typeof(double), typeof(LinearGauge), default(double),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -33,14 +33,14 @@ public class LinearGauge : AuroraViewBase
     /// <value>Percent as a double. Default is default(double).</value>
     public double StartingPercent
     {
-        get { return (double)GetValue(StartingPercentProperty); }
-        set { SetValue(StartingPercentProperty, value.Clamp(0, 100)); }
+        get => (double)GetValue(StartingPercentProperty);
+        set => SetValue(StartingPercentProperty, value.Clamp(0, 100));
     }
 
     /// <summary>
     /// The ending percent property.
     /// </summary>
-    public static BindableProperty EndingPercentProperty =
+    public static readonly BindableProperty EndingPercentProperty =
         BindableProperty.Create(nameof(EndingPercent), typeof(double), typeof(LinearGauge), default(double),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -50,14 +50,14 @@ public class LinearGauge : AuroraViewBase
     /// <value>Percent as a double. Default is default(double).</value>
     public double EndingPercent
     {
-        get { return (double)GetValue(EndingPercentProperty); }
-        set { SetValue(EndingPercentProperty, value.Clamp(0, 100)); }
+        get => (double)GetValue(EndingPercentProperty);
+        set => SetValue(EndingPercentProperty, value.Clamp(0, 100));
     }
 
     /// <summary>
     /// The progress thickness property.
     /// </summary>
-    public static BindableProperty ProgressThicknessProperty =
+    public static readonly BindableProperty ProgressThicknessProperty =
         BindableProperty.Create(nameof(ProgressThickness), typeof(double), typeof(LinearGauge), 12d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -67,14 +67,14 @@ public class LinearGauge : AuroraViewBase
     /// <value>Thickness as a double. Default is 12d.</value>
     public double ProgressThickness
     {
-        get { return (double)GetValue(ProgressThicknessProperty); }
-        set { SetValue(ProgressThicknessProperty, value); }
+        get => (double)GetValue(ProgressThicknessProperty);
+        set => SetValue(ProgressThicknessProperty, value);
     }
 
     /// <summary>
     /// The progress color property.
     /// </summary>
-    public static BindableProperty ProgressColorProperty =
+    public static readonly BindableProperty ProgressColorProperty =
         BindableProperty.Create(nameof(ProgressColor), typeof(Color), typeof(LinearGauge), Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -84,14 +84,14 @@ public class LinearGauge : AuroraViewBase
     /// <value>Expects a Xamarin.Forms.Color. Default is Xamarin.Forms.Color.Default.</value>
     public Color ProgressColor
     {
-        get { return (Color)GetValue(ProgressColorProperty); }
-        set { SetValue(ProgressColorProperty, value); }
+        get => (Color)GetValue(ProgressColorProperty);
+        set => SetValue(ProgressColorProperty, value);
     }
 
     /// <summary>
     /// The orientation property.
     /// </summary>
-    public static BindableProperty OrientationProperty =
+    public static readonly BindableProperty OrientationProperty =
         BindableProperty.Create(nameof(Orientation), typeof(LinearGaugeOrientation), typeof(LinearGauge), LinearGaugeOrientation.Horizontal,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -101,14 +101,14 @@ public class LinearGauge : AuroraViewBase
     /// <value>Takes a LinearGaugeOrientation. Default is LinearGaugeOrientation.Horizontal.</value>
     public LinearGaugeOrientation Orientation
     {
-        get { return (LinearGaugeOrientation)GetValue(OrientationProperty); }
-        set { SetValue(OrientationProperty, value); }
+        get => (LinearGaugeOrientation)GetValue(OrientationProperty);
+        set => SetValue(OrientationProperty, value);
     }
 
     /// <summary>
     /// The end cap type property.
     /// </summary>
-    public static BindableProperty EndCapTypeProperty =
+    public static readonly BindableProperty EndCapTypeProperty =
         BindableProperty.Create(nameof(EndCapType), typeof(EndCapType), typeof(LinearGauge), EndCapType.Rounded,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -118,14 +118,14 @@ public class LinearGauge : AuroraViewBase
     /// <value>Takes an EndCapType. Default is EndCapType.Rounded.</value>
     public EndCapType EndCapType
     {
-        get { return (EndCapType)GetValue(EndCapTypeProperty); }
-        set { SetValue(EndCapTypeProperty, value); }
+        get => (EndCapType)GetValue(EndCapTypeProperty);
+        set => SetValue(EndCapTypeProperty, value);
     }
 
     /// <summary>
     /// The progress background color property.
     /// </summary>
-    public static BindableProperty ProgressBackgroundColorProperty =
+    public static readonly BindableProperty ProgressBackgroundColorProperty =
         BindableProperty.Create(nameof(ProgressBackgroundColor), typeof(Color), typeof(LinearGauge), Colors.Gray,
                                 propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -135,14 +135,11 @@ public class LinearGauge : AuroraViewBase
     /// <value>Expects a Xamarin.Forms.Color. Default is Xamarin.Forms.Color.Default.</value>
     public Color ProgressBackgroundColor
     {
-        get { return (Color)GetValue(ProgressBackgroundColorProperty); }
-        set { SetValue(ProgressBackgroundColorProperty, value); }
+        get => (Color)GetValue(ProgressBackgroundColorProperty);
+        set => SetValue(ProgressBackgroundColorProperty, value);
     }
 
-    public LinearGauge()
-    {
-        MinimumHeightRequest = 22;
-    }
+    public LinearGauge() => MinimumHeightRequest = 22;
 
     /// <summary>
     /// This is the method used to draw our control on the SKCanvas. This method is fired every time <c>this.InvalidateSurface();</c> is called, resulting in a "redrawing" of the control.

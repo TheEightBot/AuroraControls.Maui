@@ -17,10 +17,7 @@ public class FontCache : Topten.RichTextKit.FontMapper
 
     public static FontCache Instance { get; } = new();
 
-    private FontCache()
-    {
-        FontMapper.Default = this;
-    }
+    private FontCache() => FontMapper.Default = this;
 
     public void Add(string embeddedResourceName, string shortNameOverride = null)
     {
