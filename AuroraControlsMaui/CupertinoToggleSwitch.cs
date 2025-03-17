@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using Microsoft.Maui.Animations;
 
 namespace AuroraControls;
@@ -24,7 +24,7 @@ public class CupertinoToggleSwitch : AuroraViewBase
     /// <summary>
     /// The color of the thumb switch.
     /// </summary>
-    public static BindableProperty ThumbColorProperty =
+    public static readonly BindableProperty ThumbColorProperty =
         BindableProperty.Create(nameof(ThumbColor), typeof(Color), typeof(CupertinoToggleSwitch), Colors.White,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -41,7 +41,7 @@ public class CupertinoToggleSwitch : AuroraViewBase
     /// <summary>
     /// The color of the track when enabled.
     /// </summary>
-    public static BindableProperty TrackEnabledColorProperty =
+    public static readonly BindableProperty TrackEnabledColorProperty =
         BindableProperty.Create(nameof(TrackEnabledColor), typeof(Color), typeof(CupertinoToggleSwitch), Color.FromRgba("#5bcd58"),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -58,7 +58,7 @@ public class CupertinoToggleSwitch : AuroraViewBase
     /// <summary>
     /// The color of the track when disabled.
     /// </summary>
-    public static BindableProperty TrackDisabledColorProperty =
+    public static readonly BindableProperty TrackDisabledColorProperty =
         BindableProperty.Create(nameof(TrackDisabledColor), typeof(Color), typeof(CupertinoToggleSwitch), Color.FromRgba("#e9e9ea"),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -75,7 +75,7 @@ public class CupertinoToggleSwitch : AuroraViewBase
     /// <summary>
     /// The border width property.
     /// </summary>
-    public static BindableProperty BorderWidthProperty =
+    public static readonly BindableProperty BorderWidthProperty =
         BindableProperty.Create(nameof(BorderWidth), typeof(double), typeof(CupertinoToggleSwitch), 4d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -92,7 +92,7 @@ public class CupertinoToggleSwitch : AuroraViewBase
     /// <summary>
     /// The duration of the toggle animation.
     /// </summary>
-    public static BindableProperty ToggleAnimationDurationProperty =
+    public static readonly BindableProperty ToggleAnimationDurationProperty =
         BindableProperty.Create(nameof(ToggleAnimationDuration), typeof(uint), typeof(CupertinoToggleSwitch), 240u,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -110,13 +110,13 @@ public class CupertinoToggleSwitch : AuroraViewBase
     /// <summary>
     /// The command property. Fires on tap.
     /// </summary>
-    public static BindableProperty CommandProperty =
+    public static readonly BindableProperty CommandProperty =
         BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(CupertinoToggleSwitch), default(ICommand));
 
     /// <summary>
     /// The toggle maximum width property.
     /// </summary>
-    public static BindableProperty ToggleMaxWidthProperty =
+    public static readonly BindableProperty ToggleMaxWidthProperty =
         BindableProperty.Create(nameof(ToggleMaxWidth), typeof(double), typeof(CupertinoToggleSwitch), 56d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -133,7 +133,7 @@ public class CupertinoToggleSwitch : AuroraViewBase
     /// <summary>
     /// The toggle maximum height property.
     /// </summary>
-    public static BindableProperty ToggleMaxHeightProperty =
+    public static readonly BindableProperty ToggleMaxHeightProperty =
         BindableProperty.Create(nameof(ToggleMaxHeight), typeof(double), typeof(CupertinoToggleSwitch), 32d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -160,7 +160,7 @@ public class CupertinoToggleSwitch : AuroraViewBase
     /// <summary>
     /// The command parameter property.
     /// </summary>
-    public static BindableProperty CommandParameterProperty =
+    public static readonly BindableProperty CommandParameterProperty =
         BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(CupertinoToggleSwitch), default(object));
 
     /// <summary>
@@ -176,9 +176,20 @@ public class CupertinoToggleSwitch : AuroraViewBase
     /// <summary>
     /// The state of the toggle.
     /// </summary>
-    public static BindableProperty IsToggledProperty =
+    public static readonly BindableProperty IsToggledProperty =
         BindableProperty.Create(nameof(IsToggled), typeof(bool), typeof(CupertinoToggleSwitch), false,
-            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
+            defaultBindingMode: BindingMode.TwoWay,
+            propertyChanged:
+            (bindable, value, newValue) =>
+            {
+                if (bindable is not CupertinoToggleSwitch cts || newValue is not bool nvBool)
+                {
+                    return;
+                }
+
+                cts.Toggled?.Invoke(cts, new ToggledEventArgs(nvBool));
+                cts.AnimateToggle(nvBool);
+            });
 
     /// <summary>
     /// Gets or sets a value indicating whether the switch is toggled or not.
@@ -187,12 +198,7 @@ public class CupertinoToggleSwitch : AuroraViewBase
     public bool IsToggled
     {
         get => (bool)GetValue(IsToggledProperty);
-        set
-        {
-            SetValue(IsToggledProperty, value);
-            AnimateToggle(value);
-            Toggled?.Invoke(this, new ToggledEventArgs(value));
-        }
+        set => SetValue(IsToggledProperty, value);
     }
 
     /// <summary>
@@ -310,22 +316,24 @@ public class CupertinoToggleSwitch : AuroraViewBase
 
         var isTapInside = _backgroundPath.Contains(e.Location.X, e.Location.Y);
 
-        if (e.ActionType == SKTouchAction.Released && isTapInside)
+        if (e.ActionType != SKTouchAction.Released || !isTapInside)
         {
-            IsToggled = !IsToggled;
-            AnimateToggle(IsToggled);
+            return;
+        }
 
-            if (Command?.CanExecute(CommandParameter) ?? false)
-            {
-                Command.Execute(CommandParameter);
-            }
+        this.IsToggled = !this.IsToggled;
+        this.AnimateToggle(this.IsToggled);
+
+        if (this.Command?.CanExecute(this.CommandParameter) ?? false)
+        {
+            this.Command.Execute(this.CommandParameter);
         }
     }
 
     private void AnimateToggle(bool toggled)
     {
         this.TransitionTo(
-            nameof(_toggleAnimationPercentage),
+            this._animateToggleAnimationName,
             x =>
             {
                 _toggleAnimationPercentage = x;
