@@ -327,6 +327,7 @@ public class PlatformUnderlayDrawable : IDisposable
             if (_virtualView is Microsoft.Maui.Controls.ContentView cv)
             {
                 _content = cv.Content;
+                this.UpdateOpacity();
 
                 if (_content is not null)
                 {
@@ -513,7 +514,10 @@ public class PlatformUnderlayDrawable : IDisposable
     public void UpdateOpacity()
     {
 #if IOS || MACCATALYST || ANDROID
-        _content.Opacity = _virtualView.Opacity;
+        if (_content is not null)
+        {
+            _content.Opacity = _virtualView.Opacity;
+        }
 #if IOS || MACCATALYST
         _canvas.Alpha = (nfloat)_virtualView.Opacity;
 #elif ANDROID
