@@ -177,4 +177,24 @@ public class TextColumn : DataGridColumn
         };
         canvas.DrawRect(rect, borderPaint);
     }
+
+    /// <summary>
+    /// Measures the content width for a given value.
+    /// </summary>
+    public override double MeasureContentWidth(object value, float scale)
+    {
+        var text = value?.ToString() ?? string.Empty;
+        using var paint = new SKPaint
+        {
+            TextSize = FontSize * scale,
+            IsAntialias = true,
+        };
+
+        var rect = default(SKRect);
+        paint.MeasureText(text, ref rect);
+
+        // Add padding (scaled)
+        var padding = 16 * scale; // 8 pixels on each side
+        return rect.Width + padding;
+    }
 }

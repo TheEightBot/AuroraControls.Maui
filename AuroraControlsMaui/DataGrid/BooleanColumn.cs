@@ -158,4 +158,15 @@ public class BooleanColumn : DataGridColumn
         };
         canvas.DrawRect(rect, borderPaint);
     }
+
+    /// <summary>
+    /// Measures the content width for a given value.
+    /// </summary>
+    public override double MeasureContentWidth(object value, float scale)
+    {
+        // For boolean columns, we return the checkbox size plus padding
+        var scaledSize = CheckboxSize * scale;
+        var padding = 16 * scale; // 8 pixels on each side
+        return scaledSize + padding;
+    }
 }

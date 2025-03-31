@@ -32,6 +32,12 @@ public abstract class DataGridColumn : BindableObject, INotifyPropertyChanged
         BindableProperty.Create(nameof(IsVisible), typeof(bool), typeof(DataGridColumn), true);
 
     /// <summary>
+    /// Property for auto-sizing the column based on content.
+    /// </summary>
+    public static readonly BindableProperty AutoSizeProperty =
+        BindableProperty.Create(nameof(AutoSize), typeof(bool), typeof(DataGridColumn), false);
+
+    /// <summary>
     /// Gets or sets the header text.
     /// </summary>
     public string HeaderText
@@ -68,6 +74,15 @@ public abstract class DataGridColumn : BindableObject, INotifyPropertyChanged
     }
 
     /// <summary>
+    /// Gets or sets a value indicating whether the column should auto-size based on content.
+    /// </summary>
+    public bool AutoSize
+    {
+        get => (bool)GetValue(AutoSizeProperty);
+        set => SetValue(AutoSizeProperty, value);
+    }
+
+    /// <summary>
     /// Gets or sets the actual width of the column after layout.
     /// </summary>
     internal double ActualWidth { get; set; }
@@ -80,24 +95,20 @@ public abstract class DataGridColumn : BindableObject, INotifyPropertyChanged
     /// <summary>
     /// Gets the cell value for the specified data item.
     /// </summary>
-    /// <param name="item">The data item.</param>
-    /// <returns>The cell value.</returns>
     public abstract object GetCellValue(object item);
 
     /// <summary>
     /// Draws a cell in the grid.
     /// </summary>
-    /// <param name="canvas">The canvas to draw on.</param>
-    /// <param name="rect">The rectangle to draw within.</param>
-    /// <param name="value">The value to draw.</param>
-    /// <param name="isSelected">Whether the cell is selected.</param>
     public abstract void DrawCell(SKCanvas canvas, SKRect rect, object value, bool isSelected);
 
     /// <summary>
     /// Draws the column header.
     /// </summary>
-    /// <param name="canvas">The canvas to draw on.</param>
-    /// <param name="rect">The rectangle to draw within.</param>
-    /// <param name="isSelected">Whether the header is selected.</param>
     public abstract void DrawHeader(SKCanvas canvas, SKRect rect, bool isSelected);
+
+    /// <summary>
+    /// Measures the content width for a value.
+    /// </summary>
+    public abstract double MeasureContentWidth(object value, float scale);
 }

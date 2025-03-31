@@ -23,7 +23,7 @@
             <aurora:DataGrid.Columns>
                 <aurora:TextColumn PropertyPath="Name"
                                 HeaderText="Name"
-                                Width="200"/>
+                                AutoSize="True"/>
 
                 <aurora:NumericColumn PropertyPath="Age"
                                    HeaderText="Age"
@@ -32,7 +32,7 @@
 
                 <aurora:DateTimeColumn PropertyPath="DateOfBirth"
                                     HeaderText="Birth Date"
-                                    Width="120"
+                                    AutoSize="True"
                                     FormatString="d"/>
 
                 <aurora:NumericColumn PropertyPath="Salary"
