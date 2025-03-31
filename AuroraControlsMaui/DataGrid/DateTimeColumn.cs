@@ -31,9 +31,9 @@ public class DateTimeColumn : TextColumn
     /// <summary>
     /// Gets the formatted date/time value.
     /// </summary>
-    public override object GetValue(object item)
+    public override object GetCellValue(object item)
     {
-        var value = base.GetValue(item);
+        var value = base.GetCellValue(item);
         if (value == null)
         {
             return null;

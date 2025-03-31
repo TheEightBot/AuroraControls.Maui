@@ -31,9 +31,9 @@ public class NumericColumn : TextColumn
     /// <summary>
     /// Gets the formatted numeric value.
     /// </summary>
-    public override object GetValue(object item)
+    public override object GetCellValue(object item)
     {
-        var value = base.GetValue(item);
+        var value = base.GetCellValue(item);
         if (value == null)
         {
             return null;

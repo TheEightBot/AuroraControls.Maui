@@ -38,7 +38,7 @@ public class BooleanColumn : DataGridColumn
     /// <summary>
     /// Gets the boolean value from the data item.
     /// </summary>
-    public override object GetValue(object item)
+    public override object GetCellValue(object item)
     {
         if (item == null || string.IsNullOrEmpty(PropertyPath))
         {

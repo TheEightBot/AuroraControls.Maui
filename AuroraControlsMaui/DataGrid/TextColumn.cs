@@ -55,7 +55,7 @@ public class TextColumn : DataGridColumn
     /// <summary>
     /// Gets the cell value using reflection.
     /// </summary>
-    public override object GetValue(object item)
+    public override object GetCellValue(object item)
     {
         if (item == null || string.IsNullOrEmpty(PropertyPath))
         {

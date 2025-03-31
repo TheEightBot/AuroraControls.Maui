@@ -36,14 +36,16 @@ public class DataGrid : AuroraViewBase
     public static readonly BindableProperty HeaderRowHeightProperty =
         BindableProperty.Create(nameof(HeaderRowHeight), typeof(int), typeof(DataGrid), 45);
 
-    private IEnumerable _itemsSource;
-    private INotifyCollectionChanged _observableItemsSource;
-    private ObservableCollection<DataGridColumn> _columns;
+    // Fields
+    private readonly ObservableCollection<DataGridColumn> _columns;
+    private IEnumerable? _itemsSource;
+    private INotifyCollectionChanged? _observableItemsSource;
     private float _verticalOffset;
     private float _horizontalOffset;
     private int _firstVisibleRowIndex;
     private int _lastVisibleRowIndex;
     private bool _needsLayout = true;
+    private SKPoint? _lastTouchLocation;
 
     /// <summary>
     /// Gets or sets the data source for the grid.
@@ -198,7 +200,7 @@ public class DataGrid : AuroraViewBase
                     continue;
                 }
 
-                var value = column.GetValue(item);
+                var value = column.GetCellValue(item);
                 column.DrawCell(canvas, cellRect, value, false); // TODO: Add selection support
             }
         }
@@ -230,17 +232,30 @@ public class DataGrid : AuroraViewBase
     }
 
     // Touch handling for scrolling
-    public override void TouchAction(TouchActionEventArgs args)
+    protected override void OnTouch(SKTouchEventArgs e)
     {
-        base.TouchAction(args);
+        base.OnTouch(e);
 
-        switch (args.Type)
+        if (!e.InContact)
         {
-            case TouchActionType.Moved:
-                if (args.IsPrimary)
+            _lastTouchLocation = null;
+            return;
+        }
+
+        switch (e.ActionType)
+        {
+            case SKTouchAction.Pressed:
+            {
+                _lastTouchLocation = e.Location;
+                break;
+            }
+
+            case SKTouchAction.Moved:
+            {
+                if (_lastTouchLocation.HasValue)
                 {
-                    var deltaX = args.Location.X - args.PreviousLocation.X;
-                    var deltaY = args.Location.Y - args.PreviousLocation.Y;
+                    var deltaX = e.Location.X - _lastTouchLocation.Value.X;
+                    var deltaY = e.Location.Y - _lastTouchLocation.Value.Y;
 
                     _horizontalOffset = Math.Max(0, _horizontalOffset - deltaX);
                     _verticalOffset = Math.Max(0, _verticalOffset - deltaY);
@@ -249,17 +264,19 @@ public class DataGrid : AuroraViewBase
                     InvalidateSurface();
                 }
 
+                _lastTouchLocation = e.Location;
                 break;
+            }
         }
     }
 
     private static void OnItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
     {
         var grid = (DataGrid)bindable;
-        grid.OnItemsSourceChanged((IEnumerable)oldValue, (IEnumerable)newValue);
+        grid.UpdateItemsSource((IEnumerable)oldValue, (IEnumerable)newValue);
     }
 
-    private void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
+    private void UpdateItemsSource(IEnumerable oldValue, IEnumerable newValue)
     {
         if (_observableItemsSource != null)
         {
@@ -278,21 +295,21 @@ public class DataGrid : AuroraViewBase
         InvalidateSurface();
     }
 
+    private void OnColumnsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
+    {
+        _needsLayout = true;
+        InvalidateSurface();
+    }
+
+    private void OnItemsSourceCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        _needsLayout = true;
+        InvalidateSurface();
+    }
+
     private static void OnColumnsChanged(BindableObject bindable, object oldValue, object newValue)
     {
         var grid = (DataGrid)bindable;
         grid.OnColumnsCollectionChanged(null, null);
-    }
-
-    private void OnColumnsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        _needsLayout = true;
-        InvalidateSurface();
-    }
-
-    private void OnItemsSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        _needsLayout = true;
-        InvalidateSurface();
     }
 }

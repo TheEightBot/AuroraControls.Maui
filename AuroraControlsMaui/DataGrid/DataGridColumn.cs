@@ -82,7 +82,7 @@ public abstract class DataGridColumn : BindableObject, INotifyPropertyChanged
     /// </summary>
     /// <param name="item">The data item.</param>
     /// <returns>The cell value.</returns>
-    public abstract object GetValue(object item);
+    public abstract object GetCellValue(object item);
 
     /// <summary>
     /// Draws a cell in the grid.
