@@ -95,12 +95,9 @@ public interface IIconCache
     /// <param name="assembly">Assembly.</param>
     void LoadAssembly(Assembly assembly);
 
-    /// <summary>
-    /// SKBs the itmap from source.
-    /// </summary>
-    /// <returns>The itmap from source.</returns>
-    /// <param name="imageSource">Image source.</param>
     Task<SKBitmap> SKBitmapFromSource(ImageSource imageSource);
+
+    Task<SKImage> SKImageFromSource(ImageSource imageSource);
 
     Task<byte[]> ByteArrayFromSource(ImageSource imageSource);
 

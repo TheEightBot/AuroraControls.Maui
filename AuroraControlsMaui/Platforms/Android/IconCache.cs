@@ -19,6 +19,19 @@ public class IconCache : IconCacheBase
         }
     }
 
+    public override async Task<SKImage> SKImageFromSource(ImageSource imageSource)
+    {
+        if (imageSource == null)
+        {
+            return null;
+        }
+
+        using (var image = await imageSource.GetHandler().LoadImageAsync(imageSource, Microsoft.Maui.ApplicationModel.Platform.CurrentActivity).ConfigureAwait(false))
+        {
+            return image.ToSKImage();
+        }
+    }
+
     public override async Task<byte[]> ByteArrayFromSource(ImageSource imageSource)
     {
         if (imageSource == null)

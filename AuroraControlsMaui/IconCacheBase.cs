@@ -355,6 +355,8 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
     public abstract Task<SKBitmap> SKBitmapFromSource(ImageSource imageSource);
 
+    public abstract Task<SKImage> SKImageFromSource(ImageSource imageSource);
+
     public abstract Task<byte[]> ByteArrayFromSource(ImageSource imageSource);
 
     public abstract Task<Stream> StreamFromSource(ImageSource imageSource);

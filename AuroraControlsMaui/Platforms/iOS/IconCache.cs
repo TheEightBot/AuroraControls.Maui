@@ -17,6 +17,18 @@ public class IconCache : IconCacheBase
         return image?.ToSKBitmap() ?? new SKBitmap();
     }
 
+    public override async Task<SKImage> SKImageFromSource(ImageSource imageSource)
+    {
+        if (imageSource == null)
+        {
+            return null;
+        }
+
+        using var image = await imageSource.GetHandler().LoadImageAsync(imageSource).ConfigureAwait(false);
+
+        return image?.ToSKImage() ?? SKImage.Create(new SKImageInfo(1, 1));
+    }
+
     public override async Task<byte[]> ByteArrayFromSource(ImageSource imageSource)
     {
         if (imageSource == null)

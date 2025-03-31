@@ -1,5 +1,6 @@
 using System.Reactive.Linq;
 using AuroraControls.Effects;
+using AuroraControls.Fluent;
 using AuroraControls.Gauges;
 using AuroraControls.TestApp.ViewModels;
 using CommunityToolkit.Maui.Markup;
@@ -96,6 +97,40 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                         Spacing = 16,
                         Children =
                         {
+                            new Material3Button
+                            {
+                                Text = "Material 3",
+                                ButtonVariant = ButtonVariant.Elevated,
+                            },
+                            new FluentAvatar
+                            {
+                                Name = "John Smith",
+                                Size = AvatarSize.Large,
+                                Shape = AvatarShape.Circle,
+                                Presence = AvatarPresence.Available,
+                                BadgeText = "3",
+                                IsActive = true,
+                                IsOutOfOffice = true,
+                            },
+                            new FluentCompoundButton
+                            {
+                                Text = "This is a compound button",
+                                Description = "This is a longer description of the compound button that goes on and on and on",
+                                Appearance = ButtonAppearance.Accent,
+                                Shape = ButtonShape.Circular,
+                                IconName = "splatoon.svg",
+                                IconPosition = IconPosition.Before,
+                            },
+                            new FluentRatingDisplay
+                            {
+                                Value = 3.5f,
+                                Max = 5,
+                                StarSize = RatingSize.Medium,
+                                Precision = RatingPrecision.Half,
+                                ShowCount = true,
+                                Count = 42,
+                                Appearance = RatingAppearance.Filled,
+                            },
                             new Button { Text = "View Image Processing", }
                                 .BindClicked(async () => await this.Navigation.PushAsync(new ImageProcessing()))
                                 .Assign(out _viewImageProcessingButton),
