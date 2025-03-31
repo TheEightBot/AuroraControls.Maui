@@ -1,4 +1,5 @@
 ﻿[assembly: XmlnsDefinition(Constants.XamlNamespace, Constants.AuroraNamespace)]
+[assembly: XmlnsDefinition(Constants.XamlNamespace, Constants.AuroraNamespacePrefix + nameof(AuroraControls.DataGrid))]
 [assembly: XmlnsDefinition(Constants.XamlNamespace, Constants.AuroraNamespacePrefix + nameof(AuroraControls.Effects))]
 [assembly: XmlnsDefinition(Constants.XamlNamespace, Constants.AuroraNamespacePrefix + nameof(AuroraControls.Gauges))]
 [assembly: XmlnsDefinition(Constants.XamlNamespace, Constants.AuroraNamespacePrefix + nameof(AuroraControls.Loading))]

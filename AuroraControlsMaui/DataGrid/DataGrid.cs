@@ -104,7 +104,7 @@ public class DataGrid : AuroraViewBase
         // Clear the canvas
         surface.Canvas.Clear(SKColors.White);
 
-        // Draw the grid content (placeholder for now)
+        // Draw the grid content
         DrawHeaders(surface.Canvas, info);
         DrawCells(surface.Canvas, info);
     }
@@ -125,8 +125,8 @@ public class DataGrid : AuroraViewBase
         {
             if (column.Width > 0)
             {
-                column.ActualWidth = column.Width;
-                totalExplicitWidth += column.Width;
+                column.ActualWidth = column.Width * _scale;
+                totalExplicitWidth += column.ActualWidth;
             }
             else
             {
@@ -154,11 +154,13 @@ public class DataGrid : AuroraViewBase
         }
 
         // Calculate visible row range
-        var totalHeight = info.Height - HeaderRowHeight;
+        var scaledHeaderRowHeight = HeaderRowHeight * _scale;
+        var scaledRowHeight = RowHeight * _scale;
+        var totalHeight = info.Height - scaledHeaderRowHeight;
         var rowCount = _itemsSource?.Cast<object>().Count() ?? 0;
-        _firstVisibleRowIndex = (int)(_verticalOffset / RowHeight);
+        _firstVisibleRowIndex = (int)(_verticalOffset / scaledRowHeight);
         _lastVisibleRowIndex = Math.Min(
-            _firstVisibleRowIndex + (int)(totalHeight / RowHeight) + 1,
+            _firstVisibleRowIndex + (int)(totalHeight / scaledRowHeight) + 1,
             rowCount - 1);
     }
 
@@ -175,6 +177,9 @@ public class DataGrid : AuroraViewBase
             return;
         }
 
+        var scaledHeaderRowHeight = HeaderRowHeight * _scale;
+        var scaledRowHeight = RowHeight * _scale;
+
         // Draw visible cells
         for (int rowIndex = _firstVisibleRowIndex; rowIndex <= _lastVisibleRowIndex; rowIndex++)
         {
@@ -184,7 +189,7 @@ public class DataGrid : AuroraViewBase
             }
 
             var item = items[rowIndex];
-            var y = HeaderRowHeight + (rowIndex * RowHeight) - _verticalOffset;
+            var y = scaledHeaderRowHeight + (rowIndex * scaledRowHeight) - _verticalOffset;
 
             foreach (var column in Columns.Where(c => c.IsVisible))
             {
@@ -192,7 +197,7 @@ public class DataGrid : AuroraViewBase
                     (float)column.X - _horizontalOffset,
                     y,
                     (float)(column.X + column.ActualWidth) - _horizontalOffset,
-                    y + RowHeight);
+                    y + scaledRowHeight);
 
                 // Skip if cell is not visible
                 if (cellRect.Right < 0 || cellRect.Left > info.Width)
@@ -213,13 +218,15 @@ public class DataGrid : AuroraViewBase
             return;
         }
 
+        var scaledHeaderRowHeight = HeaderRowHeight * _scale;
+
         foreach (var column in Columns.Where(c => c.IsVisible))
         {
             var headerRect = new SKRect(
                 (float)column.X - _horizontalOffset,
                 0,
                 (float)(column.X + column.ActualWidth) - _horizontalOffset,
-                HeaderRowHeight);
+                scaledHeaderRowHeight);
 
             // Skip if header is not visible
             if (headerRect.Right < 0 || headerRect.Left > info.Width)
