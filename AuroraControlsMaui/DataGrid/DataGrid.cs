@@ -329,16 +329,16 @@ public class DataGrid : AuroraViewBase, IDisposable
         // Clear the canvas
         surface.Canvas.Clear(SKColors.White);
 
-        // Draw content
-        var headersStart = _renderStopwatch.ElapsedMilliseconds;
-        DrawHeaders(surface.Canvas, info);
-        var headersDuration = _renderStopwatch.ElapsedMilliseconds - headersStart;
-        Debug.WriteLine($"DataGrid headers rendering took {headersDuration}ms");
-
+        // Draw content in proper order - cells first, then headers on top
         var cellsStart = _renderStopwatch.ElapsedMilliseconds;
         DrawCells(surface.Canvas, info);
         var cellsDuration = _renderStopwatch.ElapsedMilliseconds - cellsStart;
         Debug.WriteLine($"DataGrid cells rendering took {cellsDuration}ms");
+
+        var headersStart = _renderStopwatch.ElapsedMilliseconds;
+        DrawHeaders(surface.Canvas, info);
+        var headersDuration = _renderStopwatch.ElapsedMilliseconds - headersStart;
+        Debug.WriteLine($"DataGrid headers rendering took {headersDuration}ms");
 
         _renderStopwatch.Stop();
         var totalDuration = _renderStopwatch.ElapsedMilliseconds;
@@ -540,6 +540,12 @@ public class DataGrid : AuroraViewBase, IDisposable
                         continue;
                     }
 
+                    // Save canvas state before clipping
+                    canvas.Save();
+
+                    // Clip to cell bounds to prevent overflow
+                    canvas.ClipRect(cellRect);
+
                     // Rotate through available paints
                     var paint = cellPaints[currentPaintIndex];
                     currentPaintIndex = (currentPaintIndex + 1) % cellPaints.Count;
@@ -547,11 +553,14 @@ public class DataGrid : AuroraViewBase, IDisposable
                     var value = column.GetCellValue(item);
                     column.DrawCell(canvas, cellRect, value, false, paint, _bgPaint);
 
-                    // Draw right border
+                    // Restore canvas state after drawing cell content
+                    canvas.Restore();
+
+                    // Draw right border after restore to ensure it's on top
                     canvas.DrawLine(cellRect.Right, cellRect.Top, cellRect.Right, cellRect.Bottom, _borderPaint);
                 }
 
-                // Draw bottom border
+                // Draw bottom border for the row
                 canvas.DrawLine(0, y + RowHeight, info.Width, y + RowHeight, _borderPaint);
             }
         }
@@ -572,6 +581,11 @@ public class DataGrid : AuroraViewBase, IDisposable
             return;
         }
 
+        // Draw header background first
+        var headerBackground = new SKRect(0, 0, info.Width, HeaderRowHeight);
+        _bgPaint.Color = new SKColor(240, 240, 240);
+        canvas.DrawRect(headerBackground, _bgPaint);
+
         foreach (var column in Columns.Where(c => c.IsVisible))
         {
             var headerRect = new SKRect(
@@ -586,10 +600,22 @@ public class DataGrid : AuroraViewBase, IDisposable
                 continue;
             }
 
+            // Save canvas state before clipping
+            canvas.Save();
+
+            // Clip to header bounds to prevent overflow
+            canvas.ClipRect(headerRect);
+
             column.DrawHeader(canvas, headerRect, false, _headerPaint, _bgPaint, _borderPaint);
+
+            // Restore canvas state after drawing header content
+            canvas.Restore();
+
+            // Draw right border after restore to ensure it's on top
+            canvas.DrawLine(headerRect.Right, headerRect.Top, headerRect.Right, headerRect.Bottom, _borderPaint);
         }
 
-        // Draw bottom border of header row
+        // Draw bottom border of header row last to ensure it's on top
         _borderPaint.StrokeWidth = (float)PlatformInfo.ScalingFactor;
         canvas.DrawLine(0, HeaderRowHeight, info.Width, HeaderRowHeight, _borderPaint);
     }
