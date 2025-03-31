@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="clr-namespace:AuroraControls;assembly=AuroraControls.Maui"
+             xmlns:grid="clr-namespace:AuroraControls.DataGrid;assembly=AuroraControls.Maui"
+             xmlns:viewmodels="clr-namespace:AuroraControls.TestApp.ViewModels"
+             x:Class="AuroraControls.TestApp.DataGridSamplePage"
+             Title="DataGrid Sample">
+
+    <ContentPage.BindingContext>
+        <viewmodels:DataGridSampleViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid RowDefinitions="Auto,*" Padding="10">
+        <Label Text="Employee Records" 
+               FontSize="24" 
+               HorizontalOptions="Center"
+               Margin="0,0,0,10"/>
+
+        <aurora:DataGrid Grid.Row="1"
+                        ItemsSource="{Binding People}"
+                        RowHeight="40"
+                        HeaderRowHeight="45">
+            <aurora:DataGrid.Columns>
+                <grid:TextColumn PropertyPath="Name" 
+                                HeaderText="Name" 
+                                Width="200"/>
+                
+                <grid:NumericColumn PropertyPath="Age" 
+                                   HeaderText="Age" 
+                                   Width="80"
+                                   FormatString="N0"/>
+                
+                <grid:DateTimeColumn PropertyPath="DateOfBirth" 
+                                    HeaderText="Birth Date" 
+                                    Width="120"
+                                    FormatString="d"/>
+                
+                <grid:NumericColumn PropertyPath="Salary" 
+                                   HeaderText="Salary" 
+                                   Width="120"
+                                   FormatString="C2"/>
+                
+                <grid:BooleanColumn PropertyPath="IsActive" 
+                                   HeaderText="Active" 
+                                   Width="80"
+                                   CheckboxSize="16"
+                                   CheckboxColor="{StaticResource Primary}"/>
+            </aurora:DataGrid.Columns>
+        </aurora:DataGrid>
+    </Grid>
+</ContentPage>
