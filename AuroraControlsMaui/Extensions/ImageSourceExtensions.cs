@@ -125,6 +125,7 @@ public static class ImageSourceExtensions
         return button;
     }
 
+    /*
     public static ImageCell AsAsyncSourceFor(this Task<FileImageSource> imageSourceTask, ImageCell imageCell)
     {
         imageSourceTask
@@ -134,12 +135,13 @@ public static class ImageSourceExtensions
                     if (result.IsCompleted && imageCell != null)
                     {
                         var imageSource = await result.ConfigureAwait(false);
-                        imageSource.Dispatcher.Dispatch(() => imageCell.ImageSource = imageSource);
+                        imageSource.Dispatcher.Dispatch(() => imageCell.Image = imageSource);
                     }
                 });
 
         return imageCell;
     }
+    */
 
     public static void AsAsyncSourceFor(this Task<FileImageSource> imageSourceTask, Action<ImageSource> assignImageSource) =>
         imageSourceTask
@@ -288,4 +290,6 @@ public static class ImageSourceExtensions
             .AsAsyncSourceFor(image);
 
     public static Task<SKBitmap> BitmapFromSource(this ImageSource imageSource) => IconCache.SKBitmapFromSource(imageSource);
+
+    public static Task<SKImage> ImageFromSource(this ImageSource imageSource) => IconCache.SKImageFromSource(imageSource);
 }

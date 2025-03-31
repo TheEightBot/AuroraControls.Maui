@@ -106,13 +106,13 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 .BindClicked(async () => await this.Navigation.PushAsync(new CalendarViewPage()))
                                 .Assign(out _viewCalendarViewButton),
                             new Button { Text = "View touch Draw Image", }
-                                .BindClicked(async () =>
-                                    await this.Navigation.PushAsync(new TouchDrawLettersImagePage()))
+                                .BindClicked(async () => await this.Navigation.PushAsync(new TouchDrawLettersImagePage()))
                                 .Assign(out _touchDrawImage),
                             new Button { Text = "View Toggle Issue Page", }
-                                .BindClicked(async () =>
-                                    await this.Navigation.PushAsync(new ToggleBoxCollectionViewIssuePage()))
+                                .BindClicked(async () => await this.Navigation.PushAsync(new ToggleBoxCollectionViewIssuePage()))
                                 .Assign(out _viewToggleIssueButton),
+                            new Button { Text = "View Data Grid", }
+                                .BindClicked(async () => await this.Navigation.PushAsync(new DataGridPage())),
                             new ToggleBox
                             {
                                 ToggledBackgroundColor = Colors.Fuchsia,
@@ -128,9 +128,14 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                             },
                             new StyledInputLayout
                             {
-                                Placeholder = "Nullable Date Picker",
+                                Placeholder = "Nullable Calendar Picker",
                                 Content =
-                                    new CalendarPicker()
+                                    new CalendarPicker
+                                    {
+                                        IsEnabled = false,
+                                        TextColor = Colors.Black,
+                                        Date = DateTime.Now,
+                                    }
                                         .Assign(out this._calendarPicker),
                             },
                             new Button { Text = "Clear Nullable Date Picker", }
