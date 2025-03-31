@@ -42,7 +42,7 @@ public class BooleanColumn : DataGridColumn
     {
         if (item == null || string.IsNullOrEmpty(PropertyPath))
         {
-            return null;
+            return false;
         }
 
         var property = item.GetType().GetProperty(PropertyPath);
@@ -57,11 +57,13 @@ public class BooleanColumn : DataGridColumn
     public override void DrawCell(SKCanvas canvas, SKRect rect, object value, bool isSelected)
     {
         bool isChecked = value is bool b && b;
+        float scale = (float)PlatformInfo.ScalingFactor;
 
         // Calculate checkbox position
         float centerX = rect.MidX;
         float centerY = rect.MidY;
-        float halfSize = CheckboxSize / 2;
+        float scaledSize = CheckboxSize * scale;
+        float halfSize = scaledSize / 2;
 
         var checkboxRect = new SKRect(
             centerX - halfSize,
@@ -85,7 +87,7 @@ public class BooleanColumn : DataGridColumn
         {
             Color = CheckboxColor.ToSKColor(),
             Style = SKPaintStyle.Stroke,
-            StrokeWidth = 1.5f,
+            StrokeWidth = 1.5f * scale,
             IsAntialias = true,
         })
         {
@@ -99,15 +101,15 @@ public class BooleanColumn : DataGridColumn
             {
                 Color = CheckboxColor.ToSKColor(),
                 Style = SKPaintStyle.Stroke,
-                StrokeWidth = 2f,
+                StrokeWidth = 2f * scale,
                 IsAntialias = true,
             };
 
             // Draw checkmark
             var path = new SKPath();
-            path.MoveTo(checkboxRect.Left + (CheckboxSize * 0.2f), checkboxRect.MidY);
-            path.LineTo(checkboxRect.Left + (CheckboxSize * 0.45f), checkboxRect.Bottom - (CheckboxSize * 0.2f));
-            path.LineTo(checkboxRect.Right - (CheckboxSize * 0.2f), checkboxRect.Top + (CheckboxSize * 0.2f));
+            path.MoveTo(checkboxRect.Left + (scaledSize * 0.2f), checkboxRect.MidY);
+            path.LineTo(checkboxRect.Left + (scaledSize * 0.45f), checkboxRect.Bottom - (scaledSize * 0.2f));
+            path.LineTo(checkboxRect.Right - (scaledSize * 0.2f), checkboxRect.Top + (scaledSize * 0.2f));
 
             canvas.DrawPath(path, checkPaint);
         }
@@ -117,7 +119,7 @@ public class BooleanColumn : DataGridColumn
         {
             Color = new SKColor(220, 220, 220),
             Style = SKPaintStyle.Stroke,
-            StrokeWidth = 1,
+            StrokeWidth = scale,
         };
         canvas.DrawLine(rect.Right, rect.Top, rect.Right, rect.Bottom, borderPaint);
     }
