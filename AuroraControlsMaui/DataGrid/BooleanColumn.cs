@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace AuroraControls.DataGrid;
 
 /// <summary>
@@ -45,117 +47,93 @@ public class BooleanColumn : DataGridColumn
             return false;
         }
 
-        var property = item.GetType().GetProperty(PropertyPath);
+        var property = item.GetType().GetProperty(PropertyPath, BindingFlags.Public | BindingFlags.Instance);
         var value = property?.GetValue(item);
 
         return value is bool b ? b : false;
     }
 
     /// <summary>
-    /// Draws a checkbox cell.
+    /// Draws a cell with a checkbox.
     /// </summary>
-    public override void DrawCell(SKCanvas canvas, SKRect rect, object value, bool isSelected)
+    public override void DrawCell(SKCanvas canvas, SKRect rect, object value, bool isSelected, SKPaint cellPaint, SKPaint bgPaint)
     {
-        bool isChecked = value is bool b && b;
         float scale = (float)PlatformInfo.ScalingFactor;
-
-        // Calculate checkbox position
-        float centerX = rect.MidX;
-        float centerY = rect.MidY;
         float scaledSize = CheckboxSize * scale;
-        float halfSize = scaledSize / 2;
-
-        var checkboxRect = new SKRect(
-            centerX - halfSize,
-            centerY - halfSize,
-            centerX + halfSize,
-            centerY + halfSize);
 
         // Draw selection background if selected
         if (isSelected)
         {
-            using var bgPaint = new SKPaint
-            {
-                Color = new SKColor(0, 120, 215, 50),
-                Style = SKPaintStyle.Fill,
-            };
+            bgPaint.Color = new SKColor(0, 120, 215, 50);
             canvas.DrawRect(rect, bgPaint);
         }
 
-        // Draw checkbox
-        using (var paint = new SKPaint
+        // Calculate checkbox position with pixel alignment
+        float x = (float)Math.Round(rect.MidX - (scaledSize / 2f));
+        float y = (float)Math.Round(rect.MidY - (scaledSize / 2f));
+
+        using (var checkboxPaint = new SKPaint
         {
-            Color = CheckboxColor.ToSKColor(),
-            Style = SKPaintStyle.Stroke,
-            StrokeWidth = 1.5f * scale,
             IsAntialias = true,
+            SubpixelText = true,
+            LcdRenderText = true,
+            FilterQuality = SKFilterQuality.High,
+            Color = CheckboxColor.ToSKColor(),
+            StrokeWidth = scale,
         })
         {
-            canvas.DrawRect(checkboxRect, paint);
-        }
+            // Draw checkbox border
+            checkboxPaint.Style = SKPaintStyle.Stroke;
+            canvas.DrawRect(x, y, scaledSize, scaledSize, checkboxPaint);
 
-        // Draw checkmark if checked
-        if (isChecked)
-        {
-            using var checkPaint = new SKPaint
+            // Draw checkmark if checked
+            if (value is bool isChecked && isChecked)
             {
-                Color = CheckboxColor.ToSKColor(),
-                Style = SKPaintStyle.Stroke,
-                StrokeWidth = 2f * scale,
-                IsAntialias = true,
-            };
+                checkboxPaint.StrokeWidth = scale * 2;
 
-            // Draw checkmark
-            var path = new SKPath();
-            path.MoveTo(checkboxRect.Left + (scaledSize * 0.2f), checkboxRect.MidY);
-            path.LineTo(checkboxRect.Left + (scaledSize * 0.45f), checkboxRect.Bottom - (scaledSize * 0.2f));
-            path.LineTo(checkboxRect.Right - (scaledSize * 0.2f), checkboxRect.Top + (scaledSize * 0.2f));
+                using (var path = new SKPath())
+                {
+                    float padding = scaledSize * 0.2f;
+                    float left = x + padding;
+                    float right = x + scaledSize - padding;
+                    float top = y + padding;
+                    float bottom = y + scaledSize - padding;
+                    float middle = left + ((right - left) * 0.4f);
 
-            canvas.DrawPath(path, checkPaint);
+                    path.MoveTo((float)Math.Round(left), (float)Math.Round(y + (scaledSize * 0.5f)));
+                    path.LineTo((float)Math.Round(middle), (float)Math.Round(bottom));
+                    path.LineTo((float)Math.Round(right), (float)Math.Round(top));
+
+                    canvas.DrawPath(path, checkboxPaint);
+                }
+            }
         }
-
-        // Draw right border
-        using var borderPaint = new SKPaint
-        {
-            Color = new SKColor(220, 220, 220),
-            Style = SKPaintStyle.Stroke,
-            StrokeWidth = scale,
-        };
-        canvas.DrawLine(rect.Right, rect.Top, rect.Right, rect.Bottom, borderPaint);
     }
 
     /// <summary>
     /// Draws the column header.
     /// </summary>
-    public override void DrawHeader(SKCanvas canvas, SKRect rect, bool isSelected)
+    public override void DrawHeader(SKCanvas canvas, SKRect rect, bool isSelected, SKPaint headerPaint, SKPaint bgPaint, SKPaint borderPaint)
     {
+        float scale = (float)PlatformInfo.ScalingFactor;
+
         // Draw header background
-        using var bgPaint = new SKPaint
-        {
-            Color = isSelected ? new SKColor(0, 120, 215) : new SKColor(240, 240, 240),
-            Style = SKPaintStyle.Fill,
-        };
+        bgPaint.Color = isSelected ? new SKColor(0, 120, 215) : new SKColor(240, 240, 240);
         canvas.DrawRect(rect, bgPaint);
 
-        // Draw header text
-        using var paint = new SKPaint
-        {
-            Color = isSelected ? SKColors.White : SKColors.Black,
-            IsAntialias = true,
-            TextSize = 14,
-            TextAlign = SKTextAlign.Center,
-            FakeBoldText = true,
-        };
+        // Configure paint for text
+        headerPaint.Color = isSelected ? SKColors.White : SKColors.Black;
+        headerPaint.TextAlign = SKTextAlign.Center;
+        headerPaint.EnsureHasValidFont(HeaderText ?? PropertyPath ?? string.Empty);
 
-        canvas.DrawText(HeaderText ?? PropertyPath ?? string.Empty, rect.MidX, rect.MidY + (14 / 3), paint);
+        // Draw text with proper baseline alignment
+        var text = HeaderText ?? PropertyPath ?? string.Empty;
+        var metrics = headerPaint.FontMetrics;
+        var textOffset = ((rect.Height - (metrics.Descent - metrics.Ascent)) / 2) - metrics.Ascent;
+        canvas.DrawText(text, rect.MidX, rect.Top + textOffset, headerPaint);
 
         // Draw header border
-        using var borderPaint = new SKPaint
-        {
-            Color = new SKColor(200, 200, 200),
-            Style = SKPaintStyle.Stroke,
-            StrokeWidth = 1,
-        };
+        borderPaint.StrokeWidth = scale;
         canvas.DrawRect(rect, borderPaint);
     }
 
@@ -164,9 +142,8 @@ public class BooleanColumn : DataGridColumn
     /// </summary>
     public override double MeasureContentWidth(object value, float scale)
     {
-        // For boolean columns, we return the checkbox size plus padding
-        var scaledSize = CheckboxSize * scale;
-        var padding = 16 * scale; // 8 pixels on each side
-        return scaledSize + padding;
+        // Width is fixed based on checkbox size plus padding
+        float padding = 16 * scale;
+        return (CheckboxSize * scale) + padding;
     }
 }

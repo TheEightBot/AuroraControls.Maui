@@ -83,14 +83,14 @@ public abstract class DataGridColumn : BindableObject, INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Gets or sets the actual width of the column after layout.
-    /// </summary>
-    internal double ActualWidth { get; set; }
-
-    /// <summary>
     /// Gets or sets the X position of the column in the grid.
     /// </summary>
     internal double X { get; set; }
+
+    /// <summary>
+    /// Gets or sets the actual width of the column after layout.
+    /// </summary>
+    internal double ActualWidth { get; set; }
 
     /// <summary>
     /// Gets the cell value for the specified data item.
@@ -98,14 +98,14 @@ public abstract class DataGridColumn : BindableObject, INotifyPropertyChanged
     public abstract object GetCellValue(object item);
 
     /// <summary>
-    /// Draws a cell in the grid.
+    /// Draws a cell in the grid using shared paint objects.
     /// </summary>
-    public abstract void DrawCell(SKCanvas canvas, SKRect rect, object value, bool isSelected);
+    public abstract void DrawCell(SKCanvas canvas, SKRect rect, object value, bool isSelected, SKPaint cellPaint, SKPaint bgPaint);
 
     /// <summary>
-    /// Draws the column header.
+    /// Draws the column header using shared paint objects.
     /// </summary>
-    public abstract void DrawHeader(SKCanvas canvas, SKRect rect, bool isSelected);
+    public abstract void DrawHeader(SKCanvas canvas, SKRect rect, bool isSelected, SKPaint headerPaint, SKPaint bgPaint, SKPaint borderPaint);
 
     /// <summary>
     /// Measures the content width for a value.

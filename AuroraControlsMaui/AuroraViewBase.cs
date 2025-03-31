@@ -1,16 +1,20 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace AuroraControls;
 
 public abstract class AuroraViewBase : SKCanvasView, IAuroraView
 {
     private readonly VisualEffects.VisualEffectCollection _visualEffects = new();
+    private readonly Stopwatch _renderStopwatch = new();
 
     private bool _isPaintingSurface;
     private bool _needsDelayedPaint;
     private bool _attachmentClear;
 
-    private IEnumerable<VisualEffects.VisualEffect> _enabledVisualEffects;
+    private IEnumerable<VisualEffects.VisualEffect> _enabledVisualEffects = Array.Empty<VisualEffects.VisualEffect>();
 
     protected float _scale;
     protected SKRect _overrideDrawableArea;
@@ -72,10 +76,14 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
         this.PaintSurfaceInternal(surface, imageInfo);
 
         var snapshot = surface?.Snapshot();
+        if (snapshot == null)
+        {
+            return Stream.Null;
+        }
 
-        var encoded = snapshot?.Encode(imageFormat, quality)?.AsStream() ?? Stream.Null;
+        var encoded = snapshot.Encode(imageFormat, quality)?.AsStream() ?? Stream.Null;
 
-        snapshot.Dispose();
+        snapshot?.Dispose();
         snapshot = null;
 
         return encoded;
@@ -158,6 +166,8 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
             return;
         }
 
+        _renderStopwatch.Restart();
+
         if (_attachmentClear)
         {
             surface.Canvas.Clear(SKColors.Transparent);
@@ -184,48 +194,58 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
                 return;
             }
 
+            var paintControlStart = _renderStopwatch.ElapsedMilliseconds;
             PaintControl(surface, info);
+            var paintControlDuration = _renderStopwatch.ElapsedMilliseconds - paintControlStart;
+            Debug.WriteLine($"PaintControl took {paintControlDuration}ms");
 
             _enabledVisualEffects = VisualEffects.Where(x => x.Enabled).ToList();
 
-            if (!this._enabledVisualEffects.Any())
+            if (!_enabledVisualEffects.Any())
             {
                 return;
             }
 
-            if (!this.IsAttached)
+            if (!IsAttached)
             {
                 return;
             }
 
+            var effectsStart = _renderStopwatch.ElapsedMilliseconds;
             using (new SKAutoCanvasRestore(surface.Canvas))
             {
                 var image = surface.Snapshot();
 
-                if (this._overrideDrawableArea != default(SKRect))
+                if (_overrideDrawableArea != default(SKRect))
                 {
-                    surface.Canvas.ClipRect(this._overrideDrawableArea);
+                    surface.Canvas.ClipRect(_overrideDrawableArea);
                 }
 
-                foreach (var visualEffect in this._enabledVisualEffects)
+                foreach (var visualEffect in _enabledVisualEffects)
                 {
-                    if (!this.IsAttached)
+                    if (!IsAttached)
                     {
                         return;
                     }
 
-                    var tmpImage = visualEffect.ApplyEffect(image, surface, info, this._overrideDrawableArea);
+                    var effectStart = _renderStopwatch.ElapsedMilliseconds;
+                    var tmpImage = visualEffect.ApplyEffect(image, surface, info, _overrideDrawableArea);
                     image?.Dispose();
                     image = tmpImage;
+                    var effectDuration = _renderStopwatch.ElapsedMilliseconds - effectStart;
+                    Debug.WriteLine($"Visual effect {visualEffect.GetType().Name} took {effectDuration}ms");
                 }
 
-                if (!this.IsAttached)
+                if (!IsAttached)
                 {
                     return;
                 }
 
                 surface.Canvas.DrawImage(image, SKPoint.Empty);
             }
+
+            var effectsTotalDuration = _renderStopwatch.ElapsedMilliseconds - effectsStart;
+            Debug.WriteLine($"All visual effects took {effectsTotalDuration}ms");
         }
         finally
         {
@@ -234,12 +254,16 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
             if (_needsDelayedPaint)
             {
                 _needsDelayedPaint = false;
-                this.InvalidateSurface();
+                InvalidateSurface();
             }
+
+            _renderStopwatch.Stop();
+            var totalDuration = _renderStopwatch.ElapsedMilliseconds;
+            Debug.WriteLine($"Total render time: {totalDuration}ms");
         }
     }
 
-    private void VisualEffects_EffectPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) => this.InvalidateSurface();
+    private void VisualEffects_EffectPropertyChanged(object? sender, PropertyChangedEventArgs e) => InvalidateSurface();
 
-    private void VisualEffects_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) => this.InvalidateSurface();
+    private void VisualEffects_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => InvalidateSurface();
 }

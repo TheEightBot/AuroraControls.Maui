@@ -1,6 +1,8 @@
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using Microsoft.Maui.Dispatching;
 
 namespace AuroraControls.DataGrid;
@@ -8,7 +10,7 @@ namespace AuroraControls.DataGrid;
 /// <summary>
 /// A simplified DataGrid control.
 /// </summary>
-public class DataGrid : AuroraViewBase
+public class DataGrid : AuroraViewBase, IDisposable
 {
     /// <summary>
     /// Property for the item source that provides data to the grid.
@@ -39,8 +41,17 @@ public class DataGrid : AuroraViewBase
 
     private const float ScrollDecelerationRate = 0.95f;
     private const float MinScrollVelocity = 1f;
+    private const int MaxSampledRowsForAutoSize = 100;
+    private const int MaxPaintPoolSize = 32;
     private readonly IDispatcherTimer? _scrollTimer;
     private readonly ObservableCollection<DataGridColumn> _columns;
+    private readonly Dictionary<string, SKRect> _textMeasurementCache = new();
+    private readonly ConcurrentQueue<SKPaint> _paintPool = new();
+    private readonly SKPaint _cellPaint;
+    private readonly SKPaint _headerPaint;
+    private readonly SKPaint _borderPaint;
+    private readonly SKPaint _bgPaint;
+    private readonly Stopwatch _renderStopwatch = new();
     private IEnumerable? _itemsSource;
     private INotifyCollectionChanged? _observableItemsSource;
     private float _verticalOffset;
@@ -53,6 +64,7 @@ public class DataGrid : AuroraViewBase
     private DateTime _lastTouchTime;
     private float _maxHorizontalOffset;
     private float _maxVerticalOffset;
+    private bool _disposed;
 
     /// <summary>
     /// Gets or sets the data source for the grid.
@@ -99,6 +111,28 @@ public class DataGrid : AuroraViewBase
         _columns = new ObservableCollection<DataGridColumn>();
         _columns.CollectionChanged += OnColumnsCollectionChanged;
 
+        // Initialize reusable paint objects with optimized text rendering
+        _cellPaint = new SKPaint
+        {
+            IsAntialias = true, SubpixelText = true, LcdRenderText = true, FilterQuality = SKFilterQuality.High,
+        };
+
+        _headerPaint = new SKPaint
+        {
+            IsAntialias = true,
+            SubpixelText = true,
+            LcdRenderText = true,
+            FilterQuality = SKFilterQuality.High,
+            FakeBoldText = true,
+        };
+
+        _borderPaint = new SKPaint
+        {
+            Color = new SKColor(220, 220, 220), Style = SKPaintStyle.Stroke, IsAntialias = true,
+        };
+
+        _bgPaint = new SKPaint { Style = SKPaintStyle.Fill };
+
         // Initialize scroll timer for inertial scrolling
         _scrollTimer = Application.Current?.Dispatcher?.CreateTimer();
         if (_scrollTimer != null)
@@ -106,6 +140,65 @@ public class DataGrid : AuroraViewBase
             _scrollTimer.Interval = TimeSpan.FromMilliseconds(16); // ~60fps
             _scrollTimer.Tick += OnScrollTimerTick;
         }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                _cellPaint?.Dispose();
+                _headerPaint?.Dispose();
+                _borderPaint?.Dispose();
+                _bgPaint?.Dispose();
+
+                while (_paintPool.TryDequeue(out var paint))
+                {
+                    paint.Dispose();
+                }
+            }
+
+            _disposed = true;
+        }
+    }
+
+    ~DataGrid()
+    {
+        Dispose(false);
+    }
+
+    private string GetCacheKey(object value, float fontSize, SKTextAlign alignment)
+    {
+        return $"{value}_{fontSize}_{alignment}";
+    }
+
+    private SKRect MeasureTextWithCache(object value, float fontSize, SKTextAlign alignment, SKPaint paint)
+    {
+        var key = GetCacheKey(value, fontSize, alignment);
+        if (_textMeasurementCache.TryGetValue(key, out var cachedRect))
+        {
+            return cachedRect;
+        }
+
+        var text = value?.ToString() ?? string.Empty;
+        var rect = default(SKRect);
+        paint.TextSize = fontSize;
+        paint.TextAlign = alignment;
+        paint.MeasureText(text, ref rect);
+        _textMeasurementCache[key] = rect;
+        return rect;
+    }
+
+    private void ClearMeasurementCache()
+    {
+        _textMeasurementCache.Clear();
     }
 
     private void UpdateScrollBounds(SKImageInfo info)
@@ -217,20 +310,39 @@ public class DataGrid : AuroraViewBase
 
     protected override void PaintControl(SKSurface surface, SKImageInfo info)
     {
+        _renderStopwatch.Restart();
+
+        var scrollBoundsStart = _renderStopwatch.ElapsedMilliseconds;
         UpdateScrollBounds(info);
+        var scrollBoundsDuration = _renderStopwatch.ElapsedMilliseconds - scrollBoundsStart;
+        Debug.WriteLine($"DataGrid scroll bounds update took {scrollBoundsDuration}ms");
 
         if (_needsLayout)
         {
+            var layoutStart = _renderStopwatch.ElapsedMilliseconds;
             CalculateLayout(info);
             _needsLayout = false;
+            var layoutDuration = _renderStopwatch.ElapsedMilliseconds - layoutStart;
+            Debug.WriteLine($"DataGrid layout calculation took {layoutDuration}ms");
         }
 
         // Clear the canvas
         surface.Canvas.Clear(SKColors.White);
 
         // Draw content
+        var headersStart = _renderStopwatch.ElapsedMilliseconds;
         DrawHeaders(surface.Canvas, info);
+        var headersDuration = _renderStopwatch.ElapsedMilliseconds - headersStart;
+        Debug.WriteLine($"DataGrid headers rendering took {headersDuration}ms");
+
+        var cellsStart = _renderStopwatch.ElapsedMilliseconds;
         DrawCells(surface.Canvas, info);
+        var cellsDuration = _renderStopwatch.ElapsedMilliseconds - cellsStart;
+        Debug.WriteLine($"DataGrid cells rendering took {cellsDuration}ms");
+
+        _renderStopwatch.Stop();
+        var totalDuration = _renderStopwatch.ElapsedMilliseconds;
+        Debug.WriteLine($"DataGrid total render time: {totalDuration}ms");
     }
 
     private void CalculateLayout(SKImageInfo info)
@@ -243,11 +355,20 @@ public class DataGrid : AuroraViewBase
         float scale = (float)PlatformInfo.ScalingFactor;
         var availableWidth = info.Width;
         var totalExplicitWidth = 0d;
-        var autoWidthColumns = new List<DataGridColumn>();
-        var autoSizeColumns = new List<DataGridColumn>();
+        var minAutoWidth = 50 * scale;
 
-        // First pass: calculate explicit widths and identify auto columns
-        foreach (var column in Columns.Where(c => c.IsVisible))
+        // Pre-filter visible columns to avoid multiple enumerations
+        var visibleColumns = Columns.Where(c => c.IsVisible).ToArray();
+        if (visibleColumns.Length == 0)
+        {
+            return;
+        }
+
+        // Single pass to categorize columns and calculate explicit widths
+        var autoWidthColumns = new List<DataGridColumn>(visibleColumns.Length);
+        var autoSizeColumns = new List<DataGridColumn>(visibleColumns.Length);
+
+        foreach (var column in visibleColumns)
         {
             if (column.Width > 0)
             {
@@ -264,63 +385,108 @@ public class DataGrid : AuroraViewBase
             }
         }
 
-        // Second pass: calculate content-based widths for auto-size columns
-        if (autoSizeColumns.Any() && _itemsSource != null)
+        // Calculate auto-size column widths only if we have items
+        if (autoSizeColumns.Count > 0 && _itemsSource != null)
         {
-            var items = _itemsSource.Cast<object>().ToList();
+            // Cache header text measurements
+            var headerWidths = new Dictionary<DataGridColumn, double>(autoSizeColumns.Count);
             foreach (var column in autoSizeColumns)
             {
-                // Start with the header width
-                double maxWidth = column.MeasureContentWidth(column.HeaderText ?? column.PropertyPath ?? string.Empty, scale);
+                var headerText = column.HeaderText ?? column.PropertyPath ?? string.Empty;
+                headerWidths[column] = column.MeasureContentWidth(headerText, scale);
+            }
 
-                // Check each cell's content width
-                foreach (var item in items)
+            // Only enumerate items once and calculate all column widths in parallel
+            var items = _itemsSource.Cast<object>().ToArray();
+            if (items.Length > 0)
+            {
+                // Initialize width tracking
+                var columnMaxWidths = new double[autoSizeColumns.Count];
+                for (int i = 0; i < autoSizeColumns.Count; i++)
                 {
-                    var value = column.GetCellValue(item);
-                    var contentWidth = column.MeasureContentWidth(value, scale);
-                    maxWidth = Math.Max(maxWidth, contentWidth);
+                    columnMaxWidths[i] = headerWidths[autoSizeColumns[i]];
                 }
 
-                column.ActualWidth = maxWidth;
-                totalExplicitWidth += maxWidth;
+                // Sample a subset of rows for large datasets
+                var samplingStep = Math.Max(1, items.Length / MaxSampledRowsForAutoSize);
+                var sampledItems = items.Length > MaxSampledRowsForAutoSize
+                    ? items.Where((_, index) => index % samplingStep == 0).ToArray()
+                    : items;
+
+                // Calculate max widths for all columns in a single pass through sampled items
+                foreach (var item in sampledItems)
+                {
+                    for (int colIndex = 0; colIndex < autoSizeColumns.Count; colIndex++)
+                    {
+                        var column = autoSizeColumns[colIndex];
+                        var value = column.GetCellValue(item);
+                        var width = column.MeasureContentWidth(value, scale);
+                        if (width > columnMaxWidths[colIndex])
+                        {
+                            columnMaxWidths[colIndex] = width;
+                        }
+                    }
+                }
+
+                // Add a small buffer to account for sampling
+                if (items.Length > MaxSampledRowsForAutoSize)
+                {
+                    for (int i = 0; i < columnMaxWidths.Length; i++)
+                    {
+                        columnMaxWidths[i] *= 1.1; // Add 10% buffer
+                    }
+                }
+
+                // Apply calculated widths
+                for (int i = 0; i < autoSizeColumns.Count; i++)
+                {
+                    var column = autoSizeColumns[i];
+                    column.ActualWidth = columnMaxWidths[i];
+                    totalExplicitWidth += column.ActualWidth;
+                }
+            }
+            else
+            {
+                // No items, just use header widths
+                foreach (var column in autoSizeColumns)
+                {
+                    column.ActualWidth = headerWidths[column];
+                    totalExplicitWidth += column.ActualWidth;
+                }
             }
         }
 
-        // Third pass: distribute remaining width among auto-width columns
-        var remainingWidth = availableWidth - totalExplicitWidth;
-        if (autoWidthColumns.Any() && remainingWidth > 0)
+        // Distribute remaining width to auto-width columns
+        var remainingWidth = Math.Max(0, availableWidth - totalExplicitWidth);
+        if (autoWidthColumns.Count > 0)
         {
-            var autoWidth = remainingWidth / autoWidthColumns.Count;
+            var autoWidth = remainingWidth > 0 ?
+                remainingWidth / autoWidthColumns.Count :
+                minAutoWidth;
+
             foreach (var column in autoWidthColumns)
             {
                 column.ActualWidth = autoWidth;
             }
         }
-        else if (autoWidthColumns.Any())
-        {
-            // If no space remains, give auto-width columns a minimum width
-            var minWidth = 50 * scale;
-            foreach (var column in autoWidthColumns)
-            {
-                column.ActualWidth = minWidth;
-            }
-        }
 
-        // Fourth pass: calculate X positions
+        // Calculate X positions in a single pass
         var currentX = 0d;
-        foreach (var column in Columns.Where(c => c.IsVisible))
+        foreach (var column in visibleColumns)
         {
             column.X = currentX;
             currentX += column.ActualWidth;
         }
 
         // Calculate visible row range
-        var totalHeight = info.Height - HeaderRowHeight;
-        var rowCount = _itemsSource?.Cast<object>().Count() ?? 0;
-        _firstVisibleRowIndex = (int)(_verticalOffset / RowHeight);
-        _lastVisibleRowIndex = Math.Min(
-            _firstVisibleRowIndex + (int)(totalHeight / RowHeight) + 1,
-            rowCount - 1);
+        if (_itemsSource != null)
+        {
+            var totalHeight = info.Height - HeaderRowHeight;
+            _firstVisibleRowIndex = (int)(_verticalOffset / RowHeight);
+            _lastVisibleRowIndex = Math.Min(
+                _firstVisibleRowIndex + (int)(totalHeight / RowHeight) + 1,
+                (_itemsSource as ICollection)?.Count ?? _itemsSource.Cast<object>().Count() - 1);
+        }
     }
 
     private void DrawCells(SKCanvas canvas, SKImageInfo info)
@@ -336,33 +502,65 @@ public class DataGrid : AuroraViewBase
             return;
         }
 
-        // Draw visible cells
-        for (int rowIndex = _firstVisibleRowIndex; rowIndex <= _lastVisibleRowIndex; rowIndex++)
+        _borderPaint.StrokeWidth = (float)PlatformInfo.ScalingFactor;
+
+        // Create a small pool of paints for this draw operation
+        var cellPaints = new List<SKPaint>();
+        for (int i = 0; i < Math.Min(4, MaxPaintPoolSize); i++)
         {
-            if (rowIndex >= items.Count)
+            cellPaints.Add(AcquirePaint());
+        }
+
+        var currentPaintIndex = 0;
+
+        try
+        {
+            // Draw visible cells
+            for (int rowIndex = _firstVisibleRowIndex; rowIndex <= _lastVisibleRowIndex; rowIndex++)
             {
-                break;
-            }
-
-            var item = items[rowIndex];
-            var y = HeaderRowHeight + (rowIndex * RowHeight) - _verticalOffset;
-
-            foreach (var column in Columns.Where(c => c.IsVisible))
-            {
-                var cellRect = new SKRect(
-                    (float)column.X - _horizontalOffset,
-                    y,
-                    (float)(column.X + column.ActualWidth) - _horizontalOffset,
-                    y + RowHeight);
-
-                // Skip if cell is not visible
-                if (cellRect.Right < 0 || cellRect.Left > info.Width)
+                if (rowIndex >= items.Count)
                 {
-                    continue;
+                    break;
                 }
 
-                var value = column.GetCellValue(item);
-                column.DrawCell(canvas, cellRect, value, false); // TODO: Add selection support
+                var item = items[rowIndex];
+                var y = HeaderRowHeight + (rowIndex * RowHeight) - _verticalOffset;
+
+                foreach (var column in Columns.Where(c => c.IsVisible))
+                {
+                    var cellRect = new SKRect(
+                        (float)column.X - _horizontalOffset,
+                        y,
+                        (float)(column.X + column.ActualWidth) - _horizontalOffset,
+                        y + RowHeight);
+
+                    // Skip if cell is not visible
+                    if (cellRect.Right < 0 || cellRect.Left > info.Width)
+                    {
+                        continue;
+                    }
+
+                    // Rotate through available paints
+                    var paint = cellPaints[currentPaintIndex];
+                    currentPaintIndex = (currentPaintIndex + 1) % cellPaints.Count;
+
+                    var value = column.GetCellValue(item);
+                    column.DrawCell(canvas, cellRect, value, false, paint, _bgPaint);
+
+                    // Draw right border
+                    canvas.DrawLine(cellRect.Right, cellRect.Top, cellRect.Right, cellRect.Bottom, _borderPaint);
+                }
+
+                // Draw bottom border
+                canvas.DrawLine(0, y + RowHeight, info.Width, y + RowHeight, _borderPaint);
+            }
+        }
+        finally
+        {
+            // Return paints to the pool
+            foreach (var paint in cellPaints)
+            {
+                ReleasePaint(paint);
             }
         }
     }
@@ -388,8 +586,12 @@ public class DataGrid : AuroraViewBase
                 continue;
             }
 
-            column.DrawHeader(canvas, headerRect, false); // TODO: Add header selection support
+            column.DrawHeader(canvas, headerRect, false, _headerPaint, _bgPaint, _borderPaint);
         }
+
+        // Draw bottom border of header row
+        _borderPaint.StrokeWidth = (float)PlatformInfo.ScalingFactor;
+        canvas.DrawLine(0, HeaderRowHeight, info.Width, HeaderRowHeight, _borderPaint);
     }
 
     private void OnColumnsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs? e)
@@ -405,7 +607,7 @@ public class DataGrid : AuroraViewBase
     }
 
     private static void OnColumnsChanged(BindableObject bindable, object oldValue, object newValue)
-   {
+    {
         var grid = (DataGrid)bindable;
         grid.OnColumnsCollectionChanged(null, null);
     }
@@ -429,6 +631,35 @@ public class DataGrid : AuroraViewBase
 
             grid._needsLayout = true;
             grid.InvalidateSurface();
+        }
+    }
+
+    private SKPaint AcquirePaint()
+    {
+        if (_paintPool.TryDequeue(out var paint))
+        {
+            return paint;
+        }
+
+        return new SKPaint
+        {
+            IsAntialias = true,
+            SubpixelText = true,
+            LcdRenderText = true,
+            FilterQuality = SKFilterQuality.High,
+        };
+    }
+
+    private void ReleasePaint(SKPaint paint)
+    {
+        if (_paintPool.Count < MaxPaintPoolSize)
+        {
+            paint.Reset();
+            _paintPool.Enqueue(paint);
+        }
+        else
+        {
+            paint.Dispose();
         }
     }
 }

@@ -71,38 +71,33 @@ public class TextColumn : DataGridColumn
     /// <summary>
     /// Draws a cell with text content.
     /// </summary>
-    public override void DrawCell(SKCanvas canvas, SKRect rect, object value, bool isSelected)
+    public override void DrawCell(SKCanvas canvas, SKRect rect, object value, bool isSelected, SKPaint cellPaint, SKPaint bgPaint)
     {
         float scale = (float)PlatformInfo.ScalingFactor;
         float scaledFontSize = FontSize * scale;
         float scaledPadding = 8 * scale;
 
-        using var paint = new SKPaint
+        // Configure paint for text rendering
+        cellPaint.Color = TextColor.ToSKColor();
+        cellPaint.TextSize = scaledFontSize;
+        cellPaint.TextAlign = TextAlignment switch
         {
-            Color = TextColor.ToSKColor(),
-            IsAntialias = true,
-            TextSize = scaledFontSize,
-            TextAlign = TextAlignment switch
-            {
-                TextAlignment.Start => SKTextAlign.Left,
-                TextAlignment.Center => SKTextAlign.Center,
-                TextAlignment.End => SKTextAlign.Right,
-                _ => SKTextAlign.Left,
-            },
+            TextAlignment.Start => SKTextAlign.Left,
+            TextAlignment.Center => SKTextAlign.Center,
+            TextAlignment.End => SKTextAlign.Right,
+            _ => SKTextAlign.Left,
         };
+
+        cellPaint.EnsureHasValidFont(value?.ToString() ?? string.Empty);
 
         // Draw selection background if selected
         if (isSelected)
         {
-            using var bgPaint = new SKPaint
-            {
-                Color = new SKColor(0, 120, 215, 50),
-                Style = SKPaintStyle.Fill,
-            };
+            bgPaint.Color = new SKColor(0, 120, 215, 50);
             canvas.DrawRect(rect, bgPaint);
         }
 
-        // Calculate text position based on alignment
+        // Calculate text position based on alignment and metrics
         float x = TextAlignment switch
         {
             TextAlignment.Start => rect.Left + scaledPadding,
@@ -111,52 +106,38 @@ public class TextColumn : DataGridColumn
             _ => rect.Left + scaledPadding,
         };
 
-        // Draw text
+        // Draw text with proper baseline alignment
         var text = value?.ToString() ?? string.Empty;
-        canvas.DrawText(text, x, rect.MidY + (scaledFontSize / 3), paint);
-
-        // Draw right border
-        using var borderPaint = new SKPaint
-        {
-            Color = new SKColor(220, 220, 220),
-            Style = SKPaintStyle.Stroke,
-            StrokeWidth = scale,
-        };
-        canvas.DrawLine(rect.Right, rect.Top, rect.Right, rect.Bottom, borderPaint);
+        var metrics = cellPaint.FontMetrics;
+        var textOffset = ((rect.Height - (metrics.Descent - metrics.Ascent)) / 2) - metrics.Ascent;
+        canvas.DrawText(text, x, rect.Top + textOffset, cellPaint);
     }
 
     /// <summary>
     /// Draws the column header.
     /// </summary>
-    public override void DrawHeader(SKCanvas canvas, SKRect rect, bool isSelected)
+    public override void DrawHeader(SKCanvas canvas, SKRect rect, bool isSelected, SKPaint headerPaint, SKPaint bgPaint, SKPaint borderPaint)
     {
         float scale = (float)PlatformInfo.ScalingFactor;
         float scaledFontSize = FontSize * scale;
         float scaledPadding = 8 * scale;
 
         // Draw header background
-        using var bgPaint = new SKPaint
-        {
-            Color = isSelected ? new SKColor(0, 120, 215) : new SKColor(240, 240, 240),
-            Style = SKPaintStyle.Fill,
-        };
+        bgPaint.Color = isSelected ? new SKColor(0, 120, 215) : new SKColor(240, 240, 240);
         canvas.DrawRect(rect, bgPaint);
 
-        // Draw header text
-        using var paint = new SKPaint
+        // Configure header text paint
+        headerPaint.Color = isSelected ? SKColors.White : SKColors.Black;
+        headerPaint.TextSize = scaledFontSize;
+        headerPaint.TextAlign = TextAlignment switch
         {
-            Color = isSelected ? SKColors.White : SKColors.Black,
-            IsAntialias = true,
-            TextSize = scaledFontSize,
-            TextAlign = TextAlignment switch
-            {
-                TextAlignment.Start => SKTextAlign.Left,
-                TextAlignment.Center => SKTextAlign.Center,
-                TextAlignment.End => SKTextAlign.Right,
-                _ => SKTextAlign.Left,
-            },
-            FakeBoldText = true,
+            TextAlignment.Start => SKTextAlign.Left,
+            TextAlignment.Center => SKTextAlign.Center,
+            TextAlignment.End => SKTextAlign.Right,
+            _ => SKTextAlign.Left,
         };
+
+        headerPaint.EnsureHasValidFont(HeaderText ?? PropertyPath ?? string.Empty);
 
         float x = TextAlignment switch
         {
@@ -166,15 +147,14 @@ public class TextColumn : DataGridColumn
             _ => rect.Left + scaledPadding,
         };
 
-        canvas.DrawText(HeaderText ?? PropertyPath ?? string.Empty, x, rect.MidY + (scaledFontSize / 3), paint);
+        // Draw header text with proper baseline alignment
+        var text = HeaderText ?? PropertyPath ?? string.Empty;
+        var metrics = headerPaint.FontMetrics;
+        var textOffset = ((rect.Height - (metrics.Descent - metrics.Ascent)) / 2) - metrics.Ascent;
+        canvas.DrawText(text, x, rect.Top + textOffset, headerPaint);
 
         // Draw header border
-        using var borderPaint = new SKPaint
-        {
-            Color = new SKColor(200, 200, 200),
-            Style = SKPaintStyle.Stroke,
-            StrokeWidth = scale,
-        };
+        borderPaint.StrokeWidth = scale;
         canvas.DrawRect(rect, borderPaint);
     }
 

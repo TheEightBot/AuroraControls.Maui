@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Reflection;
 
 namespace AuroraControls.DataGrid;
@@ -5,16 +6,61 @@ namespace AuroraControls.DataGrid;
 /// <summary>
 /// A column type for displaying numeric data with formatting.
 /// </summary>
-public class NumericColumn : TextColumn
+public class NumericColumn : DataGridColumn
 {
     /// <summary>
-    /// Property for the numeric format string.
+    /// Property for text alignment.
+    /// </summary>
+    public static readonly BindableProperty TextAlignmentProperty =
+        BindableProperty.Create(nameof(TextAlignment), typeof(TextAlignment), typeof(NumericColumn), TextAlignment.End);
+
+    /// <summary>
+    /// Property for text color.
+    /// </summary>
+    public static readonly BindableProperty TextColorProperty =
+        BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(NumericColumn), Colors.Black);
+
+    /// <summary>
+    /// Property for font size.
+    /// </summary>
+    public static readonly BindableProperty FontSizeProperty =
+        BindableProperty.Create(nameof(FontSize), typeof(float), typeof(NumericColumn), 14f);
+
+    /// <summary>
+    /// Property for number format string.
     /// </summary>
     public static readonly BindableProperty FormatStringProperty =
         BindableProperty.Create(nameof(FormatString), typeof(string), typeof(NumericColumn), "N2");
 
     /// <summary>
-    /// Gets or sets the format string for numeric values.
+    /// Gets or sets the text alignment.
+    /// </summary>
+    public TextAlignment TextAlignment
+    {
+        get => (TextAlignment)GetValue(TextAlignmentProperty);
+        set => SetValue(TextAlignmentProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the text color.
+    /// </summary>
+    public Color TextColor
+    {
+        get => (Color)GetValue(TextColorProperty);
+        set => SetValue(TextColorProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the font size.
+    /// </summary>
+    public float FontSize
+    {
+        get => (float)GetValue(FontSizeProperty);
+        set => SetValue(FontSizeProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the format string.
     /// </summary>
     public string FormatString
     {
@@ -22,29 +68,148 @@ public class NumericColumn : TextColumn
         set => SetValue(FormatStringProperty, value);
     }
 
-    public NumericColumn()
-    {
-        // Set default alignment to end (right)
-        TextAlignment = TextAlignment.End;
-    }
+    private static readonly CultureInfo CurrentCulture = CultureInfo.CurrentCulture;
+    private static readonly NumberFormatInfo NumberFormat = CurrentCulture.NumberFormat;
 
     /// <summary>
-    /// Gets the formatted numeric value.
+    /// Gets the cell value using reflection and formats it as a number.
     /// </summary>
     public override object GetCellValue(object item)
     {
-        var value = base.GetCellValue(item);
+        if (item == null || string.IsNullOrEmpty(PropertyPath))
+        {
+            return string.Empty;
+        }
+
+        var property = item.GetType().GetProperty(PropertyPath, BindingFlags.Public | BindingFlags.Instance);
+        var value = property?.GetValue(item);
+
         if (value == null)
         {
-            return null;
+            return string.Empty;
         }
 
         // Handle different numeric types
-        if (value is IFormattable formattable)
+        return value switch
         {
-            return formattable.ToString(FormatString, System.Globalization.CultureInfo.CurrentCulture);
+            int intValue => intValue.ToString(FormatString, NumberFormat),
+            long longValue => longValue.ToString(FormatString, NumberFormat),
+            float floatValue => floatValue.ToString(FormatString, NumberFormat),
+            double doubleValue => doubleValue.ToString(FormatString, NumberFormat),
+            decimal decimalValue => decimalValue.ToString(FormatString, NumberFormat),
+            _ => value.ToString() ?? string.Empty,
+        };
+    }
+
+    /// <summary>
+    /// Draws a cell with numeric content.
+    /// </summary>
+    public override void DrawCell(SKCanvas canvas, SKRect rect, object value, bool isSelected, SKPaint cellPaint, SKPaint bgPaint)
+    {
+        float scale = (float)PlatformInfo.ScalingFactor;
+        float scaledFontSize = FontSize * scale;
+        float scaledPadding = 8 * scale;
+
+        // Configure paint for text rendering
+        cellPaint.Color = TextColor.ToSKColor();
+        cellPaint.TextSize = scaledFontSize;
+        cellPaint.TextAlign = TextAlignment switch
+        {
+            TextAlignment.Start => SKTextAlign.Left,
+            TextAlignment.Center => SKTextAlign.Center,
+            TextAlignment.End => SKTextAlign.Right,
+            _ => SKTextAlign.Right, // Default to right alignment for numbers
+        };
+
+        cellPaint.EnsureHasValidFont(value?.ToString() ?? string.Empty);
+
+        // Draw selection background if selected
+        if (isSelected)
+        {
+            bgPaint.Color = new SKColor(0, 120, 215, 50);
+            canvas.DrawRect(rect, bgPaint);
         }
 
-        return value;
+        // Calculate text position based on alignment and metrics
+        float x = TextAlignment switch
+        {
+            TextAlignment.Start => rect.Left + scaledPadding,
+            TextAlignment.Center => rect.MidX,
+            TextAlignment.End => rect.Right - scaledPadding,
+            _ => rect.Right - scaledPadding, // Default to right alignment for numbers
+        };
+
+        // Draw text with proper baseline alignment
+        var text = value?.ToString() ?? string.Empty;
+        var metrics = cellPaint.FontMetrics;
+        var textOffset = ((rect.Height - (metrics.Descent - metrics.Ascent)) / 2) - metrics.Ascent;
+        canvas.DrawText(text, x, rect.Top + textOffset, cellPaint);
+    }
+
+    /// <summary>
+    /// Draws the column header.
+    /// </summary>
+    public override void DrawHeader(SKCanvas canvas, SKRect rect, bool isSelected, SKPaint headerPaint, SKPaint bgPaint, SKPaint borderPaint)
+    {
+        float scale = (float)PlatformInfo.ScalingFactor;
+        float scaledFontSize = FontSize * scale;
+        float scaledPadding = 8 * scale;
+
+        // Draw header background
+        bgPaint.Color = isSelected ? new SKColor(0, 120, 215) : new SKColor(240, 240, 240);
+        canvas.DrawRect(rect, bgPaint);
+
+        // Configure header text paint
+        headerPaint.Color = isSelected ? SKColors.White : SKColors.Black;
+        headerPaint.TextSize = scaledFontSize;
+        headerPaint.TextAlign = TextAlignment switch
+        {
+            TextAlignment.Start => SKTextAlign.Left,
+            TextAlignment.Center => SKTextAlign.Center,
+            TextAlignment.End => SKTextAlign.Right,
+            _ => SKTextAlign.Right, // Default to right alignment for numbers
+        };
+
+        headerPaint.EnsureHasValidFont(HeaderText ?? PropertyPath ?? string.Empty);
+
+        float x = TextAlignment switch
+        {
+            TextAlignment.Start => rect.Left + scaledPadding,
+            TextAlignment.Center => rect.MidX,
+            TextAlignment.End => rect.Right - scaledPadding,
+            _ => rect.Right - scaledPadding, // Default to right alignment for numbers
+        };
+
+        // Draw header text with proper baseline alignment
+        var text = HeaderText ?? PropertyPath ?? string.Empty;
+        var metrics = headerPaint.FontMetrics;
+        var textOffset = ((rect.Height - (metrics.Descent - metrics.Ascent)) / 2) - metrics.Ascent;
+        canvas.DrawText(text, x, rect.Top + textOffset, headerPaint);
+
+        // Draw header border
+        borderPaint.StrokeWidth = scale;
+        canvas.DrawRect(rect, borderPaint);
+    }
+
+    /// <summary>
+    /// Measures the content width for a given value.
+    /// </summary>
+    public override double MeasureContentWidth(object value, float scale)
+    {
+        var text = value?.ToString() ?? string.Empty;
+        using var paint = new SKPaint
+        {
+            TextSize = FontSize * scale,
+            IsAntialias = true,
+            SubpixelText = true,
+            LcdRenderText = true,
+        };
+
+        var rect = default(SKRect);
+        paint.MeasureText(text, ref rect);
+
+        // Add padding (scaled)
+        var padding = 16 * scale; // 8 pixels on each side
+        return rect.Width + padding;
     }
 }
