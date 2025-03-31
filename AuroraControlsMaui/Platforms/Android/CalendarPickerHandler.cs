@@ -10,6 +10,7 @@ public partial class CalendarPickerHandler : DatePickerHandler
         new(DatePickerHandler.ViewMapper)
         {
             [nameof(CalendarPicker.Date)] = MapDate,
+            [nameof(CalendarPicker.TextColor)] = MapTextColor,
         };
 
     public CalendarPickerHandler()
@@ -37,6 +38,14 @@ public partial class CalendarPickerHandler : DatePickerHandler
     }
 
     public static void MapDate(CalendarPickerHandler handler, CalendarPicker view) => handler.TryShowEmptyState();
+
+    public static void MapTextColor(CalendarPickerHandler handler, CalendarPicker datePicker)
+    {
+        if (handler is DatePickerHandler platformHandler)
+        {
+            platformHandler.PlatformView?.UpdateTextColor(datePicker);
+        }
+    }
 
     public void TryShowEmptyState()
     {
