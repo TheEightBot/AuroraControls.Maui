@@ -4,12 +4,21 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:AuroraControls.TestApp"
-    Shell.FlyoutBehavior="Disabled">
+    Shell.FlyoutBehavior="Flyout">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <FlyoutItem Title="Home" Icon="home">
+        <ShellContent
+            Title="Home"
+            ContentTemplate="{DataTemplate local:MainPage}"
+            Route="MainPage" />
+    </FlyoutItem>
+    
+    <FlyoutItem Title="Signature Pad" Icon="edit">
+        <ShellContent
+            Title="Signature Pad"
+            ContentTemplate="{DataTemplate local:SignaturePadPage}"
+            Route="SignaturePadPage" />
+    </FlyoutItem>
 
 </Shell>
 
