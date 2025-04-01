@@ -66,6 +66,12 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
                 break;
         }
 
+        if (height == 0 && width == 0)
+        {
+            height = (int)this.CanvasSize.Height;
+            width = (int)this.CanvasSize.Width;
+        }
+
         var imageInfo = new SKImageInfo(width, height, colorType);
 
         using var surface = SKSurface.Create(imageInfo);
