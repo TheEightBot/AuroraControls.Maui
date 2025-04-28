@@ -62,14 +62,7 @@ public class Tile : AuroraViewBase
     /// </summary>
     public static readonly BindableProperty MaxImageSizeProperty =
         BindableProperty.Create(nameof(MaxImageSize), typeof(Size), typeof(Tile), default(Size),
-            propertyChanged:
-                static (bindable, _, _) =>
-                {
-                    if (bindable is Tile tile)
-                    {
-                        tile.InvalidateSurface();
-                    }
-                });
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets the maximum image size.
@@ -86,13 +79,7 @@ public class Tile : AuroraViewBase
     /// </summary>
     public static readonly BindableProperty OverlayColorProperty =
         BindableProperty.Create(nameof(OverlayColor), typeof(Color), typeof(Tile), Colors.Transparent,
-            propertyChanged: static (bindable, _, _) =>
-            {
-                if (bindable is Tile tile)
-                {
-                    tile.InvalidateSurface();
-                }
-            });
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets the color of the overlay.
