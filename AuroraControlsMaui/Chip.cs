@@ -1,4 +1,5 @@
-﻿using Svg.Skia;
+﻿using Microsoft.Maui.Controls.Internals;
+using Svg.Skia;
 
 namespace AuroraControls;
 
@@ -201,7 +202,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// The border color.
     /// </summary>
     public static BindableProperty BorderColorProperty =
-        BindableProperty.Create(nameof(BorderColor), typeof(Color), typeof(Chip),
+        BindableProperty.Create(nameof(BorderColor), typeof(Color), typeof(Chip), Colors.Transparent,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -215,7 +216,7 @@ public class Chip : AuroraViewBase, IDisposable
     }
 
     public static BindableProperty ToggledBorderColorProperty =
-        BindableProperty.Create(nameof(ToggledBorderColor), typeof(Color), typeof(Chip),
+        BindableProperty.Create(nameof(ToggledBorderColor), typeof(Color), typeof(Chip), Colors.Transparent,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     public Color ToggledBorderColor
@@ -228,7 +229,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// The border color when the chip is ReadOnly.
     /// </summary>
     public static BindableProperty ReadOnlyBorderColorProperty =
-        BindableProperty.Create(nameof(ReadOnlyBorderColor), typeof(Color), typeof(Chip),
+        BindableProperty.Create(nameof(ReadOnlyBorderColor), typeof(Color), typeof(Chip), Colors.Transparent,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -540,6 +541,9 @@ public class Chip : AuroraViewBase, IDisposable
     public Chip()
     {
         this._cantHandleTouch = DeviceInfo.Platform == DevicePlatform.Android;
+
+        HeightRequest = 40;
+        WidthRequest = 40;
     }
 
     protected override void Attached() => this.EnableTouchEvents = true;
@@ -791,10 +795,14 @@ public class Chip : AuroraViewBase, IDisposable
 
         var scaledXOffset = xOffset / _scale;
 
-        if (Math.Abs(scaledXOffset - this._calculatedWidth) > .001d)
+        if (Math.Abs(scaledXOffset - _calculatedWidth) > .001f)
         {
-            this._calculatedWidth = scaledXOffset;
-            this.InvalidateMeasure();
+            _calculatedWidth = scaledXOffset;
+            Dispatcher.Dispatch(
+                () =>
+                {
+                    this.InvalidateMeasureNonVirtual(InvalidationTrigger.HorizontalOptionsChanged);
+                });
         }
     }
 
@@ -845,6 +853,7 @@ public class Chip : AuroraViewBase, IDisposable
         this.InvalidateSurface();
     }
 
+    /*
     protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint)
     {
         var sr = base.OnMeasure(widthConstraint, heightConstraint);
@@ -854,6 +863,19 @@ public class Chip : AuroraViewBase, IDisposable
 
         // TODO: Need to add sizing provider
         return new SizeRequest(new Size(neededWidth, neededHeight), _minSize);
+    }
+    */
+
+    protected override Size MeasureOverride(double widthConstraint, double heightConstraint)
+    {
+        var size = base.MeasureOverride(widthConstraint, heightConstraint);
+
+        if (_calculatedWidth > size.Width)
+        {
+            return new Size(this._calculatedWidth + Margin.HorizontalThickness, size.Height);
+        }
+
+        return size;
     }
 
     /// <summary>

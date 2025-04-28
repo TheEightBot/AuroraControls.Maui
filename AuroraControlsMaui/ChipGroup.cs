@@ -1,591 +1,719 @@
-﻿using System.Collections.Specialized;
-using System.Runtime.CompilerServices;
-using Microsoft.Maui.Controls.Compatibility;
-using Microsoft.Maui.Controls.Shapes;
+using System.Collections;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using Microsoft.Maui.Controls.Internals;
+using Microsoft.Maui.Layouts;
 
 namespace AuroraControls;
 
-public class ChipGroup : Layout<Chip>
+public class ChipGroup : ContentView, IDisposable
 {
-    private static readonly BindablePropertyKey SelectedChipsPropertyKey = BindableProperty.CreateReadOnly(nameof(SelectedChips), typeof(IEnumerable<Chip>), typeof(ChipGroup), new List<Chip>());
+    private readonly ObservableCollection<Chip> _chips = new();
+    private readonly List<Chip> _selectedChips = new();
+    private bool _disposed;
+    private bool _isUpdating;
+    private Chip? _selectedChip;
+    private ScrollView? _scrollView;
+    private FlexLayout? _chipContainer;
 
-    public static readonly BindableProperty SelectedChipsProperty = SelectedChipsPropertyKey.BindableProperty;
+    /// <summary>
+    /// Event that fires when chip selection changes
+    /// </summary>
+    public event EventHandler<ChipSelectionChangedEventArgs>? SelectionChanged;
 
-    private readonly PanGestureRecognizer _panGesture;
-    private readonly LayoutInfo _layoutInfo = new();
+    /// <summary>
+    /// Gets the collection of chips in this group.
+    /// </summary>
+    public IList<Chip> Chips => _chips;
 
-    private double _xOffset;
-    private double _maxOffset;
-    private double _finalXOffset;
+    /// <summary>
+    /// Controls whether the ChipGroup allows horizontal scrolling (single line) or wraps content (multi-line).
+    /// </summary>
+    public static readonly BindableProperty IsScrollableProperty =
+        BindableProperty.Create(nameof(IsScrollable), typeof(bool), typeof(ChipGroup), false,
+            propertyChanged: OnLayoutPropertyChanged);
 
-    private Chip? _previouslySelectedChip;
-
-    public event EventHandler<ChipTappedEventArgs> ChipTapped;
-
-    public IEnumerable<Chip> SelectedChips
+    /// <summary>
+    /// Gets or sets a value indicating whether the ChipGroup allows horizontal scrolling (true) or wraps chips (false).
+    /// </summary>
+    public bool IsScrollable
     {
-        get => this.Children.Where(x => x.IsToggled).ToArray();
+        get => (bool)GetValue(IsScrollableProperty);
+        set => SetValue(IsScrollableProperty, value);
     }
 
-    public IEnumerable<object> SelectedValues
+    /// <summary>
+    /// Controls whether multiple chips can be selected simultaneously.
+    /// </summary>
+    public static readonly BindableProperty AllowMultipleSelectionProperty =
+        BindableProperty.Create(nameof(AllowMultipleSelection), typeof(bool), typeof(ChipGroup), false);
+
+    /// <summary>
+    /// Gets or sets a value indicating whether multiple chips can be selected simultaneously.
+    /// </summary>
+    public bool AllowMultipleSelection
     {
-        get => this.SelectedChips.Select(x => x.Value).ToArray();
-        set
-        {
-            var children = this.Children.ToArray();
-
-            foreach (var child in children)
-            {
-                child.IsToggled = value.Contains(child.Value);
-            }
-
-            this.OnPropertyChanged();
-        }
+        get => (bool)GetValue(AllowMultipleSelectionProperty);
+        set => SetValue(AllowMultipleSelectionProperty, value);
     }
 
-    public object SelectedValue
+    /// <summary>
+    /// The currently selected chip in single-selection mode.
+    /// </summary>
+    public static readonly BindableProperty SelectedChipProperty =
+        BindableProperty.Create(nameof(SelectedChip), typeof(Chip), typeof(ChipGroup), null,
+            BindingMode.TwoWay, propertyChanged: OnSelectedChipChanged);
+
+    /// <summary>
+    /// Gets or sets the currently selected chip in single-selection mode.
+    /// </summary>
+    public Chip? SelectedChip
     {
-        get => this.SelectedChips.Select(x => x.Value).FirstOrDefault();
-        set
-        {
-            var children = this.Children.ToArray();
-
-            var hasToggled = false;
-            foreach (var child in children)
-            {
-                if (!hasToggled)
-                {
-                    var isMatch = child?.Value?.Equals(value) ?? false;
-                    child.IsToggled = isMatch;
-
-                    if (isMatch)
-                    {
-                        hasToggled = true;
-                    }
-
-                    continue;
-                }
-
-                child.IsToggled = false;
-            }
-
-            this.OnPropertyChanged();
-        }
+        get => (Chip?)GetValue(SelectedChipProperty);
+        set => SetValue(SelectedChipProperty, value);
     }
 
-    public static BindableProperty ScrollableProperty =
-        BindableProperty.Create(nameof(Scrollable), typeof(bool), typeof(ChipGroup), false);
+    /// <summary>
+    /// The currently selected chips in multi-selection mode.
+    /// </summary>
+    public static readonly BindableProperty SelectedChipsProperty =
+        BindableProperty.Create(nameof(SelectedChips), typeof(IList<Chip>), typeof(ChipGroup), null,
+            BindingMode.OneWay);
 
-    public bool Scrollable
+    /// <summary>
+    /// Gets the currently selected chips in multi-selection mode.
+    /// </summary>
+    public IList<Chip> SelectedChips => _selectedChips;
+
+    /// <summary>
+    /// The horizontal spacing between chips.
+    /// </summary>
+    public static readonly BindableProperty HorizontalSpacingProperty =
+        BindableProperty.Create(nameof(HorizontalSpacing), typeof(double), typeof(ChipGroup), 8.0,
+            propertyChanged: OnLayoutPropertyChanged);
+
+    /// <summary>
+    /// Gets or sets the horizontal spacing between chips.
+    /// </summary>
+    public double HorizontalSpacing
     {
-        get => (bool)this.GetValue(ScrollableProperty);
-        set => this.SetValue(ScrollableProperty, value);
+        get => (double)GetValue(HorizontalSpacingProperty);
+        set => SetValue(HorizontalSpacingProperty, value);
     }
 
-    public static BindableProperty MaxRowsBeforeOverflowProperty =
-        BindableProperty.Create(nameof(MaxRowsBeforeOverflow), typeof(int), typeof(ChipGroup), -1);
+    /// <summary>
+    /// The vertical spacing between chips when in multi-line mode.
+    /// </summary>
+    public static readonly BindableProperty VerticalSpacingProperty =
+        BindableProperty.Create(nameof(VerticalSpacing), typeof(double), typeof(ChipGroup), 8.0,
+            propertyChanged: OnLayoutPropertyChanged);
 
-    public int MaxRowsBeforeOverflow
+    /// <summary>
+    /// Gets or sets the vertical spacing between chips when in multi-line mode.
+    /// </summary>
+    public double VerticalSpacing
     {
-        get => (int)this.GetValue(MaxRowsBeforeOverflowProperty);
-        set => this.SetValue(MaxRowsBeforeOverflowProperty, value);
+        get => (double)GetValue(VerticalSpacingProperty);
+        set => SetValue(VerticalSpacingProperty, value);
     }
 
-    public static BindableProperty IsOverflowProperty =
-        BindableProperty.Create(nameof(IsOverflow), typeof(bool), typeof(ChipGroup), false);
+    /// <summary>
+    /// The source collection of items to create chips from.
+    /// </summary>
+    public static readonly BindableProperty ItemsSourceProperty =
+        BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(ChipGroup), null,
+            propertyChanged: OnItemsSourceChanged);
 
-    public bool IsOverflow
+    /// <summary>
+    /// Gets or sets the source collection of items to create chips from.
+    /// </summary>
+    public IEnumerable? ItemsSource
     {
-        get => (bool)this.GetValue(IsOverflowProperty);
-        private set => this.SetValue(IsOverflowProperty, value);
+        get => (IEnumerable?)GetValue(ItemsSourceProperty);
+        set => SetValue(ItemsSourceProperty, value);
     }
 
-    public static BindableProperty IsSingleSelectionProperty =
-        BindableProperty.Create(nameof(IsSingleSelection), typeof(bool), typeof(ChipGroup), false);
+    /// <summary>
+    /// The template to use for creating chips from the ItemsSource.
+    /// </summary>
+    public static readonly BindableProperty ItemTemplateProperty =
+        BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(ChipGroup), null,
+            propertyChanged: OnItemTemplateChanged);
 
-    public bool IsSingleSelection
+    /// <summary>
+    /// Gets or sets the template to use for creating chips from the ItemsSource.
+    /// </summary>
+    public DataTemplate? ItemTemplate
     {
-        get => (bool)this.GetValue(IsSingleSelectionProperty);
-        set => this.SetValue(IsSingleSelectionProperty, value);
-    }
-
-    public static BindableProperty ChipSelectionDetectionProperty =
-        BindableProperty.Create(nameof(ChipSelectionDetection), typeof(bool), typeof(ChipGroup), true);
-
-    public bool ChipSelectionDetection
-    {
-        get => (bool)this.GetValue(ChipSelectionDetectionProperty);
-        set => this.SetValue(ChipSelectionDetectionProperty, value);
-    }
-
-    public static BindableProperty SpacingProperty = BindableProperty.Create(nameof(Spacing), typeof(double), typeof(ChipGroup), 8d);
-
-    public double Spacing
-    {
-        get
-        {
-            return (double)this.GetValue(SpacingProperty);
-        }
-
-        set
-        {
-            this.SetValue(SpacingProperty, value);
-            InvalidateLayout();
-        }
+        get => (DataTemplate?)GetValue(ItemTemplateProperty);
+        set => SetValue(ItemTemplateProperty, value);
     }
 
     public ChipGroup()
     {
-        _panGesture = new PanGestureRecognizer();
-        this.GestureRecognizers.Add(_panGesture);
+        _chips.CollectionChanged += OnChipsCollectionChanged;
+        InitializeLayout();
     }
 
-    public async Task ScrollToContextAsync(object item, ScrollToPosition scrollToPosition = ScrollToPosition.Start, bool animated = true, uint rate = 16, uint length = 250, Easing easing = null)
+    private void InitializeLayout()
     {
-        var matchingChip = this.Children.FirstOrDefault(x => x.BindingContext == item);
-
-        if (matchingChip == null)
+        // Create layout containers
+        _chipContainer = new FlexLayout
         {
-            return;
-        }
+            Direction = FlexDirection.Row,
+            Wrap = IsScrollable ? FlexWrap.NoWrap : FlexWrap.Wrap,
+            JustifyContent = FlexJustify.Start,
+            AlignItems = FlexAlignItems.Center,
+        };
 
-        await ScrollToAsync(matchingChip, scrollToPosition, animated, rate, length, easing);
-    }
-
-    public async Task ScrollToValueAsync(object item, ScrollToPosition scrollToPosition = ScrollToPosition.Start, bool animated = true, uint rate = 16, uint length = 250, Easing easing = null)
-    {
-        var matchingChip = this.Children.FirstOrDefault(x => x.Value?.Equals(item) ?? false);
-
-        if (matchingChip == null)
+        if (IsScrollable)
         {
-            return;
-        }
-
-        await ScrollToAsync(matchingChip, scrollToPosition, animated, rate, length, easing);
-    }
-
-    public async Task ScrollToAsync(Chip chip, ScrollToPosition scrollToPosition = ScrollToPosition.Start, bool animated = true, uint rate = 16, uint length = 250, Easing easing = null)
-    {
-        if (this.Children.Contains(chip))
-        {
-            var containerXStart = chip.Bounds.Left + Math.Abs(_xOffset);
-
-            var offsetAmount = 0d;
-
-            switch (scrollToPosition)
+            _scrollView = new ScrollView
             {
-                case ScrollToPosition.Start:
-                    offsetAmount = -containerXStart;
-                    break;
-                case ScrollToPosition.Center:
-                    offsetAmount = -containerXStart + (this.Width * .5d) - (chip.Width * .5d);
-                    break;
-                default:
-                    offsetAmount = -containerXStart + this.Width - chip.Width;
-                    break;
-            }
-
-            if (animated)
-            {
-                await this.TransitionTo(
-                    nameof(this.ScrollToAsync),
-                    x => this.SetXOffset(x, false),
-                    _xOffset,
-                    offsetAmount,
-                    rate,
-                    length,
-                    easing);
-
-                this.SetXOffset(_xOffset, true);
-                return;
-            }
-
-            this.SetXOffset(offsetAmount, true);
+                Orientation = ScrollOrientation.Horizontal,
+                Content = _chipContainer,
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Never,
+            };
+            Content = _scrollView;
         }
+        else
+        {
+            Content = _chipContainer;
+        }
+
+        UpdateSpacing();
     }
 
-    protected override void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    private void UpdateSpacing()
     {
-        base.OnPropertyChanged(propertyName);
-
-        if (propertyName is null)
+        if (_chipContainer == null)
         {
             return;
         }
 
-        if (!propertyName.Equals(WindowProperty.PropertyName))
+        // Set spacing
+        foreach (var child in _chipContainer.Children)
         {
-            return;
-        }
-
-        if (this.Window is null)
-        {
-            this.InternalChildrenOnCollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, Enumerable.Empty<Chip>(), this.Children.ToArray()));
-
-            if (this.Children is INotifyCollectionChanged inccw)
-            {
-                inccw.CollectionChanged -= this.InternalChildrenOnCollectionChanged;
-            }
-
-            this._panGesture.PanUpdated -= this.PanUpdated;
-
-            return;
-        }
-
-        this.InternalChildrenOnCollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, this.Children.ToArray()));
-
-        if (this.Children is INotifyCollectionChanged incc)
-        {
-            incc.CollectionChanged -= this.InternalChildrenOnCollectionChanged;
-            incc.CollectionChanged += this.InternalChildrenOnCollectionChanged;
-        }
-
-        this._panGesture.PanUpdated -= this.PanUpdated;
-        this._panGesture.PanUpdated += this.PanUpdated;
-    }
-
-    protected override void LayoutChildren(double x, double y, double width, double height)
-    {
-        _layoutInfo.ProcessLayout(this.Children, this.Spacing, this.MaxRowsBeforeOverflow, this.Scrollable, width);
-
-        _maxOffset = _layoutInfo.WidthRequest;
-
-        for (int i = 0; i < _layoutInfo.Bounds.Count; i++)
-        {
-            if (!this.Children[i].IsVisible)
+            if (child is not Chip chip)
             {
                 continue;
             }
 
-            var bounds = _layoutInfo.Bounds[i];
+            FlexLayout.SetBasis(chip, FlexBasis.Auto);
+            FlexLayout.SetGrow(chip, 0);
+            FlexLayout.SetShrink(chip, 0);
 
-            if (bounds == Rect.Zero)
-            {
-                continue;
-            }
-
-            bounds.Left += x + _xOffset;
-            bounds.Top += y;
-            LayoutChildIntoBoundingRegion(this.Children[i], bounds);
+            chip.Margin = new Thickness(0, 0, this.HorizontalSpacing, this.IsScrollable ? 0 : this.VerticalSpacing);
         }
-
-        this.IsOverflow = _layoutInfo.IsOverflow;
     }
 
-    protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint)
+    private static void OnLayoutPropertyChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        _layoutInfo.ProcessLayout(this.Children, this.Spacing, this.MaxRowsBeforeOverflow, this.Scrollable, widthConstraint);
-        return new SizeRequest(new Size(widthConstraint, _layoutInfo.HeightRequest));
+        if (bindable is ChipGroup chipGroup)
+        {
+            chipGroup.UpdateLayout();
+        }
     }
 
-    private void InternalChildrenOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private static void OnSelectedChipChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        if (e.Action == NotifyCollectionChangedAction.Move)
+        if (bindable is not ChipGroup chipGroup)
         {
             return;
         }
 
-        if (e.OldItems is not null)
+        if (chipGroup._isUpdating)
         {
-            foreach (var t in e.OldItems)
-            {
-                if (t is not Chip chip)
-                {
-                    continue;
-                }
-
-                chip.Tapped -= this.ChipTappedHandler;
-                chip.Removed -= this.ChipRemoved;
-                chip.PropertyChanged -= this.ChipPropertyChanged;
-            }
+            return;
         }
 
-        if (e.NewItems is not null)
+        var newChip = newValue as Chip;
+        var oldChip = oldValue as Chip;
+
+        try
         {
-            foreach (var t in e.NewItems)
+            chipGroup._isUpdating = true;
+
+            // Update old chip
+            if (oldChip != null && chipGroup._chips.Contains(oldChip))
             {
-                if (t is not Chip chip)
-                {
-                    continue;
-                }
-
-                chip.PropertyChanged -= this.ChipPropertyChanged;
-                chip.PropertyChanged += this.ChipPropertyChanged;
-
-                chip.Tapped -= this.ChipTappedHandler;
-                chip.Tapped += this.ChipTappedHandler;
-
-                chip.Removed -= this.ChipRemoved;
-                chip.Removed += this.ChipRemoved;
+                oldChip.IsToggled = false;
             }
 
-            this.OnPropertyChanged(SelectedChipsProperty.PropertyName);
-            this.OnPropertyChanged(nameof(this.SelectedValues));
-            this.OnPropertyChanged(nameof(this.SelectedValue));
-        }
+            // Update new chip
+            if (newChip != null && chipGroup._chips.Contains(newChip))
+            {
+                newChip.IsToggled = true;
+                chipGroup._selectedChip = newChip;
 
-        this.InvalidateLayout();
+                // In single selection mode, clear other selections
+                if (!chipGroup.AllowMultipleSelection)
+                {
+                    chipGroup._selectedChips.Clear();
+                    chipGroup._selectedChips.Add(newChip);
+                }
+            }
+            else
+            {
+                chipGroup._selectedChip = null;
+
+                if (!chipGroup.AllowMultipleSelection)
+                {
+                    chipGroup._selectedChips.Clear();
+                }
+            }
+        }
+        finally
+        {
+            chipGroup._isUpdating = false;
+
+            // Notify selection changes
+            chipGroup.NotifySelectionChanged(oldChip, newChip);
+        }
     }
 
-    private void ChipTappedHandler(object? sender, EventArgs e)
+    private void OnChipsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (sender is Chip chip)
+        if (_chipContainer == null)
         {
-            this.ChipTapped?.Invoke(this, new ChipTappedEventArgs(chip));
+            return;
+        }
+
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+                if (e.NewItems != null)
+                {
+                    foreach (Chip newChip in e.NewItems)
+                    {
+                        AddChip(newChip);
+                    }
+                }
+
+                break;
+
+            case NotifyCollectionChangedAction.Remove:
+                if (e.OldItems != null)
+                {
+                    foreach (Chip oldChip in e.OldItems)
+                    {
+                        RemoveChip(oldChip);
+                    }
+                }
+
+                break;
+
+            case NotifyCollectionChangedAction.Replace:
+                if (e.OldItems != null)
+                {
+                    foreach (Chip oldChip in e.OldItems)
+                    {
+                        RemoveChip(oldChip);
+                    }
+                }
+
+                if (e.NewItems != null)
+                {
+                    foreach (Chip newChip in e.NewItems)
+                    {
+                        AddChip(newChip);
+                    }
+                }
+
+                break;
+
+            case NotifyCollectionChangedAction.Reset:
+                _chipContainer.Clear();
+                foreach (var chip in _chips)
+                {
+                    AddChip(chip);
+                }
+
+                break;
+        }
+
+        UpdateLayout();
+    }
+
+    private void AddChip(Chip chip)
+    {
+        // Configure the chip
+        chip.IsSingleSelection = !AllowMultipleSelection;
+
+        // Attach event handlers
+        chip.Toggled += OnChipToggled;
+        chip.Removed += OnChipRemoved;
+        chip.SizeChanged += OnChipSizeChanged;
+
+        // Set initial spacing
+        if (_chipContainer != null)
+        {
+            FlexLayout.SetBasis(chip, FlexBasis.Auto);
+            FlexLayout.SetGrow(chip, 0);
+            FlexLayout.SetShrink(chip, 0);
+
+            chip.Margin = new Thickness(0, 0, HorizontalSpacing, IsScrollable ? 0 : VerticalSpacing);
+        }
+
+        // Add to the container
+        _chipContainer?.Add(chip);
+    }
+
+    private void RemoveChip(Chip chip)
+    {
+        // Detach event handlers
+        chip.Toggled -= OnChipToggled;
+        chip.Removed -= OnChipRemoved;
+        chip.SizeChanged -= OnChipSizeChanged;
+
+        // Remove from container
+        _chipContainer?.Remove(chip);
+
+        // Update selections if needed
+        if (chip.IsToggled)
+        {
+            if (SelectedChip == chip)
+            {
+                SelectedChip = null;
+            }
+
+            _selectedChips.Remove(chip);
         }
     }
 
-    private void ChipRemoved(object? sender, EventArgs e)
+    private void OnChipToggled(object? sender, bool isToggled)
+    {
+        if (sender is not Chip chip || _isUpdating)
+        {
+            return;
+        }
+
+        _isUpdating = true;
+
+        if (isToggled)
+        {
+            // Handle single selection mode
+            if (!AllowMultipleSelection)
+            {
+                foreach (var otherChip in _chips.Where(c => c != chip && c.IsToggled))
+                {
+                    otherChip.IsToggled = false;
+                }
+
+                _selectedChips.Clear();
+                _selectedChip = chip;
+            }
+
+            // Add to selected chips
+            if (!_selectedChips.Contains(chip))
+            {
+                _selectedChips.Add(chip);
+            }
+
+            // Update SelectedChip for single selection mode
+            if (!AllowMultipleSelection)
+            {
+                SetValue(SelectedChipProperty, chip);
+            }
+        }
+        else
+        {
+            // Remove from selected chips
+            _selectedChips.Remove(chip);
+
+            if (_selectedChip == chip)
+            {
+                _selectedChip = null;
+                SetValue(SelectedChipProperty, null);
+            }
+        }
+
+        _isUpdating = false;
+
+        // Notify selection changes
+        NotifySelectionChanged(isToggled ? null : chip, isToggled ? chip : null);
+    }
+
+    private void OnChipRemoved(object? sender, EventArgs e)
     {
         if (sender is not Chip chip)
         {
             return;
         }
 
-        this.Children.Remove(chip);
+        _chips.Remove(chip);
     }
 
-    private void ChipPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void OnChipSizeChanged(object? sender, EventArgs e)
     {
-        if (sender is not Chip chip || e.PropertyName is null)
+        // Request a layout update when a chip size changes
+        UpdateLayout();
+    }
+
+    private void UpdateLayout()
+    {
+        if (_chipContainer == null)
         {
             return;
         }
 
-        if (e.PropertyName.Equals(Chip.IsToggledProperty.PropertyName))
+        // Update container orientation and wrapping behavior
+        _chipContainer.Wrap = IsScrollable ? FlexWrap.NoWrap : FlexWrap.Wrap;
+
+        // Remove or add scrollview as needed
+        if (IsScrollable && Content != _scrollView)
         {
-            if ((this.IsSingleSelection || chip.IsSingleSelection) && chip.IsToggled)
+            if (_scrollView == null)
             {
-                foreach (var child in this.Children)
+                _scrollView = new ScrollView
                 {
-                    if (child != chip)
-                    {
-                        child.IsToggled = false;
-                    }
-                }
-
-                if (this.IsSingleSelection && chip.IsToggled)
-                {
-                    this._previouslySelectedChip = chip;
-                }
+                    Orientation = ScrollOrientation.Horizontal,
+                    Content = _chipContainer,
+                    HorizontalScrollBarVisibility = ScrollBarVisibility.Never,
+                };
             }
-            else if (chip.IsToggled)
+            else
             {
-                foreach (var child in this.Children)
-                {
-                    if (child != chip && child.IsSingleSelection)
-                    {
-                        child.IsToggled = false;
-                    }
-                }
+                _scrollView.Content = _chipContainer;
             }
 
-            if (!this.Children.Any(x => x.IsToggled) &&
-                this._previouslySelectedChip is not null &&
-                this.Children.Contains(this._previouslySelectedChip))
-            {
-                this._previouslySelectedChip.IsToggled = true;
-            }
-
-            if (this.ChipSelectionDetection)
-            {
-                this.OnPropertyChanged(SelectedChipsProperty.PropertyName);
-                this.OnPropertyChanged(nameof(this.SelectedValues));
-                this.OnPropertyChanged(nameof(this.SelectedValue));
-            }
+            Content = _scrollView;
         }
-        else if (e.PropertyName.Equals(Chip.HeightProperty.PropertyName) || e.PropertyName.Equals(Chip.HeightProperty.PropertyName))
+        else if (!IsScrollable && Content != _chipContainer)
         {
-            this.ForceLayout();
+            Content = _chipContainer;
         }
+
+        UpdateSpacing();
+        InvalidateLayout();
     }
 
-    private void PanUpdated(object? sender, PanUpdatedEventArgs e)
+    private static void OnItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        if (!this.Scrollable)
+        if (bindable is not ChipGroup chipGroup)
         {
             return;
         }
 
-        switch (e.StatusType)
+        // Clear old collection change subscription
+        if (oldValue is INotifyCollectionChanged oldCollection)
         {
-            case GestureStatus.Started:
-            case GestureStatus.Running:
-                this.SetXOffset(_finalXOffset + e.TotalX, false);
+            oldCollection.CollectionChanged -= chipGroup.OnItemsSourceCollectionChanged;
+        }
+
+        // Clear existing chips
+        chipGroup._chips.Clear();
+
+        // Add new items
+        if (newValue is IEnumerable items)
+        {
+            // Subscribe to collection changes if available
+            if (newValue is INotifyCollectionChanged newCollection)
+            {
+                newCollection.CollectionChanged += chipGroup.OnItemsSourceCollectionChanged;
+            }
+
+            // Create chips for initial items
+            chipGroup.CreateChipsFromItems(items);
+        }
+    }
+
+    private void OnItemsSourceCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        // Handle changes in the source collection
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+                if (e.NewItems != null && ItemTemplate != null)
+                {
+                    foreach (var item in e.NewItems)
+                    {
+                        CreateChipFromItem(item);
+                    }
+                }
+
                 break;
-            default:
-                this.SetXOffset(_xOffset, true);
+
+            case NotifyCollectionChangedAction.Remove:
+                if (e.OldItems != null)
+                {
+                    foreach (var item in e.OldItems)
+                    {
+                        var chip = _chips.FirstOrDefault(c => c.BindingContext == item);
+                        if (chip != null)
+                        {
+                            _chips.Remove(chip);
+                        }
+                    }
+                }
+
+                break;
+
+            case NotifyCollectionChangedAction.Reset:
+                _chips.Clear();
+                if (sender is IEnumerable items)
+                {
+                    CreateChipsFromItems(items);
+                }
+
                 break;
         }
     }
 
-    private void SetXOffset(double xOffset, bool isFinal)
+    private static void OnItemTemplateChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        var width = this.Width;
-
-        var potentialMax = _maxOffset - width;
-
-        if (xOffset > 0.0d || _maxOffset < width)
+        if (bindable is not ChipGroup chipGroup || chipGroup.ItemsSource == null)
         {
-            _xOffset = 0;
-        }
-        else if (Math.Abs(xOffset) > potentialMax)
-        {
-            _xOffset = -potentialMax;
-        }
-        else
-        {
-            _xOffset = xOffset;
+            return;
         }
 
-        if (isFinal)
-        {
-            _finalXOffset = _xOffset;
-        }
-
-        this.InvalidateLayout();
-
-        System.Diagnostics.Debug.WriteLine($"{_xOffset}");
+        // Recreate chips with the new template
+        chipGroup._chips.Clear();
+        chipGroup.CreateChipsFromItems(chipGroup.ItemsSource);
     }
 
-    internal class LayoutInfo
+    private void CreateChipsFromItems(IEnumerable items)
     {
-        private readonly List<Rect> _bounds = new();
-        private readonly List<Rect> _sizes = new();
-
-        private double _x = 0;
-        private double _y = 0;
-        private double _rowHeight = 0;
-        private double _spacing;
-        private int _maxRowsBeforeOverflow;
-        private bool _scrollable;
-
-        public List<Rect> Bounds => _bounds;
-
-        public double HeightRequest { get; private set; }
-
-        public double WidthRequest { get; private set; }
-
-        public int Rows { get; private set; }
-
-        public bool IsOverflow => _maxRowsBeforeOverflow > 0 && this.Rows > _maxRowsBeforeOverflow;
-
-        public void ProcessLayout(IList<Chip> views, double spacing, int maxRowsBeforeExpansion, bool scrollable, double widthConstraint)
+        if (ItemTemplate == null)
         {
-            _spacing = spacing;
-            _maxRowsBeforeOverflow = maxRowsBeforeExpansion;
-            _scrollable = scrollable;
-
-            var viewsArray = views.ToArray();
-
-            var sizes = this.SizeViews(viewsArray, widthConstraint);
-            this.LayoutViews(viewsArray, sizes, widthConstraint);
+            return;
         }
 
-        private List<Rect> SizeViews(IList<Chip> views, double widthConstraint)
+        foreach (var item in items)
         {
-            _sizes.Clear();
+            CreateChipFromItem(item);
+        }
+    }
 
-            foreach (var view in views)
+    private void CreateChipFromItem(object item)
+    {
+        if (ItemTemplate == null)
+        {
+            return;
+        }
+
+        // Create a chip from the template
+        var content = ItemTemplate.CreateContent();
+        if (content is Chip chip)
+        {
+            chip.BindingContext = item;
+            _chips.Add(chip);
+        }
+        else if (content is View view)
+        {
+            // Template returned another view type, try to find a Chip inside it
+            var embeddedChip = FindChip(view);
+            if (embeddedChip != null)
             {
-                var sizeRequest = view.Measure(widthConstraint, double.PositiveInfinity).Request;
-                var viewWidth = sizeRequest.Width;
-                var viewHeight = sizeRequest.Height;
-
-                if (viewWidth > widthConstraint)
-                {
-                    viewWidth = widthConstraint;
-                }
-
-                _sizes.Add(new Rect(0, 0, viewWidth, viewHeight));
+                embeddedChip.BindingContext = item;
+                _chips.Add(embeddedChip);
             }
+        }
+    }
 
-            return _sizes;
+    private Chip? FindChip(View view)
+    {
+        if (view is Chip chip)
+        {
+            return chip;
         }
 
-        private void LayoutViews(IList<Chip> views, List<Rect> sizes, double widthConstraint)
+        if (view is Layout layout)
         {
-            _bounds.Clear();
-            _x = 0d;
-            _y = 0d;
-            this.HeightRequest = 0;
-
-            this.Rows = 1;
-
-            for (int i = 0; i < views.Count(); i++)
+            foreach (var child in layout.Children)
             {
-                if (!views[i].IsVisible)
+                if (child is View childView)
                 {
-                    this.Bounds.Add(Rect.Zero);
-                    continue;
-                }
-
-                var sizeRect = sizes[i];
-
-                if (!_scrollable)
-                {
-                    var isNewLine = this.CheckNewLine(sizeRect.Width, widthConstraint);
-
-                    if (isNewLine)
+                    var result = FindChip(childView);
+                    if (result != null)
                     {
-                        this.Rows++;
-                    }
-
-                    if (_maxRowsBeforeOverflow > 0 && this.Rows > _maxRowsBeforeOverflow)
-                    {
-                        this.Bounds.Add(Rect.Zero);
-                        continue;
+                        return result;
                     }
                 }
-
-                this.UpdateRowHeight(sizeRect.Height);
-
-                var bound = new Rect(_x, _y, sizeRect.Width, sizeRect.Height);
-                this.Bounds.Add(bound);
-
-                _x += sizeRect.Width;
-                _x += _spacing;
             }
-
-            _x -= _spacing;
-
-            this.HeightRequest = _rowHeight * this.Rows;
-            this.WidthRequest = _x;
         }
 
-        private bool CheckNewLine(double viewWidth, double widthConstraint)
+        return null;
+    }
+
+    private void NotifySelectionChanged(Chip? oldSelection, Chip? newSelection)
+    {
+        var args = new ChipSelectionChangedEventArgs
         {
-            if (!(this._x + viewWidth > widthConstraint))
-            {
-                return false;
-            }
+            OldSelection = oldSelection,
+            NewSelection = newSelection,
+            SelectedItems = new List<Chip>(_selectedChips),
+        };
 
-            this._y += this._rowHeight + this._spacing;
-            this._x = 0;
-            this._rowHeight = 0;
+        SelectionChanged?.Invoke(this, args);
+    }
 
-            return true;
-        }
-
-        private void UpdateRowHeight(double viewHeight)
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
         {
-            if (viewHeight > _rowHeight)
-            {
-                _rowHeight = viewHeight;
-            }
+            return;
         }
+
+        _disposed = true;
+
+        if (disposing)
+        {
+            // Unsubscribe from events
+            _chips.CollectionChanged -= OnChipsCollectionChanged;
+
+            // Dispose managed resources
+            foreach (var chip in _chips.ToList())
+            {
+                chip.Toggled -= OnChipToggled;
+                chip.Removed -= OnChipRemoved;
+                chip.SizeChanged -= OnChipSizeChanged;
+
+                if (chip is IDisposable disposableChip)
+                {
+                    disposableChip.Dispose();
+                }
+            }
+
+            _chips.Clear();
+            _selectedChips.Clear();
+
+            // Clear references
+            _selectedChip = null;
+            _scrollView = null;
+            _chipContainer = null;
+
+            // Remove content
+            Content = null;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    ~ChipGroup()
+    {
+        Dispose(false);
     }
 }
 
-public class ChipTappedEventArgs : EventArgs
+public class ChipSelectionChangedEventArgs : EventArgs
 {
-    public Chip Chip { get; private set; }
+    /// <summary>
+    /// Gets or sets the chip that was deselected (may be null).
+    /// </summary>
+    public Chip? OldSelection { get; set; }
 
-    public Chip.ChipState ChipState { get; private set; }
+    /// <summary>
+    /// Gets or sets the chip that was selected (may be null).
+    /// </summary>
+    public Chip? NewSelection { get; set; }
 
-    public ChipTappedEventArgs(Chip chip)
-    {
-        this.Chip = chip;
-        this.ChipState = chip.State;
-    }
+    /// <summary>
+    /// Gets or sets all currently selected chips.
+    /// </summary>
+    public IList<Chip> SelectedItems { get; set; } = new List<Chip>();
 }
