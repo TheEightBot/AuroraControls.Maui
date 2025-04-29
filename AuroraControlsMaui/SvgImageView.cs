@@ -56,13 +56,7 @@ public class SvgImageView : AuroraViewBase
     /// </summary>
     public static readonly BindableProperty OverlayColorProperty =
         BindableProperty.Create(nameof(OverlayColor), typeof(Color), typeof(SvgImageView), Colors.Transparent,
-            propertyChanged: (bindable, oldValue, newValue) =>
-            {
-                if (bindable is SvgImageView cgv)
-                {
-                    cgv.InvalidateSurface();
-                }
-            });
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets the color of the overlay.
@@ -79,14 +73,7 @@ public class SvgImageView : AuroraViewBase
     /// </summary>
     public static readonly BindableProperty MaxImageSizeProperty =
         BindableProperty.Create(nameof(MaxImageSize), typeof(Size), typeof(SvgImageView), default(Size),
-            propertyChanged:
-                (bindable, oldValue, newValue) =>
-                {
-                    if (bindable is SvgImageView cgv)
-                    {
-                        cgv.InvalidateSurface();
-                    }
-                });
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets the maximum image size.

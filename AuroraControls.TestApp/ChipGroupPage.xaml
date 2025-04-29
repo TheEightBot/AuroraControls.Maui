@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AuroraControls.TestApp.ChipGroupPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:aurora="http://auroracontrols.maui/controls"
+    xmlns:local="clr-namespace:AuroraControls.TestApp"
+    xmlns:vm="clr-namespace:AuroraControls.TestApp.ViewModels"
+    Title="Chip Group Demo"
+    Background="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}">
+
+    <ContentPage.BindingContext>
+        <vm:ChipGroupViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <DataTemplate x:Key="ChipTemplate">
+            <aurora:Chip
+                Text="{Binding Name}"
+                LeadingEmbeddedImageName="{Binding IconSource}" />
+        </DataTemplate>
+    </ContentPage.Resources>
+
+    <Grid
+        Padding="20"
+        RowDefinitions="Auto,Auto,*">
+
+        <!-- Header -->
+        <VerticalStackLayout
+            Grid.Row="0"
+            Spacing="12"
+            Margin="0,0,0,20">
+            <Label
+                Text="Chip Group Demo"
+                FontSize="24"
+                FontAttributes="Bold" />
+            <Label
+                Text="This page demonstrates the various capabilities of the ChipGroup control." />
+        </VerticalStackLayout>
+
+        <!-- Configuration Options -->
+        <Grid
+            Grid.Row="1"
+            Margin="0,0,0,20"
+            ColumnDefinitions="*,*"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+            ColumnSpacing="10"
+            RowSpacing="10">
+
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                Text="Layout Mode:"
+                VerticalOptions="Center" />
+            <Picker
+                Grid.Row="0"
+                Grid.Column="1"
+                ItemsSource="{Binding LayoutModes}"
+                SelectedItem="{Binding SelectedLayoutMode}"
+                SelectedIndexChanged="OnLayoutModeChanged" />
+
+            <Label
+                Grid.Row="1"
+                Grid.Column="0"
+                Text="Selection Mode:"
+                VerticalOptions="Center" />
+            <Picker
+                Grid.Row="1"
+                Grid.Column="1"
+                ItemsSource="{Binding SelectionModes}"
+                SelectedItem="{Binding SelectedSelectionMode}"
+                SelectedIndexChanged="OnSelectionModeChanged" />
+
+            <Label
+                Grid.Row="2"
+                Grid.Column="0"
+                Text="Horizontal Spacing:"
+                VerticalOptions="Center" />
+            <Slider
+                Grid.Row="2"
+                Grid.Column="1"
+                Maximum="30"
+                Minimum="0"
+                Value="{Binding HorizontalSpacing}"
+                ValueChanged="OnHorizontalSpacingChanged" />
+
+            <Label
+                Grid.Row="3"
+                Grid.Column="0"
+                Text="Vertical Spacing:"
+                VerticalOptions="Center" />
+            <Slider
+                Grid.Row="3"
+                Grid.Column="1"
+                Maximum="30"
+                Minimum="0"
+                Value="{Binding VerticalSpacing}"
+                ValueChanged="OnVerticalSpacingChanged" />
+
+            <Button
+                Grid.Row="4"
+                Grid.Column="0"
+                Text="Add Chip"
+                Clicked="OnAddChipClicked" />
+
+            <Button
+                Grid.Row="4"
+                Grid.Column="1"
+                Text="Remove All"
+                Clicked="OnClearChipsClicked" />
+
+            <Label
+                Grid.Row="5"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Text="Selected Chips:"
+                Margin="0,10,0,0" />
+
+            <Label
+                Grid.Row="6"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Text="{Binding SelectedChipsText}"
+                LineBreakMode="WordWrap" />
+        </Grid>
+
+        <!-- ChipGroup Sample -->
+        <Frame
+            Grid.Row="2"
+            BorderColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+            BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
+            Padding="15">
+
+            <Grid RowDefinitions="Auto,*">
+                <Label
+                    Grid.Row="0"
+                    Text="Chip Group"
+                    FontSize="18"
+                    Margin="0,0,0,10" />
+
+                <!-- ChipGroup with data binding -->
+                <aurora:ChipGroup
+                    x:Name="ChipGroupSample"
+                    Grid.Row="1"
+                    IsScrollable="{Binding IsScrollable}"
+                    AllowMultipleSelection="{Binding AllowMultipleSelection}"
+                    HorizontalSpacing="{Binding HorizontalSpacing}"
+                    VerticalSpacing="{Binding VerticalSpacing}"
+                    ItemsSource="{Binding ChipItems}"
+                    ItemTemplate="{StaticResource ChipTemplate}"
+                    SelectionChanged="OnChipSelectionChanged" />
+
+            </Grid>
+        </Frame>
+    </Grid>
+</ContentPage>

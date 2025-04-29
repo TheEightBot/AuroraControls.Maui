@@ -110,8 +110,8 @@ public class SegmentedControl : AuroraViewBase
             {
                 if (bindable is SegmentedControl sc)
                 {
-                    sc?.InvalidateSurface();
                     sc.SelectedItem = sc.Segments?.ElementAtOrDefault((int)newValue)?.Value;
+                    sc?.InvalidateSurface();
                 }
             });
 

@@ -45,8 +45,8 @@ public class ToggleBox : AuroraViewBase
                         return;
                     }
 
-                    tb.InvalidateSurface();
                     tb.Toggled?.Invoke(tb, boolVal);
+                    tb.InvalidateSurface();
                 });
 
     /// <summary>
