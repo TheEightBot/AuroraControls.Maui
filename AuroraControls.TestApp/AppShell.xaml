@@ -19,6 +19,13 @@
             ContentTemplate="{DataTemplate local:SignaturePadPage}"
             Route="SignaturePadPage" />
     </FlyoutItem>
+    
+    <FlyoutItem Title="Chip Group" Icon="chat">
+        <ShellContent
+            Title="Chip Group"
+            ContentTemplate="{DataTemplate local:ChipGroupPage}"
+            Route="ChipGroupPage" />
+    </FlyoutItem>
 
 </Shell>
 

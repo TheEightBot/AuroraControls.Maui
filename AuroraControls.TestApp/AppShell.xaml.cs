@@ -8,5 +8,6 @@ public partial class AppShell : Shell
 
         // Register routes for navigation
         Routing.RegisterRoute(nameof(SignaturePadPage), typeof(SignaturePadPage));
+        Routing.RegisterRoute(nameof(ChipGroupPage), typeof(ChipGroupPage));
     }
 }

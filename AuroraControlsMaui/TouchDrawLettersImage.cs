@@ -14,14 +14,13 @@ public class TouchDrawLettersImage : AuroraViewBase
         BindableProperty.Create(nameof(Source), typeof(ImageSource), typeof(TouchDrawLettersImage), null,
             propertyChanged: async (bindable, oldValue, newValue) =>
             {
-                var tbi = bindable as TouchDrawLettersImage;
-                var source = newValue as ImageSource;
-
-                if (tbi != null && source != null)
+                if (bindable is not TouchDrawLettersImage tbi || newValue is not ImageSource source)
                 {
-                    tbi._imageBitmap = await source.BitmapFromSource();
-                    tbi.InvalidateSurface();
+                    return;
                 }
+
+                tbi._imageBitmap = await source.BitmapFromSource();
+                tbi.InvalidateSurface();
             });
 
     /// <summary>
@@ -180,11 +179,11 @@ public class TouchDrawLettersImage : AuroraViewBase
             return;
         }
 
-        float factor = height / _imageBitmap.Info.Height;
+        float factor = height / (float)_imageBitmap.Info.Height;
 
         if (_imageBitmap.Info.Width * factor > width)
         {
-            factor = width / _imageBitmap.Info.Width;
+            factor = width / (float)_imageBitmap.Info.Width;
         }
 
         float scaledWidth = _imageBitmap.Info.Width * factor;
@@ -224,13 +223,13 @@ public class TouchDrawLettersImage : AuroraViewBase
                         (float)touchLocationX - halfScaledTouchSize, (float)touchLocationY - halfScaledTouchSize,
                         (float)touchLocationX + halfScaledTouchSize, (float)touchLocationY + halfScaledTouchSize);
 
-                    paint.Color = touchDrawLetter.BackgroundColorOverride != Colors.Transparent
+                    paint.Color = !Equals(touchDrawLetter.BackgroundColorOverride, Colors.Transparent)
                         ? touchDrawLetter.BackgroundColorOverride.ToSKColor()
                         : this.DrawItemBackgroundColor.ToSKColor();
                     paint.Style = SKPaintStyle.Fill;
                     canvas.DrawOval(drawLocationRect, paint);
 
-                    paint.Color = touchDrawLetter.ForegroundColorOverride != Colors.Transparent
+                    paint.Color = !Equals(touchDrawLetter.ForegroundColorOverride, Colors.Transparent)
                         ? touchDrawLetter.ForegroundColorOverride.ToSKColor()
                         : this.DrawItemForegroundColor.ToSKColor();
                     paint.Style = SKPaintStyle.Stroke;
@@ -246,7 +245,7 @@ public class TouchDrawLettersImage : AuroraViewBase
                             drawPath.AddOval(drawLocationRect);
                             canvas.ClipPath(drawPath);
 
-                            paint.Color = touchDrawLetter.ForegroundColorOverride != Colors.Transparent
+                            paint.Color = !Equals(touchDrawLetter.ForegroundColorOverride, Colors.Transparent)
                                 ? touchDrawLetter.ForegroundColorOverride.ToSKColor()
                                 : this.DrawItemForegroundColor.ToSKColor();
                             paint.Style = SKPaintStyle.Fill;
