@@ -50,6 +50,8 @@ public class Chip : AuroraViewBase, IDisposable
 
                 chip.InvalidateSurface();
 
+                chip.Toggled?.Invoke(chip, toggled);
+
                 if (!toggled)
                 {
                     return;
@@ -59,8 +61,6 @@ public class Chip : AuroraViewBase, IDisposable
                 {
                     chip.Command.Execute(chip.CommandParameter);
                 }
-
-                chip.Toggled?.Invoke(chip, toggled);
             });
 
     /// <summary>

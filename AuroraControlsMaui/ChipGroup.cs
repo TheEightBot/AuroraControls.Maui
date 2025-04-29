@@ -426,12 +426,33 @@ public class ChipGroup : ContentView, IDisposable
                 _selectedChip = null;
                 SetValue(SelectedChipProperty, null);
             }
+            else if (AllowMultipleSelection)
+            {
+                // For multi-selection mode, we also need to trigger a notification
+                // even though SelectedChip property doesn't change
+                SetValue(SelectedChipProperty, SelectedChip);
+            }
+            else
+            {
+                // For single selection mode, ensure notification is triggered even if this
+                // isn't the currently selected chip (could be a programmatic deselection)
+                SetValue(SelectedChipProperty, _selectedChip);
+            }
         }
 
         _isUpdating = false;
 
-        // Notify selection changes
-        NotifySelectionChanged(isToggled ? null : chip, isToggled ? chip : null);
+        // Handle selection changed event with correct old/new parameters
+        if (isToggled)
+        {
+            // When chip is selected, it's the new selection
+            NotifySelectionChanged(null, chip);
+        }
+        else
+        {
+            // When chip is deselected, it's the old selection
+            NotifySelectionChanged(chip, _selectedChip); // Pass current selectedChip as the new selection
+        }
     }
 
     private void OnChipRemoved(object? sender, EventArgs e)
