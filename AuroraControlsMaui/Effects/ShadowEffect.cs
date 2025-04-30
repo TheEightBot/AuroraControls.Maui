@@ -73,4 +73,24 @@ public class ShadowEffect : RoutingEffect
     /// <param name="view">View to apply rounding to.</param>
     /// <param name="value">Amount of rounding to apply.</param>
     public static void SetCornerRadius(BindableObject view, double value) => view.SetValue(CornerRadiusProperty, value);
+
+    /// <summary>
+    /// The shadow color property.
+    /// </summary>
+    public static readonly BindableProperty ShadowColorProperty =
+        BindableProperty.CreateAttached("ShadowColor", typeof(Color), typeof(ShadowEffect), Colors.Transparent);
+
+    /// <summary>
+    /// Gets the shadow color.
+    /// </summary>
+    /// <returns>The shadow color.</returns>
+    /// <param name="view">View to get shadow color from.</param>
+    public static Color GetShadowColor(BindableObject view) => (Color)view.GetValue(ShadowColorProperty);
+
+    /// <summary>
+    /// Sets the shadow color.
+    /// </summary>
+    /// <param name="view">View to apply shadow color to.</param>
+    /// <param name="value">Shadow color to apply.</param>
+    public static void SetShadowColor(BindableObject view, Color value) => view.SetValue(ShadowColorProperty, value);
 }
