@@ -51,6 +51,29 @@ public class CardViewLayout : ContentView
             });
 
     /// <summary>
+    /// The card shadow color property.
+    /// </summary>
+    public static new BindableProperty ShadowColorProperty =
+        BindableProperty.Create(nameof(ShadowColor), typeof(Color), typeof(CardViewLayout), Colors.Transparent,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                if (bindable is CardViewLayout clv)
+                {
+                    ShadowEffect.SetShadowColor(clv, (Color)newValue);
+                }
+            });
+
+    /// <summary>
+    /// Gets or sets the color of the card shadow.
+    /// </summary>
+    /// <value>The color of the card shadow.</value>
+    public Color ShadowColor
+    {
+        get => (Color)GetValue(ShadowColorProperty);
+        set => SetValue(ShadowColorProperty, value);
+    }
+
+    /// <summary>
     /// The content property.
     /// </summary>
     public static new BindableProperty ContentProperty =
@@ -169,6 +192,7 @@ public class CardViewLayout : ContentView
         this.Effects.Add(new ShadowEffect());
         ShadowEffect.SetCornerRadius(this, CornerRadius);
         ShadowEffect.SetElevation(this, Elevation);
+        ShadowEffect.SetShadowColor(this, ShadowColor);
 
         base.Content = this.Content;
     }

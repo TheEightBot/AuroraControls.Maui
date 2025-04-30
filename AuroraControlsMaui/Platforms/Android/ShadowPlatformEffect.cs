@@ -2,6 +2,7 @@ using System.ComponentModel;
 using Android.Graphics;
 using Android.OS;
 using Android.Views;
+using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Microsoft.Maui.Controls.Platform;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 
@@ -32,6 +33,7 @@ public class ShadowPlatformEffect : PlatformEffect
 
         SetElevation();
         SetCornerRadius();
+        SetShadowColor();
     }
 
     protected override void OnDetached()
@@ -72,6 +74,10 @@ public class ShadowPlatformEffect : PlatformEffect
         {
             SetCornerRadius();
         }
+        else if (args.PropertyName.Equals(Effects.ShadowEffect.ShadowColorProperty.PropertyName))
+        {
+            SetShadowColor();
+        }
     }
 
     private void SetElevation()
@@ -108,6 +114,28 @@ public class ShadowPlatformEffect : PlatformEffect
         }
 
         view.OutlineProvider = new RoundedViewOutline((int)(cornerRadius * _scalingFactor));
+    }
+
+    private void SetShadowColor()
+    {
+        var view = this.Container;
+
+        if (view == null || view.Handle == IntPtr.Zero || Build.VERSION.SdkInt < BuildVersionCodes.P)
+        {
+            return;
+        }
+
+        var shadowColor = Effects.ShadowEffect.GetShadowColor(this.Element);
+
+        if (Equals(shadowColor, Colors.Transparent))
+        {
+            return;
+        }
+
+        var androidShadowColor = shadowColor.ToAndroid();
+
+        view.SetOutlineAmbientShadowColor(androidShadowColor);
+        view.SetOutlineSpotShadowColor(androidShadowColor);
     }
 
     internal class RoundedViewOutline : ViewOutlineProvider

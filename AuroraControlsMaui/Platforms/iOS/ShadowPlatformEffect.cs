@@ -1,6 +1,7 @@
 using System.Runtime.InteropServices;
 using CoreGraphics;
 using Microsoft.Maui.Controls.Platform;
+using Microsoft.Maui.Platform;
 using UIKit;
 
 namespace AuroraControls;
@@ -38,6 +39,7 @@ public class ShadowPlatformEffect : PlatformEffect
         view.Layer.RasterizationScale = UIScreen.MainScreen.Scale;
 
         SetShadowDistance();
+        SetShadowColor();
     }
 
     protected override void OnDetached()
@@ -73,6 +75,10 @@ public class ShadowPlatformEffect : PlatformEffect
         {
             SetShadowDistance();
         }
+        else if (args.PropertyName.Equals(Effects.ShadowEffect.ShadowColorProperty.PropertyName))
+        {
+            SetShadowColor();
+        }
         else if (args.PropertyName.Equals(Effects.ShadowEffect.CornerRadiusProperty.PropertyName) ||
                  args.PropertyName.Equals(VisualElement.HeightProperty.PropertyName) ||
                  args.PropertyName.Equals(VisualElement.WidthProperty.PropertyName))
@@ -95,6 +101,26 @@ public class ShadowPlatformEffect : PlatformEffect
         view.Layer.ShadowOffset = new CGSize(0f, shadowDistance);
 
         UpdateShadowPath();
+    }
+
+    private void SetShadowColor()
+    {
+        var view = Container;
+        var ve = Element as VisualElement;
+
+        if (view == null || ve == null)
+        {
+            return;
+        }
+
+        var shadowColor = Effects.ShadowEffect.GetShadowColor(this.Element);
+
+        if (Equals(shadowColor, Colors.Transparent))
+        {
+            return;
+        }
+
+        view.Layer.ShadowColor = shadowColor.ToCGColor();
     }
 
     private void UpdateShadowPath()
