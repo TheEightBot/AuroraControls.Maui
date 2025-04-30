@@ -15,6 +15,7 @@
                 Grid.Row="0" Grid.Column="0"  />
         <aurora:CardViewLayout x:Name="control"
                                Margin="24,24,24,24" BackgroundColor="Fuchsia"
+                               ShadowColor="Chartreuse" Elevation="10"
                                Grid.Row="1" Grid.Column="0">
             <Grid x:Name="content">
                 <Grid.RowDefinitions>
