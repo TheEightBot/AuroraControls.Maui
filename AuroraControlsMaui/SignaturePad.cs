@@ -232,12 +232,12 @@ public class SignaturePad : AuroraViewBase
     /// Gets a bitmap of the signature with a white background.
     /// </summary>
     /// <returns>A bitmap of the signature.</returns>
-    public SKBitmap GetSignatureBitmap()
+    public SKBitmap GetSignatureBitmap(Color? backgroundColor = null)
     {
         var bitmap = new SKBitmap((int)CanvasSize.Width, (int)CanvasSize.Height);
 
         using var canvas = new SKCanvas(bitmap);
-        canvas.Clear(SKColors.White);
+        canvas.Clear((backgroundColor ?? Colors.White).ToSKColor());
 
         using var paint = new SKPaint
         {
@@ -257,6 +257,13 @@ public class SignaturePad : AuroraViewBase
         }
 
         return bitmap;
+    }
+
+    public Stream GetSignatureImageStream(SKEncodedImageFormat format, int quality = 100, Color? backgroundColor = null)
+    {
+        using var imageBitmap = GetSignatureBitmap(backgroundColor);
+
+        return imageBitmap.Encode(format, quality).AsStream();
     }
 
     /// <summary>
