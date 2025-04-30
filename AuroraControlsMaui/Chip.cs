@@ -3,6 +3,19 @@ using Svg.Skia;
 
 namespace AuroraControls;
 
+public enum ChipShape
+{
+    Standard,
+    Rectangle,
+    RoundedRectangle,
+}
+
+public enum ChipState
+{
+    Interactable,
+    ReadOnly,
+}
+
 public class Chip : AuroraViewBase, IDisposable
 {
     private static readonly Size _minSize = new(52, 32);
@@ -21,19 +34,6 @@ public class Chip : AuroraViewBase, IDisposable
     private SKSvg? _leadingSvg, _trailingSvg;
 
     private double _calculatedWidth;
-
-    public enum ChipShape
-    {
-        Standard,
-        Rectangle,
-        RoundedRectangle,
-    }
-
-    public enum ChipState
-    {
-        Interactable,
-        ReadOnly,
-    }
 
     /// <summary>
     /// The state of the toggle.
@@ -542,13 +542,13 @@ public class Chip : AuroraViewBase, IDisposable
     {
         this._cantHandleTouch = DeviceInfo.Platform == DevicePlatform.Android;
 
-        HeightRequest = 40;
-        WidthRequest = 40;
+        HeightRequest = _minSize.Height;
+        WidthRequest = _minSize.Width;
     }
 
     protected override void Attached() => this.EnableTouchEvents = true;
 
-    protected override void PaintControl(SkiaSharp.SKSurface surface, SkiaSharp.SKImageInfo info)
+    protected override void PaintControl(SKSurface surface, SKImageInfo info)
     {
         var canvas = surface.Canvas;
 
