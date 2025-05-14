@@ -33,7 +33,8 @@ public static class AuroraControlBuilder
                     effects
                         .Add<Effects.ImageProcessingEffect, Effects.ImageProcessingPlatformEffect>()
                         .Add<Effects.ShadowEffect, ShadowPlatformEffect>()
-                        .Add<Effects.RoundedCornersEffect, RoundedCornersPlatformEffect>();
+                        .Add<Effects.RoundedCornersEffect, RoundedCornersPlatformEffect>()
+                        .Add<Effects.SafeAreaEffect, SafeAreaPlatformEffect>();
 #endif
                 });
 

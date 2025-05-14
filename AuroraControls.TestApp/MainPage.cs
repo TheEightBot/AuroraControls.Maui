@@ -60,6 +60,8 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
     private Button _viewToggleIssueButton;
 
+    private Button _viewSafeAreaTestButton;
+
     private SvgImageView _svgImageView;
 
     private Button _svgImageViewTapped;
@@ -113,6 +115,10 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new ToggleBoxCollectionViewIssuePage()))
                                 .Assign(out _viewToggleIssueButton),
+                            new Button { Text = "View SafeArea Effect Test", }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new SafeAreaTestPage()))
+                                .Assign(out _viewSafeAreaTestButton),
                             new ToggleBox
                             {
                                 ToggledBackgroundColor = Colors.Fuchsia,
