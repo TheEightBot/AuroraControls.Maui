@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:effects="http://auroracontrols.maui/controls"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             x:Class="AuroraControls.TestApp.SafeAreaTestPage"
+             Title="SafeArea Effect Test"
+             ios:Page.UseSafeArea="False">
+    <Grid RowDefinitions="Auto,*,Auto" effects:SafeAreaEffect.SafeArea="false, false, false, false">
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20" Spacing="20">
+                <!-- Header with explanation -->
+                <Label Text="SafeAreaEffect Test"
+                       FontSize="24"
+                       HorizontalOptions="Center" />
+                <Label Text="This page demonstrates different configurations of the SafeAreaEffect. Each frame shows a different configuration of safe area insets."
+                       FontSize="16" />
+
+                <!-- Uniform SafeArea = true -->
+                <Frame BackgroundColor="LightBlue" Padding="20">
+                    <VerticalStackLayout>
+                        <Label Text="Uniform SafeArea = true" FontAttributes="Bold" />
+                        <Label Text="All edges respect safe area" />
+                        <BoxView HeightRequest="80" BackgroundColor="AliceBlue"
+                                 effects:SafeAreaEffect.SafeArea="true" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Uniform SafeArea = false -->
+                <Frame BackgroundColor="LightGreen" Padding="20">
+                    <VerticalStackLayout>
+                        <Label Text="Uniform SafeArea = false" FontAttributes="Bold" />
+                        <Label Text="No edges respect safe area" />
+                        <BoxView HeightRequest="80" BackgroundColor="Honeydew"
+                                 effects:SafeAreaEffect.SafeArea="false" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Horizontal only -->
+                <Frame BackgroundColor="LightYellow" Padding="20">
+                    <VerticalStackLayout>
+                        <Label Text="Horizontal only (true, false)" FontAttributes="Bold" />
+                        <Label Text="Only left and right edges respect safe area" />
+                        <BoxView HeightRequest="80" BackgroundColor="LemonChiffon"
+                                 effects:SafeAreaEffect.SafeArea="true, false" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Vertical only -->
+                <Frame BackgroundColor="LightPink" Padding="20">
+                    <VerticalStackLayout>
+                        <Label Text="Vertical only (false, true)" FontAttributes="Bold" />
+                        <Label Text="Only top and bottom edges respect safe area" />
+                        <BoxView HeightRequest="80" BackgroundColor="MistyRose"
+                                 effects:SafeAreaEffect.SafeArea="false, true" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Custom configuration -->
+                <Frame BackgroundColor="LightSalmon" Padding="20">
+                    <VerticalStackLayout>
+                        <Label Text="Custom (true, true, false, false)" FontAttributes="Bold" />
+                        <Label Text="Left and Top respect safe area, Right and Bottom don't" />
+                        <BoxView HeightRequest="80" BackgroundColor="PeachPuff"
+                                 effects:SafeAreaEffect.SafeArea="true, true, false, false" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Another custom configuration -->
+                <Frame BackgroundColor="Lavender" Padding="20">
+                    <VerticalStackLayout>
+                        <Label Text="Custom (false, false, true, true)" FontAttributes="Bold" />
+                        <Label Text="Right and Bottom respect safe area, Left and Top don't" />
+                        <BoxView HeightRequest="80" BackgroundColor="Thistle"
+                                 effects:SafeAreaEffect.SafeArea="false, false, true, true" />
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Bottom control panel -->
+        <Frame Grid.Row="2" Padding="20" Margin="0" BackgroundColor="WhiteSmoke">
+            <VerticalStackLayout Spacing="10" effects:SafeAreaEffect.SafeArea="false, false, false, true">
+                <Label Text="Note: The effect is most visible on devices with notches or rounded corners" FontSize="14" />
+                <Button Text="Back to Main Page" Clicked="OnBackButtonClicked" />
+            </VerticalStackLayout>
+        </Frame>
+    </Grid>
+</ContentPage>
