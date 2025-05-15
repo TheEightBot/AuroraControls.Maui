@@ -155,6 +155,85 @@ public class ChipGroup : ContentView, IDisposable
         InitializeLayout();
     }
 
+    /// <summary>
+    /// Scrolls to make the specified chip visible in the viewport.
+    /// </summary>
+    /// <param name="chip">The chip to scroll to.</param>
+    /// <returns>True if the chip was found and scrolled to, false otherwise.</returns>
+    public bool ScrollToChip(Chip chip, ScrollToPosition position, bool animated = true)
+    {
+        // Only proceed if we're in scrollable mode and have a valid ScrollView
+        if (!IsScrollable || _scrollView == null || !_chips.Contains(chip))
+        {
+            return false;
+        }
+
+        // Calculate scroll position - in horizontal mode, we want to scroll to the chip's X position
+        var chipBounds = chip.Bounds;
+        var scrollPosition = new Point(chipBounds.X, 0);
+
+        // Scroll to the chip - animated
+        _scrollView.ScrollToAsync(chip, position, animated);
+        return true;
+    }
+
+    /// <summary>
+    /// Finds a chip with a matching value and scrolls to make it visible.
+    /// </summary>
+    /// <param name="value">The value to match against chip's Value.</param>
+    /// <param name="comparer">Optional custom comparer for value matching. If null, the default equality comparison is used.</param>
+    /// <returns>True if a matching chip was found and scrolled to, false otherwise.</returns>
+    public bool ScrollToChipWithValue<T>(T value, ScrollToPosition position, bool animated = true, IEqualityComparer<T>? comparer = null)
+    {
+        if (!IsScrollable || _scrollView == null || _chips.Count == 0)
+        {
+            return false;
+        }
+
+        // Find chip with matching value
+        Chip? matchingChip = null;
+        comparer ??= EqualityComparer<T>.Default;
+
+        matchingChip = _chips.FirstOrDefault(c =>
+        {
+            if (c.Value == null)
+            {
+                return false;
+            }
+
+            // Check if the chip's value is of type T or can be converted to T
+            if (c.Value is T chipValue)
+            {
+                return comparer.Equals(chipValue, value);
+            }
+
+            // If types don't match exactly, try to compare as objects
+            return value?.Equals(c.Value) == true || c.Value.Equals(value);
+        });
+
+        // If found, scroll to the chip
+        if (matchingChip != null)
+        {
+            return ScrollToChip(matchingChip, position, animated);
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Scrolls to the currently selected chip, if any.
+    /// </summary>
+    /// <returns>True if a selected chip was found and scrolled to, false otherwise.</returns>
+    public bool ScrollToSelectedChip(ScrollToPosition position, bool animated = true)
+    {
+        if (SelectedChip != null)
+        {
+            return ScrollToChip(SelectedChip, position, animated);
+        }
+
+        return false;
+    }
+
     private void InitializeLayout()
     {
         // Create layout containers

@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:aurora="http://auroracontrols.maui/controls"
+    xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
     xmlns:local="clr-namespace:AuroraControls.TestApp"
     xmlns:vm="clr-namespace:AuroraControls.TestApp.ViewModels"
     Title="Chip Group Demo"
@@ -17,7 +18,8 @@
         <DataTemplate x:Key="ChipTemplate">
             <aurora:Chip
                 Text="{Binding Name}"
-                LeadingEmbeddedImageName="{Binding IconSource}" />
+                LeadingEmbeddedImageName="{Binding IconSource}"
+                Value="{Binding Name}"/>
         </DataTemplate>
     </ContentPage.Resources>
 
@@ -43,7 +45,7 @@
             Grid.Row="1"
             Margin="0,0,0,20"
             ColumnDefinitions="*,*"
-            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
             ColumnSpacing="10"
             RowSpacing="10">
 
@@ -109,15 +111,47 @@
                 Text="Remove All"
                 Clicked="OnClearChipsClicked" />
 
-            <Label
+            <Button
                 Grid.Row="5"
+                Grid.Column="0"
+                Text="Scroll to Random"
+                Clicked="OnScrollToRandomClicked" />
+
+            <Button
+                Grid.Row="5"
+                Grid.Column="1"
+                Text="Scroll to Selection"
+                Clicked="OnScrollToSelectionClicked" />
+
+            <Label
+                Grid.Row="6"
+                Grid.Column="0"
+                Text="Scroll to Value:"
+                VerticalOptions="Center" />
+
+            <HorizontalStackLayout
+                Grid.Row="6"
+                Grid.Column="1"
+                Spacing="8">
+                <Picker
+                    x:Name="ValuePicker"
+                    WidthRequest="120"
+                    ItemsSource="{Binding ChipNames}" />
+                <Button
+                    Text="Go"
+                    WidthRequest="40"
+                    Clicked="OnScrollToValueClicked" />
+            </HorizontalStackLayout>
+
+            <Label
+                Grid.Row="7"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Text="Selected Chips:"
                 Margin="0,10,0,0" />
 
             <Label
-                Grid.Row="6"
+                Grid.Row="8"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Text="{Binding SelectedChipsText}"

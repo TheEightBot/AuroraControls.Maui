@@ -65,8 +65,16 @@ public partial class ChipGroupViewModel : ObservableObject
 
     public string SelectedSelectionMode => AllowMultipleSelection ? "Multiple Selection" : "Single Selection";
 
+    public ObservableCollection<string> ChipNames { get; } = new();
+
     public ChipGroupViewModel()
     {
+        // Populate the ChipNames collection
+        foreach (var name in _chipNames)
+        {
+            ChipNames.Add(name);
+        }
+
         // Add some initial chips
         for (int i = 0; i < 8; i++)
         {
@@ -76,9 +84,12 @@ public partial class ChipGroupViewModel : ObservableObject
 
     public void AddRandomChip()
     {
+        string name = _chipNames[_random.Next(_chipNames.Length)];
+
         var chip = new ChipItemViewModel
         {
-            Name = _chipNames[_random.Next(_chipNames.Length)],
+            Name = name,
+            Value = name, // Set the Value property to match the Name for demonstration purposes
             IconSource = _icons[_random.Next(_icons.Length)],
             IsClosable = _random.Next(2) == 0,
             BackgroundColor = _colors[_random.Next(_colors.Length)],
@@ -91,6 +102,16 @@ public partial class ChipGroupViewModel : ObservableObject
     {
         ChipItems.Clear();
         SelectedChipsText = "None";
+    }
+
+    /// <summary>
+    /// Find a chip item by its value.
+    /// </summary>
+    /// <param name="value">The value to search for.</param>
+    /// <returns>The matching chip item or null if not found.</returns>
+    public ChipItemViewModel GetChipByValue(string value)
+    {
+        return ChipItems.FirstOrDefault(c => string.Equals(c.Value, value, StringComparison.OrdinalIgnoreCase));
     }
 }
 
@@ -107,4 +128,7 @@ public partial class ChipItemViewModel : ObservableObject
 
     [ObservableProperty]
     private string _backgroundColor;
+
+    [ObservableProperty]
+    private string _value;
 }
