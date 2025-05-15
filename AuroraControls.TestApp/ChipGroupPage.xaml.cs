@@ -60,6 +60,87 @@ public partial class ChipGroupPage : ContentPage
         }
     }
 
+    private void OnScrollToRandomClicked(object sender, EventArgs e)
+    {
+        if (ChipGroupSample != null && ChipGroupSample.Chips.Count > 0)
+        {
+            // Get a random chip from the collection
+            int randomIndex = _random.Next(ChipGroupSample.Chips.Count);
+            var randomChip = ChipGroupSample.Chips[randomIndex];
+
+            // Scroll to the random chip
+            bool success = ChipGroupSample.ScrollToChip(randomChip, ScrollToPosition.Center);
+
+            // Provide visual feedback to the user
+            if (success)
+            {
+                // Briefly toggle the chip to provide visual feedback
+                randomChip.IsToggled = true;
+
+                // Create a timer to untoggle the chip after a short delay if it's not meant to stay selected
+                if (!randomChip.IsToggled)
+                {
+                    var timer = Application.Current.Dispatcher.CreateTimer();
+                    timer.Interval = TimeSpan.FromMilliseconds(500);
+                    timer.Tick += (s, args) =>
+                    {
+                        randomChip.IsToggled = false;
+                        timer.Stop();
+                    };
+                    timer.Start();
+                }
+            }
+            else
+            {
+                DisplayAlert("Scrolling Failed", "Could not scroll to the selected chip. Make sure the ChipGroup is in scrollable mode.", "OK");
+            }
+        }
+        else
+        {
+            DisplayAlert("No Chips", "There are no chips to scroll to. Please add some chips first.", "OK");
+        }
+    }
+
+    private void OnScrollToSelectionClicked(object sender, EventArgs e)
+    {
+        if (ChipGroupSample != null)
+        {
+            bool success = ChipGroupSample.ScrollToSelectedChip(ScrollToPosition.Center);
+
+            if (!success)
+            {
+                // Try to scroll to any selected chip if in multi-selection mode
+                if (ChipGroupSample.AllowMultipleSelection && ChipGroupSample.SelectedChips.Count > 0)
+                {
+                    // Scroll to the first selected chip
+                    success = ChipGroupSample.ScrollToChip(ChipGroupSample.SelectedChips[0], ScrollToPosition.MakeVisible);
+                }
+
+                if (!success)
+                {
+                    DisplayAlert("Scrolling Failed", "No selected chip to scroll to, or the ChipGroup is not in scrollable mode.", "OK");
+                }
+            }
+        }
+    }
+
+    private void OnScrollToValueClicked(object sender, EventArgs e)
+    {
+        if (ValuePicker.SelectedItem is string selectedValue && !string.IsNullOrEmpty(selectedValue))
+        {
+            bool success = ChipGroupSample.ScrollToChipWithValue(selectedValue, ScrollToPosition.Center, true, StringComparer.OrdinalIgnoreCase);
+
+            if (!success)
+            {
+                DisplayAlert("Scrolling Failed", $"Could not find a chip with value '{selectedValue}' or the ChipGroup is not in scrollable mode.", "OK");
+            }
+        }
+        else
+        {
+            DisplayAlert("No Value Selected", "Please select a value from the dropdown first.", "OK");
+        }
+    }
+
     private void OnChipSelectionChanged(object sender, ChipSelectionChangedEventArgs e)
     {
         if (BindingContext is ChipGroupViewModel viewModel)
