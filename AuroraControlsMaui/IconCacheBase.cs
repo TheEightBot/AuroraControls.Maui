@@ -116,7 +116,8 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
     }
 
-    public Task<FileImageSource> FileImageSourceFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null) => FileImageSourceFromSvg(svgName, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
+    public Task<FileImageSource> FileImageSourceFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null) =>
+        FileImageSourceFromSvg(svgName, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
 
     public async Task<FileImageSource> FileImageSourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null)
     {

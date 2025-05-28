@@ -38,7 +38,7 @@ public static class ImageSourceExtensions
                     if (result.IsCompleted && image != null)
                     {
                         var imageSource = await result.ConfigureAwait(false);
-                        imageSource.Dispatcher.Dispatch(() => image.Source = imageSource);
+                        MainThread.BeginInvokeOnMainThread(() => image.Source = imageSource);
                     }
                 });
 
@@ -54,7 +54,7 @@ public static class ImageSourceExtensions
                     if (result.IsCompleted && toolbarItem != null)
                     {
                         var imageSource = await result.ConfigureAwait(false);
-                        imageSource.Dispatcher.Dispatch(() => toolbarItem.IconImageSource = imageSource);
+                        MainThread.BeginInvokeOnMainThread(() => toolbarItem.IconImageSource = imageSource);
                     }
                 });
 
@@ -70,7 +70,7 @@ public static class ImageSourceExtensions
                     if (result.IsCompleted && menuItem != null)
                     {
                         var imageSource = await result.ConfigureAwait(false);
-                        imageSource.Dispatcher.Dispatch(() => menuItem.IconImageSource = imageSource);
+                        MainThread.BeginInvokeOnMainThread(() => menuItem.IconImageSource = imageSource);
                     }
                 });
 
@@ -86,7 +86,7 @@ public static class ImageSourceExtensions
                     if (result.IsCompleted && page != null)
                     {
                         var imageSource = await result.ConfigureAwait(false);
-                        imageSource.Dispatcher.Dispatch(() => page.IconImageSource = imageSource);
+                        MainThread.BeginInvokeOnMainThread(() => page.IconImageSource = imageSource);
                     }
                 });
 
@@ -102,7 +102,7 @@ public static class ImageSourceExtensions
                     if (result.IsCompleted && button != null)
                     {
                         var imageSource = await result.ConfigureAwait(false);
-                        imageSource.Dispatcher.Dispatch(() => button.ImageSource = imageSource);
+                        MainThread.BeginInvokeOnMainThread(() => button.ImageSource = imageSource);
                     }
                 });
 
@@ -118,7 +118,7 @@ public static class ImageSourceExtensions
                     if (result.IsCompleted && button != null)
                     {
                         var imageSource = await result.ConfigureAwait(false);
-                        imageSource.Dispatcher.Dispatch(() => button.Source = imageSource);
+                        MainThread.BeginInvokeOnMainThread(() => button.Source = imageSource);
                     }
                 });
 
@@ -134,7 +134,7 @@ public static class ImageSourceExtensions
                     if (result.IsCompleted && imageCell != null)
                     {
                         var imageSource = await result.ConfigureAwait(false);
-                        imageSource.Dispatcher.Dispatch(() => imageCell.ImageSource = imageSource);
+                        MainThread.BeginInvokeOnMainThread(() => imageCell.ImageSource = imageSource);
                     }
                 });
 
@@ -149,7 +149,7 @@ public static class ImageSourceExtensions
                     if (result.IsCompleted)
                     {
                         var imageSource = await result.ConfigureAwait(false);
-                        imageSource.Dispatcher.Dispatch(() => assignImageSource?.Invoke(imageSource));
+                        MainThread.BeginInvokeOnMainThread(() => assignImageSource?.Invoke(imageSource));
                     }
                 });
 
@@ -166,7 +166,7 @@ public static class ImageSourceExtensions
 
                     var member = (MemberExpression)source.Body;
                     var property = member.Member as PropertyInfo;
-                    element.Dispatcher.Dispatch(() => property.SetValue(element, imageSource));
+                    MainThread.BeginInvokeOnMainThread(() => property.SetValue(element, imageSource));
                 }
             });
 
@@ -185,7 +185,7 @@ public static class ImageSourceExtensions
                     if (result.IsCompleted && image != null)
                     {
                         var lateSource = await result.ConfigureAwait(false);
-                        lateSource.Dispatcher.Dispatch(() => image.Source = lateSource);
+                        MainThread.BeginInvokeOnMainThread(() => image.Source = lateSource);
                     }
                 });
 
@@ -204,7 +204,7 @@ public static class ImageSourceExtensions
                     if (result.IsCompleted && imageSource != null)
                     {
                         var lateSource = await result.ConfigureAwait(false);
-                        imageSource.Dispatcher.Dispatch(() => assignSource(imageSource, lateSource));
+                        MainThread.BeginInvokeOnMainThread(() => assignSource(imageSource, lateSource));
                     }
                 });
 
@@ -222,7 +222,7 @@ public static class ImageSourceExtensions
                     if (result.IsCompleted && imageSource != null)
                     {
                         var lateSource = await result.ConfigureAwait(false);
-                        imageSource.Dispatcher.Dispatch(() => imageSource.File = lateSource?.File);
+                        MainThread.BeginInvokeOnMainThread(() => imageSource.File = lateSource?.File);
                     }
                 });
 
@@ -238,7 +238,7 @@ public static class ImageSourceExtensions
                     if (result.IsCompleted && updatableSource != null)
                     {
                         var lateSource = await result.ConfigureAwait(false);
-                        updatableSource.Dispatcher.Dispatch(() => updatableSource.File = lateSource?.File);
+                        MainThread.BeginInvokeOnMainThread(() => updatableSource.File = lateSource?.File);
                     }
                 });
 
@@ -256,7 +256,7 @@ public static class ImageSourceExtensions
                     if (result.IsCompleted && imageSource != null)
                     {
                         var lateSource = await result.ConfigureAwait(false);
-                        imageSource.Dispatcher.Dispatch(() => imageSource.Uri = lateSource?.Uri);
+                        MainThread.BeginInvokeOnMainThread(() => imageSource.Uri = lateSource?.Uri);
                     }
                 });
 
