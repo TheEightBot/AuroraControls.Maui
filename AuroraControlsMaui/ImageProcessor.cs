@@ -2,7 +2,7 @@ using AuroraControls.ImageProcessing;
 
 namespace AuroraControls;
 
-public class ImageProcessor
+public static class ImageProcessor
 {
     public static void ProcessImage(string inputPath, string outputPath, SKEncodedImageFormat imageFormat, int quality, params IImageProcessor[] imageProcessors)
     {
