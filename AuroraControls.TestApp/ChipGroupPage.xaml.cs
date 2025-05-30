@@ -141,16 +141,67 @@ public partial class ChipGroupPage : ContentPage
         }
     }
 
+    private void OnSelectValueClicked(object sender, EventArgs e)
+    {
+        if (ValuePicker.SelectedItem is string selectedValue && !string.IsNullOrEmpty(selectedValue))
+        {
+            // Either of these approaches work:
+
+            // Option 1: Using the SelectedValue property
+            if (BindingContext is ChipGroupViewModel viewModel)
+            {
+                viewModel.SelectedValue = selectedValue;
+            }
+
+            // Option 2: Using the SelectChipByValue method
+            // bool success = ChipGroupSample.SelectChipByValue(selectedValue);
+
+            // Provide feedback on success or failure
+            DisplayAlert("Information", $"Selected chip with value: '{selectedValue}'", "OK");
+        }
+        else
+        {
+            DisplayAlert("No Value Selected", "Please select a value from the dropdown first.", "OK");
+        }
+    }
+
     private void OnChipSelectionChanged(object sender, ChipSelectionChangedEventArgs e)
     {
-        if (BindingContext is ChipGroupViewModel viewModel)
+        if (BindingContext is ChipGroupViewModel viewModel && sender is ChipGroup chipGroup)
         {
+            // Update selected chips text
             string selectedChips = string.Join(", ", e.SelectedItems.Select(c => c.Text));
             viewModel.SelectedChipsText = string.IsNullOrEmpty(selectedChips) ? "None" : selectedChips;
 
+            // Update selected values text from the ChipGroup's SelectedValues
+            string selectedValues = string.Join(", ", chipGroup.SelectedValues);
+            viewModel.SelectedValuesText = string.IsNullOrEmpty(selectedValues) ? "None" : selectedValues;
+
             Debug.WriteLine($"Selection Changed: New={e.NewSelection?.Text ?? "None"}, " +
                            $"Old={e.OldSelection?.Text ?? "None"}, " +
-                           $"Total Selected={e.SelectedItems.Count}");
+                           $"Total Selected={e.SelectedItems.Count}, " +
+                           $"SelectedValue={viewModel.SelectedValue ?? "None"}");
+        }
+    }
+
+    private async void OnShowSelectedValuesClicked(object sender, EventArgs e)
+    {
+        if (ChipGroupSample != null)
+        {
+            // Get the current selected value (for single selection mode)
+            string selectedValue = ChipGroupSample.SelectedValue?.ToString() ?? "None";
+
+            // Get all selected values (for multi-selection mode)
+            string selectedValues = string.Join(", ", ChipGroupSample.SelectedValues.Select(v => v?.ToString() ?? "null"));
+            if (string.IsNullOrEmpty(selectedValues))
+            {
+                selectedValues = "None";
+            }
+
+            await DisplayAlert(
+                "Selected Values",
+                $"SelectedValue: {selectedValue}\n\nSelectedValues: {selectedValues}",
+                "OK");
         }
     }
 }

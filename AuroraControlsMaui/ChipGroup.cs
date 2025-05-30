@@ -46,7 +46,8 @@ public class ChipGroup : ContentView, IDisposable
     /// Controls whether multiple chips can be selected simultaneously.
     /// </summary>
     public static readonly BindableProperty AllowMultipleSelectionProperty =
-        BindableProperty.Create(nameof(AllowMultipleSelection), typeof(bool), typeof(ChipGroup), false);
+        BindableProperty.Create(nameof(AllowMultipleSelection), typeof(bool), typeof(ChipGroup), false,
+            propertyChanged: OnAllowMultipleSelectionChanged);
 
     /// <summary>
     /// Gets or sets a value indicating whether multiple chips can be selected simultaneously.
@@ -148,6 +149,34 @@ public class ChipGroup : ContentView, IDisposable
         get => (DataTemplate?)GetValue(ItemTemplateProperty);
         set => SetValue(ItemTemplateProperty, value);
     }
+
+    /// <summary>
+    /// The currently selected chip value in single-selection mode.
+    /// </summary>
+    public static readonly BindableProperty SelectedValueProperty =
+        BindableProperty.Create(nameof(SelectedValue), typeof(object), typeof(ChipGroup), null,
+            BindingMode.TwoWay, propertyChanged: OnSelectedValueChanged);
+
+    /// <summary>
+    /// Gets or sets the value of the currently selected chip in single-selection mode.
+    /// </summary>
+    public object? SelectedValue
+    {
+        get => GetValue(SelectedValueProperty);
+        set => SetValue(SelectedValueProperty, value);
+    }
+
+    /// <summary>
+    /// The currently selected chip values in multi-selection mode.
+    /// </summary>
+    public static readonly BindableProperty SelectedValuesProperty =
+        BindableProperty.Create(nameof(SelectedValues), typeof(IList<object>), typeof(ChipGroup), null,
+            BindingMode.OneWay);
+
+    /// <summary>
+    /// Gets the values of currently selected chips in multi-selection mode.
+    /// </summary>
+    public IList<object> SelectedValues => _selectedChips.Select(chip => chip.Value).ToList();
 
     public ChipGroup()
     {
@@ -286,6 +315,82 @@ public class ChipGroup : ContentView, IDisposable
         }
     }
 
+    /// <summary>
+    /// Handles changes to the AllowMultipleSelection property.
+    /// Updates chip configurations and selection state.
+    /// </summary>
+    private static void OnAllowMultipleSelectionChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        if (bindable is not ChipGroup chipGroup)
+        {
+            return;
+        }
+
+        bool allowMultipleSelection = (bool)newValue;
+
+        // Update the single selection flag on all chips
+        chipGroup.UpdateChipSelectionMode();
+
+        // Handle the selection state transition
+        if (allowMultipleSelection)
+        {
+            // Switching from single to multiple selection:
+            // If there's a selected chip, keep it as the only selection
+            if (chipGroup.SelectedChip != null)
+            {
+                if (!chipGroup._selectedChips.Contains(chipGroup.SelectedChip))
+                {
+                    chipGroup._selectedChips.Clear();
+                    chipGroup._selectedChips.Add(chipGroup.SelectedChip);
+                }
+            }
+        }
+        else
+        {
+            // Switching from multiple to single selection
+            Chip? chipToKeepSelected = null;
+
+            // Determine which chip should remain selected
+            if (chipGroup._selectedChips.Count > 0)
+            {
+                // Keep the first selected chip
+                chipToKeepSelected = chipGroup._selectedChips[0];
+            }
+
+            // First, untoggle all chips that shouldn't be selected
+            foreach (var chip in chipGroup._chips)
+            {
+                if (chip != chipToKeepSelected && chip.IsToggled)
+                {
+                    chip.IsToggled = false;
+                }
+            }
+
+            // Update the selection collections and properties
+            chipGroup._selectedChips.Clear();
+
+            if (chipToKeepSelected != null)
+            {
+                chipGroup._selectedChips.Add(chipToKeepSelected);
+                chipGroup._selectedChip = chipToKeepSelected;
+                chipGroup.SetValue(ChipGroup.SelectedChipProperty, chipToKeepSelected);
+                chipGroup.SetValue(ChipGroup.SelectedValueProperty, chipToKeepSelected.Value);
+            }
+            else
+            {
+                chipGroup._selectedChip = null;
+                chipGroup.SetValue(ChipGroup.SelectedChipProperty, null);
+                chipGroup.SetValue(ChipGroup.SelectedValueProperty, null);
+            }
+        }
+
+        // Make sure SelectedValues is notified of changes
+        chipGroup.UpdateSelectedValues();
+
+        // Notify about the selection change
+        chipGroup.NotifySelectionChanged(null, chipGroup._selectedChip);
+    }
+
     private static void OnLayoutPropertyChanged(BindableObject bindable, object oldValue, object newValue)
     {
         if (bindable is ChipGroup chipGroup)
@@ -325,20 +430,34 @@ public class ChipGroup : ContentView, IDisposable
                 newChip.IsToggled = true;
                 chipGroup._selectedChip = newChip;
 
+                // Update SelectedValue to match the new chip's Value
+                chipGroup.SetValue(SelectedValueProperty, newChip.Value);
+
                 // In single selection mode, clear other selections
                 if (!chipGroup.AllowMultipleSelection)
                 {
                     chipGroup._selectedChips.Clear();
                     chipGroup._selectedChips.Add(newChip);
                 }
+                else
+                {
+                    chipGroup.UpdateSelectedValues();
+                }
             }
             else
             {
                 chipGroup._selectedChip = null;
 
+                // Clear SelectedValue when no chip is selected
+                chipGroup.SetValue(SelectedValueProperty, null);
+
                 if (!chipGroup.AllowMultipleSelection)
                 {
                     chipGroup._selectedChips.Clear();
+                }
+                else
+                {
+                    chipGroup.UpdateSelectedValues();
                 }
             }
         }
@@ -349,6 +468,122 @@ public class ChipGroup : ContentView, IDisposable
             // Notify selection changes
             chipGroup.NotifySelectionChanged(oldChip, newChip);
         }
+    }
+
+    private static void OnSelectedValueChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        if (bindable is not ChipGroup chipGroup)
+        {
+            return;
+        }
+
+        if (chipGroup._isUpdating)
+        {
+            return;
+        }
+
+        try
+        {
+            chipGroup._isUpdating = true;
+
+            // Find chip with the specified value
+            Chip? matchingChip = null;
+
+            if (newValue != null)
+            {
+                matchingChip = chipGroup._chips.FirstOrDefault(c =>
+                {
+                    if (c.Value == null)
+                    {
+                        return newValue == null;
+                    }
+
+                    return c.Value.Equals(newValue) || newValue.Equals(c.Value);
+                });
+            }
+
+            // Update selection
+            chipGroup.SelectedChip = matchingChip;
+        }
+        finally
+        {
+            chipGroup._isUpdating = false;
+        }
+    }
+
+    /// <summary>
+    /// Updates the SelectedValues collection and raises property changed notification.
+    /// </summary>
+    private void UpdateSelectedValues()
+    {
+        // For the OneWay binding of SelectedValues
+        OnPropertyChanged(nameof(SelectedValues));
+    }
+
+    /// <summary>
+    /// Selects a chip by its value.
+    /// </summary>
+    /// <param name="value">The value to search for.</param>
+    /// <returns>True if a chip with the matching value was found and selected.</returns>
+    public bool SelectChipByValue(object value)
+    {
+        if (value == null)
+        {
+            return false;
+        }
+
+        var chip = _chips.FirstOrDefault(c =>
+        {
+            if (c.Value == null)
+            {
+                return false;
+            }
+
+            return c.Value.Equals(value) || value.Equals(c.Value);
+        });
+
+        if (chip != null)
+        {
+            SelectedChip = chip;
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Finds and returns a chip by its value.
+    /// </summary>
+    /// <param name="value">The value to search for.</param>
+    /// <returns>The chip with the matching value or null if not found.</returns>
+    public Chip? GetChipByValue(object value)
+    {
+        if (value == null)
+        {
+            return null;
+        }
+
+        return _chips.FirstOrDefault(c =>
+        {
+            if (c.Value == null)
+            {
+                return false;
+            }
+
+            return c.Value.Equals(value) || value.Equals(c.Value);
+        });
+    }
+
+    private void NotifySelectionChanged(Chip? oldSelection, Chip? newSelection)
+    {
+        var args = new ChipSelectionChangedEventArgs
+        {
+            OldSelection = oldSelection,
+            NewSelection = newSelection,
+            SelectedItems = new List<Chip>(_selectedChips),
+        };
+
+        SelectionChanged?.Invoke(this, args);
     }
 
     private void OnChipsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -380,6 +615,12 @@ public class ChipGroup : ContentView, IDisposable
                     }
                 }
 
+                // If all chips are removed, ensure selected values are cleared
+                if (_chips.Count == 0)
+                {
+                    ClearSelection();
+                }
+
                 break;
 
             case NotifyCollectionChangedAction.Replace:
@@ -403,9 +644,18 @@ public class ChipGroup : ContentView, IDisposable
 
             case NotifyCollectionChangedAction.Reset:
                 _chipContainer.Clear();
-                foreach (var chip in _chips)
+
+                // When the collection is reset/cleared, clear all selections
+                if (_chips.Count == 0)
                 {
-                    AddChip(chip);
+                    ClearSelection();
+                }
+                else
+                {
+                    foreach (var chip in _chips)
+                    {
+                        AddChip(chip);
+                    }
                 }
 
                 break;
@@ -489,10 +739,15 @@ public class ChipGroup : ContentView, IDisposable
                 _selectedChips.Add(chip);
             }
 
-            // Update SelectedChip for single selection mode
+            // Update SelectedChip and SelectedValue for single selection mode
             if (!AllowMultipleSelection)
             {
                 SetValue(SelectedChipProperty, chip);
+                SetValue(SelectedValueProperty, chip.Value);
+            }
+            else
+            {
+                UpdateSelectedValues();
             }
         }
         else
@@ -504,18 +759,22 @@ public class ChipGroup : ContentView, IDisposable
             {
                 _selectedChip = null;
                 SetValue(SelectedChipProperty, null);
+                SetValue(SelectedValueProperty, null);
             }
             else if (AllowMultipleSelection)
             {
                 // For multi-selection mode, we also need to trigger a notification
                 // even though SelectedChip property doesn't change
                 SetValue(SelectedChipProperty, SelectedChip);
+
+                UpdateSelectedValues();
             }
             else
             {
                 // For single selection mode, ensure notification is triggered even if this
                 // isn't the currently selected chip (could be a programmatic deselection)
                 SetValue(SelectedChipProperty, _selectedChip);
+                SetValue(SelectedValueProperty, _selectedChip?.Value);
             }
         }
 
@@ -550,6 +809,61 @@ public class ChipGroup : ContentView, IDisposable
         UpdateLayout();
     }
 
+    /// <summary>
+    /// Updates the selection mode (IsSingleSelection) on all chips.
+    /// </summary>
+    private void UpdateChipSelectionMode()
+    {
+        foreach (var chip in _chips)
+        {
+            chip.IsSingleSelection = !AllowMultipleSelection;
+        }
+    }
+
+    /// <summary>
+    /// Clears all chip selections and updates the SelectedValue and SelectedValues properties.
+    /// </summary>
+    public void ClearSelection()
+    {
+        if (_isUpdating)
+        {
+            return;
+        }
+
+        _isUpdating = true;
+        try
+        {
+            // Clear selected chip reference
+            _selectedChip = null;
+
+            // Clear the selected chips collection
+            if (_selectedChips.Count > 0)
+            {
+                // Untoggle all selected chips
+                foreach (var chip in _selectedChips.ToList())
+                {
+                    chip.IsToggled = false;
+                }
+
+                _selectedChips.Clear();
+            }
+
+            // Update bindable properties
+            SetValue(SelectedChipProperty, null);
+            SetValue(SelectedValueProperty, null);
+
+            // Notify for one-way binding properties
+            UpdateSelectedValues();
+
+            // Raise the selection changed event
+            NotifySelectionChanged(null, null);
+        }
+        finally
+        {
+            _isUpdating = false;
+        }
+    }
+
     private void UpdateLayout()
     {
         if (_chipContainer == null)
@@ -570,6 +884,8 @@ public class ChipGroup : ContentView, IDisposable
                     Orientation = ScrollOrientation.Horizontal,
                     Content = _chipContainer,
                     HorizontalScrollBarVisibility = ScrollBarVisibility.Never,
+                    Padding = new Thickness(0),
+                    Margin = new Thickness(0),
                 };
             }
             else
@@ -603,6 +919,9 @@ public class ChipGroup : ContentView, IDisposable
 
         // Clear existing chips
         chipGroup._chips.Clear();
+
+        // Clear all selections when the item source changes
+        chipGroup.ClearSelection();
 
         // Add new items
         if (newValue is IEnumerable items)
@@ -651,6 +970,10 @@ public class ChipGroup : ContentView, IDisposable
 
             case NotifyCollectionChangedAction.Reset:
                 _chips.Clear();
+
+                // Clear all selections when the collection is reset
+                ClearSelection();
+
                 if (sender is IEnumerable items)
                 {
                     CreateChipsFromItems(items);
@@ -734,18 +1057,6 @@ public class ChipGroup : ContentView, IDisposable
         }
 
         return null;
-    }
-
-    private void NotifySelectionChanged(Chip? oldSelection, Chip? newSelection)
-    {
-        var args = new ChipSelectionChangedEventArgs
-        {
-            OldSelection = oldSelection,
-            NewSelection = newSelection,
-            SelectedItems = new List<Chip>(_selectedChips),
-        };
-
-        SelectionChanged?.Invoke(this, args);
     }
 
     protected virtual void Dispose(bool disposing)

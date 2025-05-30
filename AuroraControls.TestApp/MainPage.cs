@@ -98,27 +98,54 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                         Spacing = 16,
                         Children =
                         {
+                            new Image
+                                {
+                                    Aspect = Aspect.AspectFit,
+                                    HorizontalOptions = LayoutOptions.Center,
+                                    VerticalOptions = LayoutOptions.End,
+                                    MinimumHeightRequest = 200,
+                                    MinimumWidthRequest = 200,
+                                }
+                                .SetSvgIcon("benefits_hero_logo.svg", 200),
+
+                            new Button { BackgroundColor = Colors.Fuchsia, }
+                                .SetSvgIcon("splatoon.svg", colorOverride: Colors.White),
+
                             new Button { Text = "View Image Processing", }
                                 .BindClicked(async () => await this.Navigation.PushAsync(new ImageProcessing()))
                                 .Assign(out _viewImageProcessingButton),
+
                             new Button { Text = "View Card View Layout", }
                                 .BindClicked(async () => await this.Navigation.PushAsync(new CardViewLayoutPage()))
                                 .Assign(out _viewCardViewLayoutButton),
+
                             new Button { Text = "View Calendar View", }
                                 .BindClicked(async () => await this.Navigation.PushAsync(new CalendarViewPage()))
                                 .Assign(out _viewCalendarViewButton),
+
                             new Button { Text = "View touch Draw Image", }
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new TouchDrawLettersImagePage()))
                                 .Assign(out _touchDrawImage),
+
                             new Button { Text = "View Toggle Issue Page", }
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new ToggleBoxCollectionViewIssuePage()))
                                 .Assign(out _viewToggleIssueButton),
+
+                            new Button { Text = "View Signature Pad Page", }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new SignaturePadPage())),
+
+                            new Button { Text = "View Chip Group Page", }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new ChipGroupPage())),
+
                             new Button { Text = "View SafeArea Effect Test", }
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new SafeAreaTestPage()))
                                 .Assign(out _viewSafeAreaTestButton),
+
                             new ToggleBox
                             {
                                 ToggledBackgroundColor = Colors.Fuchsia,
@@ -189,8 +216,6 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                         .Row(2).Column(2),
                                 },
                             },
-                            new Button { BackgroundColor = Colors.Fuchsia, }
-                                .SetSvgIcon("splatoon.svg", colorOverride: Colors.White),
                             new SegmentedControl
                             {
                                 FontFamily = "Clathing",
