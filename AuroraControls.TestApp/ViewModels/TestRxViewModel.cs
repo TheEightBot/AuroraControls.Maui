@@ -8,6 +8,9 @@ namespace AuroraControls.TestApp.ViewModels;
 public class TestRxViewModel : ReactiveObject
 {
     [Reactive]
+    public decimal? NullableDecimalValue { get; set; }
+
+    [Reactive]
     public double? NullableDoubleValue { get; set; }
 
     [Reactive]

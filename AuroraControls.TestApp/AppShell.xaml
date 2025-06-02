@@ -9,17 +9,17 @@
     <FlyoutItem Title="Home" Icon="home">
         <ShellContent
             Title="Home"
-            ContentTemplate="{DataTemplate local:MainPage}"
+            ContentTemplate="{DataTemplate local:TestPage}"
             Route="MainPage" />
     </FlyoutItem>
-    
+
     <FlyoutItem Title="Signature Pad" Icon="edit">
         <ShellContent
             Title="Signature Pad"
             ContentTemplate="{DataTemplate local:SignaturePadPage}"
             Route="SignaturePadPage" />
     </FlyoutItem>
-    
+
     <FlyoutItem Title="Chip Group" Icon="chat">
         <ShellContent
             Title="Chip Group"
