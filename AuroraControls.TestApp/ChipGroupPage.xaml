@@ -30,11 +30,10 @@
         <!-- Header -->
         <VerticalStackLayout
             Grid.Row="0"
-            Spacing="12"
-            Margin="0,0,0,20">
+            Spacing="12">
             <Label
                 Text="Chip Group Demo"
-                FontSize="24"
+                FontSize="16"
                 FontAttributes="Bold" />
             <Label
                 Text="This page demonstrates the various capabilities of the ChipGroup control." />
@@ -43,11 +42,10 @@
         <!-- Configuration Options -->
         <Grid
             Grid.Row="1"
-            Margin="0,0,0,20"
             ColumnDefinitions="*,*"
-            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
             ColumnSpacing="10"
-            RowSpacing="10">
+            RowSpacing="4">
 
             <Label
                 Grid.Row="0"
@@ -141,6 +139,10 @@
                     Text="Go"
                     WidthRequest="40"
                     Clicked="OnScrollToValueClicked" />
+                <Button
+                    Text="Select"
+                    WidthRequest="70"
+                    Clicked="OnSelectValueClicked" />
             </HorizontalStackLayout>
 
             <Label
@@ -156,6 +158,28 @@
                 Grid.ColumnSpan="2"
                 Text="{Binding SelectedChipsText}"
                 LineBreakMode="WordWrap" />
+                
+            <Label
+                Grid.Row="9"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Text="Selected Values:"
+                Margin="0,10,0,0" />
+
+            <Label
+                Grid.Row="10"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Text="{Binding SelectedValuesText}"
+                LineBreakMode="WordWrap" />
+                
+            <Button
+                Grid.Row="11"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Text="Show Selected Value/Values"
+                Clicked="OnShowSelectedValuesClicked"
+                Margin="0,10,0,0" />
         </Grid>
 
         <!-- ChipGroup Sample -->
@@ -165,13 +189,7 @@
             BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray900}}"
             Padding="15">
 
-            <Grid RowDefinitions="Auto,*">
-                <Label
-                    Grid.Row="0"
-                    Text="Chip Group"
-                    FontSize="18"
-                    Margin="0,0,0,10" />
-
+            <Grid RowDefinitions="*">
                 <!-- ChipGroup with data binding -->
                 <aurora:ChipGroup
                     x:Name="ChipGroupSample"
@@ -182,6 +200,7 @@
                     VerticalSpacing="{Binding VerticalSpacing}"
                     ItemsSource="{Binding ChipItems}"
                     ItemTemplate="{StaticResource ChipTemplate}"
+                    SelectedValue="{Binding SelectedValue, Mode=TwoWay}"
                     SelectionChanged="OnChipSelectionChanged" />
 
             </Grid>

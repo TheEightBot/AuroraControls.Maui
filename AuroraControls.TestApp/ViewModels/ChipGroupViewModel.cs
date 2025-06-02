@@ -47,6 +47,12 @@ public partial class ChipGroupViewModel : ObservableObject
     [ObservableProperty]
     private string _selectedChipsText = "None";
 
+    [ObservableProperty]
+    private object _selectedValue;
+
+    [ObservableProperty]
+    private string _selectedValuesText = "None";
+
     public ObservableCollection<string> LayoutModes { get; } = new()
     {
         "Multi Line (Wrap)",
