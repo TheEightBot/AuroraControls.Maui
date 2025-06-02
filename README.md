@@ -227,6 +227,95 @@ A control for capturing handwritten signatures.
     StrokeWidth="3"
     BackgroundColor="White" />
 ```
+### ChipGroup and Chip
+
+<p align="center" style="border-radius: 10px;">
+  <img src="images/ChipGroup.png" width="200">
+</p>
+
+A flexible chip component and chip group container for creating tag-like UI elements with selection capabilities.
+
+```xml
+<!-- Single-selection ChipGroup -->
+<aurora:ChipGroup
+    IsScrollable="False"
+    AllowMultipleSelection="False"
+    HorizontalSpacing="8"
+    VerticalSpacing="8"
+    SelectedValue="{Binding SelectedCategory}"
+    SelectionChanged="OnChipSelectionChanged">
+    
+    <aurora:Chip Text="Apple" Value="apple" />
+    <aurora:Chip Text="Banana" Value="banana" />
+    <aurora:Chip Text="Cherry" Value="cherry" />
+</aurora:ChipGroup>
+
+<!-- Data-bound ChipGroup -->
+<aurora:ChipGroup
+    IsScrollable="True"
+    AllowMultipleSelection="True"
+    ItemsSource="{Binding ChipItems}"
+    ItemTemplate="{StaticResource ChipTemplate}"
+    SelectedValues="{Binding SelectedValues}"
+    SelectionChanged="OnSelectionChanged" />
+```
+
+#### ChipGroup Features:
+- **Layout Options**:
+    - `IsScrollable` - Toggle between scrollable single-line mode and multi-line wrapping mode
+    - `HorizontalSpacing` and `VerticalSpacing` - Customize the spacing between chips
+
+- **Selection Management**:
+    - `AllowMultipleSelection` - Toggle between single and multiple selection modes
+    - `SelectedChip` - Get/set the currently selected chip in single selection mode
+    - `SelectedChips` - Collection of currently selected chips in multi-selection mode
+    - `SelectedValue` - Get/set the value of the selected chip in single selection mode
+    - `SelectedValues` - Collection of values from the selected chips in multi-selection mode
+    - `SelectionChanged` event - Provides information about selection changes
+
+- **Collection Integration**:
+    - `ItemsSource` - Bind to a collection of data items
+    - `ItemTemplate` - Define a template for creating chips from data items
+
+- **Navigation Methods**:
+    - `ScrollToChip(...)` - Scroll to a specific chip
+    - `ScrollToChipWithValue(...)` - Find and scroll to a chip by its value
+    - `ScrollToSelectedChip(...)` - Scroll to the currently selected chip
+    - `SelectChipByValue(...)` - Programmatically select a chip by its value
+    - `GetChipByValue(...)` - Find a chip by its value
+
+#### Chip Features:
+- `Text` - The text displayed on the chip
+- `Value` - An associated value for the chip (used for binding and selection)
+- `IsToggled` - The selection state of the chip
+- `IsRemovable` - Whether the chip shows a removal button
+- `BackgroundColor`/`ToggledBackgroundColor` - Customize appearance based on selection state
+- `FontColor`/`ToggledFontColor` - Customize text color based on selection state
+- `LeadingEmbeddedImageName` - Display an SVG image at the start of the chip
+- `IsSingleSelection` - Auto-configured by ChipGroup based on AllowMultipleSelection
+
+#### Example with Value Binding:
+```xml
+<!-- Chip group with two-way value binding -->
+<aurora:ChipGroup
+    AllowMultipleSelection="False"
+    SelectedValue="{Binding SelectedCategory, Mode=TwoWay}">
+    
+    <aurora:Chip Text="Work" Value="work" />
+    <aurora:Chip Text="Personal" Value="personal" />
+    <aurora:Chip Text="Other" Value="other" />
+</aurora:ChipGroup>
+```
+
+#### Example with Multi-Value Binding:
+```xml
+<!-- Multi-select chip group with values collection -->
+<aurora:ChipGroup
+    AllowMultipleSelection="True"
+    ItemsSource="{Binding FilterOptions}">
+    <!-- SelectedValues will contain the Value of each selected chip -->
+</aurora:ChipGroup>
+```
 
 ### Visual Elements
 

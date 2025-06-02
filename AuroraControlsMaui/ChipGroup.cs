@@ -373,14 +373,14 @@ public class ChipGroup : ContentView, IDisposable
             {
                 chipGroup._selectedChips.Add(chipToKeepSelected);
                 chipGroup._selectedChip = chipToKeepSelected;
-                chipGroup.SetValue(ChipGroup.SelectedChipProperty, chipToKeepSelected);
-                chipGroup.SetValue(ChipGroup.SelectedValueProperty, chipToKeepSelected.Value);
+                chipGroup.SetValue(SelectedChipProperty, chipToKeepSelected);
+                chipGroup.SetValue(SelectedValueProperty, chipToKeepSelected.Value);
             }
             else
             {
                 chipGroup._selectedChip = null;
-                chipGroup.SetValue(ChipGroup.SelectedChipProperty, null);
-                chipGroup.SetValue(ChipGroup.SelectedValueProperty, null);
+                chipGroup.SetValue(SelectedChipProperty, null);
+                chipGroup.SetValue(SelectedValueProperty, null);
             }
         }
 
