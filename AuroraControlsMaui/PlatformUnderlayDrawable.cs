@@ -384,12 +384,16 @@ public class PlatformUnderlayDrawable : IDisposable
         if (_typeRegistration is not null && !string.IsNullOrEmpty(_typeRegistration.ValueChangeProperty) && e.PropertyName == _typeRegistration.ValueChangeProperty)
         {
             AnimateHasValue();
+            return;
         }
 
         if (e.PropertyName == nameof(Microsoft.Maui.Controls.VisualElement.IsFocused))
         {
             AnimateHasFocus();
+            return;
         }
+
+        this.Invalidate();
     }
 
     private void AnimateHasFocus()
