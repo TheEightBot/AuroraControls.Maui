@@ -22,21 +22,15 @@ public class TestPage : ReactiveContentPage<TestRxViewModel>
                 Orientation = StackOrientation.Vertical,
                 Children =
                 {
-                    new StyledInputLayout()
+                    new CalendarPicker()
                     {
-                        Placeholder = "hi",
-                        Content =
-                            new CalendarPicker()
-                            {
-                            }
-                                .Assign(out _entry),
                     }
-                        .Assign(out _sil),
+                        .Assign(out _entry),
                 },
             };
 
-        // this.OneWayBind(ViewModel, x => x.NullableDecimalValue, x => x._label.Text);
-        //
-        // this.Bind(ViewModel, x => x.NullableDecimalValue, x => x._entry.Text);
+        //// this.OneWayBind(ViewModel, x => x.NullableDecimalValue, x => x._label.Text);
+
+        this.Bind(ViewModel, x => x.NullableDateTimeValue, x => x._entry.Date);
     }
 }
