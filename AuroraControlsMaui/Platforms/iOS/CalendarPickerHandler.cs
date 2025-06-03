@@ -30,23 +30,11 @@ public partial class CalendarPickerHandler : DatePickerHandler
 
         if (platformView.InputView is UIDatePicker dp)
         {
-            dp.TranslatesAutoresizingMaskIntoConstraints = false;
-
-            var container = new UIView(new CGRect(0, 0, 0, 400));
-            container.AddSubview(platformView.InputView);
-
-            NSLayoutConstraint.ActivateConstraints(
-            [
-                dp.LeadingAnchor.ConstraintEqualTo(container.SafeAreaLayoutGuide.LeadingAnchor),
-                dp.TrailingAnchor.ConstraintEqualTo(container.SafeAreaLayoutGuide.TrailingAnchor),
-                dp.BottomAnchor.ConstraintEqualTo(container.SafeAreaLayoutGuide.BottomAnchor),
-                dp.TopAnchor.ConstraintEqualTo(container.SafeAreaLayoutGuide.TopAnchor),
-            ]);
+            dp.AutoresizingMask = UIViewAutoresizing.None;
+            dp.LayoutMargins = new UIEdgeInsets(0, 0, 64, 0);
 
             dp.PreferredDatePickerStyle = UIDatePickerStyle.Inline;
             dp.Mode = UIDatePickerMode.Date;
-
-            platformView.InputView = container;
         }
 
         if (platformView.InputAccessoryView is UIToolbar tb)
