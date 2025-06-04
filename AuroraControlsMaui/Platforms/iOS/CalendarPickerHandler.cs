@@ -31,7 +31,7 @@ public partial class CalendarPickerHandler : DatePickerHandler
         if (platformView.InputView is UIDatePicker dp)
         {
             dp.AutoresizingMask = UIViewAutoresizing.None;
-            dp.LayoutMargins = new UIEdgeInsets(0, 0, 64, 0);
+            dp.LayoutMargins = new UIEdgeInsets(0, 0, SafeAreaInfo.GetSafeArea().Bottom, 0);
 
             dp.PreferredDatePickerStyle = UIDatePickerStyle.Inline;
             dp.Mode = UIDatePickerMode.Date;
