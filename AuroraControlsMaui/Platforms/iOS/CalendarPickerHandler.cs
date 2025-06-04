@@ -1,3 +1,4 @@
+using CoreGraphics;
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using UIKit;
@@ -29,6 +30,9 @@ public partial class CalendarPickerHandler : DatePickerHandler
 
         if (platformView.InputView is UIDatePicker dp)
         {
+            dp.AutoresizingMask = UIViewAutoresizing.None;
+            dp.LayoutMargins = new UIEdgeInsets(0, 0, SafeAreaInfo.GetSafeArea().Bottom, 0);
+
             dp.PreferredDatePickerStyle = UIDatePickerStyle.Inline;
             dp.Mode = UIDatePickerMode.Date;
         }
