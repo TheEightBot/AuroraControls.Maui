@@ -100,16 +100,6 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                         Spacing = 16,
                         Children =
                         {
-                            new Image
-                                {
-                                    Aspect = Aspect.AspectFit,
-                                    HorizontalOptions = LayoutOptions.Center,
-                                    VerticalOptions = LayoutOptions.End,
-                                    MinimumHeightRequest = 200,
-                                    MinimumWidthRequest = 200,
-                                }
-                                .SetSvgIcon("benefits_hero_logo.svg", 200),
-
                             new Button { BackgroundColor = Colors.Fuchsia, }
                                 .SetSvgIcon("splatoon.svg", colorOverride: Colors.White),
 
@@ -134,6 +124,10 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new ToggleBoxCollectionViewIssuePage()))
                                 .Assign(out _viewToggleIssueButton),
+
+                            new Button { Text = "View ToggleBox Test Page", }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new ToggleBoxTestPage())),
 
                             new Button { Text = "View Signature Pad Page", }
                                 .BindClicked(async () =>
