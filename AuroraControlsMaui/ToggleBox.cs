@@ -260,11 +260,11 @@ public class ToggleBox : AuroraViewBase
     public ToggleBox()
     {
         this.EnableTouchEvents = true;
-        MinimumHeightRequest = IAuroraView.SmallControlHeight;
-        MinimumWidthRequest = IAuroraView.SmallControlWidth;
+        HeightRequest = IAuroraView.SmallControlHeight;
+        WidthRequest = IAuroraView.SmallControlWidth;
     }
 
-    public override Size CustomMeasuredSize(double widthConstraint, double heightConstraint) => new(IAuroraView.SmallControlWidth, IAuroraView.SmallControlHeight);
+    public override Size CustomMeasuredSize(double widthConstraint, double heightConstraint) => new(WidthRequest, HeightRequest);
 
     protected override void PaintControl(SKSurface surface, SKImageInfo info)
     {
@@ -273,17 +273,21 @@ public class ToggleBox : AuroraViewBase
         canvas.Clear();
 
         var rect = new SKRect(0, 0, info.Height, info.Height);
-        var halfBorderWidth = BorderWidth / 2f;
+        var borderWidth = BorderWidth * _scale;
+        var halfBorderWidth = borderWidth * .5f;
 
-        var cornerRadius = new SKSize((float)CornerRadius, (float)CornerRadius);
+        var markWidth = MarkWidth * _scale;
+        var halfMarkWidth = markWidth * .5f;
+
+        var cornerRadius = new SKSize((float)CornerRadius * _scale, (float)CornerRadius * _scale);
 
         using (var backgroundPaint = new SKPaint())
         {
             var halfCheckSize = info.Height * .5f;
 
             _rect = new SKRect(
-                info.Rect.MidX - halfCheckSize + halfBorderWidth, info.Rect.MidY - halfCheckSize + halfBorderWidth,
-                info.Rect.MidX + halfCheckSize - halfBorderWidth, info.Rect.MidY + halfCheckSize - halfBorderWidth);
+                info.Rect.MidX - halfCheckSize + borderWidth, info.Rect.MidY - halfCheckSize + borderWidth,
+                info.Rect.MidX + halfCheckSize - borderWidth, info.Rect.MidY + halfCheckSize - borderWidth);
 
             backgroundPaint.Color =
                 IsToggled
@@ -321,30 +325,41 @@ public class ToggleBox : AuroraViewBase
                 {
                     checkPaint.Style = SKPaintStyle.Stroke;
                     checkPaint.Color = CheckColor.ToSKColor();
-                    checkPaint.StrokeWidth = MarkWidth;
+                    checkPaint.StrokeWidth = halfMarkWidth;
                     checkPaint.StrokeCap = SKStrokeCap.Square;
                     checkPaint.IsAntialias = true;
 
                     switch (CheckType)
                     {
                         case ToggleBoxCheckType.Check:
-                            canvas.DrawLine(_rect.Left + (_rect.Width * .3f), _rect.Top + (_rect.Height * .5f),
-                                _rect.Left + (_rect.Width * .5f), _rect.Top + (_rect.Height * .7f), checkPaint);
-                            canvas.DrawLine(_rect.Left + (_rect.Width * .5f), _rect.Top + (_rect.Height * .7f),
-                                _rect.Left + (_rect.Width * .75f), _rect.Top + (_rect.Height * .3f), checkPaint);
+                            var checkPath = new SKPath();
+                            checkPath.MoveTo(_rect.Left + (_rect.Width * .3f), _rect.Top + (_rect.Height * .5f));
+                            checkPath.LineTo(_rect.Left + (_rect.Width * .5f), _rect.Top + (_rect.Height * .7f));
+                            checkPath.LineTo(_rect.Left + (_rect.Width * .75f), _rect.Top + (_rect.Height * .3f));
+                            canvas.DrawPath(checkPath, checkPaint);
                             break;
                         case ToggleBoxCheckType.RoundedCheck:
                             checkPaint.StrokeCap = SKStrokeCap.Round;
-                            canvas.DrawLine(_rect.Left + (_rect.Width * .3f), _rect.Top + (_rect.Height * .5f),
-                                _rect.Left + (_rect.Width * .5f), _rect.Top + (_rect.Height * .7f), checkPaint);
-                            canvas.DrawLine(_rect.Left + (_rect.Width * .5f), _rect.Top + (_rect.Height * .7f),
-                                _rect.Left + (_rect.Width * .75f), _rect.Top + (_rect.Height * .3f), checkPaint);
+                            var roundedCheckPath = new SKPath();
+                            roundedCheckPath.MoveTo(_rect.Left + (_rect.Width * .3f), _rect.Top + (_rect.Height * .5f));
+                            roundedCheckPath.LineTo(_rect.Left + (_rect.Width * .5f), _rect.Top + (_rect.Height * .7f));
+                            roundedCheckPath.LineTo(_rect.Left + (_rect.Width * .75f), _rect.Top + (_rect.Height * .3f));
+                            canvas.DrawPath(roundedCheckPath, checkPaint);
                             break;
                         case ToggleBoxCheckType.Cross:
-                            canvas.DrawLine(_rect.Left + MarkWidth, _rect.Top + _rect.Height - MarkWidth,
-                                _rect.Left + _rect.Width - MarkWidth, _rect.Top + MarkWidth, checkPaint);
-                            canvas.DrawLine(_rect.Left + _rect.Width - MarkWidth, _rect.Top + _rect.Height - MarkWidth,
-                                _rect.Left + MarkWidth, _rect.Top + MarkWidth, checkPaint);
+                            canvas.DrawLine(
+                                _rect.Left + halfMarkWidth + halfBorderWidth,
+                                _rect.Top + halfMarkWidth + halfBorderWidth,
+                                _rect.Left + _rect.Width - halfMarkWidth - halfBorderWidth,
+                                _rect.Top + this._rect.Height - halfMarkWidth - halfBorderWidth,
+                                checkPaint);
+
+                            canvas.DrawLine(
+                                _rect.Left + halfMarkWidth + halfBorderWidth,
+                                _rect.Top + this._rect.Height - halfMarkWidth - halfBorderWidth,
+                                _rect.Left + _rect.Width - halfMarkWidth - halfBorderWidth,
+                                _rect.Top + halfMarkWidth + halfBorderWidth,
+                                checkPaint);
                             break;
                         case ToggleBoxCheckType.Circular:
                             checkPaint.Style = SKPaintStyle.Fill;
@@ -354,7 +369,7 @@ public class ToggleBox : AuroraViewBase
                 }
             }
 
-            backgroundPaint.StrokeWidth = BorderWidth;
+            backgroundPaint.StrokeWidth = halfBorderWidth;
             backgroundPaint.Style = SKPaintStyle.Stroke;
             backgroundPaint.Color = BorderColor.ToSKColor();
 

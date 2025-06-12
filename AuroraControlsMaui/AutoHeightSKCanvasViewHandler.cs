@@ -33,7 +33,10 @@ internal class AutoHeightSKCanvasViewHandler : SKCanvasViewHandler
 
     private void AvbOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(AuroraViewBase.IsVisible) && VirtualView is AuroraViewBase { IsVisible: true })
+        if ((e.PropertyName == nameof(AuroraViewBase.IsVisible) ||
+             e.PropertyName == nameof(AuroraViewBase.WidthRequest) ||
+             e.PropertyName == nameof(AuroraViewBase.HeightRequest))
+            && VirtualView is AuroraViewBase { IsVisible: true })
         {
             PlatformView?.Superview?.SetNeedsLayout();
         }
