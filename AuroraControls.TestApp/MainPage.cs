@@ -62,6 +62,8 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
     private Button _viewSafeAreaTestButton;
 
+    private Button _viewStyledInputLayoutTestButton;
+
     private SvgImageView _svgImageView;
 
     private Button _svgImageViewTapped;
@@ -145,6 +147,14 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new SafeAreaTestPage()))
                                 .Assign(out _viewSafeAreaTestButton),
+
+                            new Button
+                                {
+                                    Text = "View StyledInputLayout Test",
+                                }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new StyledInputLayoutTestPage()))
+                                .Assign(out _viewStyledInputLayoutTestButton),
 
                             new ToggleBox
                             {
