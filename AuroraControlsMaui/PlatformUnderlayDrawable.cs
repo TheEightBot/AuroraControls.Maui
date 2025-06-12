@@ -637,7 +637,7 @@ public class PlatformUnderlayDrawable : IDisposable
                     _backgroundPaint.Color =
                         isDisabled
                             ? underlayDrawable.DisabledColor.Lerp(Colors.White, .2d).ToSKColor()
-                            : element.BackgroundColor.ToSKColor();
+                            : element.BackgroundColor?.ToSKColor() ?? SKColors.Transparent;
 
                     canvas.DrawRect(rectBackground, _backgroundPaint);
 
@@ -653,7 +653,7 @@ public class PlatformUnderlayDrawable : IDisposable
                     _backgroundPaint.Color =
                         isDisabled
                             ? underlayDrawable.DisabledColor.Lerp(Colors.White, .2d).ToSKColor()
-                            : element.BackgroundColor.ToSKColor();
+                            : element.BackgroundColor?.ToSKColor() ?? SKColors.Transparent;
 
                     canvas.DrawRoundRect(roundedRectBackground, cornerRadiusSize, _backgroundPaint);
 
@@ -670,7 +670,7 @@ public class PlatformUnderlayDrawable : IDisposable
                     _backgroundPaint.Color =
                         isDisabled
                             ? underlayDrawable.DisabledColor.Lerp(Colors.White, .2d).ToSKColor()
-                            : element.BackgroundColor.ToSKColor();
+                            : element.BackgroundColor?.ToSKColor() ?? SKColors.Transparent;
 
                     canvas.DrawRoundRect(roundedRectBackgroundPlaceholderThrough, cornerRadiusSize, _backgroundPaint);
 
@@ -697,7 +697,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
                                 _backgroundPaint.Color =
                                         _borderPaint.Color.Lerp(
-                                            element.BackgroundColor.ToSKColor(),
+                                            element.BackgroundColor?.ToSKColor() ?? SKColors.Transparent,
                                             hasValueAnimationPercentage);
 
                                 canvas.DrawRect(new SKRect(placeholderRectSize.Left - bufferSize, top, placeholderRectSize.Right + (bufferSize * 2f), top + placeholderRectSize.Height), _backgroundPaint);

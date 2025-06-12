@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             x:Class="AuroraControls.TestApp.StyledInputLayoutTestPage"
+             Title="StyledInputLayout VerticalOptions Test">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="10" Padding="20">
+            <Label Text="StyledInputLayout VerticalOptions Test"
+                   FontSize="24"
+                   HorizontalOptions="Center" />
+
+            <Label Text="This page tests different VerticalOptions settings for StyledInputLayout controls"
+                   FontSize="16"
+                   HorizontalOptions="Center" />
+
+            <Grid Margin="0,20,0,0" RowSpacing="20" ColumnSpacing="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="120" />
+                    <RowDefinition Height="120" />
+                    <RowDefinition Height="120" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Header Labels -->
+                <Label Text="Start"
+                       Grid.Row="0" Grid.Column="0"
+                       HorizontalOptions="Center"
+                       FontAttributes="Bold" />
+
+                <Label Text="Center"
+                       Grid.Row="0" Grid.Column="1"
+                       HorizontalOptions="Center"
+                       FontAttributes="Bold" />
+
+                <!-- Row 1: Different VerticalOptions -->
+                <Border Grid.Row="1" Grid.Column="0"
+                        StrokeThickness="1" Stroke="Red"
+                        Background="LightPink" Padding="10">
+                    <aurora:StyledInputLayout
+
+                        PlaceholderColor="Black"
+                        ActiveColor="Red"
+                        InactiveColor="Green"
+                        VerticalOptions="Start"
+                        BorderStyle="RoundedRectanglePlaceholderThrough">
+                        <Entry Placeholder="VerticalOptions=Start" />
+                    </aurora:StyledInputLayout>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="1"
+                        StrokeThickness="1" Stroke="Red"
+                        Background="LightPink" Padding="10">
+                    <aurora:StyledInputLayout
+                        PlaceholderColor="Black"
+                        ActiveColor="Red"
+                        InactiveColor="Green"
+                        VerticalOptions="Center"
+                        BorderStyle="RoundedRectanglePlaceholderThrough">
+                        <Entry Placeholder="VerticalOptions=Center"/>
+                    </aurora:StyledInputLayout>
+                </Border>
+
+                <!-- Row 2: Different VerticalOptions -->
+                <Border Grid.Row="2" Grid.Column="0"
+                        StrokeThickness="1" Stroke="Blue"
+                        Background="LightBlue" Padding="10">
+                    <aurora:StyledInputLayout
+
+                        PlaceholderColor="Black"
+                        ActiveColor="Red"
+                        InactiveColor="Green"
+                        VerticalOptions="End"
+                        BorderStyle="RoundedRectanglePlaceholderThrough">
+                        <Entry Placeholder="VerticalOptions=End" />
+                    </aurora:StyledInputLayout>
+                </Border>
+
+                <Border Grid.Row="2" Grid.Column="1"
+                        StrokeThickness="1" Stroke="Blue"
+                        Background="LightBlue" Padding="10">
+                    <aurora:StyledInputLayout
+
+                        PlaceholderColor="Black"
+                        ActiveColor="Red"
+                        InactiveColor="Green"
+                        VerticalOptions="Fill"
+                        BorderStyle="RoundedRectanglePlaceholderThrough"
+                        HeightRequest="80">
+                        <Entry Placeholder="VerticalOptions=Fill" />
+                    </aurora:StyledInputLayout>
+                </Border>
+
+                <!-- Row 3: Different HeightRequests -->
+                <Border Grid.Row="3" Grid.Column="0"
+                        StrokeThickness="1" Stroke="Green"
+                        Background="LightGreen" Padding="10">
+                    <aurora:StyledInputLayout
+
+                        PlaceholderColor="Black"
+                        ActiveColor="Red"
+                        InactiveColor="Green"
+                        VerticalOptions="Start"
+                        HeightRequest="80"
+                        BorderStyle="RoundedRectanglePlaceholderThrough">
+                        <Entry Placeholder="HeightRequest=80" />
+                    </aurora:StyledInputLayout>
+                </Border>
+
+                <Border Grid.Row="3" Grid.Column="1"
+                        StrokeThickness="1" Stroke="Green"
+                        Background="LightGreen" Padding="10">
+                    <aurora:StyledInputLayout
+
+                        PlaceholderColor="Black"
+                        ActiveColor="Red"
+                        InactiveColor="Green"
+                        VerticalOptions="Start"
+                        BorderStyle="RoundedRectanglePlaceholderThrough">
+                        <Entry Placeholder="No HeightRequest" Text="Test" />
+                    </aurora:StyledInputLayout>
+                </Border>
+
+                <!-- Instructions -->
+                <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+                       Text="Each cell has a colored border to visualize the container bounds. The StyledInputLayout controls should respect their VerticalOptions setting within these containers."
+                       Margin="0,20,0,0" />
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
