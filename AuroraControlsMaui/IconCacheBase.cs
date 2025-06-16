@@ -269,65 +269,77 @@ public abstract class IconCacheBase : IIconCache, IDisposable
     {
         var platformScalingFactor = _platformScalingFactor;
 
-        var scaledCanvas = platformScalingFactor;
+        // Calculate the final canvas size with platform scaling
+        var targetCanvasWidth = (float)(size.Width * platformScalingFactor);
+        var targetCanvasHeight = (float)(size.Height * platformScalingFactor);
 
-        SKRect resize = skSvg.Picture.CullRect;
+        SKRect resize;
+        SKMatrix scaleMatrix = SKMatrix.Identity;
 
-        if (size != default(Size) && skSvg.Picture.CullRect != default)
+        if (size != default(Size) && skSvg.Picture?.CullRect != default)
         {
-            var minSize = (float)Math.Min(size.Width, size.Height);
+            var svgRect = skSvg.Picture!.CullRect;
 
-            scaledCanvas = (minSize / Math.Max(skSvg.Picture.CullRect.Width, skSvg.Picture.CullRect.Height)) *
-                           platformScalingFactor;
+            // Calculate scale factors for both dimensions
+            var scaleX = targetCanvasWidth / svgRect.Width;
+            var scaleY = targetCanvasHeight / svgRect.Height;
 
-            if (scaledCanvas > 1.0f)
-            {
-                scaledCanvas = (float)Math.Ceiling(scaledCanvas);
-            }
+            // Use the smaller scale factor to ensure the SVG fits entirely within the target size
+            var uniformScale = Math.Min(scaleX, scaleY);
 
-            resize = new SKRect(0, 0, skSvg.Picture.CullRect.Width * scaledCanvas, skSvg.Picture.CullRect.Height * scaledCanvas);
+            // Calculate the actual canvas size that maintains the original aspect ratio
+            var actualCanvasWidth = svgRect.Width * uniformScale;
+            var actualCanvasHeight = svgRect.Height * uniformScale;
+
+            // Create transformation matrix for scaling, no centering needed since canvas matches aspect ratio
+            scaleMatrix = SKMatrix.CreateScale(uniformScale, uniformScale);
+            scaleMatrix = scaleMatrix.PostConcat(SKMatrix.CreateTranslation(-(svgRect.Left * uniformScale), -(svgRect.Top * uniformScale)));
+
+            resize = new SKRect(0, 0, actualCanvasWidth, actualCanvasHeight);
         }
-        else if (skSvg.Picture.CullRect != default)
+        else if (skSvg.Picture?.CullRect != default)
         {
-            resize = new SKRect(0, 0, skSvg.Picture.CullRect.Width * platformScalingFactor, skSvg.Picture.CullRect.Height * platformScalingFactor);
+            resize = new SKRect(0, 0, (float)Math.Ceiling(skSvg.Picture!.CullRect.Width * platformScalingFactor), (float)Math.Ceiling(skSvg.Picture.CullRect.Height * platformScalingFactor));
         }
-
-        if (colorOverride == null)
+        else
         {
-            using var memStream = new MemoryStream();
-
-            skSvg.Picture.ToImage(memStream, SKColors.Empty, SKEncodedImageFormat.Png, 100, scaledCanvas, scaledCanvas, SKColorType.Rgba8888, SKAlphaType.Premul, SKColorSpace.CreateSrgb());
-
-            // var img = SKImage.FromPicture(skSvg.Picture, resize.Size.ToSizeI());
-            // using var encoded = img.Encode(SKEncodedImageFormat.Png, 100);
-            memStream.Seek(0L, SeekOrigin.Begin);
-
-            // encoded.SaveTo(memStream);
-            await SaveIconToDiskCache(key, memStream).ConfigureAwait(false);
-            return;
+            resize = new SKRect(0, 0, targetCanvasWidth, targetCanvasHeight);
         }
 
-        var imageInfo = new SKImageInfo((int)Math.Ceiling(resize.Width), (int)Math.Ceiling(resize.Height), SKColorType.Rgba8888, SKAlphaType.Premul);
+        // Calculate final image dimensions once
+        var finalWidth = (int)Math.Ceiling(resize.Width);
+        var finalHeight = (int)Math.Ceiling(resize.Height);
 
-        using var bmp = new SKBitmap(imageInfo);
-        using var canvas = new SKCanvas(bmp);
+        // Use a single rendering path to reduce code duplication and memory allocations
+        var imageInfo = new SKImageInfo(finalWidth, finalHeight, SKColorType.Rgba8888, SKAlphaType.Premul, _colorspace);
 
-        skSvg.Picture.Draw(SKColor.Empty, scaledCanvas, scaledCanvas, canvas);
+        using var bitmap = new SKBitmap(imageInfo);
+        using var canvas = new SKCanvas(bitmap);
 
+        canvas.Clear(SKColors.Transparent);
+
+        if (size != default(Size) && !scaleMatrix.IsIdentity)
+        {
+            canvas.SetMatrix(scaleMatrix);
+        }
+
+        canvas.DrawPicture(skSvg.Picture);
+
+        // Apply color override if needed
         if (colorOverride != default(Color))
         {
-            this._paint.Color = colorOverride.ToSKColor();
-            canvas.DrawPaint(this._paint);
+            _paint.Color = colorOverride.ToSKColor();
+            canvas.DrawPaint(_paint);
         }
 
         canvas.Flush();
 
-        using (var image = SKImage.FromBitmap(bmp))
-        using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
-        using (var stream = data.AsStream(false))
-        {
-            await this.SaveIconToDiskCache(key, stream).ConfigureAwait(false);
-        }
+        // Encode directly to stream and save to cache
+        using var image = SKImage.FromBitmap(bitmap);
+        using var encodedData = image.Encode(SKEncodedImageFormat.Png, 85); // Reduced quality for smaller file size
+        using var stream = encodedData.AsStream(false); // Don't transfer ownership to avoid extra allocation
+
+        await SaveIconToDiskCache(key, stream).ConfigureAwait(false);
     }
 
     public void LoadAssembly(Assembly assembly) => EmbeddedResourceLoader.LoadAssembly(assembly);
@@ -360,11 +372,14 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
     public abstract Task<Stream> StreamFromSource(ImageSource imageSource);
 
-    private string CreateIconKey(string svgName, Size size, string additionalCacheKey = "", Color colorOverride = null)
+    private string CreateIconKey(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null)
     {
-        var key = $"{svgName}_{additionalCacheKey}_{size.Width}_{size.Height}_{colorOverride?.GetHashCode()}".Trim(_underscore);
+        var key = $"{svgName.Replace(".svg", string.Empty, StringComparison.OrdinalIgnoreCase)}_{additionalCacheKey}_{size.Width}_{size.Height}_{colorOverride?.GetHashCode()}".Trim(_underscore);
 
-        key = $"{key}@{_platformScalingFactor}x";
+        if (DeviceInfo.Platform == DevicePlatform.iOS || DeviceInfo.Platform == DevicePlatform.MacCatalyst || DeviceInfo.Platform == DevicePlatform.macOS)
+        {
+            key = $"{key}@{_platformScalingFactor}x";
+        }
 
         key = string.Join(_underscore, key.Split(_invalidFilenameChars));
 
