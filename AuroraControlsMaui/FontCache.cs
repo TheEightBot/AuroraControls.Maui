@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Windows.Markup;
-using Topten.RichTextKit;
+﻿using Topten.RichTextKit;
 
 namespace AuroraControls;
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AuroraControls;
+﻿namespace AuroraControls;
 
 public enum EndCapType
 {

@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui.Animations;
+﻿using Microsoft.Maui.Animations;
 using Microsoft.Maui.Platform;
 
 namespace AuroraControls;

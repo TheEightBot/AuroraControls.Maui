@@ -1,7 +1,4 @@
-﻿using System;
-using System.Reflection;
-
-namespace AuroraControls;
+﻿namespace AuroraControls;
 
 internal static class ObjectExtensions
 {

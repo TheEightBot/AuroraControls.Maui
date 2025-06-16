@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AuroraControls;
+﻿namespace AuroraControls;
 
 /// <summary>
 /// Easing functions from https://github.com/acron0/Easings/blob/master/Easings.cs.

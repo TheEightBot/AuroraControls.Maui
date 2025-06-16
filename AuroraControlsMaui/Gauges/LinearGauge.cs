@@ -1,6 +1,4 @@
-﻿using System;
-using System.Drawing;
-using Color = Microsoft.Maui.Graphics.Color;
+﻿using Color = Microsoft.Maui.Graphics.Color;
 
 namespace AuroraControls.Gauges;
 

@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Markup;
 using NPicker;
-using SkiaSharp;
 
 namespace AuroraControls.TestApp;
 

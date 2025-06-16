@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using SkiaSharp;
-
-namespace AuroraControls.ImageProcessing;
+﻿namespace AuroraControls.ImageProcessing;
 
 public class Rotate : ImageProcessingBase, IImageProcessor
 {

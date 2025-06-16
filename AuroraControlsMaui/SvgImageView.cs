@@ -10,7 +10,7 @@ namespace AuroraControls;
 public class SvgImageView : AuroraViewBase
 #pragma warning restore CA1001 // Types that own disposable fields should be disposable
 {
-    private readonly object _pictureLock = new object();
+    private readonly object _pictureLock = new();
 
     private SKPaint _overlayPaint;
 

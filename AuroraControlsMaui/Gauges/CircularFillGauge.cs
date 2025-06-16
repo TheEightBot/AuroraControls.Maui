@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AuroraControls.Gauges;
+﻿namespace AuroraControls.Gauges;
 
 /// <summary>
 /// Circular fill gauge.

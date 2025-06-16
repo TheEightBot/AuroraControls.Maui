@@ -1,7 +1,4 @@
-﻿using System;
-using SkiaSharp;
-
-namespace AuroraControls.ImageProcessing;
+﻿namespace AuroraControls.ImageProcessing;
 
 /// <summary>
 /// Circular image mask.

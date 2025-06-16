@@ -1,5 +1,4 @@
-﻿using System;
-using SkiaSharp.Views.Maui.Handlers;
+﻿using SkiaSharp.Views.Maui.Handlers;
 
 namespace AuroraControls;
 
