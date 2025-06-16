@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             x:Class="AuroraControls.TestApp.SvgImageViewTestPage"
+             Title="SvgImageView Test Page">
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="20">
+            <Label Text="SvgImageView Test Page"
+                   FontSize="Title"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <!-- Basic SVG Display -->
+            <Frame BorderColor="Gray" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Basic SVG Display" FontSize="Subtitle" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="15" RowSpacing="10">
+
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <aurora:SvgImageView EmbeddedImageName="splatoon.svg"
+                                               HeightRequest="80"
+                                               WidthRequest="80"/>
+                            <Label Text="Splatoon" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
+                            <aurora:SvgImageView EmbeddedImageName="triforce.svg" OverlayColor="Chartreuse"
+                                               HeightRequest="80"
+                                               WidthRequest="80"/>
+                            <Label Text="Triforce" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2">
+                            <aurora:SvgImageView EmbeddedImageName="more.svg" OverlayColor="Fuchsia"
+                                               HeightRequest="80"
+                                               WidthRequest="80"/>
+                            <Label Text="More" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Overlay Colors -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Overlay Colors" FontSize="Subtitle" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*, *, *, *" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="15">
+
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <aurora:SvgImageView EmbeddedImageName="splatoon.svg"
+                                               OverlayColor="Red"
+                                               HeightRequest="60"
+                                               WidthRequest="60"/>
+                            <Label Text="Red Overlay" HorizontalOptions="Center" FontSize="10"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
+                            <aurora:SvgImageView EmbeddedImageName="splatoon.svg"
+                                               OverlayColor="Blue"
+                                               HeightRequest="60"
+                                               WidthRequest="60"/>
+                            <Label Text="Blue Overlay" HorizontalOptions="Center" FontSize="10"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2">
+                            <aurora:SvgImageView EmbeddedImageName="splatoon.svg"
+                                               OverlayColor="Green"
+                                               HeightRequest="60"
+                                               WidthRequest="60"/>
+                            <Label Text="Green Overlay" HorizontalOptions="Center" FontSize="10"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="3">
+                            <aurora:SvgImageView EmbeddedImageName="splatoon.svg"
+                                               OverlayColor="Purple"
+                                               HeightRequest="60"
+                                               WidthRequest="60"/>
+                            <Label Text="Purple Overlay" HorizontalOptions="Center" FontSize="10"/>
+                        </VerticalStackLayout>
+
+                        <!-- Second row -->
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Row="1">
+                            <aurora:SvgImageView EmbeddedImageName="triforce.svg"
+                                               OverlayColor="Orange"
+                                               HeightRequest="60"
+                                               WidthRequest="60"/>
+                            <Label Text="Orange Overlay" HorizontalOptions="Center" FontSize="10"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1" Grid.Row="1">
+                            <aurora:SvgImageView EmbeddedImageName="triforce.svg"
+                                               OverlayColor="Cyan"
+                                               HeightRequest="60"
+                                               WidthRequest="60"/>
+                            <Label Text="Cyan Overlay" HorizontalOptions="Center" FontSize="10"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2" Grid.Row="1">
+                            <aurora:SvgImageView EmbeddedImageName="triforce.svg"
+                                               OverlayColor="Yellow"
+                                               HeightRequest="60"
+                                               WidthRequest="60"/>
+                            <Label Text="Yellow Overlay" HorizontalOptions="Center" FontSize="10"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="3" Grid.Row="1">
+                            <aurora:SvgImageView EmbeddedImageName="triforce.svg"
+                                               OverlayColor="Transparent"
+                                               HeightRequest="60"
+                                               WidthRequest="60"/>
+                            <Label Text="No Overlay" HorizontalOptions="Center" FontSize="10"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Size Variations -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Size Variations" FontSize="Subtitle" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*, *, *, *" ColumnSpacing="10">
+
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <aurora:SvgImageView EmbeddedImageName="more.svg"
+                                               OverlayColor="DarkBlue"
+                                               HeightRequest="30"
+                                               WidthRequest="30"/>
+                            <Label Text="Small (30x30)" HorizontalOptions="Center" FontSize="10"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
+                            <aurora:SvgImageView EmbeddedImageName="more.svg"
+                                               OverlayColor="DarkBlue"
+                                               HeightRequest="50"
+                                               WidthRequest="50"/>
+                            <Label Text="Medium (50x50)" HorizontalOptions="Center" FontSize="10"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2">
+                            <aurora:SvgImageView EmbeddedImageName="more.svg"
+                                               OverlayColor="DarkBlue"
+                                               HeightRequest="80"
+                                               WidthRequest="80"/>
+                            <Label Text="Large (80x80)" HorizontalOptions="Center" FontSize="10"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="3">
+                            <aurora:SvgImageView EmbeddedImageName="more.svg"
+                                               OverlayColor="DarkBlue"
+                                               HeightRequest="120"
+                                               WidthRequest="120"/>
+                            <Label Text="XLarge (120x120)" HorizontalOptions="Center" FontSize="10"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Interactive Controls -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Interactive Test" FontSize="Subtitle" FontAttributes="Bold"/>
+
+                    <!-- Controls -->
+                    <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto, Auto, Auto"
+                          ColumnSpacing="15" RowSpacing="15">
+
+                        <Label Text="SVG Image:" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
+                        <Picker x:Name="SvgPicker" Grid.Row="0" Grid.Column="1"
+                                Title="Select SVG"
+                                SelectedIndexChanged="OnSvgPickerSelectedIndexChanged"/>
+
+                        <Label Text="Overlay Color:" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"/>
+                        <Picker x:Name="ColorPicker" Grid.Row="1" Grid.Column="1"
+                                Title="Select Color"
+                                SelectedIndexChanged="OnColorPickerSelectedIndexChanged"/>
+
+                        <Label Text="Width:" Grid.Row="2" Grid.Column="0" VerticalOptions="Center"/>
+                        <Grid Grid.Row="2" Grid.Column="1" ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                            <Slider x:Name="WidthSlider"
+                                    Minimum="30" Maximum="200" Value="80"
+                                    ValueChanged="OnWidthSliderValueChanged"/>
+                            <Label x:Name="WidthLabel" Text="80" Grid.Column="1" VerticalOptions="Center"/>
+                        </Grid>
+
+                        <Label Text="Height:" Grid.Row="3" Grid.Column="0" VerticalOptions="Center"/>
+                        <Grid Grid.Row="3" Grid.Column="1" ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                            <Slider x:Name="HeightSlider"
+                                    Minimum="30" Maximum="200" Value="80"
+                                    ValueChanged="OnHeightSliderValueChanged"/>
+                            <Label x:Name="HeightLabel" Text="80" Grid.Column="1" VerticalOptions="Center"/>
+                        </Grid>
+
+                        <Label Text="Max Image Size:" Grid.Row="4" Grid.Column="0" VerticalOptions="Center"/>
+                        <Grid Grid.Row="4" Grid.Column="1" ColumnDefinitions="*, Auto, *, Auto" ColumnSpacing="5">
+                            <Slider x:Name="MaxWidthSlider"
+                                    Minimum="0" Maximum="300" Value="0"
+                                    ValueChanged="OnMaxSizeSliderValueChanged"/>
+                            <Label x:Name="MaxWidthLabel" Text="0" Grid.Column="1" VerticalOptions="Center"/>
+                            <Slider x:Name="MaxHeightSlider" Grid.Column="2"
+                                    Minimum="0" Maximum="300" Value="0"
+                                    ValueChanged="OnMaxSizeSliderValueChanged"/>
+                            <Label x:Name="MaxHeightLabel" Text="0" Grid.Column="3" VerticalOptions="Center"/>
+                        </Grid>
+                    </Grid>
+
+                    <!-- Preview -->
+                    <Label Text="Preview:" FontSize="Medium" Margin="0,10,0,0"/>
+                    <Border BackgroundColor="LightGray"
+                            HeightRequest="250"
+                            WidthRequest="250"
+                            HorizontalOptions="Center"
+                            Padding="10">
+                        <aurora:SvgImageView x:Name="PreviewSvgImageView"
+                                           EmbeddedImageName="splatoon.svg"
+                                           OverlayColor="Transparent"
+                                           HeightRequest="80"
+                                           WidthRequest="80"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                    </Border>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Visual Effects Test -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Visual Effects" FontSize="Subtitle" FontAttributes="Bold"/>
+                    <Label Text="Tap buttons to apply different visual effects to the image below:" FontSize="12"/>
+
+                    <ScrollView Orientation="Horizontal">
+                        <!-- Effect Buttons -->
+                        <Grid ColumnDefinitions="*, *, *" RowDefinitions="Auto, Auto" ColumnSpacing="10" RowSpacing="10">
+                            <Button Text="Clear Effects" Grid.Column="0" x:Name="ClearEffectsBtn" Clicked="OnClearEffectsClicked"/>
+                            <Button Text="Sepia" Grid.Column="1" x:Name="SepiaBtn" Clicked="OnSepiaEffectClicked"/>
+                            <Button Text="Grayscale" Grid.Column="2" x:Name="GrayscaleBtn" Clicked="OnGrayscaleEffectClicked"/>
+
+                            <Button Text="Black and White" Grid.Row="1" Grid.Column="0" x:Name="BlackWhiteBtn" Clicked="OnBlackWhiteEffectClicked"/>
+                            <Button Text="Invert" Grid.Row="1" Grid.Column="1" x:Name="InvertBtn" Clicked="OnInvertEffectClicked"/>
+                            <Button Text="High Contrast" Grid.Row="1" Grid.Column="2" x:Name="HighContrastBtn" Clicked="OnHighContrastEffectClicked"/>
+                        </Grid>
+                    </ScrollView>
+
+                    <!-- Effect Preview -->
+                    <aurora:SvgImageView x:Name="EffectsSvgImageView"
+                                       EmbeddedImageName="splatoon.svg"
+                                       HeightRequest="100"
+                                       WidthRequest="100"
+                                       HorizontalOptions="Center"
+                                       Margin="0,10,0,0"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
