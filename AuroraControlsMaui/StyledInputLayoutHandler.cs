@@ -1,6 +1,5 @@
 ﻿using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
-using ContentView = Microsoft.Maui.Controls.ContentView;
 
 #if IOS || MACCATALYST
 using CoreGraphics;

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Maui.Platform;
+﻿using Microsoft.Maui.Platform;
 
 #if ANDROID
 using Android.Views;

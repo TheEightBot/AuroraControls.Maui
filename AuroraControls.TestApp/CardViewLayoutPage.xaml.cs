@@ -1,6 +1,4 @@
-﻿using AuroraControls;
-
-namespace AuroraControls.TestApp;
+﻿namespace AuroraControls.TestApp;
 
 public partial class CardViewLayoutPage : ContentPage
 {

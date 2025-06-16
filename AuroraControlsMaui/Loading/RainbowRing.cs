@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AuroraControls.Loading;
+﻿namespace AuroraControls.Loading;
 
 #pragma warning disable CA1001 // Types that own disposable fields should be disposable
 public class RainbowRing : SceneViewBase

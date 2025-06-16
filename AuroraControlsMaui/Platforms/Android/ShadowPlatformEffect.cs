@@ -1,10 +1,8 @@
-using System.ComponentModel;
 using Android.Graphics;
 using Android.OS;
 using Android.Views;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Microsoft.Maui.Controls.Platform;
-using Microsoft.Maui.Controls.PlatformConfiguration;
 
 namespace AuroraControls;
 

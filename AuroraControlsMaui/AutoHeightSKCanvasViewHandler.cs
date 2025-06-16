@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using Microsoft.Maui.Platform;
 using SkiaSharp.Views.Maui.Handlers;
 
 #if IOS || MACCATALYST

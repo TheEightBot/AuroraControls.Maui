@@ -1,7 +1,4 @@
-﻿using System;
-using SkiaSharp;
-
-namespace AuroraControls.VisualEffects;
+﻿namespace AuroraControls.VisualEffects;
 
 public abstract class VisualEffect : BindableObject
 {
