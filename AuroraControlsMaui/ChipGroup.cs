@@ -120,17 +120,17 @@ public class ChipGroup : ContentView, IDisposable
     /// <summary>
     /// The start offset to insert empty space before the first chip.
     /// </summary>
-    public static readonly BindableProperty StartOffsetProperty =
-        BindableProperty.Create(nameof(StartOffset), typeof(double), typeof(ChipGroup), 0.0,
+    public static readonly BindableProperty ChipInsetProperty =
+        BindableProperty.Create(nameof(ChipInset), typeof(double), typeof(ChipGroup), 0.0,
             propertyChanged: OnLayoutPropertyChanged);
 
     /// <summary>
     /// Gets or sets the start offset to insert empty space before the first chip.
     /// </summary>
-    public double StartOffset
+    public double ChipInset
     {
-        get => (double)GetValue(StartOffsetProperty);
-        set => SetValue(StartOffsetProperty, value);
+        get => (double)GetValue(ChipInsetProperty);
+        set => SetValue(ChipInsetProperty, value);
     }
 
     /// <summary>
@@ -289,11 +289,7 @@ public class ChipGroup : ContentView, IDisposable
             AlignItems = FlexAlignItems.Center,
         };
 
-        // Apply start offset padding if specified
-        if (StartOffset > 0)
-        {
-            _chipContainer.Padding = new Thickness(StartOffset, 0, 0, 0);
-        }
+        ApplyChipInset();
 
         if (IsScrollable)
         {
@@ -333,6 +329,20 @@ public class ChipGroup : ContentView, IDisposable
             FlexLayout.SetShrink(chip, 0);
 
             chip.Margin = new Thickness(0, 0, this.HorizontalSpacing, this.IsScrollable ? 0 : this.VerticalSpacing);
+        }
+    }
+
+    private void ApplyChipInset()
+    {
+        if (_chipContainer == null)
+        {
+            return;
+        }
+
+        // Apply inner padding if specified
+        if (this.ChipInset > 0)
+        {
+            _chipContainer.Padding = new Thickness(this.ChipInset, 0);
         }
     }
 
@@ -894,9 +904,8 @@ public class ChipGroup : ContentView, IDisposable
 
         // Update container orientation and wrapping behavior
         _chipContainer.Wrap = IsScrollable ? FlexWrap.NoWrap : FlexWrap.Wrap;
-
-        // Update start offset padding
-        _chipContainer.Padding = new Thickness(StartOffset, 0, 0, 0);
+        
+        ApplyChipInset();
 
         // Remove or add scrollview as needed
         if (IsScrollable && Content != _scrollView)
