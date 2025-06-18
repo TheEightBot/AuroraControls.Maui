@@ -19,7 +19,8 @@
             <aurora:Chip
                 Text="{Binding Name}"
                 LeadingEmbeddedImageName="{Binding IconSource}"
-                Value="{Binding Name}"/>
+                Value="{Binding Name}"
+                State="{Binding ChipState}"/>
         </DataTemplate>
     </ContentPage.Resources>
 
@@ -158,7 +159,7 @@
                 Grid.ColumnSpan="2"
                 Text="{Binding SelectedChipsText}"
                 LineBreakMode="WordWrap" />
-                
+
             <Label
                 Grid.Row="9"
                 Grid.Column="0"
@@ -172,7 +173,7 @@
                 Grid.ColumnSpan="2"
                 Text="{Binding SelectedValuesText}"
                 LineBreakMode="WordWrap" />
-                
+
             <Button
                 Grid.Row="11"
                 Grid.Column="0"
@@ -194,14 +195,14 @@
                 <aurora:ChipGroup
                     x:Name="ChipGroupSample"
                     Grid.Row="1"
-                    IsScrollable="{Binding IsScrollable}"
+                    IsScrollable="true"
                     AllowMultipleSelection="{Binding AllowMultipleSelection}"
                     HorizontalSpacing="{Binding HorizontalSpacing}"
-                    VerticalSpacing="{Binding VerticalSpacing}"
                     ItemsSource="{Binding ChipItems}"
                     ItemTemplate="{StaticResource ChipTemplate}"
                     SelectedValue="{Binding SelectedValue, Mode=TwoWay}"
-                    SelectionChanged="OnChipSelectionChanged" />
+                    SelectionChanged="OnChipSelectionChanged"
+                    ChipTapped="OnChipTapped"/>
 
             </Grid>
         </Frame>

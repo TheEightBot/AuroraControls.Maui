@@ -204,4 +204,12 @@ public partial class ChipGroupPage : ContentPage
                 "OK");
         }
     }
+
+    private void OnChipTapped(object sender, ChipTappedEventArgs e)
+    {
+        if (e.Chip?.State == ChipState.ReadOnly)
+        {
+            DisplayAlert("Chip Tapped", $"Chip: {e.Chip.Text}", "OK");
+        }
+    }
 }
