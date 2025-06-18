@@ -62,17 +62,30 @@ jobs:
                   
                   # Get commits between tags
                   if [ "$PREVIOUS_TAG" != "" ] && git rev-parse --verify "$PREVIOUS_TAG" >/dev/null 2>&1; then
-                      COMMITS=$(git log --pretty=format:"%s|%h|%an" "$PREVIOUS_TAG..$CURRENT_TAG")
+                      COMMITS=$(git log --pretty=format:"%s|%h|%ae" "$PREVIOUS_TAG..$CURRENT_TAG")
                   else
-                      COMMITS=$(git log --pretty=format:"%s|%h|%an")
+                      COMMITS=$(git log --pretty=format:"%s|%h|%ae")
                   fi
+                  
+                  # Filter out common git cruft messages
+                  COMMITS=$(echo "$COMMITS" | grep -v -i "^merge pull request\|^merge remote-tracking\|^merge branch\|^update .gitignore\|^update readme\|^initial commit\|^updated dependencies\|^version bump\|^bump version" || echo "$COMMITS")
                   
                   # Categorize commits
                   echo "### 🚀 New Features" >> release_notes.md
                   FEATURES=$(echo "$COMMITS" | grep -i "^feat\|^add\|^new" || true)
                   if [ -n "$FEATURES" ]; then
-                      echo "$FEATURES" | while IFS='|' read -r subject hash author; do
-                          echo "- $subject (\`$hash\`) by @$author" >> release_notes.md
+                      echo "$FEATURES" | while IFS='|' read -r subject hash email; do
+                          # Get GitHub handle from email using GitHub API
+                          GITHUB_HANDLE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                              "https://api.github.com/search/users?q=${email}+in:email" | \
+                              jq -r '.items[0].login // empty' 2>/dev/null || echo "")
+                          
+                          if [ -n "$GITHUB_HANDLE" ] && [ "$GITHUB_HANDLE" != "null" ]; then
+                              echo "- $subject (\`$hash\`) by @$GITHUB_HANDLE" >> release_notes.md
+                          else
+                              # Fallback to email if GitHub handle not found
+                              echo "- $subject (\`$hash\`) by $email" >> release_notes.md
+                          fi
                       done
                   else
                       echo "- No new features in this release" >> release_notes.md
@@ -82,8 +95,18 @@ jobs:
                   echo "### 🐛 Bug Fixes" >> release_notes.md
                   FIXES=$(echo "$COMMITS" | grep -i "^fix\|^bug\|^patch" || true)
                   if [ -n "$FIXES" ]; then
-                      echo "$FIXES" | while IFS='|' read -r subject hash author; do
-                          echo "- $subject (\`$hash\`) by @$author" >> release_notes.md
+                      echo "$FIXES" | while IFS='|' read -r subject hash email; do
+                          # Get GitHub handle from email using GitHub API
+                          GITHUB_HANDLE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                              "https://api.github.com/search/users?q=${email}+in:email" | \
+                              jq -r '.items[0].login // empty' 2>/dev/null || echo "")
+                          
+                          if [ -n "$GITHUB_HANDLE" ] && [ "$GITHUB_HANDLE" != "null" ]; then
+                              echo "- $subject (\`$hash\`) by @$GITHUB_HANDLE" >> release_notes.md
+                          else
+                              # Fallback to email if GitHub handle not found
+                              echo "- $subject (\`$hash\`) by $email" >> release_notes.md
+                          fi
                       done
                   else
                       echo "- No bug fixes in this release" >> release_notes.md
@@ -93,8 +116,18 @@ jobs:
                   echo "### 📝 Documentation & Other Changes" >> release_notes.md
                   OTHER=$(echo "$COMMITS" | grep -iv "^feat\|^add\|^new\|^fix\|^bug\|^patch" || true)
                   if [ -n "$OTHER" ]; then
-                      echo "$OTHER" | while IFS='|' read -r subject hash author; do
-                          echo "- $subject (\`$hash\`) by @$author" >> release_notes.md
+                      echo "$OTHER" | while IFS='|' read -r subject hash email; do
+                          # Get GitHub handle from email using GitHub API
+                          GITHUB_HANDLE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                              "https://api.github.com/search/users?q=${email}+in:email" | \
+                              jq -r '.items[0].login // empty' 2>/dev/null || echo "")
+                          
+                          if [ -n "$GITHUB_HANDLE" ] && [ "$GITHUB_HANDLE" != "null" ]; then
+                              echo "- $subject (\`$hash\`) by @$GITHUB_HANDLE" >> release_notes.md
+                          else
+                              # Fallback to email if GitHub handle not found
+                              echo "- $subject (\`$hash\`) by $email" >> release_notes.md
+                          fi
                       done
                   else
                       echo "- No other changes in this release" >> release_notes.md
