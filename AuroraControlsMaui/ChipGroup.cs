@@ -21,6 +21,11 @@ public class ChipGroup : ContentView, IDisposable
     public event EventHandler<ChipSelectionChangedEventArgs>? SelectionChanged;
 
     /// <summary>
+    /// Event that fires when a chip in the group is tapped
+    /// </summary>
+    public event EventHandler<ChipTappedEventArgs>? ChipTapped;
+
+    /// <summary>
     /// Gets the collection of chips in this group.
     /// </summary>
     public IList<Chip> Chips => _chips;
@@ -672,6 +677,7 @@ public class ChipGroup : ContentView, IDisposable
         chip.Toggled += OnChipToggled;
         chip.Removed += OnChipRemoved;
         chip.SizeChanged += OnChipSizeChanged;
+        chip.Tapped += OnChipTapped;
 
         // Set initial spacing
         if (_chipContainer != null)
@@ -693,6 +699,7 @@ public class ChipGroup : ContentView, IDisposable
         chip.Toggled -= OnChipToggled;
         chip.Removed -= OnChipRemoved;
         chip.SizeChanged -= OnChipSizeChanged;
+        chip.Tapped -= OnChipTapped;
 
         // Remove from container
         _chipContainer?.Remove(chip);
@@ -806,6 +813,24 @@ public class ChipGroup : ContentView, IDisposable
     {
         // Request a layout update when a chip size changes
         UpdateLayout();
+    }
+
+    private void OnChipTapped(object? sender, EventArgs e)
+    {
+        if (sender is not Chip chip)
+        {
+            return;
+        }
+
+        // Create event arguments with the chip and its index
+        var args =
+            new ChipTappedEventArgs
+            {
+                Chip = chip,
+            };
+
+        // Raise the event
+        ChipTapped?.Invoke(this, args);
     }
 
     /// <summary>

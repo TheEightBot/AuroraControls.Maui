@@ -96,6 +96,7 @@ public partial class ChipGroupViewModel : ObservableObject
             Value = name, // Set the Value property to match the Name for demonstration purposes
             IconSource = _icons[_random.Next(_icons.Length)],
             IsClosable = _random.Next(2) == 0,
+            ChipState = (ChipState)_random.Next(0, 3), // Randomly select a ChipState
             BackgroundColor = _colors[_random.Next(_colors.Length)],
         };
 
@@ -129,6 +130,9 @@ public partial class ChipItemViewModel : ObservableObject
 
     [ObservableProperty]
     private bool _isClosable;
+
+    [ObservableProperty]
+    private ChipState _chipState;
 
     [ObservableProperty]
     private string _backgroundColor;
