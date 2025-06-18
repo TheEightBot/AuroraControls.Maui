@@ -118,6 +118,22 @@ public class ChipGroup : ContentView, IDisposable
     }
 
     /// <summary>
+    /// The start offset to insert empty space before the first chip.
+    /// </summary>
+    public static readonly BindableProperty StartOffsetProperty =
+        BindableProperty.Create(nameof(StartOffset), typeof(double), typeof(ChipGroup), 0.0,
+            propertyChanged: OnLayoutPropertyChanged);
+
+    /// <summary>
+    /// Gets or sets the start offset to insert empty space before the first chip.
+    /// </summary>
+    public double StartOffset
+    {
+        get => (double)GetValue(StartOffsetProperty);
+        set => SetValue(StartOffsetProperty, value);
+    }
+
+    /// <summary>
     /// The source collection of items to create chips from.
     /// </summary>
     public static readonly BindableProperty ItemsSourceProperty =
@@ -272,6 +288,12 @@ public class ChipGroup : ContentView, IDisposable
             JustifyContent = FlexJustify.Start,
             AlignItems = FlexAlignItems.Center,
         };
+
+        // Apply start offset padding if specified
+        if (StartOffset > 0)
+        {
+            _chipContainer.Padding = new Thickness(StartOffset, 0, 0, 0);
+        }
 
         if (IsScrollable)
         {
@@ -872,6 +894,9 @@ public class ChipGroup : ContentView, IDisposable
 
         // Update container orientation and wrapping behavior
         _chipContainer.Wrap = IsScrollable ? FlexWrap.NoWrap : FlexWrap.Wrap;
+
+        // Update start offset padding
+        _chipContainer.Padding = new Thickness(StartOffset, 0, 0, 0);
 
         // Remove or add scrollview as needed
         if (IsScrollable && Content != _scrollView)
