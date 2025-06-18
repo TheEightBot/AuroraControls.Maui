@@ -199,6 +199,7 @@
                     AllowMultipleSelection="{Binding AllowMultipleSelection}"
                     HorizontalSpacing="{Binding HorizontalSpacing}"
                     VerticalSpacing="{Binding VerticalSpacing}"
+                    ChipInset="64"
                     ItemsSource="{Binding ChipItems}"
                     ItemTemplate="{StaticResource ChipTemplate}"
                     SelectedValue="{Binding SelectedValue, Mode=TwoWay}"
