@@ -281,6 +281,11 @@ public static class ImageSourceExtensions
             .FileImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
             .AsAsyncSourceFor(toolbarItem);
 
+    public static MenuItem SetSvgIcon(this MenuItem menuItem, string svgName, double squareSize = 24d, Color colorOverride = default(Color)) =>
+        IconCache
+            .FileImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
+            .AsAsyncSourceFor(menuItem);
+
     public static Image SetSvgIcon(this Image image, string svgName, double squareSize = 24d, Color colorOverride = default(Color)) =>
         IconCache
             .FileImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
