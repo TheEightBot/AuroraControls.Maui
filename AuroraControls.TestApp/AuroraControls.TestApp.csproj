@@ -10,7 +10,7 @@
         <!-- Display name -->
         <ApplicationTitle>AuroraControls.TestApp</ApplicationTitle>
         <!-- App Identifier -->
-        <ApplicationId>com.companyname.auroracontrols.testapp</ApplicationId>
+        <ApplicationId>com.auroracontrols.testapp</ApplicationId>
         <ApplicationIdGuid>0FAE40EE-5A12-47B7-9497-68477FD7D251</ApplicationIdGuid>
         <!-- Versions -->
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>

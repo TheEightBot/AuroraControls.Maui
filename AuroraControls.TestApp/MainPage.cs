@@ -1,5 +1,4 @@
 using System.Reactive.Linq;
-using AuroraControls.Effects;
 using AuroraControls.Gauges;
 using AuroraControls.TestApp.ViewModels;
 using CommunityToolkit.Maui.Markup;
@@ -136,6 +135,10 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                             new Button { Text = "View Chip Group Page", }
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new ChipGroupPage())),
+
+                            new Button { Text = "View SvgImageView Test Page", }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new SvgImageViewTestPage())),
 
                             new Button { Text = "View SafeArea Effect Test", }
                                 .BindClicked(async () =>

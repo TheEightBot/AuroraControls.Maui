@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace AuroraControls.ImageProcessing;
+﻿namespace AuroraControls.ImageProcessing;
 
 /// <summary>
 /// Registered image processors.

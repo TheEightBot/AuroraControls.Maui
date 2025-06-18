@@ -1,5 +1,4 @@
 ﻿using Android.Graphics;
-using Android.Runtime;
 using SkiaSharp.Views.Android;
 
 namespace AuroraControls.Platforms.Android;

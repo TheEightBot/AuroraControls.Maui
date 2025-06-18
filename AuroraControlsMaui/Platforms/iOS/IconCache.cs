@@ -1,5 +1,4 @@
-﻿using Foundation;
-using SkiaSharp.Views.iOS;
+﻿using SkiaSharp.Views.iOS;
 
 namespace AuroraControls.Platforms.iOS;
 

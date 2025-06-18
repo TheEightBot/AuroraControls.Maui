@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Reflection;
 using Microsoft.Maui.Animations;
 using Microsoft.Maui.Controls.Compatibility;
