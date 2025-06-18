@@ -195,14 +195,15 @@
                 <aurora:ChipGroup
                     x:Name="ChipGroupSample"
                     Grid.Row="1"
-                    IsScrollable="true"
+                    IsScrollable="{Binding IsScrollable}"
                     AllowMultipleSelection="{Binding AllowMultipleSelection}"
                     HorizontalSpacing="{Binding HorizontalSpacing}"
+                    VerticalSpacing="{Binding VerticalSpacing}"
                     ItemsSource="{Binding ChipItems}"
                     ItemTemplate="{StaticResource ChipTemplate}"
                     SelectedValue="{Binding SelectedValue, Mode=TwoWay}"
                     SelectionChanged="OnChipSelectionChanged"
-                    ChipTapped="OnChipTapped"/>
+                    ChipTapped="OnChipTapped" />
 
             </Grid>
         </Frame>
