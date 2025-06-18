@@ -904,7 +904,7 @@ public class ChipGroup : ContentView, IDisposable
 
         // Update container orientation and wrapping behavior
         _chipContainer.Wrap = IsScrollable ? FlexWrap.NoWrap : FlexWrap.Wrap;
-        
+
         ApplyChipInset();
 
         // Remove or add scrollview as needed
