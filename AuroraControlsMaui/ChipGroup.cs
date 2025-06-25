@@ -518,12 +518,12 @@ public class ChipGroup : ContentView, IDisposable
             return;
         }
 
+        // Find chip with the specified value
+        Chip? matchingChip = null;
+
         try
         {
             chipGroup._isUpdating = true;
-
-            // Find chip with the specified value
-            Chip? matchingChip = null;
 
             if (newValue != null)
             {
@@ -537,14 +537,14 @@ public class ChipGroup : ContentView, IDisposable
                     return c.Value.Equals(newValue) || newValue.Equals(c.Value);
                 });
             }
-
-            // Update selection
-            chipGroup.SelectedChip = matchingChip;
         }
         finally
         {
             chipGroup._isUpdating = false;
         }
+
+        // Update selection
+        chipGroup.SelectedChip = matchingChip;
     }
 
     /// <summary>
