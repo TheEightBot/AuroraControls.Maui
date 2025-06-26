@@ -91,6 +91,49 @@ Features:
 - Command binding and click event support
 - Content padding configuration
 
+### SvgImageButton
+
+A customizable button control that displays SVG images with various background shapes, animations, and styling options.
+
+```xml
+<aurora:SvgImageButton
+    EmbeddedImageName="icon.svg"
+    BackgroundShape="Circular"
+    BackgroundColor="#4A90E2"
+    OverlayColor="White"
+    ImageInset="8"
+    MaxImageSize="32,32"
+    Animated="True"
+    AnimationScaleAmount="0.1"
+    CornerRadius="12"
+    Command="{Binding ButtonCommand}"
+    CommandParameter="IconButton"
+    HeightRequest="64"
+    WidthRequest="64" />
+```
+
+Features:
+- Display embedded SVG images with automatic scaling and centering
+- Choose from None, Square, Circular, or RoundedSquare backgrounds
+- Separate control over background color and SVG overlay color
+- Control spacing around the SVG icon within the button
+- Set maximum image size to prevent over-scaling
+- Smooth scale-down animation on touch with customizable easing
+- Full support for MVVM-pattern with Command and CommandParameter
+- Corner radius support
+- Click event handling for code-behind scenarios
+
+#### Background Shape Options:
+- `None` - No background, only the SVG icon
+- `Square` - Rectangular background
+- `Circular` - Circular/oval background
+- `RoundedSquare` - Square with rounded corners (configurable via `CornerRadius`)
+
+#### Animation Configuration:
+- `Animated` - Enable/disable touch animations
+- `AnimationScaleAmount` - How much to scale down on touch (0.0 to 1.0)
+- `AnimationEasing` - Easing function for the animation (BounceOut, SpringOut, etc.)
+
 ### GradientPillButton
 
 <p align="center" style="border-radius: 10px;">
@@ -605,4 +648,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## Support
 
 If you encounter any issues or have questions, please file an issue on the GitHub repository.
-
