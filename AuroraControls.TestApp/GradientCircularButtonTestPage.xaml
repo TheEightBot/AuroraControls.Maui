@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             x:Class="AuroraControls.TestApp.GradientCircularButtonTestPage"
+             Title="GradientCircularButton Test Page">
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="20">
+            <Label Text="GradientCircularButton Test Page"
+                   FontSize="Title"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <!-- Basic Buttons -->
+            <Frame BorderColor="Gray" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Basic Buttons" FontSize="Subtitle" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="15" RowSpacing="15">
+
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <aurora:GradientCircularButton
+                                Text="Button 1"
+                                ButtonBackgroundColor="Blue"
+                                FontColor="White"
+                                FontSize="16"
+                                HeightRequest="80"
+                                WidthRequest="80"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="Blue Background" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
+                            <aurora:GradientCircularButton
+                                Text="Button 2"
+                                ButtonBackgroundColor="Green"
+                                FontColor="White"
+                                FontSize="16"
+                                HeightRequest="80"
+                                WidthRequest="80"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="Green Background" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2">
+                            <aurora:GradientCircularButton
+                                Text="Button 3"
+                                ButtonBackgroundColor="Purple"
+                                FontColor="White"
+                                FontSize="16"
+                                HeightRequest="80"
+                                WidthRequest="80"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="Purple Background" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Border Styles -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Border Styles" FontSize="Subtitle" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="15" RowSpacing="15">
+
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <aurora:GradientCircularButton
+                                Text="No Border"
+                                ButtonBackgroundColor="Orange"
+                                FontColor="White"
+                                BorderWidth="0"
+                                HeightRequest="80"
+                                WidthRequest="80"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="No Border" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
+                            <aurora:GradientCircularButton
+                                Text="Thin"
+                                ButtonBackgroundColor="Red"
+                                FontColor="White"
+                                BorderWidth="2"
+                                BorderColor="White"
+                                HeightRequest="80"
+                                WidthRequest="80"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="Thin Border" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2">
+                            <aurora:GradientCircularButton
+                                Text="Thick"
+                                ButtonBackgroundColor="Teal"
+                                FontColor="White"
+                                BorderWidth="5"
+                                BorderColor="Yellow"
+                                HeightRequest="80"
+                                WidthRequest="80"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="Thick Border" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Shadow Effects -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Shadow Effects" FontSize="Subtitle" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="15" RowSpacing="15">
+
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <aurora:GradientCircularButton
+                                Text="No Shadow"
+                                ButtonBackgroundColor="DarkBlue"
+                                FontColor="White"
+                                ShadowColor="Transparent"
+                                HeightRequest="80"
+                                WidthRequest="80"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="No Shadow" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
+                            <aurora:GradientCircularButton
+                                Text="Light"
+                                ButtonBackgroundColor="DarkGreen"
+                                FontColor="White"
+                                ShadowColor="#40000000"
+                                ShadowLocation="2,2"
+                                HeightRequest="80"
+                                WidthRequest="80"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="Light Shadow" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2">
+                            <aurora:GradientCircularButton
+                                Text="Heavy"
+                                ButtonBackgroundColor="DarkRed"
+                                FontColor="White"
+                                ShadowColor="#80000000"
+                                ShadowLocation="4,4"
+                                HeightRequest="80"
+                                WidthRequest="80"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="Heavy Shadow" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Dynamic Gradient Angles -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Dynamic Gradient Angles" FontSize="Subtitle" FontAttributes="Bold"/>
+
+                    <!-- Angle Slider -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label x:Name="AngleLabel" Text="Gradient Angle: 90°" FontSize="14" HorizontalOptions="Center"/>
+                        <Slider x:Name="AngleSlider"
+                                Minimum="0"
+                                Maximum="360"
+                                Value="90"
+                                ValueChanged="OnAngleChanged"/>
+                    </VerticalStackLayout>
+
+                    <!-- Test Button with Dynamic Angle -->
+                    <aurora:GradientCircularButton x:Name="DynamicAngleButton"
+                                                 Text="Dynamic"
+                                                 ButtonBackgroundColor="MediumPurple"
+                                                 FontColor="White"
+                                                 GradientAngle="{Binding Source={x:Reference AngleSlider}, Path=Value}"
+                                                 HeightRequest="100"
+                                                 WidthRequest="100"
+                                                 HorizontalOptions="Center"
+                                                 Clicked="OnButtonClicked"/>
+
+                    <!-- Preset Angle Buttons -->
+                    <Label Text="Common Angles:" FontSize="14" FontAttributes="Bold" Margin="0,10,0,5"/>
+                    <Grid ColumnDefinitions="*, *, *, *" ColumnSpacing="10" RowSpacing="10">
+
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <aurora:GradientCircularButton
+                                Text="0°"
+                                ButtonBackgroundColor="MediumSeaGreen"
+                                FontColor="White"
+                                GradientAngle="0"
+                                HeightRequest="70"
+                                WidthRequest="70"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="0° (Right)" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
+                            <aurora:GradientCircularButton
+                                Text="90°"
+                                ButtonBackgroundColor="Coral"
+                                FontColor="White"
+                                GradientAngle="90"
+                                HeightRequest="70"
+                                WidthRequest="70"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="90° (Down)" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2">
+                            <aurora:GradientCircularButton
+                                Text="180°"
+                                ButtonBackgroundColor="DarkOrchid"
+                                FontColor="White"
+                                GradientAngle="180"
+                                HeightRequest="70"
+                                WidthRequest="70"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="180° (Left)" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="3">
+                            <aurora:GradientCircularButton
+                                Text="270°"
+                                ButtonBackgroundColor="DarkSlateBlue"
+                                FontColor="White"
+                                GradientAngle="270"
+                                HeightRequest="70"
+                                WidthRequest="70"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="270° (Up)" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!-- Diagonal Angles -->
+                    <Label Text="Diagonal Angles:" FontSize="14" FontAttributes="Bold" Margin="0,10,0,5"/>
+                    <Grid ColumnDefinitions="*, *, *, *" ColumnSpacing="10" RowSpacing="10">
+
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <aurora:GradientCircularButton
+                                Text="45°"
+                                ButtonBackgroundColor="IndianRed"
+                                FontColor="White"
+                                GradientAngle="45"
+                                HeightRequest="60"
+                                WidthRequest="60"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="45°" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
+                            <aurora:GradientCircularButton
+                                Text="135°"
+                                ButtonBackgroundColor="MediumVioletRed"
+                                FontColor="White"
+                                GradientAngle="135"
+                                HeightRequest="60"
+                                WidthRequest="60"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="135°" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2">
+                            <aurora:GradientCircularButton
+                                Text="225°"
+                                ButtonBackgroundColor="OliveDrab"
+                                FontColor="White"
+                                GradientAngle="225"
+                                HeightRequest="60"
+                                WidthRequest="60"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="225°" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="3">
+                            <aurora:GradientCircularButton
+                                Text="315°"
+                                ButtonBackgroundColor="Crimson"
+                                FontColor="White"
+                                GradientAngle="315"
+                                HeightRequest="60"
+                                WidthRequest="60"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="315°" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Different Sizes -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Different Sizes" FontSize="Subtitle" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*, *, *, *" ColumnSpacing="15" RowSpacing="15">
+
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <aurora:GradientCircularButton
+                                Text="S"
+                                ButtonBackgroundColor="CadetBlue"
+                                FontColor="White"
+                                FontSize="12"
+                                HeightRequest="50"
+                                WidthRequest="50"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="Small" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
+                            <aurora:GradientCircularButton
+                                Text="M"
+                                ButtonBackgroundColor="DarkSlateBlue"
+                                FontColor="White"
+                                FontSize="16"
+                                HeightRequest="70"
+                                WidthRequest="70"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="Medium" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2">
+                            <aurora:GradientCircularButton
+                                Text="L"
+                                ButtonBackgroundColor="DarkGoldenrod"
+                                FontColor="White"
+                                FontSize="20"
+                                HeightRequest="90"
+                                WidthRequest="90"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="Large" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="3">
+                            <aurora:GradientCircularButton
+                                Text="XL"
+                                ButtonBackgroundColor="Maroon"
+                                FontColor="White"
+                                FontSize="24"
+                                HeightRequest="110"
+                                WidthRequest="110"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="Extra Large" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Ripple Effects -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Ripple Effects" FontSize="Subtitle" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="15" RowSpacing="15">
+
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <aurora:GradientCircularButton
+                                Text="No Ripples"
+                                ButtonBackgroundColor="SlateGray"
+                                FontColor="White"
+                                Ripples="False"
+                                HeightRequest="80"
+                                WidthRequest="80"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="Ripples Disabled" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
+                            <aurora:GradientCircularButton
+                                Text="Ripples"
+                                ButtonBackgroundColor="RoyalBlue"
+                                FontColor="White"
+                                Ripples="True"
+                                HeightRequest="80"
+                                WidthRequest="80"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="Ripples Enabled" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Font Variations -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Font Variations" FontSize="Subtitle" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="15" RowSpacing="15">
+
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <aurora:GradientCircularButton
+                                Text="Small"
+                                ButtonBackgroundColor="DarkCyan"
+                                FontColor="White"
+                                FontSize="12"
+                                HeightRequest="80"
+                                WidthRequest="80"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="Small Font" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
+                            <aurora:GradientCircularButton
+                                Text="Normal"
+                                ButtonBackgroundColor="DarkMagenta"
+                                FontColor="White"
+                                FontSize="16"
+                                HeightRequest="80"
+                                WidthRequest="80"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="Normal Font" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2">
+                            <aurora:GradientCircularButton
+                                Text="Large"
+                                ButtonBackgroundColor="DarkOrange"
+                                FontColor="White"
+                                FontSize="20"
+                                HeightRequest="80"
+                                WidthRequest="80"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="Large Font" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Command Binding -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Command Binding" FontSize="Subtitle" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="15" RowSpacing="15">
+
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <aurora:GradientCircularButton
+                                Text="CMD 1"
+                                ButtonBackgroundColor="IndianRed"
+                                FontColor="White"
+                                Command="{Binding TestCommand}"
+                                CommandParameter="Command Button 1"
+                                HeightRequest="80"
+                                WidthRequest="80"/>
+                            <Label Text="Command Button" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
+                            <aurora:GradientCircularButton
+                                Text="CMD 2"
+                                ButtonBackgroundColor="MediumVioletRed"
+                                FontColor="White"
+                                Command="{Binding TestCommand}"
+                                CommandParameter="Command Button 2"
+                                HeightRequest="80"
+                                WidthRequest="80"/>
+                            <Label Text="Command Button" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Icon Buttons (if IsIconifiedText works) -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Icon Buttons (Experimental)" FontSize="Subtitle" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="15" RowSpacing="15">
+
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <aurora:GradientCircularButton
+                                Text="🏠"
+                                ButtonBackgroundColor="OliveDrab"
+                                FontColor="White"
+                                FontSize="24"
+                                IsIconifiedText="False"
+                                HeightRequest="80"
+                                WidthRequest="80"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="Emoji Icon" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
+                            <aurora:GradientCircularButton
+                                Text="⚙️"
+                                ButtonBackgroundColor="Crimson"
+                                FontColor="White"
+                                FontSize="24"
+                                IsIconifiedText="True"
+                                HeightRequest="80"
+                                WidthRequest="80"
+                                Clicked="OnButtonClicked"/>
+                            <Label Text="Iconified Text" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Status Label -->
+            <Label x:Name="StatusLabel"
+                   Text="Tap any button to see the click event"
+                   FontSize="Medium"
+                   HorizontalOptions="Center"
+                   TextColor="Blue"
+                   Margin="0,20,0,0"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
