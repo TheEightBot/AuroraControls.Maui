@@ -260,41 +260,73 @@ public class SvgImageButton : AuroraViewBase
     {
         var canvas = surface.Canvas;
 
-        var size = Math.Min((int)(info.Width - this.Margin.Left - this.Margin.Right), (int)(info.Height - this.Margin.Top - this.Margin.Bottom)) - (this.ImageInset * _scale);
+        // Calculate inset in physical pixels
+        var insetPixels = this.ImageInset * _scale;
 
-        var left = (info.Width - (float)size) / 2f;
-        var top = (info.Height - (float)size) / 2f;
-        var right = left + (float)size;
-        var bottom = top + (float)size;
+        // Calculate total available space considering margins
+        var totalAvailableWidth = info.Width - (float)this.Margin.Left - (float)this.Margin.Right;
+        var totalAvailableHeight = info.Height - (float)this.Margin.Top - (float)this.Margin.Bottom;
+
+        // Calculate the area for the background shape (without insets)
+        var backgroundSize = Math.Min(totalAvailableWidth, totalAvailableHeight);
+
+        // Calculate the area available for the SVG (with insets applied)
+        var svgAvailableWidth = backgroundSize - (insetPixels * 2);
+        var svgAvailableHeight = backgroundSize - (insetPixels * 2);
+
+        var left = (info.Width - backgroundSize) / 2f;
+        var top = (info.Height - backgroundSize) / 2f;
+        var right = left + backgroundSize;
+        var bottom = top + backgroundSize;
 
         this._touchArea = new SKRect(left, top, right, bottom);
 
         canvas.Clear();
 
-        if (this._svg != null)
+        if (this._svg?.Picture != null)
         {
-            var scaleAmount =
-                this.MaxImageSize == Size.Zero
-                    ? (float)Math.Min(this._touchArea.Width / this._svg.Picture.CullRect.Width, this._touchArea.Height / this._svg.Picture.CullRect.Height)
-                    : 1f;
+            var svgWidth = this._svg.Picture.CullRect.Width;
+            var svgHeight = this._svg.Picture.CullRect.Height;
 
-            var adjustmentAmount = (float)((scaleAmount * this.AnimationScaleAmount) * this._animationPercentage);
-            scaleAmount = Math.Min(scaleAmount, scaleAmount + (this._animationPercentage > .5d ? -adjustmentAmount : adjustmentAmount));
+            if (svgWidth <= 0 || svgHeight <= 0)
+            {
+                return;
+            }
 
+            // Calculate scale to fit the SVG in the inset-adjusted area
+            var scaleX = svgAvailableWidth / svgWidth;
+            var scaleY = svgAvailableHeight / svgHeight;
+            var scaleAmount = Math.Min(scaleX, scaleY);
+
+            // Apply MaxImageSize constraints if specified
+            if (this.MaxImageSize != Size.Zero)
+            {
+                var maxScaleX = (float)this.MaxImageSize.Width / svgWidth;
+                var maxScaleY = (float)this.MaxImageSize.Height / svgHeight;
+                var maxScale = Math.Min(maxScaleX, maxScaleY);
+                scaleAmount = Math.Min(scaleAmount, maxScale);
+            }
+
+            // Apply animation scaling - simpler approach
+            var animationScale = 1f - (this.AnimationScaleAmount * (float)this._animationPercentage);
+            var finalScale = scaleAmount * animationScale;
+
+            // Draw background shape with consistent animation scaling
             using (var backgroundPaint = new SKPaint())
             {
                 backgroundPaint.Color = this.BackgroundColor.ToSKColor();
                 backgroundPaint.IsAntialias = true;
                 backgroundPaint.Style = SKPaintStyle.Fill;
 
-                var halfSize = ((float)(Math.Min((int)(info.Rect.Height - this.Margin.Top - this.Margin.Bottom), (int)(info.Rect.Width - this.Margin.Left - this.Margin.Right)) / 2f)) * (1f - adjustmentAmount);
+                // Apply the same animation scale to the background shape
+                var animatedBackgroundSize = backgroundSize * animationScale;
+                var halfSize = animatedBackgroundSize / 2f;
+                var shapeRect = new SKRect(
+                    info.Rect.MidX - halfSize,
+                    info.Rect.MidY - halfSize,
+                    info.Rect.MidX + halfSize,
+                    info.Rect.MidY + halfSize);
 
-                var shapeRect =
-                    new SKRect(
-                        info.Rect.MidX - halfSize, info.Rect.MidY - halfSize,
-                        info.Rect.MidX + halfSize, info.Rect.MidY + halfSize);
-
-                // draw fill
                 switch (this.BackgroundShape)
                 {
                     case SvgImageButtonBackgroundShape.Circular:
@@ -310,13 +342,19 @@ public class SvgImageButton : AuroraViewBase
                 }
             }
 
+            // Draw SVG with proper scaling and centering
             using (new SKAutoCanvasRestore(canvas, true))
             {
-                var scale = SKMatrix.CreateScale(scaleAmount, scaleAmount);
+                // Calculate the scaled SVG dimensions
+                var scaledWidth = svgWidth * finalScale;
+                var scaledHeight = svgHeight * finalScale;
 
-                var translation = SKMatrix.CreateTranslation((info.Width - (this._svg.Picture.CullRect.Width * scaleAmount)) / 2f, (info.Height - (this._svg.Picture.CullRect.Height * scaleAmount)) / 2f);
+                // Center the SVG in the available space
+                var translateX = (info.Width - scaledWidth) / 2f;
+                var translateY = (info.Height - scaledHeight) / 2f;
 
-                scale = scale.PostConcat(translation);
+                var transform = SKMatrix.CreateScale(finalScale, finalScale);
+                transform = transform.PostConcat(SKMatrix.CreateTranslation(translateX, translateY));
 
                 if (this.OverlayColor != Colors.Transparent)
                 {
@@ -325,7 +363,7 @@ public class SvgImageButton : AuroraViewBase
                         canvas.SaveLayer(info.Rect, null);
                         canvas.Clear();
 
-                        canvas.DrawPicture(this._svg.Picture, ref scale);
+                        canvas.DrawPicture(this._svg.Picture, ref transform);
 
                         paint.Color = this.OverlayColor.ToSKColor();
                         canvas.DrawPaint(paint);
@@ -333,7 +371,7 @@ public class SvgImageButton : AuroraViewBase
                 }
                 else
                 {
-                    canvas.DrawPicture(this._svg.Picture, ref translation);
+                    canvas.DrawPicture(this._svg.Picture, ref transform);
                 }
             }
         }
@@ -424,7 +462,7 @@ public class SvgImageButton : AuroraViewBase
         });
 
         rippleAnimation.Commit(
-            this, animName, length: 250, easing: this.AnimationEasing,
+            this, animName, length: 400, easing: this.AnimationEasing,
             finished: (percent, isFinished) =>
             {
                 this._lastTouchLocation = SKPoint.Empty;
