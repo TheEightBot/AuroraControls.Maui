@@ -24,7 +24,7 @@ public partial class CalendarPickerHandler : DatePickerHandler
 
     protected override DatePickerDialog CreateDatePickerDialog(int year, int month, int day)
     {
-        var dialog = new DatePickerDialog(Context!, (o, e) =>
+        var dialog = new DatePickerDialog(Context!, (_, e) =>
         {
             if (VirtualView is CalendarPicker datePicker)
             {

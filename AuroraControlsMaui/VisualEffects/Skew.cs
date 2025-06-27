@@ -65,8 +65,8 @@ public class Skew : VisualEffect
 
             var skewLocation = this.Location;
 
-            var locationX = (float)skewLocation.X * rect.Width;
-            var locationY = (float)skewLocation.Y * rect.Height;
+            float locationX = (float)skewLocation.X * rect.Width;
+            float locationY = (float)skewLocation.Y * rect.Height;
 
             using (new SKAutoCanvasRestore(canvas))
             {

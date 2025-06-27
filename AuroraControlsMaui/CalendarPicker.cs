@@ -19,7 +19,7 @@ public class CalendarPicker : DatePicker
                 picker,
                 new NullableDateChangedEventArgs((DateTime?)oldValue, (DateTime?)newValue));
         },
-        defaultValueCreator: (bindable) => null);
+        defaultValueCreator: (_) => null);
 
     /// <summary>
     /// Gets or sets the date.

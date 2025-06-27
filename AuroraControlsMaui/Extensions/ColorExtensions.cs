@@ -28,7 +28,7 @@ public static class ColorExtensions
 
     public static SKColor WithAlpha(this SKColor color, float alpha)
     {
-        var alphaByte = Math.Max(Math.Min(byte.MaxValue, (int)(byte.MaxValue * alpha)), byte.MinValue);
+        int alphaByte = Math.Max(Math.Min(byte.MaxValue, (int)(byte.MaxValue * alpha)), byte.MinValue);
 
         return color.WithAlpha((byte)alphaByte);
     }

@@ -27,7 +27,7 @@ public class FontCache : Topten.RichTextKit.FontMapper
 
     public void Add(SKTypeface typeface, string shortNameOverride = null)
     {
-        var familyName = shortNameOverride ?? typeface.FamilyName;
+        string? familyName = shortNameOverride ?? typeface.FamilyName;
 
         if (!RegisteredFonts.ContainsKey(familyName))
         {
@@ -39,7 +39,7 @@ public class FontCache : Topten.RichTextKit.FontMapper
 
     public void Remove(SKTypeface typeface, string shortNameOverride = null)
     {
-        var familyName = shortNameOverride ?? typeface.FamilyName;
+        string? familyName = shortNameOverride ?? typeface.FamilyName;
 
         if (RegisteredFonts.TryGetValue(familyName, out var values))
         {
@@ -69,7 +69,7 @@ public class FontCache : Topten.RichTextKit.FontMapper
     public override SKTypeface TypefaceFromStyle(IStyle style, bool ignoreFontVariants)
     {
         // Work out the qualified name
-        var qualifiedName = style.FontFamily;
+        string? qualifiedName = style.FontFamily;
         if (style.FontItalic)
         {
             qualifiedName += "-Italic";

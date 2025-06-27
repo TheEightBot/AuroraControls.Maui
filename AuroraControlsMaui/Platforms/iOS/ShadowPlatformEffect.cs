@@ -97,7 +97,7 @@ public class ShadowPlatformEffect : PlatformEffect
             return;
         }
 
-        var shadowDistance = Effects.ShadowEffect.GetElevation(this.Element);
+        double shadowDistance = Effects.ShadowEffect.GetElevation(this.Element);
         view.Layer.ShadowOffset = new CGSize(0f, shadowDistance);
 
         UpdateShadowPath();
@@ -133,8 +133,8 @@ public class ShadowPlatformEffect : PlatformEffect
             return;
         }
 
-        var cornerRadius = Effects.ShadowEffect.GetCornerRadius(this.Element);
-        var elevation = Effects.ShadowEffect.GetElevation(this.Element);
+        double cornerRadius = Effects.ShadowEffect.GetCornerRadius(this.Element);
+        double elevation = Effects.ShadowEffect.GetElevation(this.Element);
 
         if (ve.Bounds == Rect.Zero)
         {

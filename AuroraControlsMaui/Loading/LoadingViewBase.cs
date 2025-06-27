@@ -23,7 +23,7 @@ public class LoadingViewBase : AuroraViewBase
 
         set
         {
-            var clampedValue = value.Clamp(0d, 1d);
+            double clampedValue = value.Clamp(0d, 1d);
             SetValue(AnimatingPercentageProperty, clampedValue);
             AnimatingPercentageChanged?.Invoke(this, new ValueChangedEventArgs(AnimatingPercentage, clampedValue));
         }

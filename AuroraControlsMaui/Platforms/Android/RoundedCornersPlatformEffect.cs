@@ -87,7 +87,7 @@ public class RoundedCornersPlatformEffect : PlatformEffect
             return;
         }
 
-        var cornerRadius = Effects.RoundedCornersEffect.GetCornerRadius(this.Element);
+        double cornerRadius = Effects.RoundedCornersEffect.GetCornerRadius(this.Element);
 
         if (view.OutlineProvider != null & view.OutlineProvider.Handle != IntPtr.Zero &&
             view.OutlineProvider != _originalOutlineProvider)
@@ -97,12 +97,12 @@ public class RoundedCornersPlatformEffect : PlatformEffect
             op.Dispose();
         }
 
-        var scaledCornerRadius = (int)(cornerRadius * _scalingFactor);
+        int scaledCornerRadius = (int)(cornerRadius * _scalingFactor);
 
         if (this.Element is VisualElement ve)
         {
             var borderColor = Effects.RoundedCornersEffect.GetBorderColor(this.Element);
-            var scaledBorderSize = (int)(Effects.RoundedCornersEffect.GetBorderSize(this.Element) * _scalingFactor);
+            int scaledBorderSize = (int)(Effects.RoundedCornersEffect.GetBorderSize(this.Element) * _scalingFactor);
 
             var foregroundShape = new GradientDrawable() { };
             foregroundShape.SetColor(0);

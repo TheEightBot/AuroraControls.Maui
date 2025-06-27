@@ -165,8 +165,7 @@ public class LinearGauge : AuroraViewBase
                     break;
             }
 
-            var progressThickness = ProgressThickness;
-            var scaledProgressThickness = _scale * (float)ProgressThickness;
+            float scaledProgressThickness = _scale * (float)ProgressThickness;
 
             progressPaint.IsAntialias = true;
             progressPaint.StrokeCap = endCapType;
@@ -186,36 +185,36 @@ public class LinearGauge : AuroraViewBase
             {
                 case LinearGaugeOrientation.Horizontal:
                 case LinearGaugeOrientation.ReverseHorizontal:
-                    var startHorizontal = ((info.Width * (this.StartingPercent / 100)) + scaledProgressThickness).Clamp(scaledProgressThickness, info.Width - scaledProgressThickness);
-                    var endHorizontal = ((info.Width * (this.EndingPercent / 100)) - scaledProgressThickness).Clamp(scaledProgressThickness, info.Width - scaledProgressThickness);
+                    double startHorizontal = ((info.Width * (this.StartingPercent / 100)) + scaledProgressThickness).Clamp(scaledProgressThickness, info.Width - scaledProgressThickness);
+                    double endHorizontal = ((info.Width * (this.EndingPercent / 100)) - scaledProgressThickness).Clamp(scaledProgressThickness, info.Width - scaledProgressThickness);
 
-                    var startBackgroundHorizontal = scaledProgressThickness.Clamp(scaledProgressThickness, info.Width - scaledProgressThickness);
-                    var endBackgroundHorizontal = (info.Width - scaledProgressThickness).Clamp(scaledProgressThickness, info.Width - scaledProgressThickness);
+                    float startBackgroundHorizontal = scaledProgressThickness.Clamp(scaledProgressThickness, info.Width - scaledProgressThickness);
+                    float endBackgroundHorizontal = (info.Width - scaledProgressThickness).Clamp(scaledProgressThickness, info.Width - scaledProgressThickness);
 
-                    var centerVertical = info.Height / 2f;
+                    float centerVertical = info.Height / 2f;
 
                     progressPath.MoveTo((float)startHorizontal, centerVertical);
                     progressPath.LineTo((float)endHorizontal, centerVertical);
 
-                    backgroundProgressPath.MoveTo((float)startBackgroundHorizontal, centerVertical);
-                    backgroundProgressPath.LineTo((float)endBackgroundHorizontal, centerVertical);
+                    backgroundProgressPath.MoveTo(startBackgroundHorizontal, centerVertical);
+                    backgroundProgressPath.LineTo(endBackgroundHorizontal, centerVertical);
                     break;
 
                 case LinearGaugeOrientation.Vertical:
                 case LinearGaugeOrientation.ReverseVertical:
-                    var startVertical = ((info.Height * (this.StartingPercent / 100)) + scaledProgressThickness).Clamp(scaledProgressThickness, info.Height - scaledProgressThickness);
-                    var endVertical = ((info.Height * (this.EndingPercent / 100)) - scaledProgressThickness).Clamp(scaledProgressThickness, info.Height - scaledProgressThickness);
+                    double startVertical = ((info.Height * (this.StartingPercent / 100)) + scaledProgressThickness).Clamp(scaledProgressThickness, info.Height - scaledProgressThickness);
+                    double endVertical = ((info.Height * (this.EndingPercent / 100)) - scaledProgressThickness).Clamp(scaledProgressThickness, info.Height - scaledProgressThickness);
 
-                    var startBackgroundVertical = scaledProgressThickness.Clamp(scaledProgressThickness, info.Height - scaledProgressThickness);
-                    var endBackgroundVertical = (info.Height - scaledProgressThickness).Clamp(scaledProgressThickness, info.Height - scaledProgressThickness);
+                    float startBackgroundVertical = scaledProgressThickness.Clamp(scaledProgressThickness, info.Height - scaledProgressThickness);
+                    float endBackgroundVertical = (info.Height - scaledProgressThickness).Clamp(scaledProgressThickness, info.Height - scaledProgressThickness);
 
-                    var centerHorizontal = info.Width / 2f;
+                    float centerHorizontal = info.Width / 2f;
 
                     progressPath.MoveTo(centerHorizontal, (float)startVertical);
                     progressPath.LineTo(centerHorizontal, (float)endVertical);
 
-                    backgroundProgressPath.MoveTo(centerHorizontal, (float)startBackgroundVertical);
-                    backgroundProgressPath.LineTo(centerHorizontal, (float)endBackgroundVertical);
+                    backgroundProgressPath.MoveTo(centerHorizontal, startBackgroundVertical);
+                    backgroundProgressPath.LineTo(centerHorizontal, endBackgroundVertical);
                     break;
             }
 

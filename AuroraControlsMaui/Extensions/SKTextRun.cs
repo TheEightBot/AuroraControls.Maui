@@ -28,36 +28,35 @@ internal sealed class SKTextRun
             return runs;
         }
 
-        var start = 0;
+        int start = 0;
 
         while (start < text.Length)
         {
-            var startIndex = text.IndexOf(IconTemplateBegin, start, StringComparison.Ordinal);
+            int startIndex = text.IndexOf(IconTemplateBegin, start, StringComparison.Ordinal);
 
             if (startIndex == -1)
             {
                 break;
             }
 
-            var endIndex = text.IndexOf(IconTemplateEnd, startIndex, StringComparison.Ordinal);
+            int endIndex = text.IndexOf(IconTemplateEnd, startIndex, StringComparison.Ordinal);
 
             if (endIndex == -1)
             {
                 break;
             }
 
-            var pre = text.Substring(start, startIndex - start);
-            var post = text.Substring(endIndex + IconTemplateEnd.Length);
+            string pre = text.Substring(start, startIndex - start);
 
-            var expression = text.Substring(startIndex + IconTemplateBegin.Length, endIndex - startIndex - IconTemplateEnd.Length);
-            var segments = expression.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            string expression = text.Substring(startIndex + IconTemplateBegin.Length, endIndex - startIndex - IconTemplateEnd.Length);
+            string[] segments = expression.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             SKColor? color = null;
             float? fontSize = null;
 
-            foreach (var item in segments)
+            foreach (string item in segments)
             {
-                var pair = item.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] pair = item.Split(new[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
                 switch (pair[0].ToLower())
                 {
                     case "color":
@@ -70,7 +69,7 @@ internal sealed class SKTextRun
                     case "font-size":
                         if (pair.Length > 1 && !string.IsNullOrWhiteSpace(pair[1]))
                         {
-                            fontSize = float.TryParse(pair[1], out var parsedFontSize) ? parsedFontSize : default(float?);
+                            fontSize = float.TryParse(pair[1], out float parsedFontSize) ? parsedFontSize : default(float?);
                         }
 
                         break;
@@ -85,8 +84,8 @@ internal sealed class SKTextRun
             var typefaceStyle = new Topten.RichTextKit.Style { FontFamily = segments[0] };
             var typeface = FontCache.Instance.TypefaceFromStyle(typefaceStyle, false);
 
-            var intVal = Convert.ToUInt32(segments[1], 16);
-            var converted = Convert.ToChar(intVal).ToString();
+            uint intVal = Convert.ToUInt32(segments[1], 16);
+            string converted = Convert.ToChar(intVal).ToString();
 
             runs.Add(
                 new SKTextRun(converted)

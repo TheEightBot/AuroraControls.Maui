@@ -41,7 +41,7 @@ public class RainbowRing : SceneViewBase
                 {
                     if (bindable is RainbowRing current && current._ringPaint != null)
                     {
-                        var value = (float)(double)newValue;
+                        float value = (float)(double)newValue;
                         current._ringPaint.StrokeWidth = value;
                         current._blurPaint.ImageFilter = SKImageFilter.CreateBlur(value, value);
                     }
@@ -64,7 +64,7 @@ public class RainbowRing : SceneViewBase
 
     protected override void Attached()
     {
-        var ringThickness = (float)this.RingThickness;
+        float ringThickness = (float)this.RingThickness;
 
         _ringPaint =
             new SKPaint()
@@ -122,16 +122,16 @@ public class RainbowRing : SceneViewBase
 
         canvas.Clear();
 
-        var progress = (float)percentage;
+        float progress = (float)percentage;
 
         for (int i = 0; i < RingCount; i++)
         {
-            var movementX =
+            float movementX =
                 progress < .5f
                     ? (float)_movementAmount[i].X * (progress * 2f)
                     : (float)_movementAmount[i].X * (1f - ((progress - .5f) * 2f));
 
-            var movementY =
+            float movementY =
                 progress < .5f
                     ? (float)_movementAmount[i].Y * (progress * 2f)
                     : (float)_movementAmount[i].Y * (1f - ((progress - .5f) * 2f));
@@ -158,7 +158,7 @@ public class RainbowRing : SceneViewBase
 
     private void UpdateAnimationValues()
     {
-        var maxMovement = _maxBuffer - (int)RingThickness;
+        int maxMovement = _maxBuffer - (int)RingThickness;
 
         for (int i = 0; i < RingCount; i++)
         {

@@ -87,7 +87,7 @@ public class ShadowPlatformEffect : PlatformEffect
             return;
         }
 
-        var elevation = (float)Effects.ShadowEffect.GetElevation(this.Element);
+        float elevation = (float)Effects.ShadowEffect.GetElevation(this.Element);
 
         view.Elevation = elevation;
         view.TranslationZ = elevation;
@@ -102,7 +102,7 @@ public class ShadowPlatformEffect : PlatformEffect
             return;
         }
 
-        var cornerRadius = Effects.ShadowEffect.GetCornerRadius(this.Element);
+        double cornerRadius = Effects.ShadowEffect.GetCornerRadius(this.Element);
 
         if (view.OutlineProvider != null && view.OutlineProvider != _originalOutlineProvider)
         {

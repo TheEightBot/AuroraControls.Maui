@@ -11,7 +11,7 @@ public class CardViewLayout : ContentView
     public static readonly BindableProperty CornerRadiusProperty =
         BindableProperty.Create(nameof(CornerRadius), typeof(double), typeof(CardViewLayout),
             ShadowEffect.CornerRadiusProperty.DefaultValue,
-            propertyChanged: (bindable, oldValue, newValue) =>
+            propertyChanged: (bindable, _, newValue) =>
             {
                 if (bindable is not CardViewLayout clv)
                 {
@@ -42,7 +42,7 @@ public class CardViewLayout : ContentView
     public static readonly BindableProperty ElevationProperty =
         BindableProperty.Create(nameof(Elevation), typeof(double), typeof(CardViewLayout),
             ShadowEffect.ElevationProperty.DefaultValue,
-            propertyChanged: (bindable, oldValue, newValue) =>
+            propertyChanged: (bindable, _, newValue) =>
             {
                 if (bindable is CardViewLayout clv)
                 {
@@ -53,9 +53,9 @@ public class CardViewLayout : ContentView
     /// <summary>
     /// The card shadow color property.
     /// </summary>
-    public static new BindableProperty ShadowColorProperty =
+    public static new readonly BindableProperty ShadowColorProperty =
         BindableProperty.Create(nameof(ShadowColor), typeof(Color), typeof(CardViewLayout), Colors.Transparent,
-            propertyChanged: (bindable, oldValue, newValue) =>
+            propertyChanged: (bindable, _, newValue) =>
             {
                 if (bindable is CardViewLayout clv)
                 {
@@ -76,9 +76,9 @@ public class CardViewLayout : ContentView
     /// <summary>
     /// The content property.
     /// </summary>
-    public static new BindableProperty ContentProperty =
+    public static new readonly BindableProperty ContentProperty =
         BindableProperty.Create(nameof(Content), typeof(View), typeof(CardViewLayout), default(View),
-            propertyChanged: (bindable, oldValue, newValue) =>
+            propertyChanged: (bindable, _, newValue) =>
             {
                 if (bindable is CardViewLayout clv)
                 {
@@ -99,9 +99,9 @@ public class CardViewLayout : ContentView
     /// <summary>
     /// The card background color property.
     /// </summary>
-    public static new BindableProperty BackgroundColorProperty =
+    public static new readonly BindableProperty BackgroundColorProperty =
         BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(CardViewLayout), default(Color),
-            propertyChanged: (bindable, oldValue, newValue) =>
+            propertyChanged: (bindable, _, newValue) =>
             {
                 if (bindable is CardViewLayout clv && clv.Content != null)
                 {
@@ -124,7 +124,7 @@ public class CardViewLayout : ContentView
     /// </summary>
     public static readonly BindableProperty BorderColorProperty =
         BindableProperty.Create(nameof(BorderColor), typeof(Color), typeof(CardViewLayout), Colors.Transparent,
-            propertyChanged: (bindable, oldValue, newValue) =>
+            propertyChanged: (bindable, _, newValue) =>
             {
                 if (bindable is not CardViewLayout clv)
                 {
@@ -152,7 +152,7 @@ public class CardViewLayout : ContentView
     /// </summary>
     public static readonly BindableProperty BorderSizeProperty =
         BindableProperty.Create(nameof(BorderSize), typeof(double), typeof(CardViewLayout), 0d,
-            propertyChanged: (bindable, oldValue, newValue) =>
+            propertyChanged: (bindable, _, newValue) =>
             {
                 if (bindable is not CardViewLayout clv)
                 {

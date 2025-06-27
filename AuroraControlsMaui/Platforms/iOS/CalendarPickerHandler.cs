@@ -39,7 +39,7 @@ public partial class CalendarPickerHandler : DatePickerHandler
         if (platformView.InputAccessoryView is UIToolbar tb)
         {
             var clearButton = new UIBarButtonItem("Clear", UIBarButtonItemStyle.Plain,
-                (sender, e) =>
+                (_, _) =>
                 {
                     if (this.VirtualView is not CalendarPicker el)
                     {

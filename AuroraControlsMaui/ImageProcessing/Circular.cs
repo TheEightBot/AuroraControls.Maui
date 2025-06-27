@@ -30,12 +30,12 @@ public class Circular : ImageProcessingBase, IImageProcessor
         paint.IsAntialias = true;
         paint.Color = SKColors.Transparent;
 
-        var size = Math.Min(processingImage.Info.Width, processingImage.Info.Height);
+        int size = Math.Min(processingImage.Info.Width, processingImage.Info.Height);
 
-        var left = (processingImage.Info.Width - size) / 2f;
-        var top = (processingImage.Info.Height - size) / 2f;
-        var right = left + size;
-        var bottom = top + size;
+        float left = (processingImage.Info.Width - size) / 2f;
+        float top = (processingImage.Info.Height - size) / 2f;
+        float right = left + size;
+        float bottom = top + size;
 
         var rect = new SKRect(left, top, right, bottom);
 

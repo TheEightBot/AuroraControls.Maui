@@ -102,9 +102,9 @@ public class Nofriendo : LoadingViewBase
         using (var foregroundPaint = new SKPaint())
         using (var foregroundPath = new SKPath())
         {
-            var animationStep = CurrentAnimationStep;
-            var previousStepProgress = _previousAnimationStep / (double)MaxAnimationSteps;
-            var currentStepProcess = animationStep / (double)MaxAnimationSteps;
+            int animationStep = CurrentAnimationStep;
+            double previousStepProgress = _previousAnimationStep / (double)MaxAnimationSteps;
+            double currentStepProcess = animationStep / (double)MaxAnimationSteps;
 
             var previousStepColor = LoadingStartColor.Lerp(LoadingEndColor, previousStepProgress).ToSKColor();
             var currentStepColor = LoadingStartColor.Lerp(LoadingEndColor, currentStepProcess).ToSKColor();
@@ -112,7 +112,7 @@ public class Nofriendo : LoadingViewBase
             foregroundPaint.Style = SKPaintStyle.Fill;
             foregroundPaint.Color = currentStepColor;
 
-            var animatingPercentage = AnimatingPercentage * 100;
+            double animatingPercentage = AnimatingPercentage * 100;
 
             if (!Animating)
             {
@@ -120,14 +120,13 @@ public class Nofriendo : LoadingViewBase
                 return;
             }
 
-            var stepHeight = (float)(info.Height / (double)StepCount);
-            var individualStepCompletion = 100 / (double)StepCount;
-            var startsAtRight = animationStep % 2 == 0;
+            float stepHeight = (float)(info.Height / (double)StepCount);
+            double individualStepCompletion = 100 / (double)StepCount;
+            bool startsAtRight = animationStep % 2 == 0;
 
             for (int i = 0; i < StepCount; i++)
             {
-                var stepStartProgress = individualStepCompletion * i;
-                var stepProgressEnd = individualStepCompletion * (i + 1);
+                double stepProgressEnd = individualStepCompletion * (i + 1);
 
                 SKRect drawRect;
 
@@ -142,9 +141,9 @@ public class Nofriendo : LoadingViewBase
                 }
                 else
                 {
-                    var currentStepProgress = animatingPercentage / stepProgressEnd;
+                    double currentStepProgress = animatingPercentage / stepProgressEnd;
 
-                    var currentStepWidth = info.Width * (float)currentStepProgress;
+                    float currentStepWidth = info.Width * (float)currentStepProgress;
 
                     if (startsAtRight)
                     {

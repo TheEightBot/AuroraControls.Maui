@@ -38,8 +38,8 @@ public class Rotate : ImageProcessingBase, IImageProcessor
     {
         if (imageProcessor is AuroraControls.ImageProcessing.Rotate processor)
         {
-            var width = 0;
-            var height = 0;
+            int width = 0;
+            int height = 0;
 
             switch (processor.RotationAmount)
             {
@@ -111,19 +111,15 @@ public class Rotate : ImageProcessingBase, IImageProcessor
             {
                 var info = codec.Info;
 
-                var maxSize = Math.Max(maxHeight, maxWidth);
-
-                var supportedScale =
+                float supportedScale =
                     info.Height > info.Width
                         ? (float)maxHeight / info.Height
                         : (float)maxWidth / info.Width;
 
-                var scaledWidth = (int)(info.Width * supportedScale);
-                var scaledHeight = (int)(info.Height * supportedScale);
+                int scaledWidth = (int)(info.Width * supportedScale);
+                int scaledHeight = (int)(info.Height * supportedScale);
 
                 // decode the bitmap at the nearest size
-                var nearest = new SKImageInfo(scaledWidth, scaledHeight);
-
                 SKBitmap bmp = null;
                 try
                 {

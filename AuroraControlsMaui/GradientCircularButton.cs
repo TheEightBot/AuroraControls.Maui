@@ -18,7 +18,7 @@ public class GradientCircularButton : AuroraViewBase
     /// <summary>
     /// The button background color property.
     /// </summary>
-    public static BindableProperty ButtonBackgroundColorProperty =
+    public static readonly BindableProperty ButtonBackgroundColorProperty =
         BindableProperty.Create(nameof(ButtonBackgroundColor), typeof(Color), typeof(GradientCircularButton), Colors.Transparent,
             propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
 
@@ -35,7 +35,7 @@ public class GradientCircularButton : AuroraViewBase
     /// <summary>
     /// Specifies the border width property..
     /// </summary>
-    public static BindableProperty BorderWidthProperty =
+    public static readonly BindableProperty BorderWidthProperty =
         BindableProperty.Create(nameof(BorderWidth), typeof(double), typeof(GradientCircularButton), 0d,
             propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
 
@@ -52,7 +52,7 @@ public class GradientCircularButton : AuroraViewBase
     /// <summary>
     /// The border color property.
     /// </summary>
-    public static BindableProperty BorderColorProperty =
+    public static readonly BindableProperty BorderColorProperty =
         BindableProperty.Create(nameof(BorderColor), typeof(Color), typeof(GradientCircularButton), Colors.White,
             propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
 
@@ -69,7 +69,7 @@ public class GradientCircularButton : AuroraViewBase
     /// <summary>
     /// The shadow color property.
     /// </summary>
-    public static BindableProperty ShadowColorProperty =
+    public static readonly BindableProperty ShadowColorProperty =
         BindableProperty.Create(nameof(ShadowColor), typeof(Color), typeof(GradientCircularButton), Color.FromRgba(0d, 0d, 0d, .33d),
             propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
 
@@ -86,7 +86,7 @@ public class GradientCircularButton : AuroraViewBase
     /// <summary>
     /// The shadow location property.
     /// </summary>
-    public static BindableProperty ShadowLocationProperty =
+    public static readonly BindableProperty ShadowLocationProperty =
         BindableProperty.Create(nameof(ShadowLocation), typeof(Point), typeof(GradientCircularButton), default(Point),
             propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
 
@@ -103,7 +103,7 @@ public class GradientCircularButton : AuroraViewBase
     /// <summary>
     /// The gradient angle property.
     /// </summary>
-    public static BindableProperty GradientAngleProperty =
+    public static readonly BindableProperty GradientAngleProperty =
         BindableProperty.Create(nameof(GradientAngle), typeof(double), typeof(GradientCircularButton), 90.0,
             propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
 
@@ -120,7 +120,7 @@ public class GradientCircularButton : AuroraViewBase
     /// <summary>
     /// The ripples property.
     /// </summary>
-    public static BindableProperty RipplesProperty =
+    public static readonly BindableProperty RipplesProperty =
         BindableProperty.Create(nameof(Ripples), typeof(bool), typeof(GradientCircularButton), true,
             propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
 
@@ -137,7 +137,7 @@ public class GradientCircularButton : AuroraViewBase
     /// <summary>
     /// The text property.
     /// </summary>
-    public static BindableProperty TextProperty =
+    public static readonly BindableProperty TextProperty =
         BindableProperty.Create(nameof(Text), typeof(string), typeof(GradientCircularButton),
             propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
 
@@ -154,11 +154,11 @@ public class GradientCircularButton : AuroraViewBase
     /// <summary>
     /// The font color property.
     /// </summary>
-    public static BindableProperty FontColorProperty =
+    public static readonly BindableProperty FontColorProperty =
         BindableProperty.Create(nameof(FontColor), typeof(Color), typeof(GradientCircularButton), Colors.White,
             propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
 
-    public static BindableProperty FontSizeProperty =
+    public static readonly BindableProperty FontSizeProperty =
         BindableProperty.Create(nameof(FontSize), typeof(double), typeof(GradientCircularButton), PlatformInfo.DefaultButtonFontSize,
             propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
 
@@ -181,7 +181,7 @@ public class GradientCircularButton : AuroraViewBase
     /// <summary>
     /// The typeface property.
     /// </summary>
-    public static BindableProperty TypefaceProperty =
+    public static readonly BindableProperty TypefaceProperty =
         BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(GradientCircularButton),
             propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
 
@@ -195,7 +195,7 @@ public class GradientCircularButton : AuroraViewBase
         set => SetValue(TypefaceProperty, value);
     }
 
-    public static BindableProperty IsIconifiedTextProperty =
+    public static readonly BindableProperty IsIconifiedTextProperty =
         BindableProperty.Create(nameof(IsIconifiedText), typeof(bool), typeof(GradientCircularButton), false,
             propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
 
@@ -208,7 +208,7 @@ public class GradientCircularButton : AuroraViewBase
     /// <summary>
     /// The command property that fires on tap.
     /// </summary>
-    public static BindableProperty CommandProperty =
+    public static readonly BindableProperty CommandProperty =
         BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(GradientCircularButton));
 
     /// <summary>
@@ -224,7 +224,7 @@ public class GradientCircularButton : AuroraViewBase
     /// <summary>
     /// The command parameter property.
     /// </summary>
-    public static BindableProperty CommandParameterProperty =
+    public static readonly BindableProperty CommandParameterProperty =
         BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(GradientCircularButton));
 
     /// <summary>
@@ -301,22 +301,22 @@ public class GradientCircularButton : AuroraViewBase
     protected override void PaintControl(SKSurface surface, SKImageInfo info)
     {
         var canvas = surface.Canvas;
-        var scale = info.Height / (float)Height;
+        float scale = info.Height / (float)Height;
 
         using var backgroundPaint = new SKPaint();
-        var size = Math.Min(info.Width - this.Margin.Left - this.Margin.Right, info.Height - this.Margin.Top - this.Margin.Bottom);
+        double size = Math.Min(info.Width - this.Margin.Left - this.Margin.Right, info.Height - this.Margin.Top - this.Margin.Bottom);
 
-        var left = (info.Width - (float)size) / 2f;
-        var top = (info.Height - (float)size) / 2f;
-        var right = left + (float)size;
-        var bottom = top + (float)size;
+        float left = (info.Width - (float)size) / 2f;
+        float top = (info.Height - (float)size) / 2f;
+        float right = left + (float)size;
+        float bottom = top + (float)size;
 
         var rect = new SKRect(left, top, right, bottom);
 
         SKPoint gradientPointStart = SKPoint.Empty, gradientPointEnd = SKPoint.Empty;
 
-        var gradientAngle = this.GradientAngle % 360;
-        var angleInRadians = (float)(gradientAngle * Math.PI / 180.0);
+        double gradientAngle = this.GradientAngle % 360;
+        float angleInRadians = (float)(gradientAngle * Math.PI / 180.0);
 
         gradientPointStart = new SKPoint(
             (float)(((float)Math.Cos(angleInRadians) * size * 0.5f) + rect.MidX),
@@ -377,9 +377,9 @@ public class GradientCircularButton : AuroraViewBase
                         ? this.ButtonBackgroundColor.AddLuminosity(-.2f).MultiplyAlpha((1f - (float)this._rippleAnimationPercentage) * .5f).ToSKColor()
                         : Colors.Transparent.ToSKColor();
 
-                var startingRippleSize = (float)size * .5f;
-                var maxRippleSize = startingRippleSize + ((float)(size * .4f) * (float)this._rippleAnimationPercentage);
-                var offsetAmount = -maxRippleSize / 2f;
+                float startingRippleSize = (float)size * .5f;
+                float maxRippleSize = startingRippleSize + ((float)(size * .4f) * (float)this._rippleAnimationPercentage);
+                float offsetAmount = -maxRippleSize / 2f;
                 var offsetPoint = new SKPoint(this._lastTouchLocation.X + offsetAmount, this._lastTouchLocation.Y + offsetAmount);
                 var rippleSize = SKRect.Create(offsetPoint, new SKSize(maxRippleSize, maxRippleSize));
                 ripplePath.AddOval(rippleSize);
@@ -434,7 +434,7 @@ public class GradientCircularButton : AuroraViewBase
             return;
         }
 
-        var isTapInside = _backgroundPath.Contains(e.Location.X, e.Location.Y);
+        bool isTapInside = _backgroundPath.Contains(e.Location.X, e.Location.Y);
 
         if (e.ActionType == SKTouchAction.Released && isTapInside)
         {
@@ -470,7 +470,7 @@ public class GradientCircularButton : AuroraViewBase
             return;
         }
 
-        var animName = nameof(Ripples);
+        string animName = nameof(Ripples);
 
         this.AbortAnimation(animName);
         _rippleAnimationPercentage = 0d;

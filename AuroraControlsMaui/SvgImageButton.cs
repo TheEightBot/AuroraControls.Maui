@@ -33,10 +33,10 @@ public class SvgImageButton : AuroraViewBase
     /// <summary>
     /// The name of the embedded image to display.
     /// </summary>
-    public static BindableProperty EmbeddedImageNameProperty =
+    public static readonly BindableProperty EmbeddedImageNameProperty =
         BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(SvgImageButton), null,
             propertyChanged:
-            async (bindable, oldValue, newValue) =>
+            async (bindable, _, _) =>
             {
                 if (bindable is SvgImageButton cgv)
                 {
@@ -58,10 +58,10 @@ public class SvgImageButton : AuroraViewBase
     /// <summary>
     /// The maximum embedded image size property.
     /// </summary>
-    public static BindableProperty MaxImageSizeProperty =
+    public static readonly BindableProperty MaxImageSizeProperty =
         BindableProperty.Create(nameof(MaxImageSize), typeof(Size), typeof(SvgImageButton), default(Size),
             propertyChanged:
-            async (bindable, oldValue, newValue) =>
+            async (bindable, _, _) =>
             {
                 if (bindable is SvgImageButton cgv)
                 {
@@ -83,12 +83,12 @@ public class SvgImageButton : AuroraViewBase
     /// <summary>
     /// The animated property specifies whether animations should be performed.
     /// </summary>
-    public static BindableProperty AnimatedProperty =
+    public static readonly BindableProperty AnimatedProperty =
         BindableProperty.Create(nameof(Animated), typeof(bool), typeof(SvgImageButton), true);
 
-    public static BindableProperty ImageInsetProperty =
+    public static readonly BindableProperty ImageInsetProperty =
         BindableProperty.Create(nameof(ImageInset), typeof(float), typeof(SvgImageButton), default(float),
-            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+            propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
 
     public float ImageInset
     {
@@ -106,9 +106,9 @@ public class SvgImageButton : AuroraViewBase
         set { SetValue(AnimatedProperty, value); }
     }
 
-    public static BindableProperty AnimationScaleAmountProperty =
+    public static readonly BindableProperty AnimationScaleAmountProperty =
         BindableProperty.Create(nameof(AnimationScaleAmount), typeof(float), typeof(SvgImageButton), .1f,
-            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+            propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
 
     public float AnimationScaleAmount
     {
@@ -119,7 +119,7 @@ public class SvgImageButton : AuroraViewBase
     /// <summary>
     /// The animation easing property.
     /// </summary>
-    public static BindableProperty AnimationEasingProperty =
+    public static readonly BindableProperty AnimationEasingProperty =
         BindableProperty.Create(nameof(AnimationEasing), typeof(Easing), typeof(SvgImageButton), Easing.CubicInOut);
 
     /// <summary>
@@ -135,9 +135,9 @@ public class SvgImageButton : AuroraViewBase
     /// <summary>
     /// The overlay color property.
     /// </summary>
-    public static BindableProperty OverlayColorProperty =
+    public static readonly BindableProperty OverlayColorProperty =
         BindableProperty.Create(nameof(OverlayColor), typeof(Color), typeof(SvgImageButton), Colors.Transparent,
-            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+            propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
 
     /// <summary>
     /// Gets or sets the color of the overlay.
@@ -152,9 +152,9 @@ public class SvgImageButton : AuroraViewBase
     /// <summary>
     /// The color of the background.
     /// </summary>
-    public static new BindableProperty BackgroundColorProperty =
+    public static new readonly BindableProperty BackgroundColorProperty =
         BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(SvgImageButton), Colors.Transparent,
-            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+            propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
 
     /// <summary>
     /// Gets or sets the background color.
@@ -166,9 +166,9 @@ public class SvgImageButton : AuroraViewBase
         set { SetValue(BackgroundColorProperty, value); }
     }
 
-    public static BindableProperty BackgroundShapeProperty =
+    public static readonly BindableProperty BackgroundShapeProperty =
         BindableProperty.Create(nameof(BackgroundShape), typeof(SvgImageButtonBackgroundShape), typeof(SvgImageButton), SvgImageButtonBackgroundShape.None,
-            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+            propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
 
     public SvgImageButtonBackgroundShape BackgroundShape
     {
@@ -176,9 +176,9 @@ public class SvgImageButton : AuroraViewBase
         set => SetValue(BackgroundShapeProperty, value);
     }
 
-    public static BindableProperty CornerRadiusProperty =
+    public static readonly BindableProperty CornerRadiusProperty =
         BindableProperty.Create(nameof(CornerRadius), typeof(double), typeof(SvgImageButton), 8d,
-            propertyChanged: (bindable, oldValue, newValue) => (bindable as IAuroraView)?.InvalidateSurface());
+            propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
 
     public double CornerRadius
     {
@@ -189,7 +189,7 @@ public class SvgImageButton : AuroraViewBase
     /// <summary>
     /// The command property. Fires on tap.
     /// </summary>
-    public static BindableProperty CommandProperty =
+    public static readonly BindableProperty CommandProperty =
         BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(SvgImageButton), default(ICommand));
 
     /// <summary>
@@ -205,7 +205,7 @@ public class SvgImageButton : AuroraViewBase
     /// <summary>
     /// The command parameter property.
     /// </summary>
-    public static BindableProperty CommandParameterProperty =
+    public static readonly BindableProperty CommandParameterProperty =
         BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(SvgImageButton), default(object));
 
     /// <summary>
@@ -261,23 +261,23 @@ public class SvgImageButton : AuroraViewBase
         var canvas = surface.Canvas;
 
         // Calculate inset in physical pixels
-        var insetPixels = this.ImageInset * _scale;
+        float insetPixels = this.ImageInset * _scale;
 
         // Calculate total available space considering margins
-        var totalAvailableWidth = info.Width - (float)this.Margin.Left - (float)this.Margin.Right;
-        var totalAvailableHeight = info.Height - (float)this.Margin.Top - (float)this.Margin.Bottom;
+        float totalAvailableWidth = info.Width - (float)this.Margin.Left - (float)this.Margin.Right;
+        float totalAvailableHeight = info.Height - (float)this.Margin.Top - (float)this.Margin.Bottom;
 
         // Calculate the area for the background shape (without insets)
-        var backgroundSize = Math.Min(totalAvailableWidth, totalAvailableHeight);
+        float backgroundSize = Math.Min(totalAvailableWidth, totalAvailableHeight);
 
         // Calculate the area available for the SVG (with insets applied)
-        var svgAvailableWidth = backgroundSize - (insetPixels * 2);
-        var svgAvailableHeight = backgroundSize - (insetPixels * 2);
+        float svgAvailableWidth = backgroundSize - (insetPixels * 2);
+        float svgAvailableHeight = backgroundSize - (insetPixels * 2);
 
-        var left = (info.Width - backgroundSize) / 2f;
-        var top = (info.Height - backgroundSize) / 2f;
-        var right = left + backgroundSize;
-        var bottom = top + backgroundSize;
+        float left = (info.Width - backgroundSize) / 2f;
+        float top = (info.Height - backgroundSize) / 2f;
+        float right = left + backgroundSize;
+        float bottom = top + backgroundSize;
 
         this._touchArea = new SKRect(left, top, right, bottom);
 
@@ -285,8 +285,8 @@ public class SvgImageButton : AuroraViewBase
 
         if (this._svg?.Picture != null)
         {
-            var svgWidth = this._svg.Picture.CullRect.Width;
-            var svgHeight = this._svg.Picture.CullRect.Height;
+            float svgWidth = this._svg.Picture.CullRect.Width;
+            float svgHeight = this._svg.Picture.CullRect.Height;
 
             if (svgWidth <= 0 || svgHeight <= 0)
             {
@@ -294,22 +294,22 @@ public class SvgImageButton : AuroraViewBase
             }
 
             // Calculate scale to fit the SVG in the inset-adjusted area
-            var scaleX = svgAvailableWidth / svgWidth;
-            var scaleY = svgAvailableHeight / svgHeight;
-            var scaleAmount = Math.Min(scaleX, scaleY);
+            float scaleX = svgAvailableWidth / svgWidth;
+            float scaleY = svgAvailableHeight / svgHeight;
+            float scaleAmount = Math.Min(scaleX, scaleY);
 
             // Apply MaxImageSize constraints if specified
             if (this.MaxImageSize != Size.Zero)
             {
-                var maxScaleX = (float)this.MaxImageSize.Width / svgWidth;
-                var maxScaleY = (float)this.MaxImageSize.Height / svgHeight;
-                var maxScale = Math.Min(maxScaleX, maxScaleY);
+                float maxScaleX = (float)this.MaxImageSize.Width / svgWidth;
+                float maxScaleY = (float)this.MaxImageSize.Height / svgHeight;
+                float maxScale = Math.Min(maxScaleX, maxScaleY);
                 scaleAmount = Math.Min(scaleAmount, maxScale);
             }
 
             // Apply animation scaling - simpler approach
-            var animationScale = 1f - (this.AnimationScaleAmount * (float)this._animationPercentage);
-            var finalScale = scaleAmount * animationScale;
+            float animationScale = 1f - (this.AnimationScaleAmount * (float)this._animationPercentage);
+            float finalScale = scaleAmount * animationScale;
 
             // Draw background shape with consistent animation scaling
             using (var backgroundPaint = new SKPaint())
@@ -319,8 +319,8 @@ public class SvgImageButton : AuroraViewBase
                 backgroundPaint.Style = SKPaintStyle.Fill;
 
                 // Apply the same animation scale to the background shape
-                var animatedBackgroundSize = backgroundSize * animationScale;
-                var halfSize = animatedBackgroundSize / 2f;
+                float animatedBackgroundSize = backgroundSize * animationScale;
+                float halfSize = animatedBackgroundSize / 2f;
                 var shapeRect = new SKRect(
                     info.Rect.MidX - halfSize,
                     info.Rect.MidY - halfSize,
@@ -346,12 +346,12 @@ public class SvgImageButton : AuroraViewBase
             using (new SKAutoCanvasRestore(canvas, true))
             {
                 // Calculate the scaled SVG dimensions
-                var scaledWidth = svgWidth * finalScale;
-                var scaledHeight = svgHeight * finalScale;
+                float scaledWidth = svgWidth * finalScale;
+                float scaledHeight = svgHeight * finalScale;
 
                 // Center the SVG in the available space
-                var translateX = (info.Width - scaledWidth) / 2f;
-                var translateY = (info.Height - scaledHeight) / 2f;
+                float translateX = (info.Width - scaledWidth) / 2f;
+                float translateY = (info.Height - scaledHeight) / 2f;
 
                 var transform = SKMatrix.CreateScale(finalScale, finalScale);
                 transform = transform.PostConcat(SKMatrix.CreateTranslation(translateX, translateY));
@@ -391,7 +391,7 @@ public class SvgImageButton : AuroraViewBase
             return;
         }
 
-        var isTapInside = this._touchArea.Contains(e.Location.X, e.Location.Y);
+        bool isTapInside = this._touchArea.Contains(e.Location.X, e.Location.Y);
 
         if (e.ActionType == SKTouchAction.Released && isTapInside)
         {
@@ -412,7 +412,7 @@ public class SvgImageButton : AuroraViewBase
     /// </summary>
     private void SetSvgResource()
     {
-        var embeddedImageName = EmbeddedImageName;
+        string embeddedImageName = EmbeddedImageName;
 
         if (string.IsNullOrEmpty(embeddedImageName))
         {
@@ -463,7 +463,7 @@ public class SvgImageButton : AuroraViewBase
 
         rippleAnimation.Commit(
             this, animName, length: 400, easing: this.AnimationEasing,
-            finished: (percent, isFinished) =>
+            finished: (_, _) =>
             {
                 this._lastTouchLocation = SKPoint.Empty;
                 this._animationPercentage = 0d;

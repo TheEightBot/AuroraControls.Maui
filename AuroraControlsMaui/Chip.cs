@@ -38,7 +38,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The state of the toggle.
     /// </summary>
-    public static BindableProperty IsToggledProperty =
+    public static readonly BindableProperty IsToggledProperty =
         BindableProperty.Create(nameof(IsToggled), typeof(bool), typeof(Chip), false,
             propertyChanged:
             (bindable, _, newValue) =>
@@ -73,7 +73,7 @@ public class Chip : AuroraViewBase, IDisposable
         set => SetValue(IsToggledProperty, value);
     }
 
-    public static BindableProperty StateProperty =
+    public static readonly BindableProperty StateProperty =
         BindableProperty.Create(nameof(State), typeof(ChipState), typeof(Chip), ChipState.Interactable,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -83,7 +83,7 @@ public class Chip : AuroraViewBase, IDisposable
         set => SetValue(StateProperty, value);
     }
 
-    public static BindableProperty IsRemovableProperty =
+    public static readonly BindableProperty IsRemovableProperty =
         BindableProperty.Create(nameof(IsRemovable), typeof(bool), typeof(Chip), default(bool),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -93,7 +93,7 @@ public class Chip : AuroraViewBase, IDisposable
         set => SetValue(IsRemovableProperty, value);
     }
 
-    public static BindableProperty IsSingleSelectionProperty =
+    public static readonly BindableProperty IsSingleSelectionProperty =
         BindableProperty.Create(nameof(IsSingleSelection), typeof(bool), typeof(Chip), default(bool));
 
     public bool IsSingleSelection
@@ -105,7 +105,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The command property. Fires on tap.
     /// </summary>
-    public static BindableProperty CommandProperty =
+    public static readonly BindableProperty CommandProperty =
         BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(Chip));
 
     /// <summary>
@@ -121,7 +121,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The command parameter property.
     /// </summary>
-    public static BindableProperty CommandParameterProperty =
+    public static readonly BindableProperty CommandParameterProperty =
         BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(Chip));
 
     /// <summary>
@@ -137,7 +137,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The Tapped command property. Fires on tap.
     /// </summary>
-    public static BindableProperty TappedCommandProperty =
+    public static readonly BindableProperty TappedCommandProperty =
         BindableProperty.Create(nameof(TappedCommand), typeof(ICommand), typeof(Chip));
 
     /// <summary>
@@ -153,7 +153,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The command parameter property.
     /// </summary>
-    public static BindableProperty TappedCommandParameterProperty =
+    public static readonly BindableProperty TappedCommandParameterProperty =
         BindableProperty.Create(nameof(TappedCommandParameter), typeof(object), typeof(Chip));
 
     /// <summary>
@@ -169,7 +169,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The removed command property. Fires on tap.
     /// </summary>
-    public static BindableProperty RemovedCommandProperty =
+    public static readonly BindableProperty RemovedCommandProperty =
         BindableProperty.Create(nameof(RemovedCommand), typeof(ICommand), typeof(Chip));
 
     /// <summary>
@@ -185,7 +185,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The command parameter property.
     /// </summary>
-    public static BindableProperty RemovedCommandParameterProperty =
+    public static readonly BindableProperty RemovedCommandParameterProperty =
         BindableProperty.Create(nameof(RemovedCommandParameter), typeof(object), typeof(Chip));
 
     /// <summary>
@@ -194,14 +194,14 @@ public class Chip : AuroraViewBase, IDisposable
     /// <value>The command parameter.</value>
     public object RemovedCommandParameter
     {
-        get => (object)GetValue(RemovedCommandParameterProperty);
+        get => this.GetValue(RemovedCommandParameterProperty);
         set => SetValue(RemovedCommandParameterProperty, value);
     }
 
     /// <summary>
     /// The border color.
     /// </summary>
-    public static BindableProperty BorderColorProperty =
+    public static readonly BindableProperty BorderColorProperty =
         BindableProperty.Create(nameof(BorderColor), typeof(Color), typeof(Chip), Colors.Transparent,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -215,7 +215,7 @@ public class Chip : AuroraViewBase, IDisposable
         set => SetValue(BorderColorProperty, value);
     }
 
-    public static BindableProperty ToggledBorderColorProperty =
+    public static readonly BindableProperty ToggledBorderColorProperty =
         BindableProperty.Create(nameof(ToggledBorderColor), typeof(Color), typeof(Chip), Colors.Transparent,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -228,7 +228,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The border color when the chip is ReadOnly.
     /// </summary>
-    public static BindableProperty ReadOnlyBorderColorProperty =
+    public static readonly BindableProperty ReadOnlyBorderColorProperty =
         BindableProperty.Create(nameof(ReadOnlyBorderColor), typeof(Color), typeof(Chip), Colors.Transparent,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -245,7 +245,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The color of the background.
     /// </summary>
-    public static new BindableProperty BackgroundColorProperty =
+    public static new readonly BindableProperty BackgroundColorProperty =
         BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(Chip), Color.FromArgb("#EAEAEA"),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -262,7 +262,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The color of the background when toggled.
     /// </summary>
-    public static BindableProperty ToggledBackgroundColorProperty =
+    public static readonly BindableProperty ToggledBackgroundColorProperty =
         BindableProperty.Create(nameof(ToggledBackgroundColor), typeof(Color), typeof(Chip), Color.FromArgb("#D2D2D2"),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -279,7 +279,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The color of the background when the chip is ReadOnly.
     /// </summary>
-    public static BindableProperty ReadOnlyBackgroundColorProperty =
+    public static readonly BindableProperty ReadOnlyBackgroundColorProperty =
         BindableProperty.Create(nameof(ReadOnlyBackgroundColor), typeof(Color), typeof(Chip), Colors.DarkGray,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -293,7 +293,7 @@ public class Chip : AuroraViewBase, IDisposable
         set => SetValue(ReadOnlyBackgroundColorProperty, value);
     }
 
-    public static BindableProperty BorderSizeProperty =
+    public static readonly BindableProperty BorderSizeProperty =
         BindableProperty.Create(nameof(BorderSize), typeof(double), typeof(Chip), default(double),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -303,7 +303,7 @@ public class Chip : AuroraViewBase, IDisposable
         set => SetValue(BorderSizeProperty, value);
     }
 
-    public static BindableProperty CornerRadiusProperty =
+    public static readonly BindableProperty CornerRadiusProperty =
         BindableProperty.Create(nameof(CornerRadius), typeof(double), typeof(Chip), 8d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -316,7 +316,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The shape of the chip.
     /// </summary>
-    public static BindableProperty ShapeProperty =
+    public static readonly BindableProperty ShapeProperty =
         BindableProperty.Create(nameof(Shape), typeof(ChipShape), typeof(Chip), ChipShape.Standard,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -333,7 +333,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The value of the chip.
     /// </summary>
-    public static BindableProperty ValueProperty =
+    public static readonly BindableProperty ValueProperty =
         BindableProperty.Create(nameof(Value), typeof(object), typeof(Chip));
 
     /// <summary>
@@ -349,7 +349,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The text on the button.
     /// </summary>
-    public static BindableProperty TextProperty =
+    public static readonly BindableProperty TextProperty =
         BindableProperty.Create(nameof(Text), typeof(string), typeof(Chip),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -366,7 +366,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The font color of the text.
     /// </summary>
-    public static BindableProperty FontColorProperty =
+    public static readonly BindableProperty FontColorProperty =
         BindableProperty.Create(nameof(FontColor), typeof(Color), typeof(Chip), Color.FromArgb("#272727"),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -380,7 +380,7 @@ public class Chip : AuroraViewBase, IDisposable
         set => SetValue(FontColorProperty, value);
     }
 
-    public static BindableProperty ToggledFontColorProperty =
+    public static readonly BindableProperty ToggledFontColorProperty =
         BindableProperty.Create(nameof(ToggledFontColor), typeof(Color), typeof(Chip),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -393,7 +393,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The font color of the text when chip is ReadOnly.
     /// </summary>
-    public static BindableProperty ReadOnlyFontColorProperty =
+    public static readonly BindableProperty ReadOnlyFontColorProperty =
         BindableProperty.Create(nameof(ReadOnlyFontColor), typeof(Color), typeof(Chip), Color.FromArgb("#272727"),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -410,7 +410,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The font size of the text.
     /// </summary>
-    public static BindableProperty FontSizeProperty =
+    public static readonly BindableProperty FontSizeProperty =
         BindableProperty.Create(nameof(FontSize), typeof(double), typeof(Chip), PlatformInfo.DefaultButtonFontSize,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -427,7 +427,7 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The typeface of the text.
     /// </summary>
-    public static BindableProperty TypefaceProperty =
+    public static readonly BindableProperty TypefaceProperty =
         BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(Chip),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -441,7 +441,7 @@ public class Chip : AuroraViewBase, IDisposable
         set => SetValue(TypefaceProperty, value);
     }
 
-    public static BindableProperty IsIconifiedTextProperty =
+    public static readonly BindableProperty IsIconifiedTextProperty =
         BindableProperty.Create(nameof(IsIconifiedText), typeof(bool), typeof(Chip), default(bool),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -454,10 +454,10 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The embedded svg image name property.
     /// </summary>
-    public static BindableProperty LeadingEmbeddedImageNameProperty =
+    public static readonly BindableProperty LeadingEmbeddedImageNameProperty =
         BindableProperty.Create(nameof(LeadingEmbeddedImageName), typeof(string), typeof(Chip),
             propertyChanged:
-            async (bindable, oldValue, newValue) =>
+            async (bindable, _, _) =>
             {
                 if (bindable is Chip c)
                 {
@@ -479,10 +479,10 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The embedded svg image name property.
     /// </summary>
-    public static BindableProperty TrailingEmbeddedImageNameProperty =
+    public static readonly BindableProperty TrailingEmbeddedImageNameProperty =
         BindableProperty.Create(nameof(TrailingEmbeddedImageName), typeof(string), typeof(Chip),
             propertyChanged:
-            async (bindable, oldValue, newValue) =>
+            async (bindable, _, _) =>
             {
                 if (bindable is Chip c)
                 {
@@ -501,7 +501,7 @@ public class Chip : AuroraViewBase, IDisposable
         set => SetValue(TrailingEmbeddedImageNameProperty, value);
     }
 
-    public static BindableProperty EmbeddedImageColorMatchesTextProperty =
+    public static readonly BindableProperty EmbeddedImageColorMatchesTextProperty =
         BindableProperty.Create(nameof(EmbeddedImageColorMatchesText), typeof(bool), typeof(Chip), true,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -511,7 +511,7 @@ public class Chip : AuroraViewBase, IDisposable
         set => SetValue(EmbeddedImageColorMatchesTextProperty, value);
     }
 
-    public static BindableProperty SpacingProperty =
+    public static readonly BindableProperty SpacingProperty =
         BindableProperty.Create(nameof(Spacing), typeof(double), typeof(Chip), 8d,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
@@ -552,26 +552,25 @@ public class Chip : AuroraViewBase, IDisposable
     {
         var canvas = surface.Canvas;
 
-        var xOffset = 0f;
+        float xOffset = 0f;
 
         this._rect = new SKRect(0f, 0f, info.Width, info.Height);
 
-        var spacing = (float)this.Spacing * _scale;
+        float spacing = (float)this.Spacing * _scale;
 
         var verticalSpacing = new Thickness(0d, 8d);
 
-        var halfHeight = this._rect.MidY;
-        var quarterHeight = info.Height * .25f;
+        float quarterHeight = info.Height * .25f;
 
-        var scaledBorderSize = (float)this.BorderSize * _scale;
-        var halfScaledBorderSize = scaledBorderSize * .5f;
+        float scaledBorderSize = (float)this.BorderSize * _scale;
+        float halfScaledBorderSize = scaledBorderSize * .5f;
 
         xOffset += halfScaledBorderSize;
 
         canvas.Clear();
 
-        var isToggled = this.IsToggled;
-        var isReadonly = this.State == ChipState.ReadOnly;
+        bool isToggled = this.IsToggled;
+        bool isReadonly = this.State == ChipState.ReadOnly;
 
         using var backgroundPaint = new SKPaint();
 
@@ -622,7 +621,7 @@ public class Chip : AuroraViewBase, IDisposable
                         canvas.DrawRect(this._rect, borderPaint);
                         break;
                     case ChipShape.RoundedRectangle:
-                        var cornerRadius = (float)this.CornerRadius * _scale;
+                        float cornerRadius = (float)this.CornerRadius * _scale;
                         canvas.DrawRoundRect(this._rect, cornerRadius, cornerRadius, borderPaint);
                         break;
                 }
@@ -642,7 +641,7 @@ public class Chip : AuroraViewBase, IDisposable
                         canvas.DrawRect(this._rect, backgroundPaint);
                         break;
                     case ChipShape.RoundedRectangle:
-                        var cornerRadius = (float)this.CornerRadius * _scale;
+                        float cornerRadius = (float)this.CornerRadius * _scale;
                         canvas.DrawRoundRect(this._rect, cornerRadius, cornerRadius, backgroundPaint);
                         break;
                 }
@@ -656,11 +655,11 @@ public class Chip : AuroraViewBase, IDisposable
 
                 var imageSize = thumbnailContainer.AspectFit(this._leadingSvg.Picture.CullRect.Size).Subtract(verticalSpacing);
 
-                var imageWidth = imageSize.Width;
+                float imageWidth = imageSize.Width;
                 imageSize.Left = xOffset;
                 imageSize.Right = imageWidth + xOffset;
 
-                var scaleAmount = Math.Min(imageSize.Width / this._leadingSvg.Picture.CullRect.Width, imageSize.Height / this._leadingSvg.Picture.CullRect.Height);
+                float scaleAmount = Math.Min(imageSize.Width / this._leadingSvg.Picture.CullRect.Width, imageSize.Height / this._leadingSvg.Picture.CullRect.Height);
 
                 var svgScale = SKMatrix.CreateScale(scaleAmount, scaleAmount);
 
@@ -721,11 +720,11 @@ public class Chip : AuroraViewBase, IDisposable
 
                 var imageSize = thumbnailContainer.AspectFit(this._trailingSvg.Picture.CullRect.Size).Subtract(verticalSpacing);
 
-                var imageWidth = imageSize.Width;
+                float imageWidth = imageSize.Width;
                 imageSize.Left = xOffset;
                 imageSize.Right = xOffset + imageWidth;
 
-                var scaleAmount = Math.Min(imageSize.Width / this._trailingSvg.Picture.CullRect.Width, imageSize.Height / this._trailingSvg.Picture.CullRect.Height);
+                float scaleAmount = Math.Min(imageSize.Width / this._trailingSvg.Picture.CullRect.Width, imageSize.Height / this._trailingSvg.Picture.CullRect.Height);
 
                 var svgScale = SKMatrix.CreateScale(scaleAmount, scaleAmount);
 
@@ -759,8 +758,8 @@ public class Chip : AuroraViewBase, IDisposable
 
             if (this.IsRemovable)
             {
-                var size = this._rect.Height / 2f;
-                var top = this._rect.Top + ((this._rect.Height - size) / 2f);
+                float size = this._rect.Height / 2f;
+                float top = this._rect.Top + ((this._rect.Height - size) / 2f);
                 this._removeRect = new SKRect(xOffset, top, xOffset + size, top + size).Subtract(8d);
 
                 using (new SKAutoCanvasRestore(canvas))
@@ -793,7 +792,7 @@ public class Chip : AuroraViewBase, IDisposable
             xOffset += quarterHeight + halfScaledBorderSize;
         }
 
-        var scaledXOffset = xOffset / _scale;
+        float scaledXOffset = xOffset / _scale;
 
         if (Math.Abs(scaledXOffset - _calculatedWidth) > .001f)
         {
@@ -808,8 +807,6 @@ public class Chip : AuroraViewBase, IDisposable
 
     protected override void OnTouch(SKTouchEventArgs e)
     {
-        System.Diagnostics.Debug.WriteLine($"{e.ActionType}");
-
         if (!this._cantHandleTouch)
         {
             e.Handled = true;

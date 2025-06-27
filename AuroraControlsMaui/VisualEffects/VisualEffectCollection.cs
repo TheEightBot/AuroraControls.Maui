@@ -112,7 +112,7 @@ public class VisualEffectCollection : BindableObject, IList<VisualEffect>, INoti
 
     public bool Remove(VisualEffect item)
     {
-        var oldIndex = IndexOf(item);
+        int oldIndex = IndexOf(item);
 
         if (this._items.Remove(item))
         {

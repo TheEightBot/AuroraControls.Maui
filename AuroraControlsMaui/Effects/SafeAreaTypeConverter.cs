@@ -8,7 +8,7 @@ public class SafeAreaTypeConverter : TypeConverter
 {
     public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
     {
-        var strValue = value.ToString() ?? string.Empty;
+        string? strValue = value.ToString() ?? string.Empty;
 
         if (strValue != null)
         {
@@ -17,23 +17,23 @@ public class SafeAreaTypeConverter : TypeConverter
             if (strValue.Contains(","))
             {
                 // XAML based definition
-                var safeArea = strValue.Split(',');
+                string[] safeArea = strValue.Split(',');
 
                 switch (safeArea.Length)
                 {
                     case 2:
-                        if (bool.TryParse(safeArea[0], out var h)
-                            && bool.TryParse(safeArea[1], out var v))
+                        if (bool.TryParse(safeArea[0], out bool h)
+                            && bool.TryParse(safeArea[1], out bool v))
                         {
                             return new SafeArea(h, v);
                         }
 
                         break;
                     case 4:
-                        if (bool.TryParse(safeArea[0], out var l)
-                            && bool.TryParse(safeArea[1], out var t)
-                            && bool.TryParse(safeArea[2], out var r)
-                            && bool.TryParse(safeArea[3], out var b))
+                        if (bool.TryParse(safeArea[0], out bool l)
+                            && bool.TryParse(safeArea[1], out bool t)
+                            && bool.TryParse(safeArea[2], out bool r)
+                            && bool.TryParse(safeArea[3], out bool b))
                         {
                             return new SafeArea(l, t, r, b);
                         }
@@ -44,7 +44,7 @@ public class SafeAreaTypeConverter : TypeConverter
             else
             {
                 // Single uniform SafeArea
-                if (bool.TryParse(strValue, out var l))
+                if (bool.TryParse(strValue, out bool l))
                 {
                     return new SafeArea(l);
                 }

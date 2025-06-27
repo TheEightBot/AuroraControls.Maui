@@ -219,7 +219,6 @@ public class ChipGroup : ContentView, IDisposable
 
         // Calculate scroll position - in horizontal mode, we want to scroll to the chip's X position
         var chipBounds = chip.Bounds;
-        var scrollPosition = new Point(chipBounds.X, 0);
 
         // Scroll to the chip - animated
         _scrollView.ScrollToAsync(chip, position, animated);
@@ -1003,7 +1002,7 @@ public class ChipGroup : ContentView, IDisposable
             case NotifyCollectionChangedAction.Add:
                 if (e.NewItems != null && ItemTemplate != null)
                 {
-                    foreach (var item in e.NewItems)
+                    foreach (object? item in e.NewItems)
                     {
                         CreateChipFromItem(item);
                     }
@@ -1014,7 +1013,7 @@ public class ChipGroup : ContentView, IDisposable
             case NotifyCollectionChangedAction.Remove:
                 if (e.OldItems != null)
                 {
-                    foreach (var item in e.OldItems)
+                    foreach (object? item in e.OldItems)
                     {
                         var chip = _chips.FirstOrDefault(c => c.BindingContext == item);
                         if (chip != null)
@@ -1060,7 +1059,7 @@ public class ChipGroup : ContentView, IDisposable
             return;
         }
 
-        foreach (var item in items)
+        foreach (object? item in items)
         {
             CreateChipFromItem(item);
         }
@@ -1074,7 +1073,7 @@ public class ChipGroup : ContentView, IDisposable
         }
 
         // Create a chip from the template
-        var content = ItemTemplate.CreateContent();
+        object? content = ItemTemplate.CreateContent();
         if (content is Chip chip)
         {
             chip.BindingContext = item;
