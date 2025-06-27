@@ -189,6 +189,7 @@ public abstract class SceneViewBase : AuroraViewBase
                     }
                 }
             };
+        _ticker.MaxFps = 60;
 
         _ticker.Start();
 

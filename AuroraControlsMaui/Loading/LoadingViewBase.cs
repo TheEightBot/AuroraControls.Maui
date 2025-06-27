@@ -84,7 +84,7 @@ public class LoadingViewBase : AuroraViewBase
     /// <param name="easing">Easing.</param>
     private void CreateAnimationNextStep(uint rate = 16, uint length = 250, Easing easing = null)
     {
-        var primaryAnimation = new Animation(x => this.AnimatingPercentage = x, 0, 1);
+        var primaryAnimation = new Animation(x => this.AnimatingPercentage = x);
 
         primaryAnimation
             .Commit(this, _animationName, rate, length, easing,

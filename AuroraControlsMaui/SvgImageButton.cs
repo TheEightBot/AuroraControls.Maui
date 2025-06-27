@@ -34,7 +34,7 @@ public class SvgImageButton : AuroraViewBase
     /// The name of the embedded image to display.
     /// </summary>
     public static readonly BindableProperty EmbeddedImageNameProperty =
-        BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(SvgImageButton), null,
+        BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(SvgImageButton),
             propertyChanged:
             async (bindable, _, _) =>
             {
@@ -88,7 +88,7 @@ public class SvgImageButton : AuroraViewBase
 
     public static readonly BindableProperty ImageInsetProperty =
         BindableProperty.Create(nameof(ImageInset), typeof(float), typeof(SvgImageButton), default(float),
-            propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     public float ImageInset
     {
@@ -108,7 +108,7 @@ public class SvgImageButton : AuroraViewBase
 
     public static readonly BindableProperty AnimationScaleAmountProperty =
         BindableProperty.Create(nameof(AnimationScaleAmount), typeof(float), typeof(SvgImageButton), .1f,
-            propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     public float AnimationScaleAmount
     {
@@ -137,7 +137,7 @@ public class SvgImageButton : AuroraViewBase
     /// </summary>
     public static readonly BindableProperty OverlayColorProperty =
         BindableProperty.Create(nameof(OverlayColor), typeof(Color), typeof(SvgImageButton), Colors.Transparent,
-            propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets the color of the overlay.
@@ -154,7 +154,7 @@ public class SvgImageButton : AuroraViewBase
     /// </summary>
     public static new readonly BindableProperty BackgroundColorProperty =
         BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(SvgImageButton), Colors.Transparent,
-            propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets the background color.
@@ -168,7 +168,7 @@ public class SvgImageButton : AuroraViewBase
 
     public static readonly BindableProperty BackgroundShapeProperty =
         BindableProperty.Create(nameof(BackgroundShape), typeof(SvgImageButtonBackgroundShape), typeof(SvgImageButton), SvgImageButtonBackgroundShape.None,
-            propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     public SvgImageButtonBackgroundShape BackgroundShape
     {
@@ -178,7 +178,7 @@ public class SvgImageButton : AuroraViewBase
 
     public static readonly BindableProperty CornerRadiusProperty =
         BindableProperty.Create(nameof(CornerRadius), typeof(double), typeof(SvgImageButton), 8d,
-            propertyChanged: (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface());
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     public double CornerRadius
     {
@@ -190,7 +190,7 @@ public class SvgImageButton : AuroraViewBase
     /// The command property. Fires on tap.
     /// </summary>
     public static readonly BindableProperty CommandProperty =
-        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(SvgImageButton), default(ICommand));
+        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(SvgImageButton));
 
     /// <summary>
     /// Gets or sets the command.
@@ -206,7 +206,7 @@ public class SvgImageButton : AuroraViewBase
     /// The command parameter property.
     /// </summary>
     public static readonly BindableProperty CommandParameterProperty =
-        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(SvgImageButton), default(object));
+        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(SvgImageButton));
 
     /// <summary>
     /// Gets or sets the command parameter.

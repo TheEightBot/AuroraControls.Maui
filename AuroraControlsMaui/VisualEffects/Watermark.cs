@@ -37,7 +37,7 @@ public class Watermark : VisualEffect
     }
 
     public static readonly BindableProperty WatermarkTextProperty =
-        BindableProperty.Create(nameof(WatermarkText), typeof(string), typeof(Watermark), default(string));
+        BindableProperty.Create(nameof(WatermarkText), typeof(string), typeof(Watermark));
 
     public string WatermarkText
     {
@@ -55,7 +55,7 @@ public class Watermark : VisualEffect
     }
 
     public static readonly BindableProperty TypefaceProperty =
-        BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(Watermark), default(SKTypeface));
+        BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(Watermark));
 
     public SKTypeface Typeface
     {
@@ -73,7 +73,7 @@ public class Watermark : VisualEffect
     }
 
     public static readonly BindableProperty BackgroundColorProperty =
-        BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(Watermark), default(Color));
+        BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(Watermark));
 
     public Color BackgroundColor
     {

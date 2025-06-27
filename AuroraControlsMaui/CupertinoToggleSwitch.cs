@@ -111,7 +111,7 @@ public class CupertinoToggleSwitch : AuroraViewBase
     /// The command property. Fires on tap.
     /// </summary>
     public static readonly BindableProperty CommandProperty =
-        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(CupertinoToggleSwitch), default(ICommand));
+        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(CupertinoToggleSwitch));
 
     /// <summary>
     /// The toggle maximum width property.
@@ -161,7 +161,7 @@ public class CupertinoToggleSwitch : AuroraViewBase
     /// The command parameter property.
     /// </summary>
     public static readonly BindableProperty CommandParameterProperty =
-        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(CupertinoToggleSwitch), default(object));
+        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(CupertinoToggleSwitch));
 
     /// <summary>
     /// Gets or sets the command parameter.
