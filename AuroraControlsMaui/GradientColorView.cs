@@ -34,7 +34,7 @@ public class GradientColorView : AuroraViewBase
     /// The gradient start color property.
     /// </summary>
     public static readonly BindableProperty GradientStartColorProperty =
-        BindableProperty.Create(nameof(GradientStartColor), typeof(Color), typeof(GradientColorView),
+        BindableProperty.Create(nameof(GradientStartColor), typeof(Color), typeof(GradientColorView), default(Color),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -51,7 +51,7 @@ public class GradientColorView : AuroraViewBase
     /// The gradient stop color property.
     /// </summary>
     public static readonly BindableProperty GradientStopColorProperty =
-        BindableProperty.Create(nameof(GradientStopColor), typeof(Color), typeof(GradientColorView),
+        BindableProperty.Create(nameof(GradientStopColor), typeof(Color), typeof(GradientColorView), default(Color),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -103,7 +103,7 @@ public class GradientColorView : AuroraViewBase
     /// The command property. Fires on tap.
     /// </summary>
     public static readonly BindableProperty CommandProperty =
-        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(GradientColorView));
+        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(GradientColorView), default(ICommand));
 
     /// <summary>
     /// Gets or sets the command.
@@ -119,7 +119,7 @@ public class GradientColorView : AuroraViewBase
     /// The command parameter property.
     /// </summary>
     public static readonly BindableProperty CommandParameterProperty =
-        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(GradientColorView));
+        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(GradientColorView), default(object));
 
     /// <summary>
     /// Gets or sets the command parameter.

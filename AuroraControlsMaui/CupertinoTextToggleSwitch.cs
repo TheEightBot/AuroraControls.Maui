@@ -113,7 +113,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The command property. Fires on tap.
     /// </summary>
     public static readonly BindableProperty CommandProperty =
-        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(CupertinoTextToggleSwitch));
+        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(CupertinoTextToggleSwitch), default(ICommand));
 
     /// <summary>
     /// The toggle maximum width property.
@@ -153,7 +153,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The text on the toggle switch.
     /// </summary>
     public static readonly BindableProperty EnabledTextProperty =
-        BindableProperty.Create(nameof(EnabledText), typeof(string), typeof(CupertinoTextToggleSwitch),
+        BindableProperty.Create(nameof(EnabledText), typeof(string), typeof(CupertinoTextToggleSwitch), default(string),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -170,7 +170,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The text on the toggle switch.
     /// </summary>
     public static readonly BindableProperty DisabledTextProperty =
-        BindableProperty.Create(nameof(DisabledText), typeof(string), typeof(CupertinoTextToggleSwitch),
+        BindableProperty.Create(nameof(DisabledText), typeof(string), typeof(CupertinoTextToggleSwitch), default(string),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -201,7 +201,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     }
 
     public static readonly BindableProperty EnabledFontColorProperty =
-        BindableProperty.Create(nameof(EnabledFontColor), typeof(Color), typeof(CupertinoTextToggleSwitch),
+        BindableProperty.Create(nameof(EnabledFontColor), typeof(Color), typeof(CupertinoTextToggleSwitch), default(Color),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     public Color EnabledFontColor
@@ -231,7 +231,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The typeface of the text.
     /// </summary>
     public static readonly BindableProperty TypefaceProperty =
-        BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(CupertinoTextToggleSwitch),
+        BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(CupertinoTextToggleSwitch), default(SKTypeface),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -268,7 +268,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The command parameter property.
     /// </summary>
     public static readonly BindableProperty CommandParameterProperty =
-        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(CupertinoTextToggleSwitch));
+        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(CupertinoTextToggleSwitch), default(object));
 
     /// <summary>
     /// Gets or sets the command parameter.

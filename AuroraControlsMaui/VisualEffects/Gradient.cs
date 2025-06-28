@@ -22,7 +22,7 @@ public class Gradient : VisualEffect
     /// The gradient start color property.
     /// </summary>
     public static readonly BindableProperty GradientStartColorProperty =
-        BindableProperty.Create(nameof(GradientStartColor), typeof(Color), typeof(Gradient));
+        BindableProperty.Create(nameof(GradientStartColor), typeof(Color), typeof(Gradient), default(Color));
 
     /// <summary>
     /// Gets or sets the starting color.
@@ -38,7 +38,7 @@ public class Gradient : VisualEffect
     /// The gradient stop color property.
     /// </summary>
     public static readonly BindableProperty GradientStopColorProperty =
-        BindableProperty.Create(nameof(GradientStopColor), typeof(Color), typeof(Gradient));
+        BindableProperty.Create(nameof(GradientStopColor), typeof(Color), typeof(Gradient), default(Color));
 
     /// <summary>
     /// Gets or sets the stop color.

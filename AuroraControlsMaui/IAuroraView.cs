@@ -7,7 +7,7 @@ public interface IAuroraView
     public const double StandardControlHeight = 40d;
 
     public static readonly BindableProperty.BindingPropertyChangedDelegate PropertyChangedInvalidateSurface =
-        IAuroraView.PropertyChangedInvalidateSurface;
+        static (bindable, _, _) => (bindable as IAuroraView)?.InvalidateSurface();
 
     void InvalidateSurface();
 }

@@ -34,7 +34,7 @@ public class SvgImageButton : AuroraViewBase
     /// The name of the embedded image to display.
     /// </summary>
     public static readonly BindableProperty EmbeddedImageNameProperty =
-        BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(SvgImageButton),
+        BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(SvgImageButton), null,
             propertyChanged:
             async (bindable, _, _) =>
             {
@@ -190,7 +190,7 @@ public class SvgImageButton : AuroraViewBase
     /// The command property. Fires on tap.
     /// </summary>
     public static readonly BindableProperty CommandProperty =
-        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(SvgImageButton));
+        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(SvgImageButton), default(ICommand));
 
     /// <summary>
     /// Gets or sets the command.
@@ -206,7 +206,7 @@ public class SvgImageButton : AuroraViewBase
     /// The command parameter property.
     /// </summary>
     public static readonly BindableProperty CommandParameterProperty =
-        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(SvgImageButton));
+        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(SvgImageButton), default(object));
 
     /// <summary>
     /// Gets or sets the command parameter.

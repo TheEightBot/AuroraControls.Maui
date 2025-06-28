@@ -38,7 +38,7 @@ public class GradientPillButton : AuroraViewBase
     /// The button background end color property.
     /// </summary>
     public static readonly BindableProperty ButtonBackgroundEndColorProperty =
-        BindableProperty.Create(nameof(ButtonBackgroundEndColor), typeof(Color), typeof(GradientPillButton),
+        BindableProperty.Create(nameof(ButtonBackgroundEndColor), typeof(Color), typeof(GradientPillButton), default(Color),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -72,7 +72,7 @@ public class GradientPillButton : AuroraViewBase
     /// The border color property.
     /// </summary>
     public static readonly BindableProperty BorderColorProperty =
-        BindableProperty.Create(nameof(BorderColor), typeof(Color), typeof(GradientPillButton),
+        BindableProperty.Create(nameof(BorderColor), typeof(Color), typeof(GradientPillButton), default(Color),
                                 propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -157,7 +157,7 @@ public class GradientPillButton : AuroraViewBase
     /// The text property.
     /// </summary>
     public static readonly BindableProperty TextProperty =
-        BindableProperty.Create(nameof(Text), typeof(string), typeof(GradientPillButton),
+        BindableProperty.Create(nameof(Text), typeof(string), typeof(GradientPillButton), default(string),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -201,7 +201,7 @@ public class GradientPillButton : AuroraViewBase
     /// The typeface property.
     /// </summary>
     public static readonly BindableProperty FontFamilyProperty =
-        BindableProperty.Create(nameof(FontFamily), typeof(string), typeof(GradientPillButton),
+        BindableProperty.Create(nameof(FontFamily), typeof(string), typeof(GradientPillButton), default(string),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -245,7 +245,7 @@ public class GradientPillButton : AuroraViewBase
     /// The command property. Fires on tap.
     /// </summary>
     public static readonly BindableProperty CommandProperty =
-        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(GradientPillButton));
+        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(GradientPillButton), default(ICommand));
 
     /// <summary>
     /// Gets or sets the command.
@@ -261,7 +261,7 @@ public class GradientPillButton : AuroraViewBase
     /// The command parameter property.
     /// </summary>
     public static readonly BindableProperty CommandParameterProperty =
-        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(GradientPillButton));
+        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(GradientPillButton), default(object));
 
     /// <summary>
     /// Gets or sets the command parameter.

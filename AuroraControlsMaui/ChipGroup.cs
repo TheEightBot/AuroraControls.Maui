@@ -82,7 +82,8 @@ public class ChipGroup : ContentView, IDisposable
     /// The currently selected chips in multi-selection mode.
     /// </summary>
     public static readonly BindableProperty SelectedChipsProperty =
-        BindableProperty.Create(nameof(SelectedChips), typeof(IList<Chip>), typeof(ChipGroup));
+        BindableProperty.Create(nameof(SelectedChips), typeof(IList<Chip>), typeof(ChipGroup), null,
+            BindingMode.OneWay);
 
     /// <summary>
     /// Gets the currently selected chips in multi-selection mode.
@@ -141,7 +142,7 @@ public class ChipGroup : ContentView, IDisposable
     /// The source collection of items to create chips from.
     /// </summary>
     public static readonly BindableProperty ItemsSourceProperty =
-        BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(ChipGroup),
+        BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(ChipGroup), null,
             propertyChanged: OnItemsSourceChanged);
 
     /// <summary>
@@ -157,7 +158,7 @@ public class ChipGroup : ContentView, IDisposable
     /// The template to use for creating chips from the ItemsSource.
     /// </summary>
     public static readonly BindableProperty ItemTemplateProperty =
-        BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(ChipGroup),
+        BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(ChipGroup), null,
             propertyChanged: OnItemTemplateChanged);
 
     /// <summary>
@@ -189,7 +190,8 @@ public class ChipGroup : ContentView, IDisposable
     /// The currently selected chip values in multi-selection mode.
     /// </summary>
     public static readonly BindableProperty SelectedValuesProperty =
-        BindableProperty.Create(nameof(SelectedValues), typeof(IList<object>), typeof(ChipGroup));
+        BindableProperty.Create(nameof(SelectedValues), typeof(IList<object>), typeof(ChipGroup), null,
+            BindingMode.OneWay);
 
     /// <summary>
     /// Gets the values of currently selected chips in multi-selection mode.

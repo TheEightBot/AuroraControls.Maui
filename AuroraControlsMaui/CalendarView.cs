@@ -1161,7 +1161,7 @@ public class CalendarEvent : BindableObject
     }
 
     public static readonly BindableProperty DisplayTextProperty =
-        BindableProperty.Create(nameof(DisplayText), typeof(string), typeof(CalendarEvent));
+        BindableProperty.Create(nameof(DisplayText), typeof(string), typeof(CalendarEvent), default(string));
 
     public string DisplayText
     {

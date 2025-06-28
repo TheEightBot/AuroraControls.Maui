@@ -1,4 +1,4 @@
-﻿using Microsoft.Maui.Animations;
+using Microsoft.Maui.Animations;
 
 namespace AuroraControls.Loading;
 
@@ -60,7 +60,7 @@ public class Nofriendo : LoadingViewBase
     /// The loading start color property.
     /// </summary>
     public static readonly BindableProperty LoadingStartColorProperty =
-        BindableProperty.Create(nameof(LoadingStartColor), typeof(Color), typeof(Nofriendo),
+        BindableProperty.Create(nameof(LoadingStartColor), typeof(Color), typeof(Nofriendo), default(Color),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -77,7 +77,7 @@ public class Nofriendo : LoadingViewBase
     /// The loading end color property.
     /// </summary>
     public static readonly BindableProperty LoadingEndColorProperty =
-        BindableProperty.Create(nameof(LoadingEndColor), typeof(Color), typeof(Nofriendo),
+        BindableProperty.Create(nameof(LoadingEndColor), typeof(Color), typeof(Nofriendo), default(Color),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>

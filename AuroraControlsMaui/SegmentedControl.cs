@@ -85,7 +85,7 @@ public class SegmentedControl : AuroraViewBase
     }
 
     public static readonly BindableProperty FontFamilyProperty =
-        BindableProperty.Create(nameof(FontFamily), typeof(string), typeof(SegmentedControl),
+        BindableProperty.Create(nameof(FontFamily), typeof(string), typeof(SegmentedControl), default(string),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     public string FontFamily
@@ -452,7 +452,7 @@ public class Segment : BindableObject, IDisposable
     private bool _disposedValue;
 
     public static readonly BindableProperty TextProperty =
-        BindableProperty.Create(nameof(Text), typeof(string), typeof(Segment));
+        BindableProperty.Create(nameof(Text), typeof(string), typeof(Segment), default(string));
 
     public string Text
     {
@@ -489,7 +489,7 @@ public class Segment : BindableObject, IDisposable
     public SKSvg SVG => _svg;
 
     public static readonly BindableProperty ValueProperty =
-        BindableProperty.Create(nameof(Value), typeof(object), typeof(Segment));
+        BindableProperty.Create(nameof(Value), typeof(object), typeof(Segment), default(object));
 
     public object Value
     {
@@ -498,7 +498,7 @@ public class Segment : BindableObject, IDisposable
     }
 
     public static readonly BindableProperty ForegroundColorProperty =
-        BindableProperty.Create(nameof(ForegroundColor), typeof(Color), typeof(Segment));
+        BindableProperty.Create(nameof(ForegroundColor), typeof(Color), typeof(Segment), default(Color));
 
     public Color ForegroundColor
     {

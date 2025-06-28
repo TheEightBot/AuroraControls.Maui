@@ -82,7 +82,7 @@ public class NotificationBadge : AuroraViewBase
     /// The typeface.
     /// </summary>
     public static readonly BindableProperty TypefaceProperty =
-        BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(NotificationBadge),
+        BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(NotificationBadge), default(SKTypeface),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -217,7 +217,7 @@ public class NotificationBadge : AuroraViewBase
         base.Detached();
     }
 
-    protected override void PaintControl(SKSurface surface, SKImageInfo info) => DrawNotificationBadge(surface, info.Rect);
+    protected override void PaintControl(SKSurface surface, SKImageInfo info) => DrawNotificationBadge(surface, info.Rect, true);
 
     public void DrawNotificationBadge(SKSurface surface, SKRect rect, bool clear = true)
     {

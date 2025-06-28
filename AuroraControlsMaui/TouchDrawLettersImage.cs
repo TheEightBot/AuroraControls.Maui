@@ -11,7 +11,7 @@ public class TouchDrawLettersImage : AuroraViewBase
     /// The source property.
     /// </summary>
     public static readonly BindableProperty SourceProperty =
-        BindableProperty.Create(nameof(Source), typeof(ImageSource), typeof(TouchDrawLettersImage),
+        BindableProperty.Create(nameof(Source), typeof(ImageSource), typeof(TouchDrawLettersImage), null,
             propertyChanged: async (bindable, _, newValue) =>
             {
                 if (bindable is not TouchDrawLettersImage tbi || newValue is not ImageSource source)
@@ -78,6 +78,7 @@ public class TouchDrawLettersImage : AuroraViewBase
 
     public static readonly BindableProperty TypefaceProperty =
         BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(TouchDrawLettersImage),
+            default(SKTypeface),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     public SKTypeface Typeface
