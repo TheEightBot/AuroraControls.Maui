@@ -65,6 +65,8 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
     private Button _viewStepIndicatorTestButton;
 
+    private Button _viewConfettiViewTestButton;
+
     private SvgImageView _svgImageView;
 
     private Button _svgImageViewTapped;
@@ -166,6 +168,11 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                             new Button { Text = "View StepIndicator Test Page", }
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new StepIndicatorTestPage())),
+
+                            new Button { Text = "View ConfettiView Test Page", }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new ConfettiViewTestPage())),
+
                             new ToggleBox
                             {
                                 ToggledBackgroundColor = Colors.Fuchsia,
