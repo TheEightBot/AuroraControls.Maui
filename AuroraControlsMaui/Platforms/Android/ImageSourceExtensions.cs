@@ -18,7 +18,7 @@ public static class ImageSourceExtensions
         {
             returnValue = new FileImageSourceHandler();
         }
-        else if (source is StreamImageSource sis)
+        else if (source is StreamImageSource)
         {
             returnValue = new StreamImagesourceHandler();
         }

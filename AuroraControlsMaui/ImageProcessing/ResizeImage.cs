@@ -54,20 +54,18 @@ public class ResizeImage : ImageProcessingBase, IImageProcessor
         if (imageProcessor is AuroraControls.ImageProcessing.ResizeImage)
         {
             var resizeImageProcessor = imageProcessor as AuroraControls.ImageProcessing.ResizeImage;
-            var maxHeight = resizeImageProcessor.MaxHeight;
-            var maxWidth = resizeImageProcessor.MaxWidth;
+            int maxHeight = resizeImageProcessor.MaxHeight;
+            int maxWidth = resizeImageProcessor.MaxWidth;
 
             var info = processingImage.Info;
 
-            var maxSize = Math.Max(maxHeight, maxWidth);
-
-            var supportedScale =
+            float supportedScale =
                 info.Height > info.Width
                     ? (float)maxHeight / info.Height
                     : (float)maxWidth / info.Width;
 
-            var scaledWidth = (int)(info.Width * supportedScale);
-            var scaledHeight = (int)(info.Height * supportedScale);
+            int scaledWidth = (int)(info.Width * supportedScale);
+            int scaledHeight = (int)(info.Height * supportedScale);
 
             var newImageInfo = new SKImageInfo(scaledWidth, scaledHeight, processingImage.Info.ColorType);
 
@@ -117,19 +115,15 @@ public class ResizeImage : ImageProcessingBase, IImageProcessor
             {
                 var info = codec.Info;
 
-                var maxSize = Math.Max(maxHeight, maxWidth);
-
-                var supportedScale =
+                float supportedScale =
                     info.Height > info.Width
                         ? (float)maxHeight / info.Height
                         : (float)maxWidth / info.Width;
 
-                var scaledWidth = (int)(info.Width * supportedScale);
-                var scaledHeight = (int)(info.Height * supportedScale);
+                int scaledWidth = (int)(info.Width * supportedScale);
+                int scaledHeight = (int)(info.Height * supportedScale);
 
                 // decode the bitmap at the nearest size
-                var nearest = new SKImageInfo(scaledWidth, scaledHeight);
-
                 SKBitmap bmp = null;
                 try
                 {

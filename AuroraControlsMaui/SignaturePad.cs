@@ -300,15 +300,15 @@ public class SignaturePad : AuroraViewBase
     /// <returns>A string containing the SVG data.</returns>
     public string GetSignatureSvg()
     {
-        float width = (float)CanvasSize.Width;
-        float height = (float)CanvasSize.Height;
+        float width = this.CanvasSize.Width;
+        float height = this.CanvasSize.Height;
 
         var svg = new System.Text.StringBuilder();
         svg
             .AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>")
             .AppendLine($"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"{width}\" height=\"{height}\" viewBox=\"0 0 {width} {height}\">");
 
-        var penColorHex = $"#{PenColor.ToHex().Substring(3)}";
+        string penColorHex = $"#{PenColor.ToHex().Substring(3)}";
 
         lock (_syncLock)
         {
@@ -373,8 +373,8 @@ public class SignaturePad : AuroraViewBase
                     var p2 = _points[_points.Count - 1];
 
                     // The stroke width is based on velocity
-                    var velocity = CalculateVelocity(p1, p2);
-                    var width = CalculateStrokeWidth(velocity);
+                    float velocity = CalculateVelocity(p1, p2);
+                    float width = CalculateStrokeWidth(velocity);
 
                     // Calculate control points
                     var c1 = new SKPoint((p0.X + p1.X) / 2, (p0.Y + p1.Y) / 2);

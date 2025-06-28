@@ -12,7 +12,7 @@ public class TouchDrawLettersImage : AuroraViewBase
     /// </summary>
     public static readonly BindableProperty SourceProperty =
         BindableProperty.Create(nameof(Source), typeof(ImageSource), typeof(TouchDrawLettersImage), null,
-            propertyChanged: async (bindable, oldValue, newValue) =>
+            propertyChanged: async (bindable, _, newValue) =>
             {
                 if (bindable is not TouchDrawLettersImage tbi || newValue is not ImageSource source)
                 {
@@ -144,8 +144,6 @@ public class TouchDrawLettersImage : AuroraViewBase
     {
         e.Handled = true;
 
-        System.Diagnostics.Debug.WriteLine($"touch\t{e}");
-
         if (!e.InContact || (e.ActionType != SKTouchAction.Pressed && e.ActionType != SKTouchAction.Moved))
         {
             return;
@@ -158,8 +156,6 @@ public class TouchDrawLettersImage : AuroraViewBase
 
         float percentX = (e.Location.X - this._overrideDrawableArea.Location.X) / this._overrideDrawableArea.Width;
         float percentY = (e.Location.Y - this._overrideDrawableArea.Location.Y) / this._overrideDrawableArea.Height;
-
-        System.Diagnostics.Debug.WriteLine($"X: {percentX}\t\t\tY: {percentY}");
 
         var lastPoint = this.TouchDrawLetters.LastOrDefault();
 
@@ -216,8 +212,8 @@ public class TouchDrawLettersImage : AuroraViewBase
                         continue;
                     }
 
-                    var touchLocationX = imageRect.Location.X + (imageRect.Width * touchDrawLetter.Location.X);
-                    var touchLocationY = imageRect.Location.Y + (imageRect.Height * touchDrawLetter.Location.Y);
+                    double touchLocationX = imageRect.Location.X + (imageRect.Width * touchDrawLetter.Location.X);
+                    double touchLocationY = imageRect.Location.Y + (imageRect.Height * touchDrawLetter.Location.Y);
 
                     var drawLocationRect = new SKRect(
                         (float)touchLocationX - halfScaledTouchSize, (float)touchLocationY - halfScaledTouchSize,

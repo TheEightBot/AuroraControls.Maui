@@ -8,7 +8,7 @@ public class RoundedCornersEffect : RoutingEffect
     public static readonly BindableProperty HasRoundedCornersProperty =
         BindableProperty.Create("HasRoundedCorners", typeof(bool), typeof(RoundedCornersEffect), default(bool),
             propertyChanged:
-            (BindableObject bindable, object oldValue, object newValue) =>
+            (BindableObject bindable, object _, object newValue) =>
             {
                 if (bindable is not View view)
                 {

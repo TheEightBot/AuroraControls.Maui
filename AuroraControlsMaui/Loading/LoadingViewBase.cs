@@ -23,7 +23,7 @@ public class LoadingViewBase : AuroraViewBase
 
         set
         {
-            var clampedValue = value.Clamp(0d, 1d);
+            double clampedValue = value.Clamp(0d, 1d);
             SetValue(AnimatingPercentageProperty, clampedValue);
             AnimatingPercentageChanged?.Invoke(this, new ValueChangedEventArgs(AnimatingPercentage, clampedValue));
         }
@@ -68,7 +68,7 @@ public class LoadingViewBase : AuroraViewBase
     /// <param name="rate">The time, in milliseconds, between frames.</param>
     /// <param name="length">The number of milliseconds over which to interpolate the animation.</param>
     /// <param name="easing">The easing function to use to transision in, out, or in and out of the animation.</param>
-    public void Start(uint rate = 16, uint length = 250, Easing easing = null)
+    public void Start(uint rate = 16, uint length = 1600, Easing easing = null)
     {
         Stop();
 
@@ -82,7 +82,7 @@ public class LoadingViewBase : AuroraViewBase
     /// <param name="rate">Rate.</param>
     /// <param name="length">Length.</param>
     /// <param name="easing">Easing.</param>
-    private void CreateAnimationNextStep(uint rate = 16, uint length = 250, Easing easing = null)
+    private void CreateAnimationNextStep(uint rate = 16, uint length = 1600, Easing easing = null)
     {
         var primaryAnimation = new Animation(x => this.AnimatingPercentage = x, 0, 1);
 

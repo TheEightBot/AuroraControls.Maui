@@ -39,8 +39,8 @@ public class Hue : VisualEffect
     private float[] GetHueMatrix(double hueAdjustment)
     {
         hueAdjustment = hueAdjustment / 180 * Math.PI;
-        var cosVal = (float)Math.Cos(hueAdjustment);
-        var sinVal = (float)Math.Sin(hueAdjustment);
+        float cosVal = (float)Math.Cos(hueAdjustment);
+        float sinVal = (float)Math.Sin(hueAdjustment);
         const float lumR = 0.213f;
         const float lumG = 0.715f;
         const float lumB = 0.072f;

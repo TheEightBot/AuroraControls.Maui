@@ -11,7 +11,7 @@ internal static class SKCanvasExtensions
             paint.EnsureHasValidFont(text);
             paint.MeasureText(text, ref size);
 
-            var textRows = canvas.TextRows(text);
+            int textRows = canvas.TextRows(text);
 
             canvas.Translate(0, (textRows * ((-paint.FontMetrics.Ascent + paint.FontMetrics.Descent) / 2f)) - paint.FontMetrics.Descent);
 
@@ -25,7 +25,7 @@ internal static class SKCanvasExtensions
         {
             paint.EnsureHasValidFont(text);
             var size = canvas.TextSize(text, paint);
-            var textRows = canvas.TextRows(text);
+            int textRows = canvas.TextRows(text);
 
             canvas.Translate(-((float)size.Width * .5f), textRows * (((-paint.FontMetrics.Ascent + paint.FontMetrics.Descent) / 2f) - paint.FontMetrics.Descent));
 
@@ -40,16 +40,16 @@ internal static class SKCanvasExtensions
             return;
         }
 
-        var clonedPaint = paint.Clone();
+        paint.Clone();
 
         paint.EnsureHasValidFont(text);
 
-        var splitText = text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+        string[] splitText = text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
 
         var size = default(SKRect);
-        var heightOffset = -paint.FontMetrics.Ascent;
+        float heightOffset = -paint.FontMetrics.Ascent;
 
-        foreach (var split in splitText)
+        foreach (string split in splitText)
         {
             if (string.IsNullOrEmpty(split))
             {
@@ -81,12 +81,12 @@ internal static class SKCanvasExtensions
 
         paint.EnsureHasValidFont(text);
 
-        var maxWidth = 0f;
-        var maxHeight = 0f;
+        float maxWidth = 0f;
+        float maxHeight = 0f;
 
-        var splitText = text?.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+        string[]? splitText = text?.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
 
-        foreach (var split in splitText)
+        foreach (string split in splitText)
         {
             if (!string.IsNullOrEmpty(split))
             {
@@ -120,10 +120,10 @@ internal static class SKCanvasExtensions
 
         paint.EnsureHasValidFont(text);
 
-        var maxWidth = 0f;
-        var maxHeight = 0f;
+        float maxWidth = 0f;
+        float maxHeight = 0f;
 
-        var offset = 0f;
+        float offset = 0f;
 
         switch (paint.TextAlign)
         {
@@ -137,9 +137,9 @@ internal static class SKCanvasExtensions
                 break;
         }
 
-        var splitText = text?.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+        string[]? splitText = text?.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
 
-        foreach (var split in splitText)
+        foreach (string split in splitText)
         {
             if (string.IsNullOrEmpty(split))
             {
@@ -158,8 +158,8 @@ internal static class SKCanvasExtensions
             }
         }
 
-        var xLocation = x - (maxWidth * offset);
-        var yLocation = y - Math.Abs(paint.FontMetrics.Ascent);
+        float xLocation = x - (maxWidth * offset);
+        float yLocation = y - Math.Abs(paint.FontMetrics.Ascent);
         return new SKRect(xLocation, yLocation, xLocation + maxWidth, yLocation + maxHeight);
     }
 
@@ -194,7 +194,7 @@ internal static class SKCanvasExtensions
         {
             var precalculatedDraw = new List<(SKTextRun Run, float Width, float VerticalCenter, SKPaint Paint)>();
 
-            var totalWidth = 0f;
+            float totalWidth = 0f;
 
             foreach (var run in runs)
             {
@@ -220,7 +220,7 @@ internal static class SKCanvasExtensions
                     }
 
                     var rect = default(SKRect);
-                    var width = newPaint.MeasureText(run.Text, ref rect);
+                    float width = newPaint.MeasureText(run.Text, ref rect);
 
                     totalWidth += width;
 
@@ -230,11 +230,11 @@ internal static class SKCanvasExtensions
 
             canvas.Translate(x - (totalWidth * .5f), 0);
 
-            var offset = 0f;
+            float offset = 0f;
 
             foreach (var draw in precalculatedDraw)
             {
-                var yOffset = y + draw.VerticalCenter;
+                float yOffset = y + draw.VerticalCenter;
                 canvas.Translate(0f, yOffset);
 
                 canvas.DrawText(draw.Run.Text, offset + draw.Run.Offset.X, 0, draw.Paint);
@@ -273,8 +273,8 @@ internal static class SKCanvasExtensions
     {
         var runs = SKTextRun.Create(text, SKTextRunLookup.Instance, toUppercase);
 
-        var width = 0f;
-        var maxHeight = 0f;
+        float width = 0f;
+        float maxHeight = 0f;
 
         foreach (var run in runs)
         {
@@ -429,7 +429,7 @@ internal static class SKCanvasExtensions
                     }
 
                     var rect = default(SKRect);
-                    var measuredWidth = newPaint.MeasureText(run.Text, ref rect);
+                    float measuredWidth = newPaint.MeasureText(run.Text, ref rect);
 
                     if (rect.Height > height)
                     {

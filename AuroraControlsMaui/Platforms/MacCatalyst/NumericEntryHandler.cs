@@ -23,15 +23,15 @@ public partial class NumericEntryHandler : EntryHandler
 
     private bool OnShouldChangeCharacters(UITextField textField, NSRange range, string replacementString)
     {
-        var originalSource = replacementString;
-        var originalDest = textField.Text;
+        string originalSource = replacementString;
+        string? originalDest = textField.Text;
 
         if (string.IsNullOrEmpty(originalDest) && string.IsNullOrEmpty(originalSource))
         {
             return true;
         }
 
-        var final =
+        string final =
             originalDest.Substring(0, (int)range.Location) + replacementString + originalDest.Substring((int)range.Location + (int)range.Length);
 
         return IsValid(final, NumericEntryVirtualView.CultureInfo, NumericEntryVirtualView.ValueType);

@@ -435,15 +435,15 @@ public class Tile : AuroraViewBase
 
         using (var backgroundPaint = new SKPaint())
         {
-            var borderWidth = (float)this.BorderWidth * _scale;
-            var halfBorderWidth = borderWidth * .5f;
+            float borderWidth = (float)this.BorderWidth * _scale;
+            float halfBorderWidth = borderWidth * .5f;
 
-            var shadowBlurRadius = (float)ShadowBlurRadius * _scale;
+            float shadowBlurRadius = (float)ShadowBlurRadius * _scale;
 
-            var shadowLocationX = (float)ShadowLocation.X * _scale;
-            var shadowLocationY = (float)ShadowLocation.Y * _scale;
+            float shadowLocationX = (float)ShadowLocation.X * _scale;
+            float shadowLocationY = (float)ShadowLocation.Y * _scale;
 
-            var cornerRadius = (float)CornerRadius * _scale;
+            float cornerRadius = (float)CornerRadius * _scale;
 
             // TODO: Negative Shadows are busted
             var rect =
@@ -464,7 +464,7 @@ public class Tile : AuroraViewBase
             {
                 using (new SKAutoCanvasRestore(canvas))
                 {
-                    var sigma = SKMaskFilter.ConvertRadiusToSigma(shadowBlurRadius) * (1f - (float)_tapAnimationPercentage);
+                    float sigma = SKMaskFilter.ConvertRadiusToSigma(shadowBlurRadius) * (1f - (float)_tapAnimationPercentage);
                     _shadowPaint.IsAntialias = true;
                     _shadowPaint.Color = ShadowColor.ToSKColor();
                     _shadowPaint.Style = SKPaintStyle.Fill;
@@ -481,8 +481,8 @@ public class Tile : AuroraViewBase
 
             using (new SKAutoCanvasRestore(canvas))
             {
-                var translateX = _tapAnimationPercentage * shadowLocationX;
-                var translateY = _tapAnimationPercentage * shadowLocationY;
+                double translateX = _tapAnimationPercentage * shadowLocationX;
+                double translateY = _tapAnimationPercentage * shadowLocationY;
 
                 canvas.Translate(new SKPoint((float)translateX, (float)translateY));
 
@@ -500,9 +500,9 @@ public class Tile : AuroraViewBase
                                 ? ButtonBackgroundColor.AddLuminosity(-.2f).MultiplyAlpha((1f - (float)_rippleAnimationPercentage) * .5f).ToSKColor()
                                 : Colors.Transparent.ToSKColor();
 
-                        var startingRippleSize = Math.Min(info.Width, info.Height) * .75f;
-                        var maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * _rippleAnimationPercentage);
-                        var offsetAmount = -maxRippleSize / 2f;
+                        float startingRippleSize = Math.Min(info.Width, info.Height) * .75f;
+                        float maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * _rippleAnimationPercentage);
+                        float offsetAmount = -maxRippleSize / 2f;
                         var offsetPoint = new SKPoint(_lastTouchLocation.X + offsetAmount, _lastTouchLocation.Y + offsetAmount);
                         var rippleSize = SKRect.Create(offsetPoint, new SKSize(maxRippleSize, maxRippleSize));
 
@@ -537,7 +537,7 @@ public class Tile : AuroraViewBase
 
                     textBounds = canvas.GetTextContainerRectAt(Text, SKPoint.Empty, _fontPaint);
 
-                    var textY = rect.Top + rect.Height - (float)ContentPadding.Bottom - textBounds.Height - (borderWidth * 2f);
+                    float textY = rect.Top + rect.Height - (float)ContentPadding.Bottom - textBounds.Height - (borderWidth * 2f);
 
                     if (IsIconifiedText)
                     {
@@ -561,9 +561,9 @@ public class Tile : AuroraViewBase
 
                     var imageSize = contentRect.AspectFit(_svg.Picture.CullRect.Size);
 
-                    var scaleAmount =
+                    float scaleAmount =
                         this.MaxImageSize == Size.Zero
-                            ? (float)Math.Min(imageSize.Width / _svg.Picture.CullRect.Width, imageSize.Height / _svg.Picture.CullRect.Height)
+                            ? Math.Min(imageSize.Width / this._svg.Picture.CullRect.Width, imageSize.Height / this._svg.Picture.CullRect.Height)
                             : 1f;
 
                     var svgScale = SKMatrix.CreateScale(scaleAmount, scaleAmount);
@@ -598,10 +598,10 @@ public class Tile : AuroraViewBase
 
             if (NotificationBadge != null)
             {
-                var badgeSize = (float)Math.Min(info.Rect.Height * .33d, info.Rect.Width * .33d);
+                float badgeSize = (float)Math.Min(info.Rect.Height * .33d, info.Rect.Width * .33d);
 
-                var maxBadgeSize = NotificationBadge.MaxBadgeSize * _scale;
-                var minBadgeSize = NotificationBadge.MinBadgeSize * _scale;
+                double maxBadgeSize = NotificationBadge.MaxBadgeSize * _scale;
+                double minBadgeSize = NotificationBadge.MinBadgeSize * _scale;
 
                 if (maxBadgeSize > 0 && badgeSize > maxBadgeSize)
                 {
@@ -634,7 +634,7 @@ public class Tile : AuroraViewBase
             return;
         }
 
-        var isTapInside = _backgroundPath.Contains(e.Location.X, e.Location.Y);
+        bool isTapInside = _backgroundPath.Contains(e.Location.X, e.Location.Y);
 
         if (Ripples && e.ActionType == SKTouchAction.Pressed && isTapInside)
         {
@@ -688,7 +688,7 @@ public class Tile : AuroraViewBase
 
         rippleAnimation.Commit(
             this, _rippleAnimationName, length: 500, easing: Easing.CubicOut,
-            finished: (percent, isFinished) =>
+            finished: (_, _) =>
             {
                 _lastTouchLocation = SKPoint.Empty;
                 _rippleAnimationPercentage = 0d;
@@ -717,7 +717,7 @@ public class Tile : AuroraViewBase
 
         rippleAnimation.Commit(
             this, _tapAnimationName, length: TapAnimationDuration, easing: tapped ? Easing.CubicOut : Easing.CubicIn,
-            finished: (percent, isFinished) =>
+            finished: (_, _) =>
             {
                 _tapAnimationPercentage = tapped ? 1 : 0;
                 this.InvalidateSurface();
@@ -729,7 +729,7 @@ public class Tile : AuroraViewBase
     /// </summary>
     private void SetSvgResource()
     {
-        var embeddedImageName = EmbeddedImageName;
+        string embeddedImageName = EmbeddedImageName;
 
         if (string.IsNullOrEmpty(embeddedImageName))
         {

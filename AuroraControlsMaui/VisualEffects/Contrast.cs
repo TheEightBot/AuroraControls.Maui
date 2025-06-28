@@ -53,7 +53,7 @@ public class Contrast : VisualEffect
 
     private float[] GetContrastMatrix(int contrastAdjustment)
     {
-        var x = 0f;
+        float x = 0f;
 
         if (contrastAdjustment < 0)
         {

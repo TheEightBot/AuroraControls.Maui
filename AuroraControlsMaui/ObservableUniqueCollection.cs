@@ -15,7 +15,7 @@ internal class ObservableUniqueCollection<T> : ObservableCollection<T>
     {
         lock (_lock)
         {
-            var exists = false;
+            bool exists = false;
 
             foreach (var myItem in Items.Where(myItem => myItem.Equals(item)))
             {

@@ -232,7 +232,7 @@ public class NotificationBadge : AuroraViewBase
         _badgePaint.FilterQuality = SKFilterQuality.High;
         _badgePaint.Color = BadgeColor.ToSKColor();
 
-        var shadowSpread = HasShadow ? (float)ShadowSpread * _scale : 0f;
+        float shadowSpread = HasShadow ? (float)ShadowSpread * _scale : 0f;
 
         if (shadowSpread > 0)
         {
@@ -242,9 +242,9 @@ public class NotificationBadge : AuroraViewBase
                     SKColors.Black);
         }
 
-        var minLength = Math.Min(rect.Height, rect.Width);
+        float minLength = Math.Min(rect.Height, rect.Width);
 
-        var maxBadgeSize = MaxBadgeSize * _scale;
+        double maxBadgeSize = MaxBadgeSize * _scale;
 
         if (maxBadgeSize > 0 && minLength > maxBadgeSize)
         {
@@ -257,12 +257,12 @@ public class NotificationBadge : AuroraViewBase
         _fontPaint.IsAntialias = true;
         _fontPaint.TextAlign = SKTextAlign.Center;
 
-        var notificationCount = NotificationCount;
-        var notificationText = notificationCount > 99 ? TooManyNotificationsSymbol : notificationCount.ToString();
+        int notificationCount = NotificationCount;
+        string notificationText = notificationCount > 99 ? TooManyNotificationsSymbol : notificationCount.ToString();
 
         _fontPaint.EnsureHasValidFont(notificationText);
 
-        var hideBadgeCondition = !(notificationCount <= 0 && HideBadgeIfZero);
+        bool hideBadgeCondition = !(notificationCount <= 0 && HideBadgeIfZero);
 
         if (hideBadgeCondition)
         {
@@ -272,8 +272,8 @@ public class NotificationBadge : AuroraViewBase
             {
                 try
                 {
-                    var textFits = false;
-                    var midY = 0f;
+                    bool textFits = false;
+                    float midY = 0f;
 
                     minLength *= .7f;
 

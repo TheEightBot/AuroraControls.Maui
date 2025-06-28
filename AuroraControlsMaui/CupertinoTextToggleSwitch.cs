@@ -287,7 +287,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
         BindableProperty.Create(nameof(IsToggled), typeof(bool), typeof(CupertinoTextToggleSwitch), false,
             defaultBindingMode: BindingMode.TwoWay,
             propertyChanged:
-                (bindable, value, newValue) =>
+                (bindable, _, newValue) =>
                 {
                     if (bindable is not CupertinoTextToggleSwitch ctts || newValue is not bool nvBool)
                     {
@@ -357,12 +357,12 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
 
         var rect = info.Rect;
 
-        var borderWidth = (float)BorderWidth * _scale;
+        float borderWidth = (float)BorderWidth * _scale;
 
-        var thumbSize = rect.Height - (borderWidth * 2f);
-        var thumbLocation = rect.Left + borderWidth + ((rect.Width - thumbSize - (borderWidth * 2f)) * (float)_toggleAnimationPercentage);
+        float thumbSize = rect.Height - (borderWidth * 2f);
+        float thumbLocation = rect.Left + borderWidth + ((rect.Width - thumbSize - (borderWidth * 2f)) * this._toggleAnimationPercentage);
         var thumbRect = new SKRect(thumbLocation, rect.Top + borderWidth, thumbLocation + thumbSize, rect.Top + borderWidth + thumbSize);
-        var halfThumbRectWidth = thumbRect.Width * .5f;
+        float halfThumbRectWidth = thumbRect.Width * .5f;
         var trackColor =
             TrackDisabledColor
                 .Lerp(TrackEnabledColor, _toggleAnimationPercentage)
@@ -370,7 +370,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
 
         _backgroundPaint.IsAntialias = true;
         _backgroundPaint.Style = SKPaintStyle.Stroke;
-        _backgroundPaint.StrokeWidth = (borderWidth * 2f) + (info.Height * (float)_toggleAnimationPercentage);
+        _backgroundPaint.StrokeWidth = (borderWidth * 2f) + (info.Height * this._toggleAnimationPercentage);
         _backgroundPaint.Color = trackColor;
 
         canvas.Clear();
@@ -457,7 +457,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
         _thumbPaint.Style = SKPaintStyle.Fill;
         _thumbPaint.IsAntialias = true;
 
-        var shadowSigma = SKMaskFilter.ConvertRadiusToSigma(borderWidth);
+        float shadowSigma = SKMaskFilter.ConvertRadiusToSigma(borderWidth);
         _thumbPaint.ImageFilter =
             SKImageFilter
                 .CreateDropShadow(
@@ -473,9 +473,9 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
         canvas.DrawOval(thumbRect, _thumbPaint);
 
         // This gets calculated 2x because we need it as a buffer for the text.
-        instanceCalculatedWidth += (float)thumbRect.Width * 1.7f;
+        instanceCalculatedWidth += thumbRect.Width * 1.7f;
 
-        var scaledInstanceCalculatedWidth = instanceCalculatedWidth / _scale;
+        float scaledInstanceCalculatedWidth = instanceCalculatedWidth / _scale;
 
         if (Math.Abs(scaledInstanceCalculatedWidth - _calculatedWidth) > .001f)
         {
@@ -508,7 +508,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     {
         e.Handled = true;
 
-        var isTapInside = _backgroundPath.Contains(e.Location.X, e.Location.Y);
+        bool isTapInside = _backgroundPath.Contains(e.Location.X, e.Location.Y);
 
         if (e.ActionType != SKTouchAction.Released || !isTapInside)
         {

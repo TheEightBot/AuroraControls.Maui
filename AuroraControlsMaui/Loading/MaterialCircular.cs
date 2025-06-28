@@ -104,7 +104,7 @@ public class MaterialCircular : SceneViewBase
                 {
                     if (bindable is MaterialCircular mc && mc._progressPaint != null && mc._progressBackgroundPaint != null)
                     {
-                        var value = (float)(double)newValue;
+                        float value = (float)(double)newValue;
                         mc._progressPaint.StrokeWidth = value * mc._scale;
                         mc._progressBackgroundPaint.StrokeWidth = value * mc._scale;
                     }
@@ -179,18 +179,18 @@ public class MaterialCircular : SceneViewBase
             return surface.Snapshot();
         }
 
-        var size = Math.Min(info.Width, info.Height) - _progressBackgroundPaint.StrokeWidth;
+        float size = Math.Min(info.Width, info.Height) - _progressBackgroundPaint.StrokeWidth;
 
-        var left = (info.Width - size) / 2f;
-        var top = (info.Height - size) / 2f;
-        var right = left + size;
-        var bottom = top + size;
+        float left = (info.Width - size) / 2f;
+        float top = (info.Height - size) / 2f;
+        float right = left + size;
+        float bottom = top + size;
 
-        var arcRect = new SKRect((float)left, (float)top, (float)right, (float)bottom);
+        var arcRect = new SKRect(left, top, right, bottom);
 
-        var progressOfCircle = (float)percentage * 360f;
+        float progressOfCircle = (float)percentage * 360f;
 
-        var progressArcLength = percentage <= .5 ? progressOfCircle : 360f - progressOfCircle;
+        float progressArcLength = percentage <= .5 ? progressOfCircle : 360f - progressOfCircle;
 
         if (progressArcLength < 1)
         {

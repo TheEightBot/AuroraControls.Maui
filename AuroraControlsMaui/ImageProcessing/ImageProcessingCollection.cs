@@ -158,7 +158,7 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
     /// <param name="item">Item.</param>
     public bool Remove(ImageProcessingBase item)
     {
-        var oldIndex = IndexOf(item);
+        int oldIndex = IndexOf(item);
 
         if (!this._items.Remove(item))
         {

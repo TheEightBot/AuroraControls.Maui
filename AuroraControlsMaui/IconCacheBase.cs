@@ -40,7 +40,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
     public async Task<ImageSource> SourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null)
     {
-        var key = CreateIconKey(svgName, size, additionalCacheKey, colorOverride);
+        string key = CreateIconKey(svgName, size, additionalCacheKey, colorOverride);
 
         try
         {
@@ -51,7 +51,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
                 return new FileImageSource { File = _resolvedIcons[key] };
             }
 
-            var diskCachedImage = GetImagePathFromDiskCache(key);
+            string? diskCachedImage = GetImagePathFromDiskCache(key);
 
             if (!string.IsNullOrEmpty(diskCachedImage))
             {
@@ -87,14 +87,14 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         {
             await _iconLock.WaitAsync().ConfigureAwait(false);
 
-            var key = CreateIconKey(svgName, size, additionalCacheKey, colorOverride);
+            string key = CreateIconKey(svgName, size, additionalCacheKey, colorOverride);
 
             if (_resolvedIcons.ContainsKey(key))
             {
                 return new FileImageSource { File = _resolvedIcons[key] };
             }
 
-            var diskCachedImage = GetImagePathFromDiskCache(key);
+            string? diskCachedImage = GetImagePathFromDiskCache(key);
 
             if (!string.IsNullOrEmpty(diskCachedImage))
             {
@@ -125,14 +125,14 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         {
             await _iconLock.WaitAsync().ConfigureAwait(false);
 
-            var key = CreateIconKey(svgName, size, additionalCacheKey, colorOverride);
+            string key = CreateIconKey(svgName, size, additionalCacheKey, colorOverride);
 
             if (_resolvedIcons.ContainsKey(key))
             {
                 return new FileImageSource { File = _resolvedIcons[key] };
             }
 
-            var diskCachedImage = GetImagePathFromDiskCache(key);
+            string? diskCachedImage = GetImagePathFromDiskCache(key);
 
             if (!string.IsNullOrEmpty(diskCachedImage))
             {
@@ -172,7 +172,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
             return null;
         }
 
-        var filePath = System.IO.Path.Combine(PlatformInfo.IconCacheDirectory, key);
+        string filePath = System.IO.Path.Combine(PlatformInfo.IconCacheDirectory, key);
 
         if (!File.Exists(filePath))
         {
@@ -208,8 +208,6 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 #endif
 
             using var skSvg = new SKSvg();
-
-            var devicePpi = (float)PlatformInfo.DevicePpi;
 
             using (var stream = EmbeddedResourceLoader.Load(svgName))
             {
@@ -267,11 +265,11 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
     private async Task RenderSvgAsync(SKSvg skSvg, string key, Size size, Color? colorOverride)
     {
-        var platformScalingFactor = _platformScalingFactor;
+        float platformScalingFactor = _platformScalingFactor;
 
         // Calculate the final canvas size with platform scaling
-        var targetCanvasWidth = (float)(size.Width * platformScalingFactor);
-        var targetCanvasHeight = (float)(size.Height * platformScalingFactor);
+        float targetCanvasWidth = (float)(size.Width * platformScalingFactor);
+        float targetCanvasHeight = (float)(size.Height * platformScalingFactor);
 
         SKRect resize;
         SKMatrix scaleMatrix = SKMatrix.Identity;
@@ -281,15 +279,15 @@ public abstract class IconCacheBase : IIconCache, IDisposable
             var svgRect = skSvg.Picture!.CullRect;
 
             // Calculate scale factors for both dimensions
-            var scaleX = targetCanvasWidth / svgRect.Width;
-            var scaleY = targetCanvasHeight / svgRect.Height;
+            float scaleX = targetCanvasWidth / svgRect.Width;
+            float scaleY = targetCanvasHeight / svgRect.Height;
 
             // Use the smaller scale factor to ensure the SVG fits entirely within the target size
-            var uniformScale = Math.Min(scaleX, scaleY);
+            float uniformScale = Math.Min(scaleX, scaleY);
 
             // Calculate the actual canvas size that maintains the original aspect ratio
-            var actualCanvasWidth = svgRect.Width * uniformScale;
-            var actualCanvasHeight = svgRect.Height * uniformScale;
+            float actualCanvasWidth = svgRect.Width * uniformScale;
+            float actualCanvasHeight = svgRect.Height * uniformScale;
 
             // Create transformation matrix for scaling, no centering needed since canvas matches aspect ratio
             scaleMatrix = SKMatrix.CreateScale(uniformScale, uniformScale);
@@ -307,8 +305,8 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
 
         // Calculate final image dimensions once
-        var finalWidth = (int)Math.Ceiling(resize.Width);
-        var finalHeight = (int)Math.Ceiling(resize.Height);
+        int finalWidth = (int)Math.Ceiling(resize.Width);
+        int finalHeight = (int)Math.Ceiling(resize.Height);
 
         // Use a single rendering path to reduce code duplication and memory allocations
         var imageInfo = new SKImageInfo(finalWidth, finalHeight, SKColorType.Rgba8888, SKAlphaType.Premul, _colorspace);
@@ -350,11 +348,11 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
         if (Directory.Exists(PlatformInfo.IconCacheDirectory))
         {
-            var files = Directory.GetFiles(PlatformInfo.IconCacheDirectory);
+            string[]? files = Directory.GetFiles(PlatformInfo.IconCacheDirectory);
 
             if (files?.Any() ?? false)
             {
-                foreach (var file in files)
+                foreach (string file in files)
                 {
                     File.Delete(file);
                 }
@@ -374,7 +372,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
     private string CreateIconKey(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null)
     {
-        var key = $"{svgName.Replace(".svg", string.Empty, StringComparison.OrdinalIgnoreCase)}_{additionalCacheKey}_{size.Width}_{size.Height}_{colorOverride?.GetHashCode()}".Trim(_underscore);
+        string key = $"{svgName.Replace(".svg", string.Empty, StringComparison.OrdinalIgnoreCase)}_{additionalCacheKey}_{size.Width}_{size.Height}_{colorOverride?.GetHashCode()}".Trim(_underscore);
 
         if (DeviceInfo.Platform == DevicePlatform.iOS || DeviceInfo.Platform == DevicePlatform.MacCatalyst || DeviceInfo.Platform == DevicePlatform.macOS)
         {

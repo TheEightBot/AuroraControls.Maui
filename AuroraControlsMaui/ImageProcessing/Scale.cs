@@ -39,7 +39,7 @@ public class Scale : ImageProcessingBase, IImageProcessor
         {
             var scaleProcessor = imageProcessor as AuroraControls.ImageProcessing.Scale;
 
-            var scaleAmount = (float)scaleProcessor.ScaleAmount;
+            float scaleAmount = (float)scaleProcessor.ScaleAmount;
 
             var info =
                 new SKImageInfo(

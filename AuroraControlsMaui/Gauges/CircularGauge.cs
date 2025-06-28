@@ -135,7 +135,7 @@ public class CircularGauge : AuroraViewBase
                     break;
             }
 
-            var progressThickness = (float)ProgressThickness * _scale;
+            float progressThickness = (float)ProgressThickness * _scale;
 
             progressPaint.Style = SKPaintStyle.Stroke;
             progressPaint.Color = ProgressColor.ToSKColor();
@@ -146,14 +146,14 @@ public class CircularGauge : AuroraViewBase
             progressBackgroundPaint.Color = ProgressBackgroundColor.ToSKColor();
             progressBackgroundPaint.StrokeWidth = progressThickness;
 
-            var size = Math.Min(info.Width, info.Height) - progressThickness;
+            float size = Math.Min(info.Width, info.Height) - progressThickness;
 
-            var left = (info.Width - size) / 2f;
-            var top = (info.Height - size) / 2f;
-            var right = left + size;
-            var bottom = top + size;
+            float left = (info.Width - size) / 2f;
+            float top = (info.Height - size) / 2f;
+            float right = left + size;
+            float bottom = top + size;
 
-            var arcRect = new SKRect((float)left, (float)top, (float)right, (float)bottom);
+            var arcRect = new SKRect(left, top, right, bottom);
 
             backgroundProgressPath.AddArc(arcRect, 0, 360);
             progressPath.AddArc(arcRect, (float)StartingDegree, (float)EndingDegree);

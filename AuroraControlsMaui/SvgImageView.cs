@@ -28,8 +28,8 @@ public class SvgImageView : AuroraViewBase
                 {
                     if (bindable is SvgImageView cgv)
                     {
-                        var oldName = oldValue as string;
-                        var newName = newValue as string;
+                        string? oldName = oldValue as string;
+                        string? newName = newValue as string;
 
                         if (oldName?.Equals(newName) ?? false)
                         {
@@ -118,12 +118,12 @@ public class SvgImageView : AuroraViewBase
     {
         var canvas = surface.Canvas;
 
-        var size = Math.Min(info.Width - Margin.Left - Margin.Right, info.Height - Margin.Top - Margin.Bottom);
+        double size = Math.Min(info.Width - Margin.Left - Margin.Right, info.Height - Margin.Top - Margin.Bottom);
 
-        var left = (info.Width - (float)size) / 2f;
-        var top = (info.Height - (float)size) / 2f;
-        var right = left + (float)size;
-        var bottom = top + (float)size;
+        float left = (info.Width - (float)size) / 2f;
+        float top = (info.Height - (float)size) / 2f;
+        float right = left + (float)size;
+        float bottom = top + (float)size;
 
         var displayArea = new SKRect(left, top, right, bottom);
 
@@ -131,9 +131,9 @@ public class SvgImageView : AuroraViewBase
 
         if (!string.IsNullOrEmpty(_pictureName))
         {
-            var scaleAmount =
+            float scaleAmount =
                 this.MaxImageSize == Size.Zero
-                    ? (float)Math.Min(displayArea.Width / _svg.Picture.CullRect.Width, displayArea.Height / _svg.Picture.CullRect.Height)
+                    ? Math.Min(displayArea.Width / this._svg.Picture.CullRect.Width, displayArea.Height / this._svg.Picture.CullRect.Height)
                     : 1f;
 
             var scale = SKMatrix.CreateScale(scaleAmount, scaleAmount);
@@ -164,7 +164,7 @@ public class SvgImageView : AuroraViewBase
     /// </summary>
     private void SetSvgResource()
     {
-        var embeddedImageName = EmbeddedImageName;
+        string embeddedImageName = EmbeddedImageName;
 
         if (string.IsNullOrEmpty(embeddedImageName))
         {

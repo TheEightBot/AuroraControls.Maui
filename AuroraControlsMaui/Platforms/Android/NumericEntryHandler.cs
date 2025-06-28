@@ -49,8 +49,8 @@ public partial class NumericEntryHandler : EntryHandler, IDisposable
 
         public ICharSequence FilterFormatted(ICharSequence source, int start, int end, ISpanned dest, int dstart, int dend)
         {
-            var originalSource = source.ToString();
-            var originalDest = dest.ToString();
+            string originalSource = source.ToString();
+            string originalDest = dest.ToString();
 
             if (string.IsNullOrEmpty(originalDest) && string.IsNullOrEmpty(originalSource))
             {
@@ -62,7 +62,7 @@ public partial class NumericEntryHandler : EntryHandler, IDisposable
                 originalDest = originalDest.Remove(dstart, dend - dstart);
             }
 
-            var final = originalDest.Insert(dstart, originalSource);
+            string final = originalDest.Insert(dstart, originalSource);
 
             return IsValid(final, _numericEntry.CultureInfo, _numericEntry.ValueType)
                 ? null

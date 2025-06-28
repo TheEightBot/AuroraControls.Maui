@@ -401,14 +401,14 @@ public class PlatformUnderlayDrawable : IDisposable
 #if IOS || MACCATALYST || ANDROID
         if (_virtualView is IUnderlayDrawable ud && _virtualView is Microsoft.Maui.Controls.VisualElement animatable)
         {
-            var hasFocus = _content?.IsFocused ?? false;
+            bool hasFocus = _content?.IsFocused ?? false;
 
             if (hasFocus == _hadFocus)
             {
                 return;
             }
 
-            var endFocused = hasFocus ? 1d : 0d;
+            double endFocused = hasFocus ? 1d : 0d;
 
             _hadFocus = hasFocus;
 
@@ -430,7 +430,7 @@ public class PlatformUnderlayDrawable : IDisposable
     private void AnimateHasValue()
     {
 #if IOS || MACCATALYST || ANDROID
-        var hasValue = _typeRegistration?.HasValue?.Invoke(_content) ?? false;
+        bool hasValue = _typeRegistration?.HasValue?.Invoke(_content) ?? false;
 
         if (hasValue == _hadValue)
         {
@@ -439,7 +439,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
         if (_virtualView is IUnderlayDrawable ud && _virtualView is Microsoft.Maui.Controls.IAnimatable animatable)
         {
-            var endHasValue = hasValue ? 1d : 0d;
+            double endHasValue = hasValue ? 1d : 0d;
 
             _hadValue = hasValue;
 
@@ -509,7 +509,7 @@ public class PlatformUnderlayDrawable : IDisposable
     public void UpdateLayoutInsets(InsetsF inset)
     {
 #if IOS || MACCATALYST || ANDROID
-        var scale = (float)DeviceDisplay.Current.MainDisplayInfo.Density;
+        float scale = (float)DeviceDisplay.Current.MainDisplayInfo.Density;
 
         (_virtualView as Microsoft.Maui.Controls.ContentView).Padding = new Thickness(inset.Left, inset.Top, inset.Right, inset.Bottom);
 #endif
@@ -544,36 +544,36 @@ public class PlatformUnderlayDrawable : IDisposable
         {
             _isDrawing = true;
 
-            var scale = (float)DeviceDisplay.Current.MainDisplayInfo.Density;
+            float scale = (float)DeviceDisplay.Current.MainDisplayInfo.Density;
 
             var canvas = surface.Canvas;
             var size = imageInfo.Size;
 
-            var hasValue = _typeRegistration?.HasValue?.Invoke(_content) ?? false;
-            var isFocused = _content?.IsFocused ?? false;
-            var isDisabled = !(_content?.IsEnabled ?? false);
-            var isError = underlayDrawable.IsError;
-            var borderSize = (float)underlayDrawable.BorderSize * scale;
-            var halfBorder = borderSize / 2f;
-            var cornerRadius = underlayDrawable.CornerRadius * scale;
+            bool hasValue = _typeRegistration?.HasValue?.Invoke(_content) ?? false;
+            bool isFocused = _content?.IsFocused ?? false;
+            bool isDisabled = !(_content?.IsEnabled ?? false);
+            bool isError = underlayDrawable.IsError;
+            float borderSize = underlayDrawable.BorderSize * scale;
+            float halfBorder = borderSize / 2f;
+            float cornerRadius = underlayDrawable.CornerRadius * scale;
             var cornerRadiusSize = new SKSize(cornerRadius, cornerRadius);
             var internalMargin = underlayDrawable.InternalMargin;
 
-            var placeholderFontSize = underlayDrawable.ActivePlaceholderFontSize * scale;
+            float placeholderFontSize = underlayDrawable.ActivePlaceholderFontSize * scale;
             var placeholderColor =
                 underlayDrawable.PlaceholderColor != default(Color)
                     ? underlayDrawable.PlaceholderColor
                     : HavePlaceholderElement.DefaultPlaceholderColor;
 
-            var fontSize = (float)underlayDrawable.FontSize * scale;
+            float fontSize = (float)underlayDrawable.FontSize * scale;
 
-            var controlYCenter =
+            double controlYCenter =
                 _typeRegistration?.AlignPlaceholderToTop ?? false
                     ? (controlFrame.Top * scale) + (fontSize * .5f)
                     : controlFrame.Center.Y * scale;
 
-            var focusedPlaceholderCenterY = borderSize + ((float)internalMargin.Top * scale) + (placeholderFontSize * .5f);
-            var controlXLeft = controlFrame.Left * scale;
+            float focusedPlaceholderCenterY = borderSize + ((float)internalMargin.Top * scale) + (placeholderFontSize * .5f);
+            double controlXLeft = controlFrame.Left * scale;
 
             var placeholderOffset = underlayDrawable.PlaceholderOffset;
             if (placeholderOffset != default(Point))
@@ -582,12 +582,12 @@ public class PlatformUnderlayDrawable : IDisposable
                 controlXLeft += placeholderOffset.X * scale;
             }
 
-            var hasValueAnimationPercentage =
+            double hasValueAnimationPercentage =
                 underlayDrawable.AlwaysShowPlaceholder
                     ? 1d
                     : underlayDrawable.HasValueAnimationPercentage;
 
-            var focusAnimationPercentage = underlayDrawable.FocusAnimationPercentage;
+            double focusAnimationPercentage = underlayDrawable.FocusAnimationPercentage;
 
             _borderPaint =
                 new SKPaint
@@ -617,7 +617,7 @@ public class PlatformUnderlayDrawable : IDisposable
             _placeholderPaint.TextSize = placeholderFontSize;
             _placeholderPaint.Typeface = PlatformInfo.DefaultTypeface;
 
-            var placeholder = underlayDrawable.Placeholder;
+            string placeholder = underlayDrawable.Placeholder;
 
             canvas.Clear(SKColors.Transparent);
 
@@ -674,7 +674,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
                     canvas.DrawRoundRect(roundedRectBackgroundPlaceholderThrough, cornerRadiusSize, _backgroundPaint);
 
-                    var restoreTo = canvas.SaveLayer();
+                    int restoreTo = canvas.SaveLayer();
 
                     using (new SKAutoCanvasRestore(canvas))
                     {
@@ -688,8 +688,8 @@ public class PlatformUnderlayDrawable : IDisposable
 
                             if (hasValueAnimationPercentage > 0.0d)
                             {
-                                var bufferSize = 2f;
-                                var top = roundedRectBackgroundPlaceholderThrough.Top - (_borderPaint.StrokeWidth * .5f);
+                                float bufferSize = 2f;
+                                float top = roundedRectBackgroundPlaceholderThrough.Top - (_borderPaint.StrokeWidth * .5f);
 
                                 var startingBlendMode = _backgroundPaint.BlendMode;
 
@@ -731,7 +731,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
                 if (placeholderFontSize > 0d)
                 {
-                    var placeholderY = controlYCenter.Lerp(focusedPlaceholderCenterY, hasValueAnimationPercentage);
+                    double placeholderY = controlYCenter.Lerp(focusedPlaceholderCenterY, hasValueAnimationPercentage);
 
                     _placeholderPaint.TextSize = fontSize.Lerp(placeholderFontSize, (float)hasValueAnimationPercentage);
                     _placeholderPaint.Color = _placeholderPaint.Color.WithAlpha((float)hasValueAnimationPercentage);

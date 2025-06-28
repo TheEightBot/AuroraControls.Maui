@@ -9,7 +9,7 @@ public partial class NumericEntryHandler : EntryHandler
 {
     private NumericEntry NumericEntryVirtualView => VirtualView as NumericEntry;
 
-    public static PropertyMapper NumericEntryMapper =
+    public static readonly PropertyMapper NumericEntryMapper =
          new PropertyMapper<NumericEntry, NumericEntryHandler>(Mapper)
          {
          };
@@ -51,15 +51,15 @@ public partial class NumericEntryHandler : EntryHandler
         switch (valueType)
         {
             case NumericEntryValueType.Double:
-                return double.TryParse(value, cultureInfo, out var _);
+                return double.TryParse(value, cultureInfo, out double _);
             case NumericEntryValueType.Decimal:
-                return decimal.TryParse(value, cultureInfo, out var _);
+                return decimal.TryParse(value, cultureInfo, out decimal _);
             case NumericEntryValueType.Float:
-                return float.TryParse(value, cultureInfo, out var _);
+                return float.TryParse(value, cultureInfo, out float _);
             case NumericEntryValueType.Int:
-                return int.TryParse(value, cultureInfo, out var _);
+                return int.TryParse(value, cultureInfo, out int _);
             case NumericEntryValueType.Long:
-                return long.TryParse(value, cultureInfo, out var _);
+                return long.TryParse(value, cultureInfo, out long _);
         }
 
         return false;

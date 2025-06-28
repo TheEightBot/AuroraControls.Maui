@@ -4,48 +4,27 @@
 public class RainbowRing : SceneViewBase
 #pragma warning restore CA1001 // Types that own disposable fields should be disposable
 {
-    private const int RingCount = 8;
+    private const int RingCount = 6; // Reduced from 8 for better performance
 
     private readonly SKColor[] _colors =
-        new[]
-        {
-            SKColor.Parse("#99f44336"),
-            SKColor.Parse("#99ff5722"),
-            SKColor.Parse("#99ffeb3b"),
-            SKColor.Parse("#9900bcd4"),
-            SKColor.Parse("#993f51b5"),
-            SKColor.Parse("#99673ab7"),
-            SKColor.Parse("#999c27b0"),
-            SKColor.Parse("#bffafafa"),
-        };
-
-    private readonly Random _rng = new Random(Guid.NewGuid().GetHashCode());
-
-    private readonly Point[] _movementAmount = new Point[RingCount];
-
-    private bool _firstRun = true;
-
-    private float _maxLength;
-    private int _maxBuffer;
+    {
+        SKColor.Parse("#f44336"), // Red
+        SKColor.Parse("#ff9800"), // Orange
+        SKColor.Parse("#ffeb3b"), // Yellow
+        SKColor.Parse("#4caf50"), // Green
+        SKColor.Parse("#2196f3"), // Blue
+        SKColor.Parse("#9c27b0"),  // Purple
+    };
 
     private SKPaint _ringPaint;
-    private SKPaint _blurPaint;
+    private float _ringRadius;
+    private bool _initialized;
 
     /// <summary>
     /// Specifies the ring thickness.
     /// </summary>
     public static readonly BindableProperty RingThicknessProperty =
-        BindableProperty.Create(nameof(RingThickness), typeof(double), typeof(RainbowRing), 12d,
-            propertyChanged:
-                static (bindable, _, newValue) =>
-                {
-                    if (bindable is RainbowRing current && current._ringPaint != null)
-                    {
-                        var value = (float)(double)newValue;
-                        current._ringPaint.StrokeWidth = value;
-                        current._blurPaint.ImageFilter = SKImageFilter.CreateBlur(value, value);
-                    }
-                });
+        BindableProperty.Create(nameof(RingThickness), typeof(double), typeof(RainbowRing), 8d);
 
     /// <summary>
     /// Gets or sets the thickness of the ring.
@@ -60,43 +39,33 @@ public class RainbowRing : SceneViewBase
     /// <summary>
     /// Initializes a new instance of the <see cref="RainbowRing"/> class.
     /// </summary>
-    public RainbowRing() => MinimumHeightRequest = 88;
+    public RainbowRing()
+    {
+        MinimumHeightRequest = 88;
+
+        // Slow down the animation significantly
+        Length = 3000; // 3 seconds per cycle instead of 1.6 seconds
+        Rate = 60;     // ~30 FPS instead of ~60 FPS
+    }
 
     protected override void Attached()
     {
-        var ringThickness = (float)this.RingThickness;
-
-        _ringPaint =
-            new SKPaint()
-            {
-                IsAntialias = true,
-                Style = SKPaintStyle.Stroke,
-                StrokeWidth = ringThickness,
-            };
-
-        _blurPaint =
-            new SKPaint()
-            {
-                FilterQuality = SKFilterQuality.Medium,
-                ImageFilter = SKImageFilter.CreateBlur(ringThickness, ringThickness),
-            };
+        _ringPaint = new SKPaint
+        {
+            IsAntialias = true,
+            Style = SKPaintStyle.Stroke,
+            StrokeWidth = (float)RingThickness,
+            StrokeCap = SKStrokeCap.Round,
+        };
 
         base.Attached();
     }
 
     protected override void Detached()
     {
-        base.Detached();
-
-        var ringPaint = _ringPaint;
+        _ringPaint?.Dispose();
         _ringPaint = null;
-        ringPaint?.Dispose();
-        ringPaint = null;
-
-        var blurPaint = _blurPaint;
-        _blurPaint = null;
-        blurPaint?.Dispose();
-        blurPaint = null;
+        base.Detached();
     }
 
     /// <summary>
@@ -107,62 +76,53 @@ public class RainbowRing : SceneViewBase
     /// <param name="percentage">The animation percentage.</param>
     protected override SKImage PaintScene(SKSurface surface, SKImageInfo info, double percentage)
     {
-        if (_firstRun)
+        if (!_initialized)
         {
-            _firstRun = false;
-
-            _maxLength = Math.Min(info.Rect.Width, info.Rect.Height) * .5f * .8f;
-
-            _maxBuffer = (int)(Math.Min(info.Rect.Width, info.Rect.Height) * .5f * .2f);
-
-            UpdateAnimationValues();
+            var minDimension = Math.Min(info.Width, info.Height);
+            _ringRadius = (minDimension * 0.3f) - (float)RingThickness;
+            _initialized = true;
         }
 
         var canvas = surface.Canvas;
-
         canvas.Clear();
 
-        var progress = (float)percentage;
+        var centerX = info.Rect.MidX;
+        var centerY = info.Rect.MidY;
 
+        // Draw each ring with a slight offset and rotation
         for (int i = 0; i < RingCount; i++)
         {
-            var movementX =
-                progress < .5f
-                    ? (float)_movementAmount[i].X * (progress * 2f)
-                    : (float)_movementAmount[i].X * (1f - ((progress - .5f) * 2f));
+            // Calculate rotation for this ring
+            var ringRotation = (percentage * 360.0) + (i * 60.0); // Each ring offset by 60 degrees
 
-            var movementY =
-                progress < .5f
-                    ? (float)_movementAmount[i].Y * (progress * 2f)
-                    : (float)_movementAmount[i].Y * (1f - ((progress - .5f) * 2f));
+            // Calculate opacity based on position in cycle
+            var opacity = (byte)(128 + (127 * Math.Sin((percentage * Math.PI * 2) + (i * Math.PI / 3))));
 
-            if (_ringPaint != null)
-            {
-                _ringPaint.Color = _colors[i];
-            }
+            // Set color with calculated opacity
+            _ringPaint.Color = _colors[i].WithAlpha(opacity);
 
-            if (_ringPaint != null)
-            {
-                canvas.DrawOval(info.Rect.MidX + movementX, info.Rect.MidY + movementY, _maxLength, _maxLength, _ringPaint);
-            }
+            // Calculate ring position (slight spiral effect)
+            var radiusOffset = (float)(Math.Sin((percentage * Math.PI * 2) + (i * Math.PI / 6)) * 5);
+            var currentRadius = _ringRadius + radiusOffset;
+
+            // Draw the ring
+            canvas.Save();
+            canvas.RotateDegrees((float)ringRotation, centerX, centerY);
+
+            // Draw arc instead of full circle for more dynamic effect
+            var sweepAngle = 300f; // 300 degree arc
+            var startAngle = (float)(percentage * 360);
+
+            var rect = new SKRect(
+                centerX - currentRadius,
+                centerY - currentRadius,
+                centerX + currentRadius,
+                centerY + currentRadius);
+
+            canvas.DrawArc(rect, startAngle, sweepAngle, false, _ringPaint);
+            canvas.Restore();
         }
-
-        canvas.RotateDegrees(progress * 360f, info.Rect.MidX, info.Rect.MidY);
-
-        canvas.DrawImage(surface.Snapshot(), SKPoint.Empty, _blurPaint);
-
-        canvas.Flush();
 
         return surface.Snapshot();
-    }
-
-    private void UpdateAnimationValues()
-    {
-        var maxMovement = _maxBuffer - (int)RingThickness;
-
-        for (int i = 0; i < RingCount; i++)
-        {
-            _movementAmount[i] = new Point(_rng.Next(-maxMovement, maxMovement), _rng.Next(-maxMovement, maxMovement));
-        }
     }
 }

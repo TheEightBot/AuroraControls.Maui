@@ -38,7 +38,7 @@ public class Saturation : VisualEffect
 
     private float[] GetSaturationMatrix(float saturationAdjustment)
     {
-        var x = 1 + ((saturationAdjustment > 0) ? 3 * saturationAdjustment / 100f : saturationAdjustment / 100f);
+        float x = 1 + ((saturationAdjustment > 0) ? 3 * saturationAdjustment / 100f : saturationAdjustment / 100f);
         const float lumR = 0.3086f;
         const float lumG = 0.6094f;
         const float lumB = 0.0820f;

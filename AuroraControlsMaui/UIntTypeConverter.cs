@@ -13,7 +13,7 @@ public class UIntTypeConverter : TypeConverter
 
     public override object ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
     {
-        var strValue = value?.ToString();
+        string? strValue = value?.ToString();
         if (string.IsNullOrWhiteSpace(strValue))
         {
             return 0u;

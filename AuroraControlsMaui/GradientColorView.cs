@@ -191,12 +191,10 @@ public class GradientColorView : AuroraViewBase
             overlayPaint.Shader = shader;
             overlayPaint.IsAntialias = true;
 
-            var size = Math.Min(info.Width - Margin.Left - Margin.Right, info.Height - Margin.Top - Margin.Bottom);
+            double size = Math.Min(info.Width - Margin.Left - Margin.Right, info.Height - Margin.Top - Margin.Bottom);
 
-            var left = (info.Width - (float)size) / 2f;
-            var top = (info.Height - (float)size) / 2f;
-            var right = left + (float)size;
-            var bottom = top + (float)size;
+            float left = (info.Width - (float)size) / 2f;
+            float top = (info.Height - (float)size) / 2f;
 
             canvas.Clear();
             _backgroundPath.Reset();
@@ -215,9 +213,9 @@ public class GradientColorView : AuroraViewBase
                             ? GradientStartColor.AddLuminosity(-.2f).MultiplyAlpha((1f - (float)_rippleAnimationPercentage) * .5f).ToSKColor()
                             : Colors.Transparent.ToSKColor();
 
-                    var startingRippleSize = Math.Min(info.Width, info.Height) * .75f;
-                    var maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * _rippleAnimationPercentage);
-                    var offsetAmount = -maxRippleSize / 2f;
+                    float startingRippleSize = Math.Min(info.Width, info.Height) * .75f;
+                    float maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * _rippleAnimationPercentage);
+                    float offsetAmount = -maxRippleSize / 2f;
                     var offsetPoint = new SKPoint(_lastTouchLocation.X + offsetAmount, _lastTouchLocation.Y + offsetAmount);
                     var rippleSize = SKRect.Create(offsetPoint, new SKSize(maxRippleSize, maxRippleSize));
                     ripplePath.AddOval(rippleSize);
@@ -229,7 +227,7 @@ public class GradientColorView : AuroraViewBase
                 }
             }
 
-            var translation = SKMatrix.CreateTranslation(info.Width / 2f, info.Height / 2f);
+            SKMatrix.CreateTranslation(info.Width / 2f, info.Height / 2f);
 
             using (new SKAutoCanvasRestore(canvas))
             {
@@ -299,7 +297,7 @@ public class GradientColorView : AuroraViewBase
         rippleAnimation.Commit(
             this, _rippleAnimationName, length: 500, easing: Easing.CubicOut,
             finished:
-                (percent, isFinished) =>
+                (_, _) =>
                 {
                     _lastTouchLocation = SKPoint.Empty;
                     _rippleAnimationPercentage = 0d;
@@ -329,7 +327,7 @@ public class GradientColorView : AuroraViewBase
         rippleAnimation.Commit(
             this, _tapAnimationName, length: TapAnimationDuration, easing: tapped ? Easing.CubicOut : Easing.CubicIn,
             finished:
-                (percent, isFinished) =>
+                (_, _) =>
                 {
                     _tapAnimationPercentage = tapped ? 1 : 0;
                     this.InvalidateSurface();

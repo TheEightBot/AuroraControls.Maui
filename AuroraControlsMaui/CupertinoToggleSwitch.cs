@@ -180,7 +180,7 @@ public class CupertinoToggleSwitch : AuroraViewBase
         BindableProperty.Create(nameof(IsToggled), typeof(bool), typeof(CupertinoToggleSwitch), false,
             defaultBindingMode: BindingMode.TwoWay,
             propertyChanged:
-            (bindable, value, newValue) =>
+            (bindable, _, newValue) =>
             {
                 if (bindable is not CupertinoToggleSwitch cts || newValue is not bool nvBool)
                 {
@@ -248,21 +248,19 @@ public class CupertinoToggleSwitch : AuroraViewBase
 
         var canvas = surface.Canvas;
 
-        var scale = info.Height / (float)Height;
-
-        var toggleHeight = (float)ToggleMaxHeight * _scale;
-        var toggleWidth = (float)ToggleMaxWidth * _scale;
-        var halfToggleHeight = toggleHeight * .5f;
-        var halfToggleWidth = toggleWidth * .5f;
+        float toggleHeight = (float)ToggleMaxHeight * _scale;
+        float toggleWidth = (float)ToggleMaxWidth * _scale;
+        float halfToggleHeight = toggleHeight * .5f;
+        float halfToggleWidth = toggleWidth * .5f;
 
         var rect = new SKRect(
             info.Rect.MidX - halfToggleWidth, info.Rect.MidY - halfToggleHeight,
             info.Rect.MidX + halfToggleWidth, info.Rect.MidY + halfToggleHeight);
 
-        var borderWidth = (float)BorderWidth;
+        float borderWidth = (float)BorderWidth;
 
-        var thumbSize = rect.Height - (borderWidth * 2f);
-        var thumbLocation = rect.Left + borderWidth + ((toggleWidth - thumbSize - (borderWidth * 2f)) * (float)_toggleAnimationPercentage);
+        float thumbSize = rect.Height - (borderWidth * 2f);
+        float thumbLocation = rect.Left + borderWidth + ((toggleWidth - thumbSize - (borderWidth * 2f)) * (float)_toggleAnimationPercentage);
         var thumbRect = new SKRect(thumbLocation, rect.Top + borderWidth, thumbLocation + thumbSize, rect.Top + borderWidth + thumbSize);
 
         var trackColor =
@@ -314,7 +312,7 @@ public class CupertinoToggleSwitch : AuroraViewBase
     {
         e.Handled = true;
 
-        var isTapInside = _backgroundPath.Contains(e.Location.X, e.Location.Y);
+        bool isTapInside = _backgroundPath.Contains(e.Location.X, e.Location.Y);
 
         if (e.ActionType != SKTouchAction.Released || !isTapInside)
         {

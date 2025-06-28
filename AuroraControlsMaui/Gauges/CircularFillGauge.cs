@@ -97,19 +97,19 @@ public class CircularFillGauge : AuroraViewBase
             progressBackgroundPaint.Style = SKPaintStyle.Fill;
             progressBackgroundPaint.Color = ProgressBackgroundColor.ToSKColor();
 
-            var size = Math.Min(info.Width, info.Height);
+            int size = Math.Min(info.Width, info.Height);
 
-            var left = (info.Width - size) / 2f;
-            var top = (info.Height - size) / 2f;
-            var right = left + size;
-            var bottom = top + size;
+            float left = (info.Width - size) / 2f;
+            float top = (info.Height - size) / 2f;
+            float right = left + size;
+            float bottom = top + size;
 
             var arcRect = new SKRect(left, top, right, bottom);
 
             backgroundProgressPath.AddOval(arcRect);
 
-            var halfWidth = arcRect.Width * .5f;
-            var halfHeight = arcRect.Height * .5f;
+            float halfWidth = arcRect.Width * .5f;
+            float halfHeight = arcRect.Height * .5f;
             var newRect = SKRect.Inflate(arcRect, -halfWidth + (((float)ProgressPercentage / 100f) * halfWidth), -halfHeight + (((float)ProgressPercentage / 100f) * halfHeight));
 
             progressPath.AddOval(newRect);

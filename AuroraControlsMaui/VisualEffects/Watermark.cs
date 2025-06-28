@@ -96,7 +96,7 @@ public class Watermark : VisualEffect
 
     private SKImage InternalApplyEffect(SKSurface surface, SKRect rect)
     {
-        var text = this.WatermarkText;
+        string text = this.WatermarkText;
 
         if (string.IsNullOrEmpty(text))
         {
@@ -116,8 +116,8 @@ public class Watermark : VisualEffect
 
             var measuredText = SKRect.Empty;
             paint.MeasureText(text, ref measuredText);
-            var x = 0f;
-            var y = 0f;
+            float x = 0f;
+            float y = 0f;
 
             switch (this.HorizontalWatermarkLocation)
             {
@@ -148,7 +148,7 @@ public class Watermark : VisualEffect
             }
 
             paint.Color = this.BackgroundColor.ToSKColor();
-            var halfPadding = (float)this.WatermarkPadding / 2f;
+            float halfPadding = (float)this.WatermarkPadding / 2f;
             canvas.DrawRoundRect(
                 x - halfPadding, y - (measuredText.Height / 2f) - halfPadding,
                 measuredText.Width + (float)this.WatermarkPadding, measuredText.Height + (float)this.WatermarkPadding,

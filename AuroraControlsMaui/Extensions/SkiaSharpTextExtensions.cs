@@ -19,8 +19,8 @@ public static class SkiaSharpTextExtensions
 
         var textContainerRect = new SKRect(drawPoint.X, drawPoint.Y, drawPoint.X + textBounds.Width, drawPoint.Y + textBounds.Height);
 
-        var horizontalOffset = 0f;
-        var verticalOffset = 0f;
+        float horizontalOffset = 0f;
+        float verticalOffset = 0f;
 
         switch (horizontalLocation)
         {
@@ -55,10 +55,10 @@ public static class SkiaSharpTextExtensions
         textPaint.EnsureHasValidFont(text);
         textPaint.MeasureText(text, ref textBounds);
 
-        var left = drawPoint.X; // We will always use this as a starting point
-        var top = drawPoint.Y;
-        var width = textBounds.Width;
-        var baseline = -textBounds.Top + top + baselinePadding + baselinePaint.StrokeWidth;
+        float left = drawPoint.X; // We will always use this as a starting point
+        float top = drawPoint.Y;
+        float width = textBounds.Width;
+        float baseline = -textBounds.Top + top + baselinePadding + baselinePaint.StrokeWidth;
 
         return (new SKPoint(left, baseline), new SKPoint(left + width, baseline));
     }
@@ -69,9 +69,9 @@ public static class SkiaSharpTextExtensions
         paint.EnsureHasValidFont(text);
         paint.MeasureText(text, ref textBounds);
 
-        var top = drawPoint.Y;
-        var textLeft = -textBounds.Left + drawPoint.X;
-        var baseline = -textBounds.Top + top;
+        float top = drawPoint.Y;
+        float textLeft = -textBounds.Left + drawPoint.X;
+        float baseline = -textBounds.Top + top;
 
         return new SKRect(
             textLeft,
