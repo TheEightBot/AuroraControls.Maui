@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             x:Class="AuroraControls.TestApp.StepIndicatorTestPage"
+             Title="StepIndicator Test Page">
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+            <Label Text="StepIndicator Test Page"
+                   FontSize="Title"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <!-- Basic Configuration -->
+            <Border Stroke="Gray" StrokeThickness="1" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Basic Configuration" FontSize="Subtitle" FontAttributes="Bold"/>
+
+                    <aurora:StepIndicator x:Name="BasicStepIndicator"
+                                        NumberOfSteps="5"
+                                        CurrentStep="2"
+                                        HeightRequest="60"
+                                        LineColor="Blue"
+                                        LineWidth="4"
+                                        HighlightColor="Green"
+                                        InactiveColor="LightGray"
+                                        FontColor="Black"/>
+
+                    <Grid ColumnDefinitions="*, *, *"
+                          RowDefinitions="Auto, Auto, Auto"
+                          ColumnSpacing="10"
+                          RowSpacing="10">
+                        <Label Text="Number of Steps:" Grid.Column="0"/>
+                        <Slider x:Name="NumberOfStepsSlider"
+                                Grid.Column="1"
+                                Minimum="1"
+                                Maximum="10"
+                                Value="5"
+                                ValueChanged="OnNumberOfStepsChanged"/>
+                        <Label x:Name="NumberOfStepsLabel"
+                               Text="5"
+                               Grid.Column="2"/>
+
+                        <Label Text="Current Step:" Grid.Row="1"/>
+                        <Slider x:Name="CurrentStepSlider"
+                                Grid.Column="1"
+                                Grid.Row="1"
+                                Minimum="0"
+                                Maximum="4"
+                                Value="2"
+                                ValueChanged="OnCurrentStepChanged"/>
+                        <Label x:Name="CurrentStepLabel"
+                               Text="2"
+                               Grid.Column="2"
+                               Grid.Row="1"/>
+
+                        <Label Text="Line Width:" Grid.Row="2"/>
+                        <Slider x:Name="LineWidthSlider"
+                                Grid.Column="1"
+                                Grid.Row="2"
+                                Minimum="1"
+                                Maximum="10"
+                                Value="4"
+                                ValueChanged="OnLineWidthChanged"/>
+                        <Label x:Name="LineWidthLabel"
+                               Text="4"
+                               Grid.Column="2"
+                               Grid.Row="2"/>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                        <CheckBox x:Name="DisplayStepNumberCheckBox"
+                                  IsChecked="True"
+                                  CheckedChanged="OnDisplayStepNumberChanged"/>
+                        <Label Text="Display Step Number"
+                               Grid.Column="1"
+                               VerticalOptions="Center"/>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                        <CheckBox x:Name="DrawConnectingLineCheckBox"
+                                  IsChecked="True"
+                                  CheckedChanged="OnDrawConnectingLineChanged"/>
+                        <Label Text="Draw Connecting Line"
+                               Grid.Column="1"
+                               VerticalOptions="Center"/>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                        <CheckBox x:Name="SwitchOnStepTapCheckBox"
+                                  IsChecked="False"
+                                  CheckedChanged="OnSwitchOnStepTapChanged"/>
+                        <Label Text="Switch On Step Tap"
+                               Grid.Column="1"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Color Configuration -->
+            <Border Stroke="Gray" StrokeThickness="1" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Color Configuration" FontSize="Subtitle" FontAttributes="Bold"/>
+
+                    <Grid ColumnDefinitions="*, *, *"
+                          RowDefinitions="Auto, Auto"
+                          ColumnSpacing="10"
+                          RowSpacing="10">
+                        <Button Text="Line Color"
+                                BackgroundColor="Blue"
+                                TextColor="White"
+                                Clicked="OnLineColorClicked"/>
+                        <Button Text="Highlight Color"
+                                Grid.Column="1"
+                                BackgroundColor="Green"
+                                TextColor="White"
+                                Clicked="OnHighlightColorClicked"/>
+                        <Button Text="Inactive Color"
+                                Grid.Column="2"
+                                BackgroundColor="LightGray"
+                                TextColor="Black"
+                                Clicked="OnInactiveColorClicked"/>
+
+                        <Button Text="Font Color"
+                                Grid.Row="1"
+                                BackgroundColor="Black"
+                                TextColor="White"
+                                Clicked="OnFontColorClicked"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Different Styles -->
+            <Border Stroke="Gray" StrokeThickness="1" Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Different Styles" FontSize="Subtitle" FontAttributes="Bold"/>
+
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Minimal Style" FontAttributes="Bold"/>
+                        <aurora:StepIndicator NumberOfSteps="3"
+                                            CurrentStep="1"
+                                            HeightRequest="40"
+                                            LineColor="Gray"
+                                            LineWidth="2"
+                                            HighlightColor="Blue"
+                                            InactiveColor="LightGray"
+                                            FontColor="Black"
+                                            DisplayStepNumber="False"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Colorful Style" FontAttributes="Bold"/>
+                        <aurora:StepIndicator NumberOfSteps="6"
+                                            CurrentStep="3"
+                                            HeightRequest="80"
+                                            LineColor="Purple"
+                                            LineWidth="6"
+                                            HighlightColor="Orange"
+                                            InactiveColor="Pink"
+                                            FontColor="DarkBlue"
+                                            Padding="10,5,10,5"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="No Connecting Line" FontAttributes="Bold"/>
+                        <aurora:StepIndicator NumberOfSteps="4"
+                                            CurrentStep="2"
+                                            HeightRequest="60"
+                                            LineColor="Red"
+                                            LineWidth="3"
+                                            HighlightColor="Green"
+                                            InactiveColor="Gray"
+                                            FontColor="White"
+                                            DrawConnectingLine="False"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Interactive Style (Tap to Change Steps)" FontAttributes="Bold"/>
+                        <aurora:StepIndicator x:Name="InteractiveStepIndicator"
+                                            NumberOfSteps="7"
+                                            CurrentStep="0"
+                                            HeightRequest="70"
+                                            LineColor="Teal"
+                                            LineWidth="5"
+                                            HighlightColor="Yellow"
+                                            InactiveColor="LightBlue"
+                                            FontColor="Black"
+                                            SwitchOnStepTap="True"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Control Buttons -->
+            <Border Stroke="Gray" StrokeThickness="1" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Interactive Controls" FontSize="Subtitle" FontAttributes="Bold"/>
+
+                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="10">
+                        <Button Text="Previous Step"
+                                Clicked="OnPreviousStepClicked"/>
+                        <Button Text="Next Step"
+                                Grid.Column="1"
+                                Clicked="OnNextStepClicked"/>
+                        <Button Text="Reset"
+                                Grid.Column="2"
+                                Clicked="OnResetClicked"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
