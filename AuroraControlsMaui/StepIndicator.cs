@@ -268,41 +268,57 @@ public class StepIndicator : AuroraViewBase
         using (var path = new SKPath())
         {
             var progressCircleSize = (float)((info.Height - this.Padding.VerticalThickness) / 4f) * .8f;
-            var progressCircleSizeWithStroke = progressCircleSize + (this.LineWidth * 2f);
+
+            // Calculate stroke widths that scale with circle sizes
+            var baseStrokeWidth = (float)this.LineWidth;
+            var progressStrokeWidth = baseStrokeWidth * 1.5f; // Larger stroke for current step
+            var previousStrokeWidth = baseStrokeWidth * 1.2f; // Medium stroke for completed steps
+
+            // Calculate the actual circle sizes (radius to center of stroke)
             var nextStepCircleSize = progressCircleSize * .5f;
             var previousStepCircleSize = progressCircleSize * .8f;
-            var previousStepCircleSizeWithStroke = progressCircleSizeWithStroke * .8f;
+
+            // Calculate the maximum outer radius (circle radius + half stroke width)
+            var progressMaxRadius = progressCircleSize + (progressStrokeWidth / 2f);
+            var previousMaxRadius = previousStepCircleSize + (previousStrokeWidth / 2f);
+            var nextStepMaxRadius = nextStepCircleSize + (baseStrokeWidth / 2f);
+
+            // Use the largest possible radius for padding calculations
+            var maxRadius = Math.Max(Math.Max(progressMaxRadius, previousMaxRadius), nextStepMaxRadius);
 
             paint.IsAntialias = true;
             paint.StrokeCap = SKStrokeCap.Round;
             paint.Style = SKPaintStyle.Stroke;
             paint.Color = this.LineColor.ToSKColor();
-            paint.StrokeWidth = (float)this.LineWidth;
+            paint.StrokeWidth = baseStrokeWidth;
 
             fontPaint.IsAntialias = true;
             fontPaint.Color = this.FontColor.ToSKColor();
-            fontPaint.TextSize = progressCircleSize;
+            fontPaint.TextSize = progressCircleSize * 0.6f; // Scale font size with circle
             fontPaint.Typeface = this.Typeface ?? PlatformInfo.DefaultTypeface;
             fontPaint.TextAlign = SKTextAlign.Center;
             fontPaint.TextEncoding = SKTextEncoding.Utf8;
 
-            var start = progressCircleSizeWithStroke + (float)this.Padding.Left;
-            var end = info.Width - progressCircleSizeWithStroke - (float)this.Padding.Right;
+            // Use the maximum radius to ensure proper padding
+            var start = maxRadius + (float)this.Padding.Left;
+            var end = info.Width - maxRadius - (float)this.Padding.Right;
 
             var verticalCenter = (float)((info.Height / 2f) + (this.Padding.Top * .5f) - (this.Padding.Bottom * .5f));
 
             canvas.Clear();
 
-            if (this.DrawConnectingLine)
+            // Only draw connecting line if we have enough space and it's enabled
+            if (this.DrawConnectingLine && start < end)
             {
-                path.MoveTo((float)start, verticalCenter);
-                path.LineTo((float)end, verticalCenter);
+                path.MoveTo(start, verticalCenter);
+                path.LineTo(end, verticalCenter);
                 canvas.DrawPath(path, paint);
             }
 
-            if (this.NumberOfSteps > 0)
+            if (this.NumberOfSteps > 0 && start < end)
             {
-                var stepSize = (end - start) / (float)(this.NumberOfSteps - 1);
+                var stepSize = this.NumberOfSteps > 1 ? (end - start) / (float)(this.NumberOfSteps - 1) : 0f;
+
                 for (int i = 0; i < this.NumberOfSteps; i++)
                 {
                     var circlePath = this._stepPaths.ElementAtOrDefault(i);
@@ -314,47 +330,58 @@ public class StepIndicator : AuroraViewBase
 
                     circlePath.Reset();
 
+                    var centerX = start + (stepSize * i);
+
                     paint.Style = SKPaintStyle.StrokeAndFill;
                     paint.BlendMode = SKBlendMode.Src;
                     paint.Color = this.LineColor.ToSKColor();
 
+                    // Future steps (not yet reached)
                     if (i > this.CurrentStep - 1)
                     {
-                        circlePath.AddCircle((float)start + ((float)stepSize * i), verticalCenter, nextStepCircleSize);
+                        paint.StrokeWidth = baseStrokeWidth;
+                        paint.Color = this.InactiveColor.ToSKColor();
+                        circlePath.AddCircle(centerX, verticalCenter, nextStepCircleSize);
                         canvas.DrawPath(circlePath, paint);
-
                         continue;
                     }
 
                     using (var strokePath = new SKPath())
                     {
+                        // Completed steps (before current)
                         if (i < this.CurrentStep - 1)
                         {
-                            strokePath.AddCircle((float)start + ((float)stepSize * i), verticalCenter, (float)previousStepCircleSizeWithStroke);
-                        }
-                        else if (i == this.CurrentStep - 1)
-                        {
-                            strokePath.AddCircle((float)start + ((float)stepSize * i), verticalCenter, (float)progressCircleSizeWithStroke);
-                        }
+                            paint.StrokeWidth = previousStrokeWidth;
+                            paint.Color = this.LineColor.ToSKColor();
+                            strokePath.AddCircle(centerX, verticalCenter, previousStepCircleSize);
+                            canvas.DrawPath(strokePath, paint);
 
-                        paint.Color = this.LineColor.ToSKColor();
-                        canvas.DrawPath(strokePath, paint);
-
-                        if (i < this.CurrentStep - 1)
-                        {
                             paint.Color = this.InactiveColor.ToSKColor();
-                            circlePath.AddCircle((float)start + ((float)stepSize * i), verticalCenter, previousStepCircleSize);
-                        }
-                        else if (i == this.CurrentStep - 1)
-                        {
-                            paint.Color = this.HighlightColor.ToSKColor();
-                            circlePath.AddCircle((float)start + ((float)stepSize * i), verticalCenter, progressCircleSize);
+                            paint.BlendMode = SKBlendMode.SrcOver;
+                            paint.Style = SKPaintStyle.Fill;
+                            circlePath.AddCircle(centerX, verticalCenter, previousStepCircleSize - (previousStrokeWidth / 2f));
+                            canvas.DrawPath(circlePath, paint);
+                            paint.Style = SKPaintStyle.StrokeAndFill;
                         }
 
-                        paint.BlendMode = SKBlendMode.SrcOver;
-                        canvas.DrawPath(circlePath, paint);
+                        // Current step
+                        else if (i == this.CurrentStep - 1)
+                        {
+                            paint.StrokeWidth = progressStrokeWidth;
+                            paint.Color = this.LineColor.ToSKColor();
+                            strokePath.AddCircle(centerX, verticalCenter, progressCircleSize);
+                            canvas.DrawPath(strokePath, paint);
+
+                            paint.Color = this.HighlightColor.ToSKColor();
+                            paint.BlendMode = SKBlendMode.SrcOver;
+                            paint.Style = SKPaintStyle.Fill;
+                            circlePath.AddCircle(centerX, verticalCenter, progressCircleSize - (progressStrokeWidth / 2f));
+                            canvas.DrawPath(circlePath, paint);
+                            paint.Style = SKPaintStyle.StrokeAndFill;
+                        }
                     }
 
+                    // Draw step numbers if enabled
                     if (this.DisplayStepNumber)
                     {
                         var currentStepText = (i + 1).ToString();
@@ -362,7 +389,7 @@ public class StepIndicator : AuroraViewBase
                         fontPaint.EnsureHasValidFont(currentStepText);
                         fontPaint.MeasureText(currentStepText, ref textRect);
 
-                        canvas.DrawText(currentStepText, (float)start + ((float)stepSize * i), verticalCenter - textRect.MidY, fontPaint);
+                        canvas.DrawText(currentStepText, centerX, verticalCenter - textRect.MidY, fontPaint);
                     }
                 }
             }
