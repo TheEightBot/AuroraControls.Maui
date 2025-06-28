@@ -15,6 +15,9 @@ public partial class StepIndicatorTestPage : ContentPage
     public StepIndicatorTestPage()
     {
         InitializeComponent();
+
+        // Set initial shape picker selection
+        ShapePicker.SelectedIndex = 0; // Circle
     }
 
     private void OnNumberOfStepsChanged(object sender, ValueChangedEventArgs e)
@@ -60,6 +63,17 @@ public partial class StepIndicatorTestPage : ContentPage
     private void OnSwitchOnStepTapChanged(object sender, CheckedChangedEventArgs e)
     {
         BasicStepIndicator.SwitchOnStepTap = e.Value;
+    }
+
+    private void OnShapeChanged(object sender, EventArgs e)
+    {
+        if (sender is Picker picker && picker.SelectedItem is string shapeName)
+        {
+            if (Enum.TryParse<StepIndicatorShape>(shapeName, out var shape))
+            {
+                BasicStepIndicator.Shape = shape;
+            }
+        }
     }
 
     private void OnLineColorClicked(object sender, EventArgs e)

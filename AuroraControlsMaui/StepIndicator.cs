@@ -223,6 +223,23 @@ public class StepIndicator : AuroraViewBase
     }
 
     /// <summary>
+    /// The shape of the step indicators.
+    /// </summary>
+    public static BindableProperty ShapeProperty =
+        BindableProperty.Create(nameof(Shape), typeof(StepIndicatorShape), typeof(StepIndicator), StepIndicatorShape.Circle,
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
+
+    /// <summary>
+    /// Gets or sets the shape of the step indicators.
+    /// </summary>
+    /// <value>Takes a StepIndicatorShape. Default value is Circle.</value>
+    public StepIndicatorShape Shape
+    {
+        get => (StepIndicatorShape)GetValue(ShapeProperty);
+        set => SetValue(ShapeProperty, value);
+    }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="StepIndicator"/> class.
     /// </summary>
     public StepIndicator()
@@ -341,8 +358,13 @@ public class StepIndicator : AuroraViewBase
                     {
                         paint.StrokeWidth = baseStrokeWidth;
                         paint.Color = this.InactiveColor.ToSKColor();
-                        circlePath.AddCircle(centerX, verticalCenter, nextStepCircleSize);
-                        canvas.DrawPath(circlePath, paint);
+
+                        using (var shapePath = CreateShapePath(this.Shape, centerX, verticalCenter, nextStepCircleSize))
+                        {
+                            circlePath.AddPath(shapePath);
+                            canvas.DrawPath(circlePath, paint);
+                        }
+
                         continue;
                     }
 
@@ -353,14 +375,23 @@ public class StepIndicator : AuroraViewBase
                         {
                             paint.StrokeWidth = previousStrokeWidth;
                             paint.Color = this.LineColor.ToSKColor();
-                            strokePath.AddCircle(centerX, verticalCenter, previousStepCircleSize);
-                            canvas.DrawPath(strokePath, paint);
+
+                            using (var strokeShapePath = CreateShapePath(this.Shape, centerX, verticalCenter, previousStepCircleSize))
+                            {
+                                strokePath.AddPath(strokeShapePath);
+                                canvas.DrawPath(strokePath, paint);
+                            }
 
                             paint.Color = this.InactiveColor.ToSKColor();
                             paint.BlendMode = SKBlendMode.SrcOver;
                             paint.Style = SKPaintStyle.Fill;
-                            circlePath.AddCircle(centerX, verticalCenter, previousStepCircleSize - (previousStrokeWidth / 2f));
-                            canvas.DrawPath(circlePath, paint);
+
+                            using (var fillShapePath = CreateShapePath(this.Shape, centerX, verticalCenter, previousStepCircleSize - (previousStrokeWidth / 2f)))
+                            {
+                                circlePath.AddPath(fillShapePath);
+                                canvas.DrawPath(circlePath, paint);
+                            }
+
                             paint.Style = SKPaintStyle.StrokeAndFill;
                         }
 
@@ -369,14 +400,23 @@ public class StepIndicator : AuroraViewBase
                         {
                             paint.StrokeWidth = progressStrokeWidth;
                             paint.Color = this.LineColor.ToSKColor();
-                            strokePath.AddCircle(centerX, verticalCenter, progressCircleSize);
-                            canvas.DrawPath(strokePath, paint);
+
+                            using (var strokeShapePath = CreateShapePath(this.Shape, centerX, verticalCenter, progressCircleSize))
+                            {
+                                strokePath.AddPath(strokeShapePath);
+                                canvas.DrawPath(strokePath, paint);
+                            }
 
                             paint.Color = this.HighlightColor.ToSKColor();
                             paint.BlendMode = SKBlendMode.SrcOver;
                             paint.Style = SKPaintStyle.Fill;
-                            circlePath.AddCircle(centerX, verticalCenter, progressCircleSize - (progressStrokeWidth / 2f));
-                            canvas.DrawPath(circlePath, paint);
+
+                            using (var fillShapePath = CreateShapePath(this.Shape, centerX, verticalCenter, progressCircleSize - (progressStrokeWidth / 2f)))
+                            {
+                                circlePath.AddPath(fillShapePath);
+                                canvas.DrawPath(circlePath, paint);
+                            }
+
                             paint.Style = SKPaintStyle.StrokeAndFill;
                         }
                     }
@@ -419,5 +459,144 @@ public class StepIndicator : AuroraViewBase
         }
 
         e.Handled = true;
+    }
+
+    /// <summary>
+    /// Creates a shape path based on the specified shape type.
+    /// </summary>
+    /// <param name="shape">The shape type to create.</param>
+    /// <param name="centerX">The center X coordinate.</param>
+    /// <param name="centerY">The center Y coordinate.</param>
+    /// <param name="size">The size (radius) of the shape.</param>
+    /// <returns>An SKPath representing the shape.</returns>
+    private SKPath CreateShapePath(StepIndicatorShape shape, float centerX, float centerY, float size)
+    {
+        var path = new SKPath();
+
+        switch (shape)
+        {
+            case StepIndicatorShape.Circle:
+                path.AddCircle(centerX, centerY, size);
+                break;
+
+            case StepIndicatorShape.Square:
+                var halfSize = size;
+                path.AddRect(SKRect.Create(centerX - halfSize, centerY - halfSize, halfSize * 2, halfSize * 2));
+                break;
+
+            case StepIndicatorShape.RoundedSquare:
+                var roundedHalfSize = size;
+                var cornerRadius = size * 0.3f;
+                path.AddRoundRect(SKRect.Create(centerX - roundedHalfSize, centerY - roundedHalfSize, roundedHalfSize * 2, roundedHalfSize * 2), cornerRadius, cornerRadius);
+                break;
+
+            case StepIndicatorShape.Diamond:
+                path.MoveTo(centerX, centerY - size);
+                path.LineTo(centerX + size, centerY);
+                path.LineTo(centerX, centerY + size);
+                path.LineTo(centerX - size, centerY);
+                path.Close();
+                break;
+
+            case StepIndicatorShape.Triangle:
+                var triangleHeight = size * 1.2f;
+                path.MoveTo(centerX, centerY - triangleHeight);
+                path.LineTo(centerX + size, centerY + (triangleHeight * 0.5f));
+                path.LineTo(centerX - size, centerY + (triangleHeight * 0.5f));
+                path.Close();
+                break;
+
+            case StepIndicatorShape.Hexagon:
+                CreatePolygonPath(path, centerX, centerY, size, 6);
+                break;
+
+            case StepIndicatorShape.Pentagon:
+                CreatePolygonPath(path, centerX, centerY, size, 5);
+                break;
+
+            case StepIndicatorShape.Octagon:
+                CreatePolygonPath(path, centerX, centerY, size, 8);
+                break;
+
+            case StepIndicatorShape.Star:
+                CreateStarPath(path, centerX, centerY, size);
+                break;
+
+            default:
+                path.AddCircle(centerX, centerY, size);
+                break;
+        }
+
+        return path;
+    }
+
+    /// <summary>
+    /// Creates a regular polygon path.
+    /// </summary>
+    /// <param name="path">The SKPath to add the polygon to.</param>
+    /// <param name="centerX">The center X coordinate.</param>
+    /// <param name="centerY">The center Y coordinate.</param>
+    /// <param name="radius">The radius of the polygon.</param>
+    /// <param name="sides">The number of sides.</param>
+    private void CreatePolygonPath(SKPath path, float centerX, float centerY, float radius, int sides)
+    {
+        if (sides < 3)
+        {
+            return;
+        }
+
+        var angleStep = (float)(2 * Math.PI / sides);
+        var startAngle = (float)(-Math.PI / 2); // Start at top
+
+        for (int i = 0; i < sides; i++)
+        {
+            var angle = startAngle + (i * angleStep);
+            var x = centerX + (radius * (float)Math.Cos(angle));
+            var y = centerY + (radius * (float)Math.Sin(angle));
+
+            if (i == 0)
+            {
+                path.MoveTo(x, y);
+            }
+            else
+            {
+                path.LineTo(x, y);
+            }
+        }
+
+        path.Close();
+    }
+
+    /// <summary>
+    /// Creates a 5-pointed star path.
+    /// </summary>
+    /// <param name="path">The SKPath to add the star to.</param>
+    /// <param name="centerX">The center X coordinate.</param>
+    /// <param name="centerY">The center Y coordinate.</param>
+    /// <param name="outerRadius">The outer radius of the star.</param>
+    private void CreateStarPath(SKPath path, float centerX, float centerY, float outerRadius)
+    {
+        var innerRadius = outerRadius * 0.4f;
+        var angleStep = (float)(Math.PI / 5); // 36 degrees
+        var startAngle = (float)(-Math.PI / 2); // Start at top
+
+        for (int i = 0; i < 10; i++)
+        {
+            var angle = startAngle + (i * angleStep);
+            var radius = (i % 2 == 0) ? outerRadius : innerRadius;
+            var x = centerX + (radius * (float)Math.Cos(angle));
+            var y = centerY + (radius * (float)Math.Sin(angle));
+
+            if (i == 0)
+            {
+                path.MoveTo(x, y);
+            }
+            else
+            {
+                path.LineTo(x, y);
+            }
+        }
+
+        path.Close();
     }
 }

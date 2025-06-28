@@ -94,6 +94,28 @@
                                Grid.Column="1"
                                VerticalOptions="Center"/>
                     </Grid>
+
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                        <Label Text="Shape:"
+                               VerticalOptions="Center"/>
+                        <Picker x:Name="ShapePicker"
+                                Grid.Column="1"
+                                SelectedIndexChanged="OnShapeChanged">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Circle</x:String>
+                                    <x:String>Square</x:String>
+                                    <x:String>RoundedSquare</x:String>
+                                    <x:String>Diamond</x:String>
+                                    <x:String>Triangle</x:String>
+                                    <x:String>Hexagon</x:String>
+                                    <x:String>Pentagon</x:String>
+                                    <x:String>Octagon</x:String>
+                                    <x:String>Star</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </Grid>
                 </VerticalStackLayout>
             </Border>
 
@@ -187,24 +209,6 @@
                                             FontColor="Black"
                                             SwitchOnStepTap="True"/>
                     </VerticalStackLayout>
-                </VerticalStackLayout>
-            </Border>
-
-            <!-- Control Buttons -->
-            <Border Stroke="Gray" StrokeThickness="1" Padding="15">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Interactive Controls" FontSize="Subtitle" FontAttributes="Bold"/>
-
-                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="10">
-                        <Button Text="Previous Step"
-                                Clicked="OnPreviousStepClicked"/>
-                        <Button Text="Next Step"
-                                Grid.Column="1"
-                                Clicked="OnNextStepClicked"/>
-                        <Button Text="Reset"
-                                Grid.Column="2"
-                                Clicked="OnResetClicked"/>
-                    </Grid>
                 </VerticalStackLayout>
             </Border>
 
