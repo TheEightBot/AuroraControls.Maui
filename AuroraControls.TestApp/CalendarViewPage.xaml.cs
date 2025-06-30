@@ -75,7 +75,7 @@ public partial class CalendarViewPage : ContentPage
     {
         base.OnAppearing();
 
-        Device.StartTimer(
+        Dispatcher.StartTimer(
             TimeSpan.FromSeconds(1.5),
             () => { return _continueRunningTimer; });
     }

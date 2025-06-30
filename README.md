@@ -485,8 +485,9 @@ A circular gauge that fills with color based on progress.
     ProgressColor="Blue"
     ProgressBackgroundColor="Gray" />
 ```
+### Custom Controls
 
-### TouchDrawLettersImage
+#### TouchDrawLettersImage
 
 <p align="center" style="border-radius: 10px;">
   <img src="images/TouchDrawLettersImage.png" width="200">
@@ -501,6 +502,94 @@ A specialized view for drawing letter shapes, useful for handwriting recognition
     BackgroundColor="White"
     LetterSpacing="20" />
 ```
+#### ConfettiView
+
+A high-performance confetti particle animation control optimized for smooth rendering with hundreds of particles. Perfect for celebrations, achievements, and adding festive effects to your application.
+
+```xml
+<aurora:ConfettiView
+    MaxParticles="300"
+    ConfettiShape="Rectangular"
+    Continuous="False"
+    ParticleSize="6.0"
+    Gravity="0.08"
+    WindIntensity="0.3"
+    EmissionRate="5"
+    FadeOut="True"
+    BurstMode="False"
+    BackgroundColor="Transparent">
+    <aurora:ConfettiView.Colors>
+        <x:Array Type="{x:Type Color}">
+            <Color>#FF6B6B</Color>
+            <Color>#4ECDC4</Color>
+            <Color>#45B7D1</Color>
+            <Color>#FFA07A</Color>
+            <Color>#98D8C8</Color>
+        </x:Array>
+    </aurora:ConfettiView.Colors>
+</aurora:ConfettiView>
+```
+
+Features:
+- **High Performance**: Optimized for rendering up to 500+ particles with smooth 60fps animation
+- **Customizable Particles**: Control size, shape (rectangular or circular), colors, and physics
+- **Multiple Animation Modes**:
+    - Standard falling confetti from top
+    - Burst mode for explosion effects from center
+    - Continuous mode for ongoing particle emission
+- **Physics Simulation**: Realistic gravity, wind effects, and particle rotation
+- **Color Themes**: Use custom color palettes or automatic random colors
+- **Lifecycle Management**: Optional fade-out effects and particle aging
+- **Memory Optimized**: Pre-allocated particle arrays and lookup tables for performance
+
+##### Key Properties:
+- `MaxParticles` - Maximum number of particles (default: 300, max: 500+)
+- `ConfettiShape` - Particle shape: Rectangular or Circular
+- `Continuous` - Enable continuous particle emission
+- `ParticleSize` - Base size of particles (randomized between 50%-100% of value)
+- `Gravity` - How fast particles fall (higher = faster falling)
+- `WindIntensity` - Horizontal drift strength
+- `EmissionRate` - New particles per frame in continuous mode
+- `FadeOut` - Enable particle fade-out over time
+- `BurstMode` - Explosion effect from center instead of falling from top
+- `Colors` - Custom color palette (uses random colors if not specified)
+
+##### Usage Examples:
+
+**Celebration Burst:**
+```xml
+<aurora:ConfettiView
+    MaxParticles="400"
+    BurstMode="True"
+    FadeOut="True"
+    ConfettiShape="Rectangular"
+    ParticleSize="8" />
+```
+
+**Continuous Falling Confetti:**
+```xml
+<aurora:ConfettiView
+    Continuous="True"
+    EmissionRate="8"
+    MaxParticles="200"
+    Gravity="0.12"
+    WindIntensity="0.5" />
+```
+
+**Custom Color Theme:**
+```csharp
+// In code-behind or view model
+confettiView.Colors = new List<Color>
+{
+    Colors.Gold,
+    Colors.Silver,
+    Colors.White
+};
+```
+
+##### Performance Tips:
+- Keep MaxParticles under 300 for optimal performance on older devices
+- Use BurstMode for short celebration effects, Continuous for ambient effects
 
 ### Loading Indicators
 
