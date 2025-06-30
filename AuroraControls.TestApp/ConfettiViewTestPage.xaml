@@ -49,6 +49,36 @@
                                 ValueChanged="OnMaxParticlesChanged" />
                     </VerticalStackLayout>
 
+                    <!-- Particle Size Control -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="{Binding Source={x:Reference ParticleSizeSlider}, Path=Value, StringFormat='Particle Size: {0:F1}'}" />
+                        <Slider x:Name="ParticleSizeSlider"
+                                Minimum="2"
+                                Maximum="15"
+                                Value="6"
+                                ValueChanged="OnParticleSizeChanged" />
+                    </VerticalStackLayout>
+
+                    <!-- Gravity Control -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="{Binding Source={x:Reference GravitySlider}, Path=Value, StringFormat='Gravity: {0:F2}'}" />
+                        <Slider x:Name="GravitySlider"
+                                Minimum="0.01"
+                                Maximum="0.3"
+                                Value="0.08"
+                                ValueChanged="OnGravityChanged" />
+                    </VerticalStackLayout>
+
+                    <!-- Wind Intensity Control -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="{Binding Source={x:Reference WindIntensitySlider}, Path=Value, StringFormat='Wind Intensity: {0:F1}'}" />
+                        <Slider x:Name="WindIntensitySlider"
+                                Minimum="0"
+                                Maximum="2"
+                                Value="0.3"
+                                ValueChanged="OnWindIntensityChanged" />
+                    </VerticalStackLayout>
+
                     <!-- Shape Selection -->
                     <VerticalStackLayout Spacing="5">
                         <Label Text="Confetti Shape:" />
@@ -75,6 +105,57 @@
                                 x:Name="ContinuousSwitch"
                                 Toggled="OnContinuousToggled" />
                     </Grid>
+
+                    <!-- Fade Out Toggle -->
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10">
+                        <Label Grid.Column="0" Text="Fade Out Effect:" VerticalOptions="Center" />
+                        <Switch Grid.Column="1"
+                                x:Name="FadeOutSwitch"
+                                Toggled="OnFadeOutToggled" />
+                    </Grid>
+
+                    <!-- Burst Mode Toggle -->
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10">
+                        <Label Grid.Column="0" Text="Burst Mode:" VerticalOptions="Center" />
+                        <Switch Grid.Column="1"
+                                x:Name="BurstModeSwitch"
+                                Toggled="OnBurstModeToggled" />
+                    </Grid>
+
+                    <!-- Color Themes -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Color Theme:" />
+                        <Grid ColumnDefinitions="*, *, *, *" ColumnSpacing="5">
+                            <Button Grid.Column="0"
+                                    x:Name="RandomColorsButton"
+                                    Text="Random"
+                                    BackgroundColor="Blue"
+                                    TextColor="White"
+                                    FontSize="12"
+                                    Clicked="OnColorThemeChanged" />
+                            <Button Grid.Column="1"
+                                    x:Name="RainbowButton"
+                                    Text="Rainbow"
+                                    BackgroundColor="LightGray"
+                                    TextColor="Black"
+                                    FontSize="12"
+                                    Clicked="OnColorThemeChanged" />
+                            <Button Grid.Column="2"
+                                    x:Name="PastelButton"
+                                    Text="Pastel"
+                                    BackgroundColor="LightGray"
+                                    TextColor="Black"
+                                    FontSize="12"
+                                    Clicked="OnColorThemeChanged" />
+                            <Button Grid.Column="3"
+                                    x:Name="GoldButton"
+                                    Text="Gold"
+                                    BackgroundColor="LightGray"
+                                    TextColor="Black"
+                                    FontSize="12"
+                                    Clicked="OnColorThemeChanged" />
+                        </Grid>
+                    </VerticalStackLayout>
 
                     <!-- Preset Configurations -->
                     <Label Text="Preset Configurations:" FontAttributes="Bold" />

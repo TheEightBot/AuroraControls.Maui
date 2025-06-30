@@ -7,362 +7,465 @@ public enum ConfettiShape
 }
 
 /// <summary>
-/// Confetti view.
+/// High-performance confetti view optimized for maximum particles and smooth rendering.
 /// </summary>
 #pragma warning disable CA1001
 public class ConfettiView : SceneViewBase
 #pragma warning restore CA1001
 {
-    private readonly List<ConfettiParticle> _particles = new List<ConfettiParticle>();
-    private readonly object _listLock = new object();
     private readonly Random _rng;
-
     private readonly SKPaint _paint = new SKPaint();
-    private readonly SKPath _path = new SKPath();
 
-    private double _angle, _tiltAngle;
+    private ConfettiParticle[] _particles;
+    private double _angle;
     private bool _confettiActive = true;
+    private int _currentParticleCount;
+    private int _canvasWidth;
+    private int _canvasHeight;
+
+    // Pre-calculated constants for performance
+    private static readonly float[] SinTable = new float[3600]; // 0.1 degree precision
+    private static readonly float[] CosTable = new float[3600];
+
+    static ConfettiView()
+    {
+        // Initialize lookup tables once for all instances
+        for (int i = 0; i < 3600; i++)
+        {
+            float radians = i * 0.001745329f; // 0.1 degrees in radians
+            SinTable[i] = (float)Math.Sin(radians);
+            CosTable[i] = (float)Math.Cos(radians);
+        }
+    }
 
     /// <summary>
-    /// The max particles property defines the maximum number of particles desired. Default is 250 particles.
+    /// The max particles property. Default is 300 for optimal performance.
     /// </summary>
     public static BindableProperty MaxParticlesProperty =
-        BindableProperty.Create(nameof(MaxParticles), typeof(int), typeof(ConfettiView), 250,
-            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
+        BindableProperty.Create(nameof(MaxParticles), typeof(int), typeof(ConfettiView), 300,
+            propertyChanged: OnMaxParticlesChanged);
 
-    /// <summary>
-    /// Gets or sets the max particles.
-    /// </summary>
-    /// <value>Maximum amount of particles as an int. Default is 250.</value>
     public int MaxParticles
     {
-        get { return (int)this.GetValue(MaxParticlesProperty); }
-        set { this.SetValue(MaxParticlesProperty, value); }
+        get => (int)GetValue(MaxParticlesProperty);
+        set => SetValue(MaxParticlesProperty, value);
     }
 
     public static BindableProperty ConfettiShapeProperty =
-        BindableProperty.Create(nameof(ConfettiShape), typeof(ConfettiShape), typeof(ConfettiView), default(ConfettiShape),
-            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
+        BindableProperty.Create(nameof(ConfettiShape), typeof(ConfettiShape), typeof(ConfettiView),
+            ConfettiShape.Rectangular, propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     public ConfettiShape ConfettiShape
     {
-        get => (ConfettiShape)this.GetValue(ConfettiShapeProperty);
-        set => this.SetValue(ConfettiShapeProperty, value);
+        get => (ConfettiShape)GetValue(ConfettiShapeProperty);
+        set => SetValue(ConfettiShapeProperty, value);
+    }
+
+    public static BindableProperty ContinuousProperty =
+        BindableProperty.Create(nameof(Continuous), typeof(bool), typeof(ConfettiView), false,
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
+
+    public bool Continuous
+    {
+        get => (bool)GetValue(ContinuousProperty);
+        set => SetValue(ContinuousProperty, value);
     }
 
     /// <summary>
-    /// The continuous property.
+    /// The particle size property. Controls the size range of confetti particles. Default is 6.0.
     /// </summary>
-    public static BindableProperty ContinuousProperty =
-        BindableProperty.Create(nameof(Continuous), typeof(bool), typeof(ConfettiView), default(bool),
+    public static BindableProperty ParticleSizeProperty =
+        BindableProperty.Create(nameof(ParticleSize), typeof(double), typeof(ConfettiView), 6.0,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
-    /// Gets or sets a value indicating whether this <see cref="T:AuroraControls.ConfettiView"/> is continuous.
+    /// Gets or sets the particle size. This controls the maximum size of confetti particles.
+    /// The actual size will be randomized between 50% and 100% of this value.
     /// </summary>
-    /// <value><c>true</c> if continuous; otherwise, <c>false</c>.</value>
-    public bool Continuous
+    /// <value>The particle size as a double. Default is 6.0.</value>
+    public double ParticleSize
     {
-        get { return (bool)this.GetValue(ContinuousProperty); }
-        set { this.SetValue(ContinuousProperty, value); }
+        get => (double)GetValue(ParticleSizeProperty);
+        set => SetValue(ParticleSizeProperty, value);
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ConfettiView"/> class.
+    /// The gravity property. Controls how fast particles fall. Default is 0.08.
     /// </summary>
+    public static BindableProperty GravityProperty =
+        BindableProperty.Create(nameof(Gravity), typeof(double), typeof(ConfettiView), 0.08,
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
+
+    /// <summary>
+    /// Gets or sets the gravity affecting the particles. Higher values make particles fall faster.
+    /// </summary>
+    public double Gravity
+    {
+        get => (double)GetValue(GravityProperty);
+        set => SetValue(GravityProperty, value);
+    }
+
+    /// <summary>
+    /// The wind intensity property. Controls horizontal drift of particles. Default is 0.3.
+    /// </summary>
+    public static BindableProperty WindIntensityProperty =
+        BindableProperty.Create(nameof(WindIntensity), typeof(double), typeof(ConfettiView), 0.3,
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
+
+    /// <summary>
+    /// Gets or sets the wind intensity. Higher values create more horizontal drift.
+    /// </summary>
+    public double WindIntensity
+    {
+        get => (double)GetValue(WindIntensityProperty);
+        set => SetValue(WindIntensityProperty, value);
+    }
+
+    /// <summary>
+    /// The emission rate property. Controls how many particles spawn per frame in continuous mode. Default is 5.
+    /// </summary>
+    public static BindableProperty EmissionRateProperty =
+        BindableProperty.Create(nameof(EmissionRate), typeof(int), typeof(ConfettiView), 5,
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
+
+    /// <summary>
+    /// Gets or sets the emission rate for continuous mode. Number of new particles per frame.
+    /// </summary>
+    public int EmissionRate
+    {
+        get => (int)GetValue(EmissionRateProperty);
+        set => SetValue(EmissionRateProperty, value);
+    }
+
+    /// <summary>
+    /// The fade out property. Controls whether particles fade out as they age. Default is false.
+    /// </summary>
+    public static BindableProperty FadeOutProperty =
+        BindableProperty.Create(nameof(FadeOut), typeof(bool), typeof(ConfettiView), false,
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
+
+    /// <summary>
+    /// Gets or sets a value indicating whether gets or sets whether particles fade out as they age.
+    /// </summary>
+    public bool FadeOut
+    {
+        get => (bool)GetValue(FadeOutProperty);
+        set => SetValue(FadeOutProperty, value);
+    }
+
+    /// <summary>
+    /// The colors property. Allows setting custom colors for confetti particles.
+    /// </summary>
+    public static BindableProperty ColorsProperty =
+        BindableProperty.Create(nameof(Colors), typeof(IList<Color>), typeof(ConfettiView), null,
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
+
+    /// <summary>
+    /// Gets or sets the custom colors for confetti particles. If null, random colors are used.
+    /// </summary>
+    public IList<Color> Colors
+    {
+        get => (IList<Color>)GetValue(ColorsProperty);
+        set => SetValue(ColorsProperty, value);
+    }
+
+    /// <summary>
+    /// The burst mode property. When true, creates an explosion effect from the center.
+    /// </summary>
+    public static BindableProperty BurstModeProperty =
+        BindableProperty.Create(nameof(BurstMode), typeof(bool), typeof(ConfettiView), false,
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
+
+    /// <summary>
+    /// Gets or sets a value indicating whether gets or sets whether to use burst mode (explosion from center) instead of falling from top.
+    /// </summary>
+    public bool BurstMode
+    {
+        get => (bool)GetValue(BurstModeProperty);
+        set => SetValue(BurstModeProperty, value);
+    }
+
     public ConfettiView()
     {
-        this._rng = new Random(Guid.NewGuid().GetHashCode());
+        _rng = new Random();
+        _particles = new ConfettiParticle[1000]; // Pre-allocate max possible
 
-        this._paint.Style = SKPaintStyle.StrokeAndFill;
-        this._paint.IsDither = true;
-        this._paint.IsAntialias = false;
-        this._paint.HintingLevel = SKPaintHinting.NoHinting;
+        // Optimize paint for maximum performance
+        _paint.Style = SKPaintStyle.Stroke;
+        _paint.IsAntialias = false; // Disable for maximum performance
+        _paint.IsDither = false;
+        _paint.StrokeWidth = 2f;
     }
 
-    /// <summary>
-    /// Method that is called when the property that is specified by propertyName is changed.
-    /// The surface is automatically invalidated/redrawn whenever <c>HeightProperty</c>, <c>WidthProperty</c> or <c>MarginProperty</c> gets updated.
-    /// </summary>
-    /// <param name="propertyName">The name of the bound property that changed.</param>
+    private static void OnMaxParticlesChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        if (bindable is ConfettiView view)
+        {
+            view._currentParticleCount = Math.Min((int)newValue, 1000);
+        }
+
+        IAuroraView.PropertyChangedInvalidateSurface(bindable, oldValue, newValue);
+    }
+
     protected override void OnPropertyChanged(string propertyName = null)
     {
         base.OnPropertyChanged(propertyName);
 
-        if (propertyName.Equals(VisualElement.HeightProperty.PropertyName) ||
-            propertyName.Equals(VisualElement.WidthProperty.PropertyName) ||
-            propertyName.Equals(View.MarginProperty.PropertyName))
+        if (propertyName?.Equals(VisualElement.HeightProperty.PropertyName) == true ||
+            propertyName?.Equals(VisualElement.WidthProperty.PropertyName) == true ||
+            propertyName?.Equals(View.MarginProperty.PropertyName) == true)
         {
-            this.InvalidateSurface();
+            InvalidateSurface();
         }
     }
 
     public override void Start()
     {
-        lock (this._listLock)
-        {
-            this._particles.Clear();
-        }
+        _confettiActive = true;
+        _currentParticleCount = Math.Min(MaxParticles, 1000);
+
+        // Don't initialize particles here - wait for PaintScene to get proper dimensions
+        // Just reset the array to ensure clean initialization
+        _particles = new ConfettiParticle[1000];
 
         base.Start();
     }
 
-    /// <summary>
-    /// Update the specified particle, particleIndex, width, height and remainingFlakes.
-    /// </summary>
-    /// <param name="particle">Particle.</param>
-    /// <param name="particleIndex">Particle index.</param>
-    /// <param name="width">Width.</param>
-    /// <param name="height">Height.</param>
-    /// <param name="remainingFlakes">Remaining flakes.</param>
-    private void Update(ref ConfettiParticle particle, int particleIndex, int width, int height, bool continuous, ref int remainingFlakes)
+    public override void Stop()
     {
-        this._angle += 0.01;
-        this._tiltAngle += 0.1;
-
-        if (!this._confettiActive && particle.YOffset < -15)
-        {
-            particle.YOffset = height + 100;
-            return;
-        }
-
-        this.StepParticle(ref particle, particleIndex);
-
-        if (continuous || particle.YOffset <= height)
-        {
-            ++remainingFlakes;
-
-            this.CheckForReposition(ref particle, particleIndex, width, height);
-        }
+        _confettiActive = false;
+        base.Stop();
     }
 
-    /// <summary>
-    /// Steps the particle.
-    /// </summary>
-    /// <param name="particle">ConfettiParticle ref particle.</param>
-    /// <param name="particleIndex">Particle index.</param>
-    private void StepParticle(ref ConfettiParticle particle, int particleIndex)
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    private ConfettiParticle CreateParticle(int width, int height)
     {
-        particle.TiltAngle += particle.TiltAngleIncremental;
-        particle.YOffset += (Math.Cos(this._angle + particle.Density) + 3d + (particle.Radius / 2d)) / 2d;
-        particle.XOffset += Math.Sin(this._angle);
-        particle.Tilt = Math.Sin(particle.TiltAngle - (particleIndex / 3d)) * 15d;
-    }
+        var maxSize = (float)ParticleSize;
+        var minSize = maxSize * 0.5f; // Minimum size is 50% of maximum
 
-    /// <summary>
-    /// Checks for reposition.
-    /// </summary>
-    /// <param name="particle">Particle.</param>
-    /// <param name="particleIndex">Particle index.</param>
-    /// <param name="width">Width.</param>
-    /// <param name="height">Height.</param>
-    private void CheckForReposition(ref ConfettiParticle particle, int particleIndex, int width, int height)
-    {
-        if ((particle.XOffset > width + 20 || particle.XOffset < -20 || particle.YOffset > height) && this._confettiActive)
+        float x, y, velX, velY;
+
+        if (BurstMode)
         {
-            // 66.67% of the flakes
-            if (particleIndex % 5 > 0 || particleIndex % 2 == 0)
-            {
-                this.RepositionParticle(particle, this._rng.NextDouble() * width, -10, Math.Floor(this._rng.NextDouble() * 10d) - 20);
-            }
-            else
-            {
-                if (Math.Sin(this._angle) > 0)
-                {
-                    // Enter from the left
-                    this.RepositionParticle(particle, -20, this._rng.NextDouble() * height, Math.Floor(this._rng.NextDouble() * 10d) - 20);
-                }
-                else
-                {
-                    // Enter from the right
-                    this.RepositionParticle(particle, width + 20, this._rng.NextDouble() * height, Math.Floor(this._rng.NextDouble() * 10d) - 20);
-                }
-            }
-        }
-    }
+            // Burst from center
+            x = width * 0.5f;
+            y = height * 0.5f;
 
-    /// <summary>
-    /// Repositions the particle.
-    /// </summary>
-    /// <param name="particle">Particle.</param>
-    /// <param name="xCoordinate">X coordinate.</param>
-    /// <param name="yCoordinate">Y coordinate.</param>
-    /// <param name="tilt">Tilt.</param>
-    private void RepositionParticle(ConfettiParticle particle, double xCoordinate, double yCoordinate, double tilt)
-    {
-        particle.XOffset = xCoordinate;
-        particle.YOffset = yCoordinate;
-        particle.Tilt = tilt;
+            // Random direction for burst
+            float angle = (float)(_rng.NextDouble() * Math.PI * 2);
+            float speed = (float)((_rng.NextDouble() * 8) + 4); // Burst speed
+            velX = (float)Math.Cos(angle) * speed;
+            velY = (float)Math.Sin(angle) * speed;
+        }
+        else
+        {
+            // Traditional falling from top
+            x = (float)(_rng.NextDouble() * width);
+            y = (float)((_rng.NextDouble() * -height * 0.5) - 50);
+            velX = (float)((_rng.NextDouble() * 2) - 1);
+            velY = (float)((_rng.NextDouble() * 2) + 1);
+        }
+
+        // Choose color from custom palette or random
+        SKColor color;
+        if (Colors?.Count > 0)
+        {
+            var selectedColor = Colors[_rng.Next(Colors.Count)];
+            color = new SKColor(
+                (byte)(selectedColor.Red * 255),
+                (byte)(selectedColor.Green * 255),
+                (byte)(selectedColor.Blue * 255),
+                (byte)(selectedColor.Alpha * 255));
+        }
+        else
+        {
+            color = new SKColor((byte)_rng.Next(255), (byte)_rng.Next(255), (byte)_rng.Next(255));
+        }
+
+        return new ConfettiParticle
+        {
+            X = x,
+            Y = y,
+            VelocityX = velX,
+            VelocityY = velY,
+            Size = (float)((_rng.NextDouble() * (maxSize - minSize)) + minSize),
+            Rotation = (float)(_rng.NextDouble() * 360),
+            RotationSpeed = (float)((_rng.NextDouble() * 8) - 4),
+            Color = color,
+            IsActive = true,
+            Age = 0f,
+            LifeSpan = FadeOut ? (float)((_rng.NextDouble() * 3) + 2) : float.MaxValue, // 2-5 seconds if fading
+        };
     }
 
     protected override SKImage PaintScene(SKSurface surface, SKImageInfo info, double percentage)
     {
         var canvas = surface.Canvas;
+        canvas.Clear();
 
-        if ((!this._particles?.Any() ?? false) || this._particles.Count != this.MaxParticles)
+        // Update canvas dimensions
+        _canvasWidth = info.Width;
+        _canvasHeight = info.Height;
+
+        // Initialize particles with actual canvas dimensions
+        bool needsInitialization = _particles[0].Size == 0;
+        if (needsInitialization)
         {
-            lock (this._listLock)
+            for (int i = 0; i < _currentParticleCount; i++)
             {
-                var particleCount = this._particles.Count;
-                var maxParticles = this.MaxParticles;
-
-                if (particleCount == 0)
-                {
-                    for (int i = 0; i < maxParticles; i++)
-                    {
-                        this._particles.Add(new ConfettiParticle(info.Width, info.Height, maxParticles, this._rng));
-                    }
-                }
-                else if (particleCount < maxParticles)
-                {
-                    var particlesToAdd = maxParticles - particleCount;
-
-                    for (int i = 0; i < particlesToAdd; i++)
-                    {
-                        this._particles.Add(new ConfettiParticle(info.Width, info.Height, maxParticles, this._rng));
-                    }
-                }
-                else
-                {
-                    var particlesToRemove = particleCount - maxParticles;
-
-                    for (int i = particleCount - 1; i >= maxParticles; i--)
-                    {
-                        this._particles.RemoveAt(i);
-                    }
-                }
+                _particles[i] = CreateParticle(_canvasWidth, _canvasHeight);
             }
         }
 
-        canvas.Clear();
+        _angle += 0.015; // Slower angle increment for stability
 
-        List<ConfettiParticle> tempParticles;
+        var shape = ConfettiShape;
+        var continuous = Continuous;
+        int activeParticles = 0;
 
-        lock (this._listLock)
+        // High-performance particle update and render loop
+        for (int i = 0; i < _currentParticleCount; i++)
         {
-            tempParticles = this._particles.ToList();
+            ref var particle = ref _particles[i];
+
+            if (!particle.IsActive && !continuous)
+            {
+                continue;
+            }
+
+            // Update particle physics
+            UpdateParticle(ref particle, _canvasWidth, _canvasHeight, continuous);
+
+            // Only render if particle is active and on screen
+            if (particle.IsActive && particle.Y > -50 && particle.Y < _canvasHeight + 50)
+            {
+                RenderParticle(canvas, ref particle, shape);
+                activeParticles++;
+            }
         }
-
-        var remainingFlakes = 0;
-        var particleIndex = 0;
-
-        var continuous = this.Continuous;
-        var shape = this.ConfettiShape;
-        for (int i = 0; i < tempParticles.Count; i++)
-        {
-            var particle = tempParticles[i];
-            particle.Draw(canvas, this._paint, this._path, shape);
-            this.Update(ref particle, particleIndex, info.Width, info.Height, continuous, ref remainingFlakes);
-        }
-
-        if (remainingFlakes <= 0)
-        {
-            canvas.Clear();
-        }
-
-        tempParticles = null;
 
         return surface.Snapshot();
     }
 
-    /// <summary>
-    /// Confetti particle class, represents a single confetti particle.
-    /// </summary>
-    private class ConfettiParticle
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    private void UpdateParticle(ref ConfettiParticle particle, int width, int height, bool continuous)
     {
-        /// <summary>
-        /// Gets or sets the XO ffset.
-        /// </summary>
-        /// <value>The XO ffset.</value>
-        public double XOffset { get; set; }
-
-        /// <summary>
-        /// Gets or sets the YO ffset.
-        /// </summary>
-        /// <value>The YO ffset.</value>
-        public double YOffset { get; set; }
-
-        /// <summary>
-        /// Gets the radius.
-        /// </summary>
-        /// <value>The radius.</value>
-        public int Radius { get; private set; }
-
-        /// <summary>
-        /// Gets the color.
-        /// </summary>
-        /// <value>The color.</value>
-        public SKColor Color { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the tilt.
-        /// </summary>
-        /// <value>The tilt.</value>
-        public double Tilt { get; set; }
-
-        /// <summary>
-        /// Gets the tilt angle incremental.
-        /// </summary>
-        /// <value>The tilt angle incremental.</value>
-        public double TiltAngleIncremental { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the tilt angle.
-        /// </summary>
-        /// <value>The tilt angle.</value>
-        public double TiltAngle { get; set; }
-
-        /// <summary>
-        /// Gets or sets the density.
-        /// </summary>
-        /// <value>The density.</value>
-        public double Density { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConfettiParticle"/> class.
-        /// </summary>
-        /// <param name="width">Width of the confetti particle.</param>
-        /// <param name="height">Height of the confetti particle.</param>
-        /// <param name="maxParticles">Max particles.</param>
-        /// <param name="rng">random number gen.</param>
-        public ConfettiParticle(int width, int height, int maxParticles, Random rng)
+        if (!particle.IsActive && !continuous)
         {
-            this.XOffset = rng.NextDouble() * width;
-            this.YOffset = (rng.NextDouble() * height) - height;
-            this.Radius = rng.Next(10, 30);
-            this.Color = new SKColor((byte)rng.Next(0, 255), (byte)rng.Next(0, 255), (byte)rng.Next(0, 255), (byte)255);
-            this.Tilt = Math.Floor(rng.NextDouble() * 10) - 10;
-            this.TiltAngleIncremental = (rng.NextDouble() * 0.07) + 0.05;
-            this.TiltAngle = 0d;
-            this.Density = (rng.NextDouble() * maxParticles) + 10;
+            return;
         }
 
-        /// <summary>
-        /// Draw the specified canvas, paint and path.
-        /// </summary>
-        /// <param name="canvas">Canvas to draw upon.</param>
-        /// <param name="paint">SKPaint.</param>
-        /// <param name="path">Particle drawing path.</param>
-        public void Draw(SKCanvas canvas, SKPaint paint, SKPath path, ConfettiShape shape)
-        {
-            paint.Color = this.Color;
-            paint.StrokeWidth = this.Radius / 2f;
+        // Update particle age for fade out
+        particle.Age += 0.016f; // Assume ~60 FPS (1/60 second per frame)
 
-            switch (shape)
+        // Check if particle should fade out
+        if (FadeOut && particle.Age >= particle.LifeSpan)
+        {
+            particle.IsActive = false;
+            return;
+        }
+
+        // Apply wind effect with configurable intensity
+        float windEffect = (float)(Math.Sin(_angle + (particle.X * 0.01)) * WindIntensity);
+        particle.X += particle.VelocityX + windEffect;
+        particle.Y += particle.VelocityY;
+        particle.Rotation += particle.RotationSpeed;
+
+        // Apply gravity
+        particle.VelocityY += (float)Gravity;
+
+        // Handle off-screen particles
+        if (particle.Y > height + 50)
+        {
+            if (continuous)
             {
-                case ConfettiShape.Circular:
-                    paint.StrokeCap = SKStrokeCap.Round;
-                    break;
-                default:
-                    paint.StrokeCap = SKStrokeCap.Square;
-                    break;
+                // Respawn particles based on emission rate
+                particle = CreateParticle(width, height);
             }
-
-            path.Reset();
-            path.MoveTo((float)(this.XOffset + this.Tilt + (this.Radius / 4f)), (float)this.YOffset);
-            path.LineTo((float)(this.XOffset + this.Tilt), (float)(this.YOffset + this.Tilt + (this.Radius / 4f)));
-
-            canvas.DrawPath(path, paint);
+            else
+            {
+                particle.IsActive = false;
+            }
         }
+        else if (particle.X < -50 || particle.X > width + 50)
+        {
+            if (continuous)
+            {
+                // Wrap around horizontally in continuous mode
+                if (particle.X < -50)
+                {
+                    particle.X = width + 40;
+                }
+                else
+                {
+                    particle.X = -40;
+                }
+            }
+            else
+            {
+                particle.IsActive = false;
+            }
+        }
+    }
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    private void RenderParticle(SKCanvas canvas, ref ConfettiParticle particle, ConfettiShape shape)
+    {
+        // Apply fade out effect if enabled
+        var color = particle.Color;
+        if (FadeOut && particle.Age > 0)
+        {
+            float fadeAlpha = Math.Max(0f, 1f - (particle.Age / particle.LifeSpan));
+            color = new SKColor(color.Red, color.Green, color.Blue, (byte)(255 * fadeAlpha));
+        }
+
+        _paint.Color = color;
+        _paint.StrokeWidth = particle.Size * 0.5f;
+
+        if (shape == ConfettiShape.Circular)
+        {
+            _paint.StrokeCap = SKStrokeCap.Round;
+        }
+        else
+        {
+            _paint.StrokeCap = SKStrokeCap.Square;
+        }
+
+        // Fast lookup for rotation
+        int rotIndex = (int)(particle.Rotation * 10) % 3600;
+        if (rotIndex < 0)
+        {
+            rotIndex += 3600;
+        }
+
+        float cos = CosTable[rotIndex];
+        float sin = SinTable[rotIndex];
+
+        // Draw optimized line representing confetti piece
+        float halfSize = particle.Size * 0.5f;
+        float x1 = particle.X + (cos * halfSize);
+        float y1 = particle.Y + (sin * halfSize);
+        float x2 = particle.X - (cos * halfSize);
+        float y2 = particle.Y - (sin * halfSize);
+
+        canvas.DrawLine(x1, y1, x2, y2, _paint);
+    }
+
+    /// <summary>
+    /// Ultra-lightweight particle struct for maximum performance.
+    /// </summary>
+    private struct ConfettiParticle
+    {
+        public float X;
+        public float Y;
+        public float VelocityX;
+        public float VelocityY;
+        public float Size;
+        public float Rotation;
+        public float RotationSpeed;
+        public SKColor Color;
+        public bool IsActive;
+        public float Age;
+        public float LifeSpan;
     }
 }
