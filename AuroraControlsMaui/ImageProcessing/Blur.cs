@@ -67,7 +67,7 @@ public class Blur : ImageProcessingBase, IImageProcessor
 
         var blur = imageProcessor as AuroraControls.ImageProcessing.Blur;
 
-        var blurAmount = (float)blur.BlurAmount;
+        float blurAmount = (float)blur.BlurAmount;
         var blurLocation = blur.BlurringLocation;
 
         var bitmap = new SKBitmap(processingImage.Info);

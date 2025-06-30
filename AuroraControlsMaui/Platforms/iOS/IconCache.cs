@@ -26,7 +26,7 @@ public class IconCache : IconCacheBase
         using (var image = await imageSource.GetHandler().LoadImageAsync(imageSource).ConfigureAwait(false))
         using (var data = image.AsPNG())
         {
-            var dataBytes = new byte[data.Length];
+            byte[] dataBytes = new byte[data.Length];
             System.Runtime.InteropServices.Marshal.Copy(data.Bytes, dataBytes, 0, (int)data.Length);
             return dataBytes;
         }

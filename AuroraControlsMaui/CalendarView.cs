@@ -51,7 +51,7 @@ public class CalendarView : AuroraViewBase
     /// </summary>
     public static readonly BindableProperty CurrentYearProperty =
         BindableProperty.Create(nameof(CurrentYear), typeof(int), typeof(CalendarView), DateTime.Now.Year,
-            propertyChanged: (bindable, oldValue, newValue) =>
+            propertyChanged: (bindable, _, _) =>
             {
                 if (bindable is not CalendarView control)
                 {
@@ -68,7 +68,7 @@ public class CalendarView : AuroraViewBase
                     return value;
                 }
 
-                var val = (int)value;
+                int val = (int)value;
 
                 var maxDate = control.MaximumDate;
 
@@ -95,7 +95,7 @@ public class CalendarView : AuroraViewBase
     /// </summary>
     public static readonly BindableProperty CurrentMonthProperty =
         BindableProperty.Create(nameof(CurrentMonth), typeof(int), typeof(CalendarView), DateTime.Now.Month,
-            propertyChanged: (bindable, oldValue, newValue) =>
+            propertyChanged: (bindable, _, _) =>
             {
                 if (bindable is not CalendarView control)
                 {
@@ -112,7 +112,7 @@ public class CalendarView : AuroraViewBase
                     return value;
                 }
 
-                var val = (int)value;
+                int val = (int)value;
 
                 var maxDate = control.MaximumDate;
 
@@ -312,7 +312,7 @@ public class CalendarView : AuroraViewBase
     public static readonly BindableProperty SelectionTypeProperty =
         BindableProperty.Create(nameof(SelectionType), typeof(CalendarSelectionType), typeof(CalendarView),
             CalendarSelectionType.Single,
-            propertyChanged: (bindable, oldValue, newValue) =>
+            propertyChanged: (bindable, _, newValue) =>
             {
                 var control = bindable as CalendarView;
                 var selectionType = (CalendarSelectionType)newValue;
@@ -321,7 +321,7 @@ public class CalendarView : AuroraViewBase
                     return;
                 }
 
-                var startingDayOfWeek = (int)new DateTime(control.CurrentYear, control.CurrentMonth, 1).DayOfWeek;
+                int startingDayOfWeek = (int)new DateTime(control.CurrentYear, control.CurrentMonth, 1).DayOfWeek;
 
                 if (startingDayOfWeek == 7)
                 {
@@ -348,8 +348,8 @@ public class CalendarView : AuroraViewBase
 
                         break;
                     case CalendarSelectionType.Span:
-                        var firstSelectedIndex = control._dateContainers.FindIndex(x => x.Selected);
-                        var lastSelectedIndex = control._dateContainers.FindLastIndex(x => x.Selected);
+                        int firstSelectedIndex = control._dateContainers.FindIndex(x => x.Selected);
+                        int lastSelectedIndex = control._dateContainers.FindLastIndex(x => x.Selected);
 
                         if (firstSelectedIndex >= 0 && lastSelectedIndex >= firstSelectedIndex)
                         {
@@ -364,7 +364,7 @@ public class CalendarView : AuroraViewBase
                                 var foundDate = control._selectedDates.FirstOrDefault(x =>
                                     x.Date == new DateTime(control.CurrentYear, control.CurrentMonth, i - startingDayOfWeek + 2).Date);
 
-                                var isWithinSelection = i >= firstSelectedIndex && i <= lastSelectedIndex;
+                                bool isWithinSelection = i >= firstSelectedIndex && i <= lastSelectedIndex;
                                 control._dateContainers.ElementAt(i).Selected = isWithinSelection;
 
                                 if (foundDate.Date != date.Date && isWithinSelection)
@@ -408,7 +408,7 @@ public class CalendarView : AuroraViewBase
         BindableProperty.Create(nameof(DayOfWeekDisplayType), typeof(CalendarDayOfWeekDisplayType),
             typeof(CalendarView), CalendarDayOfWeekDisplayType.Abbreviated,
             propertyChanged:
-            (bindable, oldValue, newValue) =>
+            (bindable, _, _) =>
             {
                 (bindable as CalendarView)._currentCalendarNeedsRebuild = true;
                 (bindable as IAuroraView)?.InvalidateSurface();
@@ -424,7 +424,7 @@ public class CalendarView : AuroraViewBase
         BindableProperty.Create(nameof(CalendarDayDisplayLocation), typeof(CalendarDayDisplayLocationType),
             typeof(CalendarView), CalendarDayDisplayLocationType.Centered,
             propertyChanged:
-            (bindable, oldValue, newValue) =>
+            (bindable, _, _) =>
             {
                 (bindable as CalendarView)._currentCalendarNeedsRebuild = true;
                 (bindable as IAuroraView)?.InvalidateSurface();
@@ -517,7 +517,7 @@ public class CalendarView : AuroraViewBase
         var canvas = surface.Canvas;
 
         using var dateFontPaint = new SKPaint();
-        var columnSize = info.Width / (float)Columns;
+        float columnSize = info.Width / (float)Columns;
 
         var dateFontPaintColor = this.DateTextColor.ToSKColor();
         var selectedDateFontPaintColor = this.SelectedDateTextColor.ToSKColor();
@@ -530,7 +530,7 @@ public class CalendarView : AuroraViewBase
 
         var currentCultureDateFormat = CultureInfo.CurrentUICulture.DateTimeFormat;
 
-        var daysOfWeekNames =
+        string[] daysOfWeekNames =
             this._daysOfWeekNames
                 .Select(
                     dayOfWeek =>
@@ -550,13 +550,13 @@ public class CalendarView : AuroraViewBase
                     })
                 .ToArray();
 
-        var longestName =
+        string? longestName =
             daysOfWeekNames
                 .OrderByDescending(x => x.Length)
                 .FirstOrDefault();
 
         dateFontPaint.TextSize = 49f;
-        var foundFontSize = false;
+        bool foundFontSize = false;
 
         while (!foundFontSize)
         {
@@ -572,20 +572,20 @@ public class CalendarView : AuroraViewBase
             }
         }
 
-        var dayHeaderHeight = (float)canvas.TextSize("Xy", dateFontPaint).Height + 8f;
+        float dayHeaderHeight = (float)canvas.TextSize("Xy", dateFontPaint).Height + 8f;
 
-        var rowSize = (info.Height - dayHeaderHeight) / (float)Rows;
+        float rowSize = (info.Height - dayHeaderHeight) / Rows;
 
-        var minSize = (float)Math.Min(rowSize, columnSize);
+        float minSize = Math.Min(rowSize, columnSize);
 
         // TODO: Make this more configurable
-        var selectionSize = minSize * .8f;
-        var halfSelectionSize = selectionSize * .5f;
+        float selectionSize = minSize * .8f;
+        float halfSelectionSize = selectionSize * .5f;
 
-        var currentYear = this.CurrentYear;
-        var currentMonth = this.CurrentMonth;
+        int currentYear = this.CurrentYear;
+        int currentMonth = this.CurrentMonth;
 
-        var startingDayOfWeek = (int)new DateTime(currentYear, currentMonth, 1).DayOfWeek;
+        int startingDayOfWeek = (int)new DateTime(currentYear, currentMonth, 1).DayOfWeek;
 
         if (startingDayOfWeek == 7)
         {
@@ -596,7 +596,7 @@ public class CalendarView : AuroraViewBase
             startingDayOfWeek++;
         }
 
-        var daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
+        int daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
 
         int dayOfMonth = 1,
             currentPosition = startingDayOfWeek,
@@ -610,12 +610,12 @@ public class CalendarView : AuroraViewBase
             this._rowSize = rowSize;
             this._columnSize = columnSize;
 
-            var rowIncrementer = 0;
-            var columnIncrementer = 0;
+            int rowIncrementer = 0;
+            int columnIncrementer = 0;
             for (int currIndex = 0; currIndex < TotalCells; currIndex++)
             {
-                var rowLocation = dayHeaderHeight + (rowIncrementer * rowSize);
-                var columnLocation = columnIncrementer * columnSize;
+                float rowLocation = dayHeaderHeight + (rowIncrementer * rowSize);
+                float columnLocation = columnIncrementer * columnSize;
 
                 var cellInfo = this._dateContainers?.ElementAtOrDefault(currIndex);
 
@@ -718,9 +718,9 @@ public class CalendarView : AuroraViewBase
                     {
                         canvas.DrawRect(dateContainer.Location, availablePaint);
 
-                        var previousContainerSelected =
+                        bool previousContainerSelected =
                             this._dateContainers?.ElementAtOrDefault(i - 1)?.Selected ?? false;
-                        var nextContainerSelected = this._dateContainers?.ElementAtOrDefault(i + 1)?.Selected ?? false;
+                        bool nextContainerSelected = this._dateContainers?.ElementAtOrDefault(i + 1)?.Selected ?? false;
 
                         if (previousContainerSelected && nextContainerSelected)
                         {
@@ -781,25 +781,25 @@ public class CalendarView : AuroraViewBase
 
             for (int i = 1; i < Columns; i++)
             {
-                var columnLocation = i * columnSize;
+                float columnLocation = i * columnSize;
                 canvas.DrawLine(columnLocation, dayHeaderHeight, columnLocation, info.Height, separatorPaint);
             }
 
             for (int i = 1; i < Rows; i++)
             {
-                var rowLocation = dayHeaderHeight + (i * rowSize);
+                float rowLocation = dayHeaderHeight + (i * rowSize);
                 canvas.DrawLine(0, rowLocation, info.Width, rowLocation, separatorPaint);
             }
 
-            var verticalPadding = 8f;
-            var horizontalPadding = 10f;
+            float verticalPadding = 8f;
+            float horizontalPadding = 10f;
 
             while (dayOfMonth <= daysInMonth)
             {
-                var dayOfMonthText = dayOfMonth.ToString();
+                string dayOfMonthText = dayOfMonth.ToString();
 
-                var columnPlacement = columnPosition * columnSize;
-                var rowPlacement = rowPosition * rowSize;
+                float columnPlacement = columnPosition * columnSize;
+                float rowPlacement = rowPosition * rowSize;
 
                 switch (this.CalendarDayDisplayLocation)
                 {
@@ -808,8 +808,8 @@ public class CalendarView : AuroraViewBase
                         fontPaint.TextAlign = SKTextAlign.Left;
                         fontPaint.Color = dateFontPaintColor;
                         var measured = canvas.TextSize(dayOfMonthText, fontPaint);
-                        var fontXUpperRightPlacement = columnPlacement - (float)measured.Width - horizontalPadding;
-                        var fontYUpperRightPlacement = -rowSize - (float)fontPaint.FontMetrics.Ascent + verticalPadding;
+                        float fontXUpperRightPlacement = columnPlacement - (float)measured.Width - horizontalPadding;
+                        float fontYUpperRightPlacement = -rowSize - fontPaint.FontMetrics.Ascent + verticalPadding;
                         canvas.DrawText(dayOfMonthText, fontXUpperRightPlacement, dayHeaderHeight + rowPlacement + fontYUpperRightPlacement, fontPaint);
                         break;
                     case CalendarDayDisplayLocationType.Centered:
@@ -819,8 +819,8 @@ public class CalendarView : AuroraViewBase
                         fontPaint.Color = this._dateContainers[currentPosition - 1].Selected
                             ? selectedDateFontPaintColor
                             : dateFontPaintColor;
-                        var fontXCenteredPlacement = columnSize * .5f;
-                        var fontYCenteredPlacement = (rowSize - fontPaint.FontMetrics.CapHeight) * .5f;
+                        float fontXCenteredPlacement = columnSize * .5f;
+                        float fontYCenteredPlacement = (rowSize - fontPaint.FontMetrics.CapHeight) * .5f;
                         canvas.DrawText(dayOfMonthText, columnPlacement - fontXCenteredPlacement,
                             dayHeaderHeight + rowPlacement - fontYCenteredPlacement, fontPaint);
                         break;
@@ -842,8 +842,7 @@ public class CalendarView : AuroraViewBase
 
                         // We basically have to force it to this size to make it work right
                         dateFontPaint.TextSize = minSize * .25f;
-                        var circleSize = Math.Abs(dateFontPaint.FontMetrics.Ascent) * .5f;
-                        var halfCircleSize = circleSize * .5f;
+                        float circleSize = Math.Abs(dateFontPaint.FontMetrics.Ascent) * .5f;
 
                         canvas.DrawCircle(
                             columnPlacement - columnSize + circleSize + verticalPadding,
@@ -855,11 +854,11 @@ public class CalendarView : AuroraViewBase
                             eventTextPaint.Color = largeEvent.TextColor.ToSKColor();
                             eventTextPaint.TextSize = dateFontPaint.TextSize * .8f;
 
-                            var fontSizeGood = false;
+                            bool fontSizeGood = false;
 
-                            var x = columnPlacement - columnSize + (columnSize * .5f);
-                            var y = dayHeaderHeight + rowPlacement - rowSize + (circleSize * 2f) + verticalPadding;
-                            var yAvailable = rowSize - (circleSize * 2f) - (verticalPadding * 2f);
+                            float x = columnPlacement - columnSize + (columnSize * .5f);
+                            float y = dayHeaderHeight + rowPlacement - rowSize + (circleSize * 2f) + verticalPadding;
+                            float yAvailable = rowSize - (circleSize * 2f) - (verticalPadding * 2f);
 
                             Size textSize = Size.Zero;
 
@@ -885,11 +884,11 @@ public class CalendarView : AuroraViewBase
                     }
                     else
                     {
-                        var count = calendarEventsForDay.Count;
+                        int count = calendarEventsForDay.Count;
 
-                        var fontYPlacement = (rowSize - fontPaint.FontMetrics.CapHeight) * .5f;
+                        float fontYPlacement = (rowSize - fontPaint.FontMetrics.CapHeight) * .5f;
 
-                        var standardEventSize = fontYPlacement * .25f;
+                        float standardEventSize = fontYPlacement * .25f;
 
                         for (int i = 0; i < count; i++)
                         {
@@ -897,7 +896,7 @@ public class CalendarView : AuroraViewBase
                             calendarEventPaint.Color = calendarEvent.Color != default(Color)
                                 ? calendarEvent.Color.ToSKColor()
                                 : SKColors.OrangeRed;
-                            var columnOffset = columnSize * ((i + 1f) / (float)(count + 1));
+                            float columnOffset = columnSize * ((i + 1f) / (count + 1));
                             canvas.DrawCircle(
                                 columnPlacement - columnOffset,
                                 dayHeaderHeight + rowPlacement - (fontYPlacement * .5f), standardEventSize,
@@ -939,9 +938,9 @@ public class CalendarView : AuroraViewBase
     {
         e.Handled = true;
 
-        var updatedContainers = false;
+        bool updatedContainers = false;
 
-        var startingDayOfWeek = (int)new DateTime(this.CurrentYear, this.CurrentMonth, 1).DayOfWeek;
+        int startingDayOfWeek = (int)new DateTime(this.CurrentYear, this.CurrentMonth, 1).DayOfWeek;
 
         if (startingDayOfWeek == 7)
         {
@@ -1003,8 +1002,8 @@ public class CalendarView : AuroraViewBase
                     switch (SelectionType)
                     {
                         case CalendarSelectionType.Span:
-                            var firstSelectedIndex = Math.Min(_pressedIndex.Value, i);
-                            var lastSelectedIndex = Math.Max(_pressedIndex.Value, i);
+                            int firstSelectedIndex = Math.Min(_pressedIndex.Value, i);
+                            int lastSelectedIndex = Math.Max(_pressedIndex.Value, i);
 
                             for (int index = 0; index < _dateContainers.Count; index++)
                             {
@@ -1018,7 +1017,7 @@ public class CalendarView : AuroraViewBase
                                     x.Date == new DateTime(CurrentYear, CurrentMonth, index - startingDayOfWeek + 2)
                                         .Date);
 
-                                var isWithinSelection = index >= firstSelectedIndex && index <= lastSelectedIndex;
+                                bool isWithinSelection = index >= firstSelectedIndex && index <= lastSelectedIndex;
                                 _dateContainers.ElementAt(index).Selected = isWithinSelection;
 
                                 if (foundDate.Date != date.Date && isWithinSelection)
@@ -1035,12 +1034,12 @@ public class CalendarView : AuroraViewBase
                             updatedContainers = true;
                             break;
                         case CalendarSelectionType.Multiple:
-                            var minIndex = Math.Min(i, _pressedIndex ?? -1);
-                            var maxIndex = Math.Max(i, _pressedIndex ?? -1);
+                            int minIndex = Math.Min(i, _pressedIndex ?? -1);
+                            int maxIndex = Math.Max(i, _pressedIndex ?? -1);
 
                             if (minIndex >= 0 && maxIndex >= 0)
                             {
-                                var currIndex = minIndex;
+                                int currIndex = minIndex;
                                 foreach (var dateContainer in _dateContainers?.GetRange(minIndex, maxIndex - minIndex + 1))
                                 {
                                     dateContainer.Selected = _wasSelected;

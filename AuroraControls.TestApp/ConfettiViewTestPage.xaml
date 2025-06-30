@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             x:Class="AuroraControls.TestApp.ConfettiViewTestPage"
+             Title="ConfettiView Test Page">
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="20">
+            <Label Text="ConfettiView Test Page"
+                   FontSize="Title"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <!-- Confetti Display Area -->
+            <Frame BorderColor="Gray" Padding="0" HeightRequest="300" Margin="0,10,0,0">
+                <aurora:ConfettiView x:Name="ConfettiView"
+                                     MaxParticles="250"
+                                     ConfettiShape="Rectangular"
+                                     Continuous="False"
+                                     BackgroundColor="LightBlue" />
+            </Frame>
+
+            <!-- Controls Section -->
+            <Frame BorderColor="Gray" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Controls" FontSize="Subtitle" FontAttributes="Bold"/>
+
+                    <!-- Start/Stop Buttons -->
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                        <Button Grid.Column="0"
+                                Text="Start Confetti"
+                                BackgroundColor="Green"
+                                TextColor="White"
+                                Clicked="OnStartClicked" />
+                        <Button Grid.Column="1"
+                                Text="Stop Confetti"
+                                BackgroundColor="Red"
+                                TextColor="White"
+                                Clicked="OnStopClicked" />
+                    </Grid>
+
+                    <!-- Max Particles Control -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="{Binding Source={x:Reference MaxParticlesSlider}, Path=Value, StringFormat='Max Particles: {0:F0}'}" />
+                        <Slider x:Name="MaxParticlesSlider"
+                                Minimum="50"
+                                Maximum="500"
+                                Value="250"
+                                ValueChanged="OnMaxParticlesChanged" />
+                    </VerticalStackLayout>
+
+                    <!-- Particle Size Control -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="{Binding Source={x:Reference ParticleSizeSlider}, Path=Value, StringFormat='Particle Size: {0:F1}'}" />
+                        <Slider x:Name="ParticleSizeSlider"
+                                Minimum="2"
+                                Maximum="15"
+                                Value="6"
+                                ValueChanged="OnParticleSizeChanged" />
+                    </VerticalStackLayout>
+
+                    <!-- Gravity Control -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="{Binding Source={x:Reference GravitySlider}, Path=Value, StringFormat='Gravity: {0:F2}'}" />
+                        <Slider x:Name="GravitySlider"
+                                Minimum="0.01"
+                                Maximum="0.3"
+                                Value="0.08"
+                                ValueChanged="OnGravityChanged" />
+                    </VerticalStackLayout>
+
+                    <!-- Wind Intensity Control -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="{Binding Source={x:Reference WindIntensitySlider}, Path=Value, StringFormat='Wind Intensity: {0:F1}'}" />
+                        <Slider x:Name="WindIntensitySlider"
+                                Minimum="0"
+                                Maximum="2"
+                                Value="0.3"
+                                ValueChanged="OnWindIntensityChanged" />
+                    </VerticalStackLayout>
+
+                    <!-- Shape Selection -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Confetti Shape:" />
+                        <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
+                            <Button Grid.Column="0"
+                                    x:Name="RectangularButton"
+                                    Text="Rectangular"
+                                    BackgroundColor="Blue"
+                                    TextColor="White"
+                                    Clicked="OnShapeChanged" />
+                            <Button Grid.Column="1"
+                                    x:Name="CircularButton"
+                                    Text="Circular"
+                                    BackgroundColor="LightGray"
+                                    TextColor="Black"
+                                    Clicked="OnShapeChanged" />
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <!-- Continuous Mode Toggle -->
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10">
+                        <Label Grid.Column="0" Text="Continuous Mode:" VerticalOptions="Center" />
+                        <Switch Grid.Column="1"
+                                x:Name="ContinuousSwitch"
+                                Toggled="OnContinuousToggled" />
+                    </Grid>
+
+                    <!-- Fade Out Toggle -->
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10">
+                        <Label Grid.Column="0" Text="Fade Out Effect:" VerticalOptions="Center" />
+                        <Switch Grid.Column="1"
+                                x:Name="FadeOutSwitch"
+                                Toggled="OnFadeOutToggled" />
+                    </Grid>
+
+                    <!-- Burst Mode Toggle -->
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10">
+                        <Label Grid.Column="0" Text="Burst Mode:" VerticalOptions="Center" />
+                        <Switch Grid.Column="1"
+                                x:Name="BurstModeSwitch"
+                                Toggled="OnBurstModeToggled" />
+                    </Grid>
+
+                    <!-- Color Themes -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Color Theme:" />
+                        <Grid ColumnDefinitions="*, *, *, *" ColumnSpacing="5">
+                            <Button Grid.Column="0"
+                                    x:Name="RandomColorsButton"
+                                    Text="Random"
+                                    BackgroundColor="Blue"
+                                    TextColor="White"
+                                    FontSize="12"
+                                    Clicked="OnColorThemeChanged" />
+                            <Button Grid.Column="1"
+                                    x:Name="RainbowButton"
+                                    Text="Rainbow"
+                                    BackgroundColor="LightGray"
+                                    TextColor="Black"
+                                    FontSize="12"
+                                    Clicked="OnColorThemeChanged" />
+                            <Button Grid.Column="2"
+                                    x:Name="PastelButton"
+                                    Text="Pastel"
+                                    BackgroundColor="LightGray"
+                                    TextColor="Black"
+                                    FontSize="12"
+                                    Clicked="OnColorThemeChanged" />
+                            <Button Grid.Column="3"
+                                    x:Name="GoldButton"
+                                    Text="Gold"
+                                    BackgroundColor="LightGray"
+                                    TextColor="Black"
+                                    FontSize="12"
+                                    Clicked="OnColorThemeChanged" />
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <!-- Preset Configurations -->
+                    <Label Text="Preset Configurations:" FontAttributes="Bold" />
+                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="10" RowSpacing="10">
+                        <Button Grid.Column="0"
+                                Text="Light Show"
+                                BackgroundColor="Purple"
+                                TextColor="White"
+                                Clicked="OnLightShowClicked" />
+                        <Button Grid.Column="1"
+                                Text="Celebration"
+                                BackgroundColor="Orange"
+                                TextColor="White"
+                                Clicked="OnCelebrationClicked" />
+                        <Button Grid.Column="2"
+                                Text="Party Mode"
+                                BackgroundColor="HotPink"
+                                TextColor="White"
+                                Clicked="OnPartyModeClicked" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Status Information -->
+            <Frame BorderColor="Gray" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Status Information" FontSize="Subtitle" FontAttributes="Bold"/>
+                    <Label x:Name="StatusLabel"
+                           Text="Ready to start confetti animation"
+                           FontSize="14" />
+                    <Label x:Name="ConfigLabel"
+                           Text="Current: 250 particles, Rectangular shape, One-time mode"
+                           FontSize="12"
+                           TextColor="Gray" />
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

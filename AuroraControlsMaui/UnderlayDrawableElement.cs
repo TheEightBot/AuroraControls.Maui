@@ -67,7 +67,7 @@ public static class UnderlayDrawableExtensions
 {
     public static SizeRequest GetDesiredSize(this IUnderlayDrawable underlayDrawable, SizeRequest sizeRequest, float scale = 1.0f)
     {
-        var yOffset = underlayDrawable.ActivePlaceholderFontSize + ((underlayDrawable.BorderSize + underlayDrawable.InternalMargin.Top) * 2f);
+        double yOffset = underlayDrawable.ActivePlaceholderFontSize + ((underlayDrawable.BorderSize + underlayDrawable.InternalMargin.Top) * 2f);
 
         yOffset *= scale;
 
@@ -79,8 +79,8 @@ public static class UnderlayDrawableExtensions
 
     public static InsetsF GetLayoutInset(this IUnderlayDrawable underlayDrawable)
     {
-        var yOffset = underlayDrawable.ActivePlaceholderFontSize;
-        var borderSize = underlayDrawable.BorderSize;
+        float yOffset = underlayDrawable.ActivePlaceholderFontSize;
+        float borderSize = underlayDrawable.BorderSize;
         var internalMargin = underlayDrawable.InternalMargin;
 
         switch (underlayDrawable.BorderStyle)

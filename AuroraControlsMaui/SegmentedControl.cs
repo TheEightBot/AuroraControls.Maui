@@ -106,7 +106,7 @@ public class SegmentedControl : AuroraViewBase
 
     public static readonly BindableProperty SelectedIndexProperty =
         BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(SegmentedControl), -1, BindingMode.TwoWay,
-            propertyChanged: (bindable, oldValue, newValue) =>
+            propertyChanged: (bindable, _, newValue) =>
             {
                 if (bindable is SegmentedControl sc)
                 {
@@ -123,7 +123,7 @@ public class SegmentedControl : AuroraViewBase
 
     public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(SegmentedControl), null, BindingMode.OneWayToSource,
         propertyChanged:
-            (bindable, oldValue, newValue) =>
+            (bindable, _, newValue) =>
             {
                 if (bindable is SegmentedControl sc)
                 {
@@ -200,7 +200,7 @@ public class SegmentedControl : AuroraViewBase
             paint.IsAntialias = true;
             paint.Style = SKPaintStyle.Fill;
 
-            var scaledCornerRadius =
+            float scaledCornerRadius =
                 this.SegmentControlStyle switch
                 {
                     SegmentedControlStyle.Rectangular => 0f,
@@ -212,13 +212,13 @@ public class SegmentedControl : AuroraViewBase
             var backgroundColor = ControlBackgroundColor.ToSKColor();
             var style = this.SegmentControlStyle;
 
-            var borderSize = (float)this.BorderSize * _scale;
-            var halfBorderSize = borderSize * .5f;
+            float borderSize = (float)this.BorderSize * _scale;
+            float halfBorderSize = borderSize * .5f;
 
             var segments = Segments.ToList();
 
-            var segmentSize = info.Width / (float)(segments.Any() ? segments.Count : 1);
-            var halfSegmentSize = segmentSize * .5f;
+            float segmentSize = info.Width / (float)(segments.Any() ? segments.Count : 1);
+            float halfSegmentSize = segmentSize * .5f;
 
             _segmentCount = segments.Count;
             _controlRect = info.Rect;
@@ -239,7 +239,7 @@ public class SegmentedControl : AuroraViewBase
 
                 if (segment != null)
                 {
-                    var selected = i == SelectedIndex;
+                    bool selected = i == SelectedIndex;
 
                     var segmentForegroundColor =
                         segment.ForegroundColor != default(Color)
@@ -250,7 +250,7 @@ public class SegmentedControl : AuroraViewBase
 
                     if (selected)
                     {
-                        var selectedX = segmentSize * i;
+                        float selectedX = segmentSize * i;
 
                         switch (style)
                         {
@@ -279,7 +279,7 @@ public class SegmentedControl : AuroraViewBase
 
                             var imageSize = contentRect.AspectFit(segment.SVG.Picture.CullRect.Size);
 
-                            var scaleAmount = (float)Math.Max(0, Math.Min(imageSize.Width / segment.SVG.Picture.CullRect.Width, imageSize.Height / segment.SVG.Picture.CullRect.Height));
+                            float scaleAmount = Math.Max(0, Math.Min(imageSize.Width / segment.SVG.Picture.CullRect.Width, imageSize.Height / segment.SVG.Picture.CullRect.Height));
 
                             var svgScale = SKMatrix.CreateScale(scaleAmount, scaleAmount);
 
@@ -313,14 +313,14 @@ public class SegmentedControl : AuroraViewBase
                             fontPaint.Typeface = FontCache.Instance.TypefaceFromFontFamily(FontFamily);
                             fontPaint.IsAntialias = true;
 
-                            var textMid = (segmentSize * i) + halfSegmentSize;
+                            float textMid = (segmentSize * i) + halfSegmentSize;
 
                             if (segment.IsIconifiedText)
                             {
                                 var textBounds = SKRect.Empty;
                                 textBounds = fontPaint.MeasureIconifiedText(segment.Text);
 
-                                var maxSegmentSize = segmentSize - (borderSize * 4f);
+                                float maxSegmentSize = segmentSize - (borderSize * 4f);
 
                                 while (textBounds.Width > 0 && fontPaint.TextSize > 0 && textBounds.Width > maxSegmentSize)
                                 {
@@ -357,7 +357,7 @@ public class SegmentedControl : AuroraViewBase
 
                 for (int i = 0; i < segments.Count; i++)
                 {
-                    var x = (segmentSize * (i + 1)) - halfBorderSize;
+                    float x = (segmentSize * (i + 1)) - halfBorderSize;
                     canvas.DrawRect(x, borderSize, borderSize, info.Height - (borderSize * 2f), paint);
                 }
             }
@@ -390,7 +390,7 @@ public class SegmentedControl : AuroraViewBase
             return;
         }
 
-        var segmentSize = _controlRect.Width / (float)_segmentCount;
+        float segmentSize = _controlRect.Width / this._segmentCount;
 
         e.Handled = true;
 
@@ -399,7 +399,7 @@ public class SegmentedControl : AuroraViewBase
             case SKTouchAction.Pressed:
                 _previousIndex = SelectedIndex;
 
-                var newIndex = (int)Math.Floor(e.Location.X / segmentSize);
+                int newIndex = (int)Math.Floor(e.Location.X / segmentSize);
 
                 if (_previousIndex != newIndex && !_segments.ElementAt(newIndex).IsSpacer)
                 {
@@ -472,7 +472,7 @@ public class Segment : BindableObject, IDisposable
     public static readonly BindableProperty EmbeddedImageNameProperty =
         BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(Segment), string.Empty,
             propertyChanged:
-            (bindable, oldValue, newValue) =>
+            (bindable, _, _) =>
             {
                 if (bindable is Segment s)
                 {

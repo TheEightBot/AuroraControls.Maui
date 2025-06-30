@@ -129,27 +129,27 @@ public class CupertinoActivityIndicator : SceneViewBase
     {
         var canvas = surface.Canvas;
 
-        var startingRotation = 360f * (float)percentage;
+        float startingRotation = 360f * (float)percentage;
 
-        var midX = info.Rect.MidX;
-        var midY = info.Rect.MidY;
+        int midX = info.Rect.MidX;
+        int midY = info.Rect.MidY;
 
-        var minLength = Math.Min(info.Width, info.Height) * .5f;
-        var yStart = info.Rect.MidY - minLength;
-        var length = minLength * (float)LengthPercent;
+        float minLength = Math.Min(info.Width, info.Height) * .5f;
+        float yStart = info.Rect.MidY - minLength;
+        float length = minLength * (float)LengthPercent;
 
-        var width = length * (float)WidthPercent;
+        float width = length * (float)WidthPercent;
 
-        var halfCanvasWidth = info.Width * .5f;
+        float halfCanvasWidth = info.Width * .5f;
 
         var drawRect = new SKRect(halfCanvasWidth - (width * .5f), yStart, halfCanvasWidth + (width * .5f), yStart + length);
 
-        var segments = (float)Segments;
+        float segments = (float)Segments;
 
-        var cornerRadius = (float)CornerRadius * _scale;
+        float cornerRadius = (float)CornerRadius * _scale;
 
-        var rotationAmount = 360f / segments;
-        var alphaAmount = 1f / segments;
+        float rotationAmount = 360f / segments;
+        float alphaAmount = 1f / segments;
 
         canvas.Clear();
 

@@ -109,17 +109,11 @@ public class Waves : LoadingViewBase
     {
         var canvas = surface.Canvas;
 
-        var waveLength = info.Width / (float)WaveCount;
+        float waveLength = info.Width / (float)WaveCount;
 
-        var halfWaveLength = waveLength * .5f;
+        float halfHeight = info.Height / 2f;
 
-        var angularFrequency = 2f * Math.PI / waveLength / info.Width;
-
-        var halfHeight = info.Height / 2f;
-
-        var waveDirection = (float)(AnimatingPercentage < .5 ? AnimatingPercentage : 1 - AnimatingPercentage);
-
-        var stackPercentage = (100f / WaveStacks) / 100f;
+        float stackPercentage = (100f / WaveStacks) / 100f;
 
         canvas.Clear();
 
@@ -132,17 +126,15 @@ public class Waves : LoadingViewBase
             foregroundPaint.StrokeWidth = 10f;
             foregroundPaint.IsAntialias = true;
 
-            var endX = info.Width + 1;
-
             for (int waveStack = WaveStacks - 1; waveStack >= 0; waveStack--)
             {
                 foregroundPath.Reset();
 
-                var waveHeight = (float)(WaveHeight + (WaveHeight * _randomSeed * (AnimatingPercentage < .5d ? AnimatingPercentage : 1 - AnimatingPercentage)));
+                float waveHeight = (float)(WaveHeight + (WaveHeight * _randomSeed * (AnimatingPercentage < .5d ? AnimatingPercentage : 1 - AnimatingPercentage)));
 
-                var stackWaveLength = info.Width / (float)(WaveCount * (waveStack + 1));
-                var stackWaveHeight = waveHeight * stackPercentage * (WaveStacks - waveStack);
-                var stackHalfHeight = halfHeight - (waveHeight / WaveStacks * waveStack);
+                float stackWaveLength = info.Width / (float)(WaveCount * (waveStack + 1));
+                float stackWaveHeight = waveHeight * stackPercentage * (WaveStacks - waveStack);
+                float stackHalfHeight = halfHeight - (waveHeight / WaveStacks * waveStack);
 
                 foregroundPath.MoveTo(new SKPoint(0, stackHalfHeight));
 
@@ -161,9 +153,6 @@ public class Waves : LoadingViewBase
                 foregroundPath.LineTo(foregroundPath.Bounds.Width, info.Height);
                 foregroundPath.LineTo(0, info.Height);
                 foregroundPath.Close();
-
-                var waveHeightOffset = (float)WaveHeight / (float)WaveStacks;
-                var waveStackOffset = (float)info.Width / WaveStacks;
 
                 foregroundPaint.Color = ForegroundWaveColor.Lerp(BackgroundWaveColor, stackPercentage * waveStack).ToSKColor();
 

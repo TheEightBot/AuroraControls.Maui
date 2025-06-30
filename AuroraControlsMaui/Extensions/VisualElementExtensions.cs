@@ -35,7 +35,7 @@ public static class VisualElementExtensions
         var member = (MemberExpression)start.Body;
         var property = member.Member as PropertyInfo;
 
-        var animationName = $"color_to_{property.Name}_{element.GetHashCode()}";
+        string animationName = $"color_to_{property.Name}_{element.GetHashCode()}";
 
         var tcs = new TaskCompletionSource<bool>();
 
@@ -47,7 +47,7 @@ public static class VisualElementExtensions
         {
             element.AbortAnimation(animationName);
 
-            transitionAnimation.Commit(element, animationName, rate, length, finished: (f, a) => tcs.SetResult(a));
+            transitionAnimation.Commit(element, animationName, rate, length, finished: (_, a) => tcs.SetResult(a));
         }
         catch (InvalidOperationException)
         {
@@ -80,11 +80,11 @@ public static class VisualElementExtensions
         var member = (MemberExpression)start.Body;
         var property = member.Member as PropertyInfo;
 
-        var animationName = $"transition_to_{property.Name}_{element.GetHashCode()}";
+        string animationName = $"transition_to_{property.Name}_{element.GetHashCode()}";
 
         var tcs = new TaskCompletionSource<bool>();
 
-        var elementStartingPosition = (double)property.GetValue(element);
+        double elementStartingPosition = (double)property.GetValue(element);
 
         var transitionAnimation = new Animation(d => property.SetValue(element, d), elementStartingPosition, end, easing);
 
@@ -92,7 +92,7 @@ public static class VisualElementExtensions
         {
             element.AbortAnimation(animationName);
 
-            transitionAnimation.Commit(element, animationName, rate, length, finished: (f, a) => tcs.SetResult(a));
+            transitionAnimation.Commit(element, animationName, rate, length, finished: (_, a) => tcs.SetResult(a));
         }
         catch (InvalidOperationException)
         {
@@ -125,11 +125,11 @@ public static class VisualElementExtensions
         var member = (MemberExpression)start.Body;
         var property = member.Member as PropertyInfo;
 
-        var animationName = $"transition_to_{property.Name}_{element.GetHashCode()}";
+        string animationName = $"transition_to_{property.Name}_{element.GetHashCode()}";
 
         var tcs = new TaskCompletionSource<bool>();
 
-        var elementStartingPosition = (float)property.GetValue(element);
+        float elementStartingPosition = (float)property.GetValue(element);
 
         var transitionAnimation = new Animation(d => property.SetValue(element, d), elementStartingPosition, end, easing);
 
@@ -137,7 +137,7 @@ public static class VisualElementExtensions
         {
             element.AbortAnimation(animationName);
 
-            transitionAnimation.Commit(element, animationName, rate, length, finished: (f, a) => tcs.SetResult(a));
+            transitionAnimation.Commit(element, animationName, rate, length, finished: (_, a) => tcs.SetResult(a));
         }
         catch (InvalidOperationException)
         {
@@ -170,11 +170,11 @@ public static class VisualElementExtensions
         var member = (MemberExpression)start.Body;
         var property = member.Member as PropertyInfo;
 
-        var animationName = $"transition_to_{property.Name}_{element.GetHashCode()}";
+        string animationName = $"transition_to_{property.Name}_{element.GetHashCode()}";
 
         var tcs = new TaskCompletionSource<bool>();
 
-        var elementStartingPosition = (int)property.GetValue(element);
+        int elementStartingPosition = (int)property.GetValue(element);
 
         var transitionAnimation = new Animation(d => property.SetValue(element, (int)d), elementStartingPosition, end, easing);
 
@@ -182,7 +182,7 @@ public static class VisualElementExtensions
         {
             element.AbortAnimation(animationName);
 
-            transitionAnimation.Commit(element, animationName, rate, length, finished: (f, a) => tcs.SetResult(a));
+            transitionAnimation.Commit(element, animationName, rate, length, finished: (_, a) => tcs.SetResult(a));
         }
         catch (InvalidOperationException)
         {
@@ -204,11 +204,11 @@ public static class VisualElementExtensions
         var member = (MemberExpression)start.Body;
         var property = member.Member as PropertyInfo;
 
-        var animationName = $"transition_to_{property.Name}_{element.GetHashCode()}";
+        string animationName = $"transition_to_{property.Name}_{element.GetHashCode()}";
 
         var tcs = new TaskCompletionSource<bool>();
 
-        var elementStartingPosition = (uint)property.GetValue(element);
+        uint elementStartingPosition = (uint)property.GetValue(element);
 
         var transitionAnimation = new Animation(d => property.SetValue(element, (uint)d), elementStartingPosition, end, easing);
 
@@ -216,7 +216,7 @@ public static class VisualElementExtensions
         {
             element.AbortAnimation(animationName);
 
-            transitionAnimation.Commit(element, animationName, rate, length, finished: (f, a) => tcs.SetResult(a));
+            transitionAnimation.Commit(element, animationName, rate, length, finished: (_, a) => tcs.SetResult(a));
         }
         catch (InvalidOperationException)
         {
@@ -243,7 +243,7 @@ public static class VisualElementExtensions
         {
             element.AbortAnimation(animationName);
 
-            transitionAnimation.Commit(element, animationName, rate, length, finished: (f, a) => tcs.SetResult(a));
+            transitionAnimation.Commit(element, animationName, rate, length, finished: (_, a) => tcs.SetResult(a));
         }
         catch (InvalidOperationException)
         {
@@ -270,7 +270,7 @@ public static class VisualElementExtensions
         {
             element.AbortAnimation(animationName);
 
-            transitionAnimation.Commit(element, animationName, rate, length, finished: (f, a) => tcs.SetResult(a));
+            transitionAnimation.Commit(element, animationName, rate, length, finished: (_, a) => tcs.SetResult(a));
         }
         catch (InvalidOperationException)
         {
@@ -297,7 +297,7 @@ public static class VisualElementExtensions
         {
             element.AbortAnimation(animationName);
 
-            transitionAnimation.Commit(element, animationName, rate, length, finished: (f, a) => tcs.SetResult(a));
+            transitionAnimation.Commit(element, animationName, rate, length, finished: (_, a) => tcs.SetResult(a));
         }
         catch (InvalidOperationException)
         {
@@ -324,7 +324,7 @@ public static class VisualElementExtensions
         {
             element.AbortAnimation(animationName);
 
-            transitionAnimation.Commit(element, animationName, rate, length, finished: (f, a) => tcs.SetResult(a));
+            transitionAnimation.Commit(element, animationName, rate, length, finished: (_, a) => tcs.SetResult(a));
         }
         catch (InvalidOperationException)
         {
@@ -357,7 +357,7 @@ public static class VisualElementExtensions
         var member = (MemberExpression)start.Body;
         var property = member.Member as PropertyInfo;
 
-        var animationName = $"point_to_{property.Name}_{element.GetHashCode()}";
+        string animationName = $"point_to_{property.Name}_{element.GetHashCode()}";
 
         var tcs = new TaskCompletionSource<bool>();
 
@@ -366,8 +366,8 @@ public static class VisualElementExtensions
         var transitionAnimation = new Animation(
             d =>
             {
-                var newX = elementStartingPoint.X.Lerp(end.X, d);
-                var newY = elementStartingPoint.Y.Lerp(end.Y, d);
+                double newX = elementStartingPoint.X.Lerp(end.X, d);
+                double newY = elementStartingPoint.Y.Lerp(end.Y, d);
                 var newPoint = new Point(newX, newY);
                 property.SetValue(element, newPoint);
             }, 0d, 1d, easing);
@@ -376,7 +376,7 @@ public static class VisualElementExtensions
         {
             element.AbortAnimation(animationName);
 
-            transitionAnimation.Commit(element, animationName, rate, length, finished: (f, a) => tcs.SetResult(a));
+            transitionAnimation.Commit(element, animationName, rate, length, finished: (_, a) => tcs.SetResult(a));
         }
         catch (InvalidOperationException)
         {
@@ -409,7 +409,7 @@ public static class VisualElementExtensions
         var member = (MemberExpression)start.Body;
         var property = member.Member as PropertyInfo;
 
-        var animationName = $"point_to_{property.Name}_{element.GetHashCode()}";
+        string animationName = $"point_to_{property.Name}_{element.GetHashCode()}";
 
         var tcs = new TaskCompletionSource<bool>();
 
@@ -418,10 +418,10 @@ public static class VisualElementExtensions
         var transitionAnimation = new Animation(
             d =>
             {
-                var newLeft = elementStartingThickness.Left.Lerp(end.Left, d);
-                var newTop = elementStartingThickness.Top.Lerp(end.Top, d);
-                var newRight = elementStartingThickness.Right.Lerp(end.Right, d);
-                var newBottom = elementStartingThickness.Bottom.Lerp(end.Bottom, d);
+                double newLeft = elementStartingThickness.Left.Lerp(end.Left, d);
+                double newTop = elementStartingThickness.Top.Lerp(end.Top, d);
+                double newRight = elementStartingThickness.Right.Lerp(end.Right, d);
+                double newBottom = elementStartingThickness.Bottom.Lerp(end.Bottom, d);
                 var newThickness = new Thickness(newLeft, newTop, newRight, newBottom);
                 property.SetValue(element, newThickness);
             }, 0d, 1d, easing);
@@ -430,7 +430,7 @@ public static class VisualElementExtensions
         {
             element.AbortAnimation(animationName);
 
-            transitionAnimation.Commit(element, animationName, rate, length, finished: (f, a) => tcs.SetResult(a));
+            transitionAnimation.Commit(element, animationName, rate, length, finished: (_, a) => tcs.SetResult(a));
         }
         catch (InvalidOperationException)
         {
@@ -463,7 +463,7 @@ public static class VisualElementExtensions
         var member = (MemberExpression)start.Body;
         var property = member.Member as PropertyInfo;
 
-        var animationName = $"point_to_{property.Name}_{element.GetHashCode()}";
+        string animationName = $"point_to_{property.Name}_{element.GetHashCode()}";
 
         var tcs = new TaskCompletionSource<bool>();
 
@@ -472,8 +472,8 @@ public static class VisualElementExtensions
         var transitionAnimation = new Animation(
             d =>
             {
-                var newWidth = elementStartingSize.Width.Lerp(end.Width, d);
-                var newHeight = elementStartingSize.Height.Lerp(end.Height, d);
+                double newWidth = elementStartingSize.Width.Lerp(end.Width, d);
+                double newHeight = elementStartingSize.Height.Lerp(end.Height, d);
                 var newSize = new Size(newWidth, newHeight);
                 property.SetValue(element, newSize);
             }, 0d, 1d, easing);
@@ -482,7 +482,7 @@ public static class VisualElementExtensions
         {
             element.AbortAnimation(animationName);
 
-            transitionAnimation.Commit(element, animationName, rate, length, finished: (f, a) => tcs.SetResult(a));
+            transitionAnimation.Commit(element, animationName, rate, length, finished: (_, a) => tcs.SetResult(a));
         }
         catch (InvalidOperationException)
         {
@@ -498,7 +498,7 @@ public static class VisualElementExtensions
             return null;
         }
 
-        var hasParent = false;
+        bool hasParent = false;
 
         var parentElement = element.Parent;
 

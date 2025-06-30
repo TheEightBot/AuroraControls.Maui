@@ -63,6 +63,10 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
     private Button _viewStyledInputLayoutTestButton;
 
+    private Button _viewStepIndicatorTestButton;
+
+    private Button _viewConfettiViewTestButton;
+
     private SvgImageView _svgImageView;
 
     private Button _svgImageViewTapped;
@@ -160,6 +164,14 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new StyledInputLayoutTestPage()))
                                 .Assign(out _viewStyledInputLayoutTestButton),
+
+                            new Button { Text = "View StepIndicator Test Page", }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new StepIndicatorTestPage())),
+
+                            new Button { Text = "View ConfettiView Test Page", }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new ConfettiViewTestPage())),
 
                             new ToggleBox
                             {
@@ -405,7 +417,9 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                             (_nofriendo = new Loading.Nofriendo
                             {
                                 HeightRequest = 120d,
-                                BackgroundColor = Colors.Tomato,
+                                LoadingStartColor = Colors.Fuchsia,
+                                LoadingEndColor = Colors.Chartreuse,
+                                StepCount = 7,
                                 GestureRecognizers =
                                 {
                                     new TapGestureRecognizer

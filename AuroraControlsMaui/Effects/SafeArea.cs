@@ -58,7 +58,7 @@ public struct SafeArea
     {
         unchecked
         {
-            var hashCode = Left.GetHashCode();
+            int hashCode = Left.GetHashCode();
             hashCode = (hashCode * 397) ^ Top.GetHashCode();
             hashCode = (hashCode * 397) ^ Right.GetHashCode();
             hashCode = (hashCode * 397) ^ Bottom.GetHashCode();

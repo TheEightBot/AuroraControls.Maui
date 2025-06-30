@@ -79,7 +79,7 @@ public class ToggleBox : AuroraViewBase
     /// <summary>
     /// The color of the background.
     /// </summary>
-    public static new BindableProperty BackgroundColorProperty =
+    public static new readonly BindableProperty BackgroundColorProperty =
         BindableProperty.Create(
             nameof(BackgroundColor),
             typeof(Color),
@@ -269,17 +269,17 @@ public class ToggleBox : AuroraViewBase
         canvas.Clear();
 
         var rect = new SKRect(0, 0, info.Height, info.Height);
-        var borderWidth = BorderWidth * _scale;
-        var halfBorderWidth = borderWidth * .5f;
+        float borderWidth = BorderWidth * _scale;
+        float halfBorderWidth = borderWidth * .5f;
 
-        var markWidth = MarkWidth * _scale;
-        var halfMarkWidth = markWidth * .5f;
+        float markWidth = MarkWidth * _scale;
+        float halfMarkWidth = markWidth * .5f;
 
         var cornerRadius = new SKSize((float)CornerRadius * _scale, (float)CornerRadius * _scale);
 
         using (var backgroundPaint = new SKPaint())
         {
-            var halfCheckSize = info.Height * .5f;
+            float halfCheckSize = info.Height * .5f;
 
             _rect = new SKRect(
                 info.Rect.MidX - halfCheckSize + borderWidth, info.Rect.MidY - halfCheckSize + borderWidth,

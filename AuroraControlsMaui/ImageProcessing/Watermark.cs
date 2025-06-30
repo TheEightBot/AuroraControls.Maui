@@ -108,7 +108,7 @@ public class Watermark : ImageProcessingBase, IImageProcessor
             return processingImage;
         }
 
-        if (imageProcessor is Watermark watermark)
+        if (imageProcessor is Watermark)
         {
             using (SKCanvas canvas = new(processingImage))
             using (SKPaint paint = new())

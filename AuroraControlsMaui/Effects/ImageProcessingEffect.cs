@@ -271,7 +271,7 @@ public class ImageProcessingPlatformEffect : PlatformEffect
         }
 
         _processing = true;
-        var currentProcessingTime = _lastProcessingTime;
+        long currentProcessingTime = _lastProcessingTime;
 
         try
         {

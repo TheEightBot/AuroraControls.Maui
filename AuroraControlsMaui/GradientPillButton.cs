@@ -325,9 +325,9 @@ public class GradientPillButton : AuroraViewBase
 
         using (var backgroundPaint = new SKPaint())
         {
-            var halfBorder = (float)this.BorderWidth / 2f;
+            float halfBorder = (float)this.BorderWidth / 2f;
 
-            var scale = info.Height / (float)Height;
+            float scale = info.Height / (float)Height;
             var rect = new SKRect((float)ShadowLocation.X + (float)ShadowBlurRadius + halfBorder, (float)ShadowLocation.Y + (float)ShadowBlurRadius + halfBorder,
                   info.Width - (float)ShadowLocation.X - (float)ShadowBlurRadius - halfBorder, info.Height - (float)ShadowLocation.Y - (float)ShadowBlurRadius - halfBorder);
 
@@ -405,9 +405,9 @@ public class GradientPillButton : AuroraViewBase
                                 ? ButtonBackgroundEndColor.AddLuminosity(-.2f).MultiplyAlpha((1 - (float)_rippleAnimationPercentage) * .5f).ToSKColor()
                                 : Colors.Transparent.ToSKColor();
 
-                        var startingRippleSize = Math.Min(info.Width, info.Height) * 1.5f;
-                        var maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * _rippleAnimationPercentage);
-                        var offsetAmount = -maxRippleSize / 2f;
+                        float startingRippleSize = Math.Min(info.Width, info.Height) * 1.5f;
+                        float maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * _rippleAnimationPercentage);
+                        float offsetAmount = -maxRippleSize / 2f;
                         var offsetPoint = new SKPoint(_lastTouchLocation.X + offsetAmount, _lastTouchLocation.Y + offsetAmount);
                         var rippleSize = SKRect.Create(offsetPoint, new SKSize(maxRippleSize, maxRippleSize));
                         ripplePath.AddOval(rippleSize);
@@ -461,8 +461,6 @@ public class GradientPillButton : AuroraViewBase
     {
         e.Handled = true;
 
-        System.Diagnostics.Debug.WriteLine($"Button: Location - {e.Location}\tAction Type - {e.ActionType}");
-
         if (e.ActionType == SKTouchAction.Cancelled || e.ActionType == SKTouchAction.Exited)
         {
             Tapped = false;
@@ -470,7 +468,7 @@ public class GradientPillButton : AuroraViewBase
             return;
         }
 
-        var isTapInside = _backgroundPath.Contains(e.Location.X, e.Location.Y);
+        bool isTapInside = _backgroundPath.Contains(e.Location.X, e.Location.Y);
 
         if (e.ActionType == SKTouchAction.Released && isTapInside)
         {
@@ -506,7 +504,7 @@ public class GradientPillButton : AuroraViewBase
             return;
         }
 
-        var animName = nameof(Ripples);
+        string animName = nameof(Ripples);
 
         this.AbortAnimation(animName);
         _rippleAnimationPercentage = 0d;
@@ -524,7 +522,7 @@ public class GradientPillButton : AuroraViewBase
 
         rippleAnimation.Commit(
             this, animName, length: 500, easing: Easing.CubicOut,
-            finished: (percent, isFinished) =>
+            finished: (_, _) =>
             {
                 _lastTouchLocation = SKPoint.Empty;
                 _rippleAnimationPercentage = 0d;

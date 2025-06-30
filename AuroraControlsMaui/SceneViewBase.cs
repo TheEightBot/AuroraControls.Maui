@@ -189,6 +189,7 @@ public abstract class SceneViewBase : AuroraViewBase
                     }
                 }
             };
+        _ticker.MaxFps = 60;
 
         _ticker.Start();
 
@@ -242,7 +243,7 @@ public abstract class SceneViewBase : AuroraViewBase
                         _currentPosition -= _length;
                     }
 
-                    var percentage = Easings.Interpolate(_currentPosition / (double)_length, _easingFunction);
+                    double percentage = Easings.Interpolate(_currentPosition / (double)_length, _easingFunction);
 
                     image = PaintScene(_surface, _imageInfo, percentage);
                 }

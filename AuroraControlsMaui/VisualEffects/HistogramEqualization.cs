@@ -21,7 +21,7 @@ public class HistogramEqualization : VisualEffect
                 for (int x = 0; x < bitmap.Width; x++)
                 {
                     var pixel = bitmap.GetPixel(x, y);
-                    var intensity = (byte)((pixel.Red + pixel.Green + pixel.Blue) / 3);
+                    byte intensity = (byte)((pixel.Red + pixel.Green + pixel.Blue) / 3);
 
                     if (pixel == SKColors.White || pixel == SKColors.Black || pixel == SKColors.Transparent ||
                         (pixel.Red == byte.MinValue && pixel.Green == byte.MinValue && pixel.Blue == byte.MinValue && pixel.Alpha == byte.MinValue))
@@ -53,9 +53,9 @@ public class HistogramEqualization : VisualEffect
                         continue;
                     }
 
-                    var red = (pixel.Red - min) * byte.MaxValue / (max - min);
-                    var green = (pixel.Green - min) * byte.MaxValue / (max - min);
-                    var blue = (pixel.Blue - min) * byte.MaxValue / (max - min);
+                    int red = (pixel.Red - min) * byte.MaxValue / (max - min);
+                    int green = (pixel.Green - min) * byte.MaxValue / (max - min);
+                    int blue = (pixel.Blue - min) * byte.MaxValue / (max - min);
 
                     bitmap.SetPixel(x, y, new SKColor((byte)red, (byte)green, (byte)blue));
                 }
@@ -69,13 +69,13 @@ public class HistogramEqualization : VisualEffect
 
     private uint[] ComputeHistogram(SKBitmap bitmap)
     {
-        var histo = new uint[256];
+        uint[] histo = new uint[256];
         for (int y = 0; y < bitmap.Height; y++)
         {
             for (int x = 0; x < bitmap.Width; x++)
             {
                 var pixel = bitmap.GetPixel(x, y);
-                var pixelColor = (uint)(pixel.Red + pixel.Green + pixel.Blue) / 3;
+                uint pixelColor = (uint)(pixel.Red + pixel.Green + pixel.Blue) / 3;
                 histo[pixelColor]++;
             }
         }

@@ -12,7 +12,7 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
 
     private IEnumerable<VisualEffects.VisualEffect> _enabledVisualEffects;
 
-    protected float _scale;
+    protected readonly float _scale;
     protected SKRect _overrideDrawableArea;
 
     public IList<VisualEffects.VisualEffect> VisualEffects => _visualEffects;
@@ -39,7 +39,7 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
                 height = height = (int)this._overrideDrawableArea.Height;
                 break;
             case > 0 when maxHeight <= 0:
-                var scaleAmount = maxWidth / this._overrideDrawableArea.Width;
+                float scaleAmount = maxWidth / this._overrideDrawableArea.Width;
 
                 width = (int)this._overrideDrawableArea.Width;
                 height = (int)(this._overrideDrawableArea.Height * scaleAmount);
@@ -47,17 +47,17 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
             default:
                 if (maxHeight > 0 && maxWidth <= 0)
                 {
-                    var defaultScaleAmount = maxHeight / this._overrideDrawableArea.Height;
+                    float defaultScaleAmount = maxHeight / this._overrideDrawableArea.Height;
 
                     height = (int)this._overrideDrawableArea.Height;
                     width = (int)(this._overrideDrawableArea.Width * defaultScaleAmount);
                 }
                 else
                 {
-                    var scaledHeightAmount = maxHeight / this._overrideDrawableArea.Height;
-                    var scaledWidthAmount = maxWidth / this._overrideDrawableArea.Width;
+                    float scaledHeightAmount = maxHeight / this._overrideDrawableArea.Height;
+                    float scaledWidthAmount = maxWidth / this._overrideDrawableArea.Width;
 
-                    var minScale = Math.Min(scaledHeightAmount, scaledWidthAmount);
+                    float minScale = Math.Min(scaledHeightAmount, scaledWidthAmount);
 
                     height = (int)(this._overrideDrawableArea.Height * minScale);
                     width = (int)(this._overrideDrawableArea.Width * minScale);

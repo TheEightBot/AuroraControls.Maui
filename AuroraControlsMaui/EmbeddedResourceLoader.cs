@@ -35,11 +35,11 @@ public static class EmbeddedResourceLoader
     {
         Stream stream = null;
 
-        var formattedName = $".{name}";
+        string formattedName = $".{name}";
 
         foreach (var kvp in _assemblies)
         {
-            var foundResource = kvp.Value.FirstOrDefault(n => n.Equals(formattedName, StringComparison.OrdinalIgnoreCase) || n.EndsWith(formattedName, StringComparison.OrdinalIgnoreCase));
+            string? foundResource = kvp.Value.FirstOrDefault(n => n.Equals(formattedName, StringComparison.OrdinalIgnoreCase) || n.EndsWith(formattedName, StringComparison.OrdinalIgnoreCase));
             if (foundResource is not null)
             {
                 stream = kvp.Key.GetManifestResourceStream(foundResource);
