@@ -134,6 +134,35 @@ Features:
 - `AnimationScaleAmount` - How much to scale down on touch (0.0 to 1.0)
 - `AnimationEasing` - Easing function for the animation (BounceOut, SpringOut, etc.)
 
+### GradientCircularButton
+
+A circular button with gradient background, shadow effects, and customizable styling options.
+
+```xml
+<aurora:GradientCircularButton
+    ButtonBackgroundColor="#4A90E2"
+    GradientStartColor="#FF6B6B"
+    GradientStopColor="#4ECDC4"
+    BorderWidth="2"
+    BorderColor="White"
+    ShadowColor="#80000000"
+    ShadowLocation="0,3"
+    ShadowBlurRadius="6"
+    Ripples="True"
+    Command="{Binding CircularButtonCommand}"
+    HeightRequest="80"
+    WidthRequest="80" />
+```
+
+Features:
+- Perfect circular shape with gradient backgrounds
+- Customizable border width and color
+- Drop shadow with configurable color, position, and blur
+- Material Design ripple effects
+- Touch feedback and animations
+- Command binding support
+- Scalable size
+
 ### GradientPillButton
 
 <p align="center" style="border-radius: 10px;">
@@ -256,6 +285,123 @@ A customizable numeric entry control.
     PlaceholderColor="Gray" />
 ```
 
+### StepIndicator
+
+A step indicator control for displaying progress through multi-step workflows and wizards.
+
+```xml
+<aurora:StepIndicator
+    NumberOfSteps="5"
+    CurrentStep="2"
+    StepShape="Circular"
+    CompletedStepColor="#4CAF50"
+    CurrentStepColor="#2196F3"
+    IncompleteStepColor="#E0E0E0"
+    LineColor="#E0E0E0"
+    CompletedLineColor="#4CAF50"
+    StepSize="32"
+    LineThickness="2"
+    ShowStepNumbers="True" />
+```
+
+Features:
+- **Visual Progress Tracking**: Clear indication of current, completed, and remaining steps
+- **Customizable Appearance**: Control colors, sizes, and shapes of step indicators
+- **Flexible Step Count**: Support for any number of steps in a workflow
+- **Shape Options**: Circular or square step indicators
+- **Connection Lines**: Visual lines connecting steps with customizable styling
+- **Step Numbers**: Optional display of step numbers within indicators
+
+#### Key Properties:
+- `NumberOfSteps` - Total number of steps in the workflow
+- `CurrentStep` - The currently active step (1-based index)
+- `StepShape` - Shape of step indicators (Circular, Square)
+- `CompletedStepColor` - Color for completed steps
+- `CurrentStepColor` - Color for the current active step
+- `IncompleteStepColor` - Color for future/incomplete steps
+- `LineColor` - Color of connecting lines between steps
+- `CompletedLineColor` - Color of lines connecting completed steps
+- `StepSize` - Size of each step indicator
+- `LineThickness` - Thickness of connecting lines
+- `ShowStepNumbers` - Whether to display step numbers
+
+### StyledInputLayout
+
+A Material Design-inspired input layout container that provides floating labels, validation styling, and enhanced input field presentation.
+
+```xml
+<aurora:StyledInputLayout
+    LabelText="Email Address"
+    HelperText="Enter your email address"
+    ErrorText="{Binding EmailError}"
+    IsRequired="True"
+    BorderStyle="Underline"
+    ActiveColor="#2196F3"
+    InactiveColor="#757575"
+    ErrorColor="#F44336"
+    InternalMargin="8,4">
+    <Entry Text="{Binding Email}"
+           Placeholder="email@example.com" />
+</aurora:StyledInputLayout>
+```
+
+Features:
+- **Floating Labels**: Animated labels that float above input when focused or filled
+- **Validation Support**: Built-in error state styling and helper text
+- **Multiple Border Styles**: Underline, outline, or no border options
+- **State Management**: Different visual states for focused, filled, and error conditions
+- **Flexible Content**: Works with Entry, Editor, Picker, and other input controls
+- **Accessibility**: Enhanced accessibility support for screen readers
+- **Material Design**: Follows Material Design input field guidelines
+
+#### Border Style Options:
+- `Underline` - Material Design underline style
+- `Outline` - Outlined input field style
+- `None` - No visible border
+
+#### Key Properties:
+- `LabelText` - The floating label text
+- `HelperText` - Helper text displayed below the input
+- `ErrorText` - Error message text (shows when not empty)
+- `IsRequired` - Whether the field is required
+- `BorderStyle` - Visual style of the input border
+- `ActiveColor` - Color when input is focused or active
+- `InactiveColor` - Color when input is inactive
+- `ErrorColor` - Color used for error states
+- `InternalMargin` - Internal spacing within the container
+
+### CalendarPicker
+
+A date picker control that opens a calendar view for intuitive date selection.
+
+```xml
+<aurora:CalendarPicker
+    Date="{Binding SelectedDate}"
+    MinimumDate="2024-01-01"
+    MaximumDate="2024-12-31"
+    Format="MMM dd, yyyy"
+    PlaceholderText="Select a date"
+    CalendarBackgroundColor="White"
+    CalendarSelectionColor="#2196F3" />
+```
+
+Features:
+- **Calendar Interface**: Full calendar view for date selection
+- **Date Range Constraints**: Set minimum and maximum selectable dates
+- **Custom Formatting**: Configurable date display format
+- **Placeholder Support**: Placeholder text when no date is selected
+- **Styling Options**: Customizable colors and appearance
+- **Nullable Dates**: Support for optional date selection
+
+#### Key Properties:
+- `Date` - The selected date (nullable DateTime)
+- `MinimumDate` - Earliest selectable date
+- `MaximumDate` - Latest selectable date
+- `Format` - Date display format string
+- `PlaceholderText` - Text shown when no date is selected
+- `CalendarBackgroundColor` - Background color of calendar popup
+- `CalendarSelectionColor` - Color for selected date in calendar
+
 ### SignaturePad
 
 <p align="center" style="border-radius: 10px;">
@@ -361,6 +507,58 @@ A flexible chip component and chip group container for creating tag-like UI elem
 ```
 
 ### Visual Elements
+
+### CalendarView
+
+A powerful calendar control with multiple selection modes, event support, and extensive customization options.
+
+```xml
+<aurora:CalendarView
+    CurrentYear="2024"
+    CurrentMonth="6"
+    SelectionType="Multiple"
+    DayOfWeekDisplayType="Abbreviated"
+    DayDisplayLocationType="Centered"
+    MinimumDate="2024-01-01"
+    MaximumDate="2024-12-31"
+    ShowEventIndicators="True"
+    CalendarSelectedDatesChanged="OnSelectedDatesChanged">
+    <aurora:CalendarView.Events>
+        <aurora:CalendarEvent Date="2024-06-15" Title="Meeting" Color="Blue" />
+        <aurora:CalendarEvent Date="2024-06-20" Title="Birthday" Color="Red" />
+    </aurora:CalendarView.Events>
+</aurora:CalendarView>
+```
+
+Features:
+- **Multiple Selection Types**: Single date, date span, or multiple date selection
+- **Event Support**: Display events with custom colors and titles
+- **Date Range Constraints**: Set minimum and maximum selectable dates
+- **Customizable Display**: Control day-of-week labels and date positioning
+- **Navigation**: Programmatic month/year navigation
+- **Globalization**: Respects system culture and calendar settings
+- **Event Indicators**: Visual indicators for dates with events
+
+#### Selection Types:
+- `Single` - Select one date at a time
+- `Span` - Select a continuous date range
+- `Multiple` - Select multiple individual dates
+
+#### Day of Week Display Options:
+- `Full` - Complete day names (Monday, Tuesday, etc.)
+- `Abbreviated` - Short day names (Mon, Tue, etc.)
+- `AbbreviatedUppercase` - Uppercase short names (MON, TUE, etc.)
+- `Shortest` - Minimal day names (M, T, etc.)
+
+#### Key Properties:
+- `CurrentYear`/`CurrentMonth` - Current displayed month/year
+- `SelectionType` - Type of date selection allowed
+- `SelectedDates` - Collection of currently selected dates
+- `Events` - Collection of calendar events to display
+- `MinimumDate`/`MaximumDate` - Date range constraints
+- `ShowEventIndicators` - Whether to show event indicators
+- `DayOfWeekDisplayType` - How day-of-week headers are displayed
+- `DayDisplayLocationType` - Position of day numbers in cells
 
 ### SVGImageView
 
