@@ -104,9 +104,9 @@ public class StepIndicator : AuroraViewBase
     /// Gets or sets the color of the line.
     /// </summary>
     /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
-    public Color LineColor
+    public Color? LineColor
     {
-        get { return (Color)GetValue(LineColorProperty); }
+        get { return (Color?)GetValue(LineColorProperty); }
         set { SetValue(LineColorProperty, value); }
     }
 
@@ -138,7 +138,7 @@ public class StepIndicator : AuroraViewBase
     /// Gets or sets the color of the highlight.
     /// </summary>
     /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
-    public Color HighlightColor
+    public Color? HighlightColor
     {
         get { return (Color)GetValue(HighlightColorProperty); }
         set { SetValue(HighlightColorProperty, value); }
@@ -155,7 +155,7 @@ public class StepIndicator : AuroraViewBase
     /// Gets or sets the color of the inactive.
     /// </summary>
     /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
-    public Color InactiveColor
+    public Color? InactiveColor
     {
         get { return (Color)GetValue(InactiveColorProperty); }
         set { SetValue(InactiveColorProperty, value); }
@@ -172,7 +172,7 @@ public class StepIndicator : AuroraViewBase
     /// Gets or sets the color of the font.
     /// </summary>
     /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
-    public Color FontColor
+    public Color? FontColor
     {
         get { return (Color)GetValue(FontColorProperty); }
         set { SetValue(FontColorProperty, value); }
@@ -306,11 +306,11 @@ public class StepIndicator : AuroraViewBase
             paint.IsAntialias = true;
             paint.StrokeCap = SKStrokeCap.Round;
             paint.Style = SKPaintStyle.Stroke;
-            paint.Color = this.LineColor.ToSKColor();
+            paint.Color = this.LineColor?.ToSKColor() ?? SKColors.Transparent;
             paint.StrokeWidth = baseStrokeWidth;
 
             fontPaint.IsAntialias = true;
-            fontPaint.Color = this.FontColor.ToSKColor();
+            fontPaint.Color = this.FontColor?.ToSKColor() ?? SKColors.Transparent;
             fontPaint.TextSize = progressCircleSize * 0.6f; // Scale font size with circle
             fontPaint.Typeface = this.Typeface ?? PlatformInfo.DefaultTypeface;
             fontPaint.TextAlign = SKTextAlign.Center;
@@ -351,13 +351,13 @@ public class StepIndicator : AuroraViewBase
 
                     paint.Style = SKPaintStyle.StrokeAndFill;
                     paint.BlendMode = SKBlendMode.Src;
-                    paint.Color = this.LineColor.ToSKColor();
+                    paint.Color = this.LineColor?.ToSKColor() ?? SKColors.Transparent;
 
                     // Future steps (not yet reached)
                     if (i > this.CurrentStep - 1)
                     {
                         paint.StrokeWidth = baseStrokeWidth;
-                        paint.Color = this.InactiveColor.ToSKColor();
+                        paint.Color = this.InactiveColor?.ToSKColor() ?? SKColors.Transparent;
 
                         using (var shapePath = CreateShapePath(this.Shape, centerX, verticalCenter, nextStepCircleSize))
                         {
@@ -374,7 +374,7 @@ public class StepIndicator : AuroraViewBase
                         if (i < this.CurrentStep - 1)
                         {
                             paint.StrokeWidth = previousStrokeWidth;
-                            paint.Color = this.LineColor.ToSKColor();
+                            paint.Color = this.LineColor?.ToSKColor() ?? SKColors.Transparent;
 
                             using (var strokeShapePath = CreateShapePath(this.Shape, centerX, verticalCenter, previousStepCircleSize))
                             {
@@ -382,7 +382,7 @@ public class StepIndicator : AuroraViewBase
                                 canvas.DrawPath(strokePath, paint);
                             }
 
-                            paint.Color = this.InactiveColor.ToSKColor();
+                            paint.Color = this.InactiveColor?.ToSKColor() ?? SKColors.Transparent;
                             paint.BlendMode = SKBlendMode.SrcOver;
                             paint.Style = SKPaintStyle.Fill;
 
@@ -399,7 +399,7 @@ public class StepIndicator : AuroraViewBase
                         else if (i == this.CurrentStep - 1)
                         {
                             paint.StrokeWidth = progressStrokeWidth;
-                            paint.Color = this.LineColor.ToSKColor();
+                            paint.Color = this.LineColor?.ToSKColor() ?? SKColors.Transparent;
 
                             using (var strokeShapePath = CreateShapePath(this.Shape, centerX, verticalCenter, progressCircleSize))
                             {
@@ -407,7 +407,7 @@ public class StepIndicator : AuroraViewBase
                                 canvas.DrawPath(strokePath, paint);
                             }
 
-                            paint.Color = this.HighlightColor.ToSKColor();
+                            paint.Color = this.HighlightColor?.ToSKColor() ?? SKColors.Transparent;
                             paint.BlendMode = SKBlendMode.SrcOver;
                             paint.Style = SKPaintStyle.Fill;
 
