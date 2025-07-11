@@ -132,7 +132,7 @@ public static class HavePlaceholderElement
         BindableProperty.Create(nameof(IHavePlaceholder.Placeholder), typeof(bool), typeof(IHavePlaceholder), true);
 
     public static readonly BindableProperty PlaceholderColorProperty =
-        BindableProperty.Create(nameof(IHavePlaceholder.PlaceholderColor), typeof(Microsoft.Maui.Graphics.Color), typeof(IHavePlaceholder), default(Microsoft.Maui.Graphics.Color));
+        BindableProperty.Create(nameof(IHavePlaceholder.PlaceholderColor), typeof(Microsoft.Maui.Graphics.Color), typeof(IHavePlaceholder), DefaultPlaceholderColor);
 
     public static readonly BindableProperty PlaceholderOffsetProperty =
         BindableProperty.Create(nameof(IHavePlaceholder.PlaceholderOffset), typeof(Point), typeof(IHavePlaceholder), default(Point));
