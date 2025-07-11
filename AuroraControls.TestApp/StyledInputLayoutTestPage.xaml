@@ -46,8 +46,8 @@
                     <aurora:StyledInputLayout
 
                         PlaceholderColor="Black"
-                        ActiveColor="Red"
-                        InactiveColor="Green"
+                        ActiveColor="Transparent"
+                        InactiveColor="Transparent"
                         VerticalOptions="Start"
                         BorderStyle="RoundedRectanglePlaceholderThrough">
                         <Entry Placeholder="VerticalOptions=Start" />
