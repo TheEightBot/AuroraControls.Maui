@@ -560,10 +560,7 @@ public class PlatformUnderlayDrawable : IDisposable
             var internalMargin = underlayDrawable.InternalMargin;
 
             float placeholderFontSize = underlayDrawable.ActivePlaceholderFontSize * scale;
-            var placeholderColor =
-                underlayDrawable.PlaceholderColor != default(Color)
-                    ? underlayDrawable.PlaceholderColor
-                    : HavePlaceholderElement.DefaultPlaceholderColor;
+            var placeholderColor = underlayDrawable.PlaceholderColor;
 
             float fontSize = (float)underlayDrawable.FontSize * scale;
 
@@ -722,26 +719,31 @@ public class PlatformUnderlayDrawable : IDisposable
             }
             else if (!string.IsNullOrEmpty(placeholder))
             {
-                _placeholderPaint.Color =
-                    placeholderColor
-                        .Lerp(
-                            underlayDrawable.ActiveColor,
-                            focusAnimationPercentage > 0d ? focusAnimationPercentage : hasValueAnimationPercentage)
-                        .ToSKColor();
-
                 if (placeholderFontSize > 0d)
                 {
-                    double placeholderY = controlYCenter.Lerp(focusedPlaceholderCenterY, hasValueAnimationPercentage);
+                    var currentColor = isFocused ? underlayDrawable.ActiveColor : underlayDrawable.InactiveColor;
 
-                    _placeholderPaint.TextSize = fontSize.Lerp(placeholderFontSize, (float)hasValueAnimationPercentage);
-                    _placeholderPaint.Color = _placeholderPaint.Color.WithAlpha((float)hasValueAnimationPercentage);
+                    if (currentColor.Alpha > 0.0f)
+                    {
+                        _placeholderPaint.Color =
+                            placeholderColor
+                                .Lerp(
+                                    currentColor,
+                                    focusAnimationPercentage > 0d ? focusAnimationPercentage : hasValueAnimationPercentage)
+                                .ToSKColor();
 
-                    _placeholderPaint.EnsureHasValidFont(placeholder);
+                        double placeholderY = controlYCenter.Lerp(focusedPlaceholderCenterY, hasValueAnimationPercentage);
 
-                    canvas.DrawTextCenteredVertically(placeholder, new SKPoint((float)controlXLeft, (float)placeholderY), _placeholderPaint);
+                        _placeholderPaint.TextSize = fontSize.Lerp(placeholderFontSize, (float)hasValueAnimationPercentage);
+                        _placeholderPaint.Color = _placeholderPaint.Color.WithAlpha((float)hasValueAnimationPercentage);
+
+                        _placeholderPaint.EnsureHasValidFont(placeholder);
+
+                        canvas.DrawTextCenteredVertically(placeholder, new SKPoint((float)controlXLeft, (float)placeholderY), _placeholderPaint);
+                    }
                 }
 
-                _placeholderPaint.Color = placeholderColor.ToSKColor().WithAlpha(1f - (float)hasValueAnimationPercentage);
+                _placeholderPaint.Color = (placeholderColor?.ToSKColor() ?? SKColors.Transparent).WithAlpha(1f - (float)hasValueAnimationPercentage);
                 _placeholderPaint.TextSize = fontSize;
 
                 canvas.DrawTextCenteredVertically(placeholder, new SKPoint((float)controlXLeft, (float)controlYCenter), _placeholderPaint);
