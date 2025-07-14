@@ -44,7 +44,7 @@ public static class ImageSourceExtensions
         return image;
     }
 
-    public static ToolbarItem AsAsyncSourceFor(this Task<FileImageSource> imageSourceTask, ToolbarItem toolbarItem)
+    public static ToolbarItem AsAsyncSourceFor(this Task<ImageSource> imageSourceTask, ToolbarItem toolbarItem)
     {
         imageSourceTask
             .ContinueWith(
@@ -60,7 +60,7 @@ public static class ImageSourceExtensions
         return toolbarItem;
     }
 
-    public static MenuItem AsAsyncSourceFor(this Task<FileImageSource> imageSourceTask, MenuItem menuItem)
+    public static MenuItem AsAsyncSourceFor(this Task<ImageSource> imageSourceTask, MenuItem menuItem)
     {
         imageSourceTask
             .ContinueWith(
@@ -92,7 +92,7 @@ public static class ImageSourceExtensions
         return page;
     }
 
-    public static Button AsAsyncSourceFor(this Task<FileImageSource> imageSourceTask, Button button)
+    public static Button AsAsyncSourceFor(this Task<ImageSource> imageSourceTask, Button button)
     {
         imageSourceTask
             .ContinueWith(
@@ -108,7 +108,7 @@ public static class ImageSourceExtensions
         return button;
     }
 
-    public static ImageButton AsAsyncSourceFor(this Task<FileImageSource> imageSourceTask, ImageButton button)
+    public static ImageButton AsAsyncSourceFor(this Task<ImageSource> imageSourceTask, ImageButton button)
     {
         imageSourceTask
             .ContinueWith(
@@ -124,7 +124,7 @@ public static class ImageSourceExtensions
         return button;
     }
 
-    public static ImageCell AsAsyncSourceFor(this Task<FileImageSource> imageSourceTask, ImageCell imageCell)
+    public static ImageCell AsAsyncSourceFor(this Task<ImageSource> imageSourceTask, ImageCell imageCell)
     {
         imageSourceTask
             .ContinueWith(
@@ -140,7 +140,7 @@ public static class ImageSourceExtensions
         return imageCell;
     }
 
-    public static void AsAsyncSourceFor(this Task<FileImageSource> imageSourceTask, Action<ImageSource> assignImageSource) =>
+    public static void AsAsyncSourceFor(this Task<ImageSource> imageSourceTask, Action<ImageSource> assignImageSource) =>
         imageSourceTask
             .ContinueWith(
                 async result =>
@@ -210,7 +210,7 @@ public static class ImageSourceExtensions
         return imageSource;
     }
 
-    public static FileImageSource AsAsyncFileImageSource(this Task<FileImageSource> imageSourceTask)
+    public static FileImageSource AsAsyncImageSource(this Task<FileImageSource> imageSourceTask)
     {
         var imageSource = new FileImageSource();
 
@@ -228,7 +228,7 @@ public static class ImageSourceExtensions
         return imageSource;
     }
 
-    public static FileImageSource AsAsyncFileImageSource(this Task<FileImageSource> imageSourceTask, FileImageSource updatableSource)
+    public static ImageSource AsAsyncImageSource(this Task<FileImageSource> imageSourceTask, FileImageSource updatableSource)
     {
         imageSourceTask
             .ContinueWith(
@@ -264,13 +264,13 @@ public static class ImageSourceExtensions
 
     public static Button SetSvgIcon(this Button imageElement, string svgName, double squareSize = 24d, Color? colorOverride = null) =>
         IconCache
-            .FileImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
+            .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
             .AsAsyncSourceFor(imageElement);
 
     public static ImageButton SetSvgIcon(this ImageButton imageButton, string svgName, double squareSize = 24d, Color? colorOverride = null)
     {
         IconCache
-            .FileImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
+            .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
             .AsAsyncSourceFor(x => imageButton.Source = x);
 
         return imageButton;
@@ -278,17 +278,17 @@ public static class ImageSourceExtensions
 
     public static ToolbarItem SetSvgIcon(this ToolbarItem toolbarItem, string svgName, double squareSize = 24d, Color? colorOverride = null) =>
         IconCache
-            .FileImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
+            .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
             .AsAsyncSourceFor(toolbarItem);
 
     public static MenuItem SetSvgIcon(this MenuItem menuItem, string svgName, double squareSize = 24d, Color? colorOverride = null) =>
         IconCache
-            .FileImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
+            .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
             .AsAsyncSourceFor(menuItem);
 
     public static Image SetSvgIcon(this Image image, string svgName, double squareSize = 24d, Color? colorOverride = null) =>
         IconCache
-            .FileImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
+            .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
             .AsAsyncSourceFor(image);
 
     public static Task<SKBitmap> BitmapFromSource(this ImageSource imageSource) => IconCache.SKBitmapFromSource(imageSource);

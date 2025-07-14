@@ -104,7 +104,7 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                         Children =
                         {
                             new Button { BackgroundColor = Colors.Fuchsia, }
-                                .SetSvgIcon("splatoon.svg", colorOverride: Colors.White),
+                                .SetSvgIcon("splatoon.svg", 40, colorOverride: Colors.White),
 
                             new Button { Text = "View Image Processing", }
                                 .BindClicked(async () => await this.Navigation.PushAsync(new ImageProcessing()))
@@ -264,7 +264,7 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 {
                                     Opacity = .25d,
                                     BackgroundColor = Colors.Fuchsia,
-                                    ActiveColor = Colors.Red,
+                                    ActiveColor = Colors.Transparent,
                                     InactiveColor = Colors.Green,
                                     PlaceholderColor = Colors.Purple,
                                     BorderStyle = ContainerBorderStyle.RoundedRectanglePlaceholderThrough,
@@ -492,8 +492,10 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 },
                             }),
                             new Tile { EmbeddedImageName = "triforce.svg", ButtonBackgroundColor = Colors.Fuchsia, },
-                            new SvgImageView { EmbeddedImageName = "splatoon.svg", OverlayColor = Colors.Chartreuse, }
+                            new SvgImageView { EmbeddedImageName = "splatoon.svg", HeightRequest = 66, OverlayColor = Colors.Chartreuse, }
                                 .Assign(out _svgImageView),
+                            new Image { HeightRequest = 66, }
+                                .SetSvgIcon("splatoon.svg", 66, Colors.Fuchsia),
                             new Button { Text = "Update Effects" }
                                 .Assign(out _svgImageViewTapped),
                             new GradientPillButton
@@ -505,8 +507,6 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                     FontFamily = "Clathing",
                                 }
                                 .Assign(out _pillButton),
-                            new Image()
-                                .SetSvgIcon("splatoon.svg", 66, Colors.Red),
                             new CupertinoToggleSwitch(),
                         },
                     },

@@ -33,55 +33,12 @@ public abstract class IconCacheBase : IIconCache, IDisposable
     public async Task<Image> IconFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null) =>
         new()
         {
-            Source = await SourceFromSvg(svgName, size, additionalCacheKey, colorOverride),
+            Source = await ImageSourceFromSvg(svgName, size, additionalCacheKey, colorOverride),
         };
 
-    public Task<ImageSource> SourceFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null) => SourceFromSvg(svgName, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
+    public Task<ImageSource> ImageSourceFromRawSvg(string svgName, string svgValue, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null) => ImageSourceFromRawSvg(svgName, svgValue, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
 
-    public async Task<ImageSource> SourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null)
-    {
-        string key = CreateIconKey(svgName, size, additionalCacheKey, colorOverride);
-
-        try
-        {
-            await _iconLock.WaitAsync().ConfigureAwait(false);
-
-            if (_resolvedIcons.ContainsKey(key))
-            {
-                return new FileImageSource { File = _resolvedIcons[key] };
-            }
-
-            string? diskCachedImage = GetImagePathFromDiskCache(key);
-
-            if (!string.IsNullOrEmpty(diskCachedImage))
-            {
-                _resolvedIcons[key] = diskCachedImage;
-                return new FileImageSource { File = diskCachedImage };
-            }
-
-            await GenerateImageFromEmbedded(key, svgName, size, colorOverride).ConfigureAwait(false);
-
-            diskCachedImage = GetImagePathFromDiskCache(key);
-
-            _resolvedIcons[key] = diskCachedImage;
-
-            return new FileImageSource { File = diskCachedImage };
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"[SVG Exception]\t {ex}");
-
-            return new FileImageSource();
-        }
-        finally
-        {
-            _iconLock.Release();
-        }
-    }
-
-    public Task<ImageSource> SourceFromRawSvg(string svgName, string svgValue, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null) => SourceFromRawSvg(svgName, svgValue, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
-
-    public async Task<ImageSource> SourceFromRawSvg(string svgName, string svgValue, Size size, string additionalCacheKey = "", Color? colorOverride = null)
+    public async Task<ImageSource> ImageSourceFromRawSvg(string svgName, string svgValue, Size size, string additionalCacheKey = "", Color? colorOverride = null)
     {
         try
         {
@@ -91,7 +48,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
             if (_resolvedIcons.ContainsKey(key))
             {
-                return new FileImageSource { File = _resolvedIcons[key] };
+                return GetPlatformImageSource(_resolvedIcons[key]);
             }
 
             string? diskCachedImage = GetImagePathFromDiskCache(key);
@@ -99,7 +56,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
             if (!string.IsNullOrEmpty(diskCachedImage))
             {
                 _resolvedIcons[key] = diskCachedImage;
-                return new FileImageSource { File = diskCachedImage };
+                return GetPlatformImageSource(diskCachedImage);
             }
 
             await GenerateImageFromRaw(key, svgValue, size, colorOverride).ConfigureAwait(false);
@@ -108,7 +65,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
             _resolvedIcons[key] = diskCachedImage;
 
-            return new FileImageSource { File = diskCachedImage };
+            return GetPlatformImageSource(diskCachedImage);
         }
         finally
         {
@@ -116,10 +73,10 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
     }
 
-    public Task<FileImageSource> FileImageSourceFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null) =>
-        FileImageSourceFromSvg(svgName, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
+    public Task<ImageSource> ImageSourceFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null) =>
+        ImageSourceFromSvg(svgName, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
 
-    public async Task<FileImageSource> FileImageSourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null)
+    public async Task<ImageSource> ImageSourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null)
     {
         try
         {
@@ -129,7 +86,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
             if (_resolvedIcons.ContainsKey(key))
             {
-                return new FileImageSource { File = _resolvedIcons[key] };
+                return GetPlatformImageSource(_resolvedIcons[key]);
             }
 
             string? diskCachedImage = GetImagePathFromDiskCache(key);
@@ -137,7 +94,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
             if (!string.IsNullOrEmpty(diskCachedImage))
             {
                 _resolvedIcons[key] = diskCachedImage;
-                return new FileImageSource { File = diskCachedImage };
+                return GetPlatformImageSource(diskCachedImage);
             }
 
             await GenerateImageFromEmbedded(key, svgName, size, colorOverride).ConfigureAwait(false);
@@ -146,23 +103,28 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
             _resolvedIcons[key] = diskCachedImage;
 
-            if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
-            {
-                return new FileImageSource { File = diskCachedImage };
-            }
-
-            return new FileImageSource { File = diskCachedImage };
+            return GetPlatformImageSource(diskCachedImage);
         }
         catch (Exception ex)
         {
             Console.WriteLine($"[SVG Exception]\t {ex}");
 
-            return new FileImageSource();
+            return GetPlatformImageSource();
         }
         finally
         {
             _iconLock.Release();
         }
+    }
+
+    private ImageSource GetPlatformImageSource(string? file = null)
+    {
+        if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+        {
+            return new NoCacheFileImageSource { File = file };
+        }
+
+        return new FileImageSource { File = file };
     }
 
     private string? GetImagePathFromDiskCache(string key)
