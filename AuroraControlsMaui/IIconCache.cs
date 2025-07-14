@@ -35,7 +35,7 @@ public interface IIconCache
     /// <param name="squareSize">The square size of the icon.</param>
     /// <param name="additionalCacheKey">Allows for setting an addiitonal cache key.</param>
     /// <param name="colorOverride">Allows for setting the color of the icon.</param>
-    Task<ImageSource> SourceFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = default(Color));
+    Task<ImageSource> ImageSourceFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = default(Color));
 
     /// <summary>
     /// Fetches an SVG icon by name.
@@ -45,7 +45,7 @@ public interface IIconCache
     /// <param name="size">A Xamarin.Forms.Size representing the desired size of the icon.</param>
     /// <param name="additionalCacheKey">Allows for setting an addiitonal cache key.</param>
     /// <param name="colorOverride">Allows for setting the color of the icon.</param>
-    Task<ImageSource> SourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = default(Color));
+    Task<ImageSource> ImageSourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = default(Color));
 
     /// <summary>
     /// Fetches an SVG icon by name.
@@ -56,7 +56,7 @@ public interface IIconCache
     /// <param name="squareSize">A double representing the desired size of the icon.</param>
     /// <param name="additionalCacheKey">Allows for setting an addiitonal cache key.</param>
     /// <param name="colorOverride">Allows for setting the color of the icon.</param>
-    Task<ImageSource> SourceFromRawSvg(string svgName, string svgValue, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = default(Color));
+    Task<ImageSource> ImageSourceFromRawSvg(string svgName, string svgValue, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = default(Color));
 
     /// <summary>
     /// Fetches an SVG icon by name.
@@ -67,27 +67,7 @@ public interface IIconCache
     /// <param name="size">A Xamarin.Forms.Size representing the desired size of the icon.</param>
     /// <param name="additionalCacheKey">Allows for setting an addiitonal cache key.</param>
     /// <param name="colorOverride">Allows for setting the color of the icon.</param>
-    Task<ImageSource> SourceFromRawSvg(string svgName, string svgValue, Size size, string additionalCacheKey = "", Color? colorOverride = default(Color));
-
-    /// <summary>
-    /// Fetches an SVG file image source by name.
-    /// </summary>
-    /// <returns>The Icon as a FileImageSource.</returns>
-    /// <param name="svgName">The name of the SVG.</param>
-    /// <param name="squareSize">The square size of the icon.</param>
-    /// <param name="additionalCacheKey">Allows for setting an addiitonal cache key.</param>
-    /// <param name="colorOverride">Allows for setting the color of the icon.</param>
-    Task<FileImageSource> FileImageSourceFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = default(Color));
-
-    /// <summary>
-    /// Fetches an SVG icon by name.
-    /// </summary>
-    /// <returns>The Icon as a FileImageSource.</returns>
-    /// <param name="svgName">The name of the SVG.</param>
-    /// <param name="size">A Xamarin.Forms.Size representing the desired size of the icon.</param>
-    /// <param name="additionalCacheKey">Allows for setting an addiitonal cache key.</param>
-    /// <param name="colorOverride">Allows for setting the color of the icon.</param>
-    Task<FileImageSource> FileImageSourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = default(Color));
+    Task<ImageSource> ImageSourceFromRawSvg(string svgName, string svgValue, Size size, string additionalCacheKey = "", Color? colorOverride = default(Color));
 
     /// <summary>
     /// Loads the assembly.

@@ -1,4 +1,5 @@
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace AuroraControls;
@@ -36,6 +37,11 @@ public static class AuroraControlBuilder
                         .Add<Effects.RoundedCornersEffect, RoundedCornersPlatformEffect>()
                         .Add<Effects.SafeAreaEffect, SafeAreaPlatformEffect>();
 #endif
+                })
+            .ConfigureImageSources(
+                services =>
+                {
+                    services.AddService<NoCacheFileImageSource>(svcs => new NoCacheFileImageSourceService(svcs.GetService<ILogger<NoCacheFileImageSourceService>>()));
                 });
 
         foreach (var assembly in resourceAssemblies)
