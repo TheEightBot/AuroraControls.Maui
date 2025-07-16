@@ -23,7 +23,7 @@ public class ImageProcessingEffect : RoutingEffect
     /// </summary>
     /// <value>The image processing effects.</value>
     public ImageProcessing.ImageProcessingCollection ImageProcessingEffects { get; private set; }
-        = new ImageProcessing.ImageProcessingCollection();
+        = new();
 
     /// <summary>
     /// The processor changed property.

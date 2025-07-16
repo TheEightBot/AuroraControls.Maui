@@ -127,7 +127,7 @@ public class ResizeImage : ImageProcessingBase, IImageProcessor
         {
             bmp = SKBitmap.Decode(codec);
 
-            SKImageInfo desired = new SKImageInfo(scaledWidth, scaledHeight);
+            SKImageInfo desired = new(scaledWidth, scaledHeight);
             bmp = bmp.Resize(desired, SKFilterQuality.High);
 
             using var image = SKImage.FromBitmap(bmp);

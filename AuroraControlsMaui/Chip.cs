@@ -540,7 +540,7 @@ public class Chip : AuroraViewBase, IDisposable
 
     public Chip()
     {
-        this._cantHandleTouch = DeviceInfo.Platform == DevicePlatform.Android;
+        _cantHandleTouch = DeviceInfo.Platform == DevicePlatform.Android;
 
         HeightRequest = _minSize.Height;
         WidthRequest = _minSize.Width;
@@ -554,7 +554,7 @@ public class Chip : AuroraViewBase, IDisposable
 
         float xOffset = 0f;
 
-        this._rect = new SKRect(0f, 0f, info.Width, info.Height);
+        _rect = new SKRect(0f, 0f, info.Width, info.Height);
 
         float spacing = (float)this.Spacing * _scale;
 
@@ -610,19 +610,19 @@ public class Chip : AuroraViewBase, IDisposable
                 borderPaint.StrokeWidth = scaledBorderSize;
                 borderPaint.Color = borderColor;
 
-                this._rect = this._rect.Subtract(scaledBorderSize);
+                _rect = _rect.Subtract(scaledBorderSize);
 
                 switch (this.Shape)
                 {
                     case ChipShape.Standard:
-                        canvas.DrawRoundRect(this._rect, this._rect.Height / 2f, this._rect.Height / 2f, borderPaint);
+                        canvas.DrawRoundRect(_rect, _rect.Height / 2f, _rect.Height / 2f, borderPaint);
                         break;
                     case ChipShape.Rectangle:
-                        canvas.DrawRect(this._rect, borderPaint);
+                        canvas.DrawRect(_rect, borderPaint);
                         break;
                     case ChipShape.RoundedRectangle:
                         float cornerRadius = (float)this.CornerRadius * _scale;
-                        canvas.DrawRoundRect(this._rect, cornerRadius, cornerRadius, borderPaint);
+                        canvas.DrawRoundRect(_rect, cornerRadius, cornerRadius, borderPaint);
                         break;
                 }
             }
@@ -635,31 +635,31 @@ public class Chip : AuroraViewBase, IDisposable
                 switch (this.Shape)
                 {
                     case ChipShape.Standard:
-                        canvas.DrawRoundRect(this._rect, this._rect.Height / 2f, this._rect.Height / 2f, backgroundPaint);
+                        canvas.DrawRoundRect(_rect, _rect.Height / 2f, _rect.Height / 2f, backgroundPaint);
                         break;
                     case ChipShape.Rectangle:
-                        canvas.DrawRect(this._rect, backgroundPaint);
+                        canvas.DrawRect(_rect, backgroundPaint);
                         break;
                     case ChipShape.RoundedRectangle:
                         float cornerRadius = (float)this.CornerRadius * _scale;
-                        canvas.DrawRoundRect(this._rect, cornerRadius, cornerRadius, backgroundPaint);
+                        canvas.DrawRoundRect(_rect, cornerRadius, cornerRadius, backgroundPaint);
                         break;
                 }
             }
 
             xOffset += quarterHeight + spacing;
 
-            if (!string.IsNullOrEmpty(this.LeadingEmbeddedImageName) && this._leadingSvg != null)
+            if (!string.IsNullOrEmpty(this.LeadingEmbeddedImageName) && _leadingSvg != null)
             {
-                var thumbnailContainer = new SKRect(this._rect.Left, this._rect.Top, this._rect.Height, this._rect.Height);
+                var thumbnailContainer = new SKRect(_rect.Left, _rect.Top, _rect.Height, _rect.Height);
 
-                var imageSize = thumbnailContainer.AspectFit(this._leadingSvg.Picture.CullRect.Size).Subtract(verticalSpacing);
+                var imageSize = thumbnailContainer.AspectFit(_leadingSvg.Picture.CullRect.Size).Subtract(verticalSpacing);
 
                 float imageWidth = imageSize.Width;
                 imageSize.Left = xOffset;
                 imageSize.Right = imageWidth + xOffset;
 
-                float scaleAmount = Math.Min(imageSize.Width / this._leadingSvg.Picture.CullRect.Width, imageSize.Height / this._leadingSvg.Picture.CullRect.Height);
+                float scaleAmount = Math.Min(imageSize.Width / _leadingSvg.Picture.CullRect.Width, imageSize.Height / _leadingSvg.Picture.CullRect.Height);
 
                 var svgScale = SKMatrix.CreateScale(scaleAmount, scaleAmount);
 
@@ -679,13 +679,13 @@ public class Chip : AuroraViewBase, IDisposable
                         canvas.SaveLayer(null);
 
                         canvas.Clear();
-                        canvas.DrawPicture(this._leadingSvg.Picture, ref svgScale);
+                        canvas.DrawPicture(_leadingSvg.Picture, ref svgScale);
                         canvas.DrawPaint(overlayPaint);
                     }
                 }
                 else
                 {
-                    canvas.DrawPicture(this._leadingSvg.Picture, ref svgScale);
+                    canvas.DrawPicture(_leadingSvg.Picture, ref svgScale);
                 }
 
                 xOffset = imageSize.Right + spacing;
@@ -702,29 +702,29 @@ public class Chip : AuroraViewBase, IDisposable
                 if (this.IsIconifiedText)
                 {
                     var iconifiedSize = canvas.IconifiedTextSize(this.Text, fontPaint);
-                    canvas.DrawCenteredIconifiedText(this.Text, xOffset + ((float)iconifiedSize.Width / 2f), this._rect.MidY, fontPaint);
+                    canvas.DrawCenteredIconifiedText(this.Text, xOffset + ((float)iconifiedSize.Width / 2f), _rect.MidY, fontPaint);
                     xOffset += (float)iconifiedSize.Width + spacing;
                 }
                 else
                 {
                     fontPaint.EnsureHasValidFont(this.Text);
                     var textSize = canvas.TextSize(this.Text, fontPaint);
-                    canvas.DrawCenteredText(this.Text, xOffset + ((float)textSize.Width / 2f), this._rect.MidY, fontPaint);
+                    canvas.DrawCenteredText(this.Text, xOffset + ((float)textSize.Width / 2f), _rect.MidY, fontPaint);
                     xOffset += (float)textSize.Width + spacing;
                 }
             }
 
-            if (!string.IsNullOrEmpty(this.TrailingEmbeddedImageName) && this._trailingSvg != null)
+            if (!string.IsNullOrEmpty(this.TrailingEmbeddedImageName) && _trailingSvg != null)
             {
-                var thumbnailContainer = new SKRect(this._rect.Left, this._rect.Top, this._rect.Height, this._rect.Height);
+                var thumbnailContainer = new SKRect(_rect.Left, _rect.Top, _rect.Height, _rect.Height);
 
-                var imageSize = thumbnailContainer.AspectFit(this._trailingSvg.Picture.CullRect.Size).Subtract(verticalSpacing);
+                var imageSize = thumbnailContainer.AspectFit(_trailingSvg.Picture.CullRect.Size).Subtract(verticalSpacing);
 
                 float imageWidth = imageSize.Width;
                 imageSize.Left = xOffset;
                 imageSize.Right = xOffset + imageWidth;
 
-                float scaleAmount = Math.Min(imageSize.Width / this._trailingSvg.Picture.CullRect.Width, imageSize.Height / this._trailingSvg.Picture.CullRect.Height);
+                float scaleAmount = Math.Min(imageSize.Width / _trailingSvg.Picture.CullRect.Width, imageSize.Height / _trailingSvg.Picture.CullRect.Height);
 
                 var svgScale = SKMatrix.CreateScale(scaleAmount, scaleAmount);
 
@@ -744,13 +744,13 @@ public class Chip : AuroraViewBase, IDisposable
                         canvas.SaveLayer(null);
 
                         canvas.Clear();
-                        canvas.DrawPicture(this._trailingSvg.Picture, ref svgScale);
+                        canvas.DrawPicture(_trailingSvg.Picture, ref svgScale);
                         canvas.DrawPaint(overlayPaint);
                     }
                 }
                 else
                 {
-                    canvas.DrawPicture(this._trailingSvg.Picture, ref svgScale);
+                    canvas.DrawPicture(_trailingSvg.Picture, ref svgScale);
                 }
 
                 xOffset = imageSize.Right + spacing;
@@ -758,9 +758,9 @@ public class Chip : AuroraViewBase, IDisposable
 
             if (this.IsRemovable)
             {
-                float size = this._rect.Height / 2f;
-                float top = this._rect.Top + ((this._rect.Height - size) / 2f);
-                this._removeRect = new SKRect(xOffset, top, xOffset + size, top + size).Subtract(8d);
+                float size = _rect.Height / 2f;
+                float top = _rect.Top + ((_rect.Height - size) / 2f);
+                _removeRect = new SKRect(xOffset, top, xOffset + size, top + size).Subtract(8d);
 
                 using (new SKAutoCanvasRestore(canvas))
                 {
@@ -772,7 +772,7 @@ public class Chip : AuroraViewBase, IDisposable
                     canvas.SaveLayer(null);
 
                     canvas.Clear();
-                    canvas.DrawCircle(this._removeRect.MidX, this._removeRect.MidY, size / 2f, overlayPaint);
+                    canvas.DrawCircle(_removeRect.MidX, _removeRect.MidY, size / 2f, overlayPaint);
 
                     overlayPaint.Style = SKPaintStyle.Stroke;
                     overlayPaint.StrokeCap = SKStrokeCap.Round;
@@ -780,13 +780,13 @@ public class Chip : AuroraViewBase, IDisposable
                     overlayPaint.Color = SKColors.Transparent;
                     overlayPaint.StrokeWidth = 3f;
 
-                    var crossRect = this._removeRect.Subtract(this._removeRect.Width * .25f);
+                    var crossRect = _removeRect.Subtract(_removeRect.Width * .25f);
 
                     canvas.DrawLine(crossRect.Left, crossRect.Top + crossRect.Height, crossRect.Left + crossRect.Width, crossRect.Top, overlayPaint);
                     canvas.DrawLine(crossRect.Left + crossRect.Width, crossRect.Top + crossRect.Height, crossRect.Left, crossRect.Top, overlayPaint);
                 }
 
-                xOffset = this._removeRect.Right + spacing;
+                xOffset = _removeRect.Right + spacing;
             }
 
             xOffset += quarterHeight + halfScaledBorderSize;
@@ -807,12 +807,12 @@ public class Chip : AuroraViewBase, IDisposable
 
     protected override void OnTouch(SKTouchEventArgs e)
     {
-        if (!this._cantHandleTouch)
+        if (!_cantHandleTouch)
         {
             e.Handled = true;
         }
 
-        if (e.ActionType != SKTouchAction.Released && (!this._cantHandleTouch || e.ActionType != SKTouchAction.Pressed))
+        if (e.ActionType != SKTouchAction.Released && (!_cantHandleTouch || e.ActionType != SKTouchAction.Pressed))
         {
             return;
         }
@@ -829,7 +829,7 @@ public class Chip : AuroraViewBase, IDisposable
             return;
         }
 
-        if (this.IsRemovable && this._removeRect.Contains(e.Location))
+        if (this.IsRemovable && _removeRect.Contains(e.Location))
         {
             if (this.RemovedCommand?.CanExecute(this.RemovedCommandParameter) ?? false)
             {
@@ -841,7 +841,7 @@ public class Chip : AuroraViewBase, IDisposable
             return;
         }
 
-        if (!this._rect.Contains(e.Location))
+        if (!_rect.Contains(e.Location))
         {
             return;
         }
@@ -855,7 +855,7 @@ public class Chip : AuroraViewBase, IDisposable
     {
         var sr = base.OnMeasure(widthConstraint, heightConstraint);
 
-        var neededWidth = this._calculatedWidth > sr.Request.Width ? this._calculatedWidth : sr.Request.Width;
+        var neededWidth = _calculatedWidth > sr.Request.Width ? _calculatedWidth : sr.Request.Width;
         var neededHeight = _minSize.Height < sr.Request.Height ? _minSize.Height : sr.Request.Height;
 
         // TODO: Need to add sizing provider
@@ -869,7 +869,7 @@ public class Chip : AuroraViewBase, IDisposable
 
         if (_calculatedWidth > size.Width)
         {
-            return new Size(this._calculatedWidth + Margin.HorizontalThickness, size.Height);
+            return new Size(_calculatedWidth + Margin.HorizontalThickness, size.Height);
         }
 
         return size;
@@ -882,14 +882,14 @@ public class Chip : AuroraViewBase, IDisposable
     {
         if (string.IsNullOrEmpty(this.LeadingEmbeddedImageName))
         {
-            this._leadingSvg = new SKSvg();
+            _leadingSvg = new SKSvg();
             return;
         }
 
-        this._leadingSvg = new SKSvg();
+        _leadingSvg = new SKSvg();
 
         await using var imageStream = EmbeddedResourceLoader.Load(this.LeadingEmbeddedImageName);
-        this._leadingSvg.Load(imageStream);
+        _leadingSvg.Load(imageStream);
         await imageStream.FlushAsync().ConfigureAwait(false);
     }
 
@@ -897,14 +897,14 @@ public class Chip : AuroraViewBase, IDisposable
     {
         if (string.IsNullOrEmpty(this.TrailingEmbeddedImageName))
         {
-            this._trailingSvg = new SKSvg();
+            _trailingSvg = new SKSvg();
             return;
         }
 
-        this._trailingSvg = new SKSvg();
+        _trailingSvg = new SKSvg();
 
         await using var imageStream = EmbeddedResourceLoader.Load(this.TrailingEmbeddedImageName);
-        this._trailingSvg.Load(imageStream);
+        _trailingSvg.Load(imageStream);
         await imageStream.FlushAsync().ConfigureAwait(false);
     }
 
@@ -916,7 +916,7 @@ public class Chip : AuroraViewBase, IDisposable
         }
 
         // Free unmanaged resources and set fields to null
-        this._disposed = true;
+        _disposed = true;
 
         if (!disposing)
         {
@@ -924,9 +924,9 @@ public class Chip : AuroraViewBase, IDisposable
         }
 
         // Dispose managed resources
-        this._backgroundPath.Dispose();
-        this._leadingSvg?.Dispose();
-        this._trailingSvg?.Dispose();
+        _backgroundPath.Dispose();
+        _leadingSvg?.Dispose();
+        _trailingSvg?.Dispose();
     }
 
     public void Dispose()

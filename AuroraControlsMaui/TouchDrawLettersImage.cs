@@ -2,7 +2,7 @@ namespace AuroraControls;
 
 public class TouchDrawLettersImage : AuroraViewBase
 {
-    private readonly object _lock = new object();
+    private readonly object _lock = new();
     private readonly ObservableUniqueCollection<TouchDrawLetter> _touchDrawLetters = new();
 
     private SKBitmap _imageBitmap;
@@ -149,13 +149,13 @@ public class TouchDrawLettersImage : AuroraViewBase
             return;
         }
 
-        if (!this._overrideDrawableArea.Contains(e.Location))
+        if (!_overrideDrawableArea.Contains(e.Location))
         {
             return;
         }
 
-        float percentX = (e.Location.X - this._overrideDrawableArea.Location.X) / this._overrideDrawableArea.Width;
-        float percentY = (e.Location.Y - this._overrideDrawableArea.Location.Y) / this._overrideDrawableArea.Height;
+        float percentX = (e.Location.X - _overrideDrawableArea.Location.X) / _overrideDrawableArea.Width;
+        float percentY = (e.Location.Y - _overrideDrawableArea.Location.Y) / _overrideDrawableArea.Height;
 
         var lastPoint = this.TouchDrawLetters.LastOrDefault();
 

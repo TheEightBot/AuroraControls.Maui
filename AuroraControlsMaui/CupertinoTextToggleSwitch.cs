@@ -10,7 +10,7 @@ namespace AuroraControls;
 public class CupertinoTextToggleSwitch : AuroraViewBase
 #pragma warning restore CA1001 // Types that own disposable fields should be disposable
 {
-    private readonly SKPath _backgroundPath = new SKPath();
+    private readonly SKPath _backgroundPath = new();
     private readonly string _animateToggleAnimationName;
 
     private float _calculatedWidth;
@@ -360,7 +360,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
         float borderWidth = (float)BorderWidth * _scale;
 
         float thumbSize = rect.Height - (borderWidth * 2f);
-        float thumbLocation = rect.Left + borderWidth + ((rect.Width - thumbSize - (borderWidth * 2f)) * this._toggleAnimationPercentage);
+        float thumbLocation = rect.Left + borderWidth + ((rect.Width - thumbSize - (borderWidth * 2f)) * _toggleAnimationPercentage);
         var thumbRect = new SKRect(thumbLocation, rect.Top + borderWidth, thumbLocation + thumbSize, rect.Top + borderWidth + thumbSize);
         float halfThumbRectWidth = thumbRect.Width * .5f;
         var trackColor =
@@ -370,7 +370,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
 
         _backgroundPaint.IsAntialias = true;
         _backgroundPaint.Style = SKPaintStyle.Stroke;
-        _backgroundPaint.StrokeWidth = (borderWidth * 2f) + (info.Height * this._toggleAnimationPercentage);
+        _backgroundPaint.StrokeWidth = (borderWidth * 2f) + (info.Height * _toggleAnimationPercentage);
         _backgroundPaint.Color = trackColor;
 
         canvas.Clear();
@@ -494,7 +494,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
 
         if (_calculatedWidth > size.Width)
         {
-            return new Size(this._calculatedWidth, size.Height);
+            return new Size(_calculatedWidth, size.Height);
         }
 
         return size;

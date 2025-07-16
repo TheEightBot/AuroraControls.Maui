@@ -5,7 +5,7 @@ namespace AuroraControls;
 /// </summary>
 public class StepIndicator : AuroraViewBase
 {
-    private readonly List<SKPath> _stepPaths = new List<SKPath>();
+    private readonly List<SKPath> _stepPaths = new();
 
     /// <summary>
     /// The number of steps to display in workflow.
@@ -337,7 +337,7 @@ public class StepIndicator : AuroraViewBase
 
             for (int i = 0; i < this.NumberOfSteps; i++)
             {
-                var circlePath = this._stepPaths.ElementAtOrDefault(i);
+                var circlePath = _stepPaths.ElementAtOrDefault(i);
 
                 if (circlePath == null)
                 {
@@ -442,9 +442,9 @@ public class StepIndicator : AuroraViewBase
 
         if (this.SwitchOnStepTap)
         {
-            for (int index = 0; index < this._stepPaths.Count; index++)
+            for (int index = 0; index < _stepPaths.Count; index++)
             {
-                var stepPath = this._stepPaths[index];
+                var stepPath = _stepPaths[index];
                 if (e.InContact == true && stepPath.Contains(e.Location.X, e.Location.Y))
                 {
                     System.Diagnostics.Debug.WriteLine($"Tapped {index} : {e}");

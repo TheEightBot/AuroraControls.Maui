@@ -14,7 +14,7 @@ public class ConfettiView : SceneViewBase
 #pragma warning restore CA1001
 {
     private readonly Random _rng;
-    private readonly SKPaint _paint = new SKPaint();
+    private readonly SKPaint _paint = new();
 
     private ConfettiParticle[] _particles;
     private double _angle;

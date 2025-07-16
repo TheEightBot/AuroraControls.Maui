@@ -22,7 +22,7 @@ public static class PlatformInfo
 
     private static string _iconCacheDirectory;
 
-    private static Rect _unknownLocation = new Rect(-1d, -1d, -1d, -1d);
+    private static Rect _unknownLocation = new(-1d, -1d, -1d, -1d);
 
     public static void Init()
     {

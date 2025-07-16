@@ -7,7 +7,7 @@ public class GradientColorView : AuroraViewBase
 #pragma warning disable CA1001 // Types that own disposable fields should be disposable
 {
     private readonly string _rippleAnimationName, _tapAnimationName;
-    private readonly SKPath _backgroundPath = new SKPath();
+    private readonly SKPath _backgroundPath = new();
     private SKPoint _lastTouchLocation;
     private double _rippleAnimationPercentage;
     private double _tapAnimationPercentage;
@@ -195,11 +195,11 @@ public class GradientColorView : AuroraViewBase
         float top = (info.Height - (float)size) / 2f;
 
         canvas.Clear();
-        this._backgroundPath.Reset();
+        _backgroundPath.Reset();
 
-        this._backgroundPath.AddRect(new SKRect(0, 0, info.Width, info.Height));
+        _backgroundPath.AddRect(new SKRect(0, 0, info.Width, info.Height));
 
-        if (this._lastTouchLocation != SKPoint.Empty && this._rippleAnimationPercentage > 0.0d)
+        if (_lastTouchLocation != SKPoint.Empty && _rippleAnimationPercentage > 0.0d)
         {
             using var ripplePath = new SKPath();
             using var ripplePaint = new SKPaint();
@@ -207,17 +207,17 @@ public class GradientColorView : AuroraViewBase
             ripplePaint.Style = SKPaintStyle.Fill;
             ripplePaint.Color =
                 this.GradientStartColor != Colors.Transparent
-                    ? this.GradientStartColor.AddLuminosity(-.2f).MultiplyAlpha((1f - (float)this._rippleAnimationPercentage) * .5f).ToSKColor()
+                    ? this.GradientStartColor.AddLuminosity(-.2f).MultiplyAlpha((1f - (float)_rippleAnimationPercentage) * .5f).ToSKColor()
                     : Colors.Transparent.ToSKColor();
 
             float startingRippleSize = Math.Min(info.Width, info.Height) * .75f;
-            float maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * this._rippleAnimationPercentage);
+            float maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * _rippleAnimationPercentage);
             float offsetAmount = -maxRippleSize / 2f;
-            var offsetPoint = new SKPoint(this._lastTouchLocation.X + offsetAmount, this._lastTouchLocation.Y + offsetAmount);
+            var offsetPoint = new SKPoint(_lastTouchLocation.X + offsetAmount, _lastTouchLocation.Y + offsetAmount);
             var rippleSize = SKRect.Create(offsetPoint, new SKSize(maxRippleSize, maxRippleSize));
             ripplePath.AddOval(rippleSize);
 
-            using var finalRipple = ripplePath.Op(this._backgroundPath, SKPathOp.Intersect);
+            using var finalRipple = ripplePath.Op(_backgroundPath, SKPathOp.Intersect);
             canvas.DrawPath(finalRipple, ripplePaint);
         }
 

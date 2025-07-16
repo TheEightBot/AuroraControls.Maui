@@ -18,7 +18,7 @@ public enum SvgImageButtonBackgroundShape
 public class SvgImageButton : AuroraViewBase
 #pragma warning restore CA1001
 {
-    private readonly object _pictureLock = new object();
+    private readonly object _pictureLock = new();
 
     private SKRect _touchArea;
     private SKSvg _svg;
@@ -228,7 +228,7 @@ public class SvgImageButton : AuroraViewBase
 
     protected override void Detached()
     {
-        this._svg?.Picture?.Dispose();
+        _svg?.Picture?.Dispose();
 
         base.Detached();
     }
@@ -279,14 +279,14 @@ public class SvgImageButton : AuroraViewBase
         float right = left + backgroundSize;
         float bottom = top + backgroundSize;
 
-        this._touchArea = new SKRect(left, top, right, bottom);
+        _touchArea = new SKRect(left, top, right, bottom);
 
         canvas.Clear();
 
-        if (this._svg?.Picture != null)
+        if (_svg?.Picture != null)
         {
-            float svgWidth = this._svg.Picture.CullRect.Width;
-            float svgHeight = this._svg.Picture.CullRect.Height;
+            float svgWidth = _svg.Picture.CullRect.Width;
+            float svgHeight = _svg.Picture.CullRect.Height;
 
             if (svgWidth <= 0 || svgHeight <= 0)
             {
@@ -308,7 +308,7 @@ public class SvgImageButton : AuroraViewBase
             }
 
             // Apply animation scaling - simpler approach
-            float animationScale = 1f - (this.AnimationScaleAmount * (float)this._animationPercentage);
+            float animationScale = 1f - (this.AnimationScaleAmount * (float)_animationPercentage);
             float finalScale = scaleAmount * animationScale;
 
             // Draw background shape with consistent animation scaling
@@ -362,14 +362,14 @@ public class SvgImageButton : AuroraViewBase
                     canvas.SaveLayer(info.Rect, null);
                     canvas.Clear();
 
-                    canvas.DrawPicture(this._svg.Picture, ref transform);
+                    canvas.DrawPicture(_svg.Picture, ref transform);
 
                     paint.Color = this.OverlayColor.ToSKColor();
                     canvas.DrawPaint(paint);
                 }
                 else
                 {
-                    canvas.DrawPicture(this._svg.Picture, ref transform);
+                    canvas.DrawPicture(_svg.Picture, ref transform);
                 }
             }
         }
@@ -389,11 +389,11 @@ public class SvgImageButton : AuroraViewBase
             return;
         }
 
-        bool isTapInside = this._touchArea.Contains(e.Location.X, e.Location.Y);
+        bool isTapInside = _touchArea.Contains(e.Location.X, e.Location.Y);
 
         if (e.ActionType == SKTouchAction.Released && isTapInside)
         {
-            this._lastTouchLocation = e.Location;
+            _lastTouchLocation = e.Location;
             this.Animate();
 
             if (this.Command?.CanExecute(this.CommandParameter) ?? false)
@@ -438,7 +438,7 @@ public class SvgImageButton : AuroraViewBase
     /// <param name="reset">If set to <c>true</c> reset.</param>
     private void Animate(bool reset = false)
     {
-        if (this._lastTouchLocation == SKPoint.Empty && !this.Animated)
+        if (_lastTouchLocation == SKPoint.Empty && !this.Animated)
         {
             return;
         }
@@ -446,7 +446,7 @@ public class SvgImageButton : AuroraViewBase
         const string animName = "ImageButtonAnimating";
 
         this.AbortAnimation(animName);
-        this._animationPercentage = 0d;
+        _animationPercentage = 0d;
 
         if (reset)
         {
@@ -455,7 +455,7 @@ public class SvgImageButton : AuroraViewBase
 
         var rippleAnimation = new Animation(x =>
         {
-            this._animationPercentage = x;
+            _animationPercentage = x;
             this.InvalidateSurface();
         });
 
@@ -463,8 +463,8 @@ public class SvgImageButton : AuroraViewBase
             this, animName, length: 400, easing: this.AnimationEasing,
             finished: (_, _) =>
             {
-                this._lastTouchLocation = SKPoint.Empty;
-                this._animationPercentage = 0d;
+                _lastTouchLocation = SKPoint.Empty;
+                _animationPercentage = 0d;
                 this.InvalidateSurface();
             });
     }

@@ -503,7 +503,7 @@ public class CalendarView : AuroraViewBase
             return;
         }
 
-        this._currentCalendarNeedsRebuild = true;
+        _currentCalendarNeedsRebuild = true;
         this?.InvalidateSurface();
     }
 
@@ -531,7 +531,7 @@ public class CalendarView : AuroraViewBase
         var currentCultureDateFormat = CultureInfo.CurrentUICulture.DateTimeFormat;
 
         string[] daysOfWeekNames =
-            this._daysOfWeekNames
+            _daysOfWeekNames
                 .Select(
                     dayOfWeek =>
                     {
@@ -603,12 +603,12 @@ public class CalendarView : AuroraViewBase
             columnPosition = startingDayOfWeek,
             rowPosition = 1;
 
-        if (this._currentCalendarNeedsRebuild)
+        if (_currentCalendarNeedsRebuild)
         {
-            this._currentCalendarNeedsRebuild = false;
+            _currentCalendarNeedsRebuild = false;
 
-            this._rowSize = rowSize;
-            this._columnSize = columnSize;
+            _rowSize = rowSize;
+            _columnSize = columnSize;
 
             int rowIncrementer = 0;
             int columnIncrementer = 0;
@@ -617,7 +617,7 @@ public class CalendarView : AuroraViewBase
                 float rowLocation = dayHeaderHeight + (rowIncrementer * rowSize);
                 float columnLocation = columnIncrementer * columnSize;
 
-                var cellInfo = this._dateContainers?.ElementAtOrDefault(currIndex);
+                var cellInfo = _dateContainers?.ElementAtOrDefault(currIndex);
 
                 if (cellInfo != null)
                 {
@@ -625,12 +625,12 @@ public class CalendarView : AuroraViewBase
                                          currIndex < daysInMonth + startingDayOfWeek - 1;
                     cellInfo.Location = new SKRect(columnLocation, rowLocation, columnLocation + columnSize,
                         rowLocation + rowSize);
-                    cellInfo.Selected = this._dateContainers?.ElementAt(currIndex)?.Selected ?? false;
+                    cellInfo.Selected = _dateContainers?.ElementAt(currIndex)?.Selected ?? false;
 
                     if (cellInfo.Available)
                     {
                         var date = new DateTime(currentYear, currentMonth, currIndex - startingDayOfWeek + 2).Date;
-                        cellInfo.Selected = this._selectedDates.Contains(date);
+                        cellInfo.Selected = _selectedDates.Contains(date);
                     }
                     else
                     {
@@ -685,7 +685,7 @@ public class CalendarView : AuroraViewBase
 
         dateFontPaint.Color = this.HeaderTextColor.ToSKColor();
 
-        for (int index = 0; index < this._daysOfWeekNames.Count; index++)
+        for (int index = 0; index < _daysOfWeekNames.Count; index++)
         {
             canvas.DrawRect(
                 new SKRect(index * columnSize, 0f, (index * columnSize) + columnSize, dayHeaderHeight),
@@ -699,9 +699,9 @@ public class CalendarView : AuroraViewBase
 
         dateFontPaint.Color = dateFontPaintColor;
 
-        for (int i = 0; i < this._dateContainers.Count; i++)
+        for (int i = 0; i < _dateContainers.Count; i++)
         {
-            var dateContainer = this._dateContainers?.ElementAtOrDefault(i);
+            var dateContainer = _dateContainers?.ElementAtOrDefault(i);
 
             if (dateContainer != null)
             {
@@ -718,8 +718,8 @@ public class CalendarView : AuroraViewBase
                     canvas.DrawRect(dateContainer.Location, availablePaint);
 
                     bool previousContainerSelected =
-                        this._dateContainers?.ElementAtOrDefault(i - 1)?.Selected ?? false;
-                    bool nextContainerSelected = this._dateContainers?.ElementAtOrDefault(i + 1)?.Selected ?? false;
+                        _dateContainers?.ElementAtOrDefault(i - 1)?.Selected ?? false;
+                    bool nextContainerSelected = _dateContainers?.ElementAtOrDefault(i + 1)?.Selected ?? false;
 
                     if (previousContainerSelected && nextContainerSelected)
                     {
@@ -807,7 +807,7 @@ public class CalendarView : AuroraViewBase
                 default:
                     fontPaint.TextSize = minSize * .5f;
                     fontPaint.TextAlign = SKTextAlign.Center;
-                    fontPaint.Color = this._dateContainers[currentPosition - 1].Selected
+                    fontPaint.Color = _dateContainers[currentPosition - 1].Selected
                         ? selectedDateFontPaintColor
                         : dateFontPaintColor;
                     float fontXCenteredPlacement = columnSize * .5f;
@@ -1091,7 +1091,7 @@ public class CalendarView : AuroraViewBase
                             {
                                 if (i != e.NewStartingIndex)
                                 {
-                                    this._selectedDates.RemoveAt(i);
+                                    _selectedDates.RemoveAt(i);
                                 }
                             }
                         });

@@ -280,7 +280,7 @@ public class ToggleBox : AuroraViewBase
         using var backgroundPaint = new SKPaint();
         float halfCheckSize = info.Height * .5f;
 
-        this._rect = new SKRect(
+        _rect = new SKRect(
             info.Rect.MidX - halfCheckSize + borderWidth, info.Rect.MidY - halfCheckSize + borderWidth,
             info.Rect.MidX + halfCheckSize - borderWidth, info.Rect.MidY + halfCheckSize - borderWidth);
 
@@ -296,22 +296,22 @@ public class ToggleBox : AuroraViewBase
         switch (this.Shape)
         {
             case ToggleBoxShape.Circular:
-                canvas.DrawOval(this._rect, backgroundPaint);
+                canvas.DrawOval(_rect, backgroundPaint);
                 break;
             case ToggleBoxShape.RoundedSquare:
-                canvas.DrawRoundRect(this._rect, cornerRadius, backgroundPaint);
+                canvas.DrawRoundRect(_rect, cornerRadius, backgroundPaint);
                 break;
             default:
-                canvas.DrawRect(this._rect, backgroundPaint);
+                canvas.DrawRect(_rect, backgroundPaint);
                 break;
         }
 
         var innerRect = new SKRect
         {
-            Left = this._rect.Left + halfBorderWidth,
-            Right = this._rect.Right - halfBorderWidth,
-            Top = this._rect.Top + halfBorderWidth,
-            Bottom = this._rect.Bottom - halfBorderWidth,
+            Left = _rect.Left + halfBorderWidth,
+            Right = _rect.Right - halfBorderWidth,
+            Top = _rect.Top + halfBorderWidth,
+            Bottom = _rect.Bottom - halfBorderWidth,
         };
 
         if (this.IsToggled)
@@ -327,37 +327,37 @@ public class ToggleBox : AuroraViewBase
             {
                 case ToggleBoxCheckType.Check:
                     var checkPath = new SKPath();
-                    checkPath.MoveTo(this._rect.Left + (this._rect.Width * .3f), this._rect.Top + (this._rect.Height * .5f));
-                    checkPath.LineTo(this._rect.Left + (this._rect.Width * .5f), this._rect.Top + (this._rect.Height * .7f));
-                    checkPath.LineTo(this._rect.Left + (this._rect.Width * .75f), this._rect.Top + (this._rect.Height * .3f));
+                    checkPath.MoveTo(_rect.Left + (_rect.Width * .3f), _rect.Top + (_rect.Height * .5f));
+                    checkPath.LineTo(_rect.Left + (_rect.Width * .5f), _rect.Top + (_rect.Height * .7f));
+                    checkPath.LineTo(_rect.Left + (_rect.Width * .75f), _rect.Top + (_rect.Height * .3f));
                     canvas.DrawPath(checkPath, checkPaint);
                     break;
                 case ToggleBoxCheckType.RoundedCheck:
                     checkPaint.StrokeCap = SKStrokeCap.Round;
                     var roundedCheckPath = new SKPath();
-                    roundedCheckPath.MoveTo(this._rect.Left + (this._rect.Width * .3f), this._rect.Top + (this._rect.Height * .5f));
-                    roundedCheckPath.LineTo(this._rect.Left + (this._rect.Width * .5f), this._rect.Top + (this._rect.Height * .7f));
-                    roundedCheckPath.LineTo(this._rect.Left + (this._rect.Width * .75f), this._rect.Top + (this._rect.Height * .3f));
+                    roundedCheckPath.MoveTo(_rect.Left + (_rect.Width * .3f), _rect.Top + (_rect.Height * .5f));
+                    roundedCheckPath.LineTo(_rect.Left + (_rect.Width * .5f), _rect.Top + (_rect.Height * .7f));
+                    roundedCheckPath.LineTo(_rect.Left + (_rect.Width * .75f), _rect.Top + (_rect.Height * .3f));
                     canvas.DrawPath(roundedCheckPath, checkPaint);
                     break;
                 case ToggleBoxCheckType.Cross:
                     canvas.DrawLine(
-                        this._rect.Left + halfMarkWidth + halfBorderWidth,
-                        this._rect.Top + halfMarkWidth + halfBorderWidth,
-                        this._rect.Left + this._rect.Width - halfMarkWidth - halfBorderWidth,
-                        this._rect.Top + this._rect.Height - halfMarkWidth - halfBorderWidth,
+                        _rect.Left + halfMarkWidth + halfBorderWidth,
+                        _rect.Top + halfMarkWidth + halfBorderWidth,
+                        _rect.Left + _rect.Width - halfMarkWidth - halfBorderWidth,
+                        _rect.Top + _rect.Height - halfMarkWidth - halfBorderWidth,
                         checkPaint);
 
                     canvas.DrawLine(
-                        this._rect.Left + halfMarkWidth + halfBorderWidth,
-                        this._rect.Top + this._rect.Height - halfMarkWidth - halfBorderWidth,
-                        this._rect.Left + this._rect.Width - halfMarkWidth - halfBorderWidth,
-                        this._rect.Top + halfMarkWidth + halfBorderWidth,
+                        _rect.Left + halfMarkWidth + halfBorderWidth,
+                        _rect.Top + _rect.Height - halfMarkWidth - halfBorderWidth,
+                        _rect.Left + _rect.Width - halfMarkWidth - halfBorderWidth,
+                        _rect.Top + halfMarkWidth + halfBorderWidth,
                         checkPaint);
                     break;
                 case ToggleBoxCheckType.Circular:
                     checkPaint.Style = SKPaintStyle.Fill;
-                    canvas.DrawCircle(this._rect.MidX, rect.MidY, innerRect.Width * .20f, checkPaint);
+                    canvas.DrawCircle(_rect.MidX, rect.MidY, innerRect.Width * .20f, checkPaint);
                     break;
             }
         }
@@ -369,13 +369,13 @@ public class ToggleBox : AuroraViewBase
         switch (this.Shape)
         {
             case ToggleBoxShape.Circular:
-                canvas.DrawOval(this._rect, backgroundPaint);
+                canvas.DrawOval(_rect, backgroundPaint);
                 break;
             case ToggleBoxShape.RoundedSquare:
-                canvas.DrawRoundRect(this._rect, cornerRadius, backgroundPaint);
+                canvas.DrawRoundRect(_rect, cornerRadius, backgroundPaint);
                 break;
             default:
-                canvas.DrawRect(this._rect, backgroundPaint);
+                canvas.DrawRect(_rect, backgroundPaint);
                 break;
         }
     }
@@ -386,14 +386,14 @@ public class ToggleBox : AuroraViewBase
 
         if (!e.InContact)
         {
-            this._holding = false;
+            _holding = false;
             return;
         }
 
-        if (this._holding == false && _rect.Contains(e.Location))
+        if (_holding == false && _rect.Contains(e.Location))
         {
             IsToggled = !IsToggled;
-            this._holding = e.InContact;
+            _holding = e.InContact;
             this.InvalidateSurface();
         }
     }

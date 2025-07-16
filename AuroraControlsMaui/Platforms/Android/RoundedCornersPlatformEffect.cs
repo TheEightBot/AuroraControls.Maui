@@ -26,8 +26,8 @@ public class RoundedCornersPlatformEffect : PlatformEffect
 
         _originalClipToOutline = view.ClipToOutline;
         _originalOutlineProvider = view.OutlineProvider;
-        this._originalForeground = view.Foreground;
-        this._originalBackground = view.Background;
+        _originalForeground = view.Foreground;
+        _originalBackground = view.Background;
 
         view.ClipToOutline = true;
         view.OutlineProvider = ViewOutlineProvider.Bounds;
@@ -57,8 +57,8 @@ public class RoundedCornersPlatformEffect : PlatformEffect
 
             view.ClipToOutline = _originalClipToOutline;
             view.OutlineProvider = _originalOutlineProvider;
-            view.Foreground = this._originalForeground;
-            view.Background = this._originalBackground;
+            view.Foreground = _originalForeground;
+            view.Background = _originalBackground;
         }
         catch (ObjectDisposedException)
         {

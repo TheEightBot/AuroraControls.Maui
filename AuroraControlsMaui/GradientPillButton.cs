@@ -360,12 +360,12 @@ public class GradientPillButton : AuroraViewBase
 
         canvas.Clear();
 
-        if (this._backgroundPath is null)
+        if (_backgroundPath is null)
         {
             return;
         }
 
-        this._backgroundPath.Reset();
+        _backgroundPath.Reset();
 
         if (this.ShadowColor != default(Color) && this.ShadowLocation != Point.Zero)
         {
@@ -389,10 +389,10 @@ public class GradientPillButton : AuroraViewBase
                 canvas.Translate(this.ShadowLocation.ToSKPoint());
             }
 
-            this._backgroundPath.AddRoundRect(rect, info.Height / 2f, info.Height / 2f);
-            canvas.DrawPath(this._backgroundPath, backgroundPaint);
+            _backgroundPath.AddRoundRect(rect, info.Height / 2f, info.Height / 2f);
+            canvas.DrawPath(_backgroundPath, backgroundPaint);
 
-            if (this._lastTouchLocation != SKPoint.Empty && this._rippleAnimationPercentage > 0.0d)
+            if (_lastTouchLocation != SKPoint.Empty && _rippleAnimationPercentage > 0.0d)
             {
                 using var ripplePath = new SKPath();
                 using var ripplePaint = new SKPaint();
@@ -400,17 +400,17 @@ public class GradientPillButton : AuroraViewBase
                 ripplePaint.Style = SKPaintStyle.Fill;
                 ripplePaint.Color =
                     this.ButtonBackgroundStartColor != default(Color)
-                        ? this.ButtonBackgroundEndColor.AddLuminosity(-.2f).MultiplyAlpha((1 - (float)this._rippleAnimationPercentage) * .5f).ToSKColor()
+                        ? this.ButtonBackgroundEndColor.AddLuminosity(-.2f).MultiplyAlpha((1 - (float)_rippleAnimationPercentage) * .5f).ToSKColor()
                         : Colors.Transparent.ToSKColor();
 
                 float startingRippleSize = Math.Min(info.Width, info.Height) * 1.5f;
-                float maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * this._rippleAnimationPercentage);
+                float maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * _rippleAnimationPercentage);
                 float offsetAmount = -maxRippleSize / 2f;
-                var offsetPoint = new SKPoint(this._lastTouchLocation.X + offsetAmount, this._lastTouchLocation.Y + offsetAmount);
+                var offsetPoint = new SKPoint(_lastTouchLocation.X + offsetAmount, _lastTouchLocation.Y + offsetAmount);
                 var rippleSize = SKRect.Create(offsetPoint, new SKSize(maxRippleSize, maxRippleSize));
                 ripplePath.AddOval(rippleSize);
 
-                using var finalRipple = ripplePath.Op(this._backgroundPath, SKPathOp.Intersect);
+                using var finalRipple = ripplePath.Op(_backgroundPath, SKPathOp.Intersect);
                 canvas.DrawPath(finalRipple, ripplePaint);
             }
 
@@ -421,7 +421,7 @@ public class GradientPillButton : AuroraViewBase
                 backgroundPaint.Shader = null;
                 backgroundPaint.Style = SKPaintStyle.Stroke;
 
-                canvas.DrawPath(this._backgroundPath, backgroundPaint);
+                canvas.DrawPath(_backgroundPath, backgroundPaint);
             }
 
             if (!string.IsNullOrEmpty(this.Text))

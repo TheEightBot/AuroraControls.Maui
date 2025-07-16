@@ -133,7 +133,7 @@ public class SvgImageView : AuroraViewBase
         {
             float scaleAmount =
                 this.MaxImageSize == Size.Zero
-                    ? Math.Min(displayArea.Width / this._svg.Picture.CullRect.Width, displayArea.Height / this._svg.Picture.CullRect.Height)
+                    ? Math.Min(displayArea.Width / _svg.Picture.CullRect.Width, displayArea.Height / _svg.Picture.CullRect.Height)
                     : 1f;
 
             var scale = SKMatrix.CreateScale(scaleAmount, scaleAmount);

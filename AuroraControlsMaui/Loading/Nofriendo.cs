@@ -102,7 +102,7 @@ public class Nofriendo : LoadingViewBase
         using var foregroundPaint = new SKPaint();
         using var foregroundPath = new SKPath();
         int animationStep = this.CurrentAnimationStep;
-        double previousStepProgress = this._previousAnimationStep / (double)this.MaxAnimationSteps;
+        double previousStepProgress = _previousAnimationStep / (double)this.MaxAnimationSteps;
         double currentStepProcess = animationStep / (double)this.MaxAnimationSteps;
 
         var previousStepColor = this.LoadingStartColor.Lerp(this.LoadingEndColor, previousStepProgress).ToSKColor();

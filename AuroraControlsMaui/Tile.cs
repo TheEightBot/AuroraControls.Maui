@@ -10,11 +10,11 @@ namespace AuroraControls;
 public class Tile : AuroraViewBase
 #pragma warning restore CA1001 // Types that own disposable fields should be disposable
 {
-    private readonly SKPath _backgroundPath = new SKPath();
+    private readonly SKPath _backgroundPath = new();
 
     private readonly string _rippleAnimationName, _tapAnimationName;
 
-    private readonly object _pictureLock = new object();
+    private readonly object _pictureLock = new();
 
     private SKPoint _lastTouchLocation;
     private double _rippleAnimationPercentage, _tapAnimationPercentage;
@@ -434,15 +434,15 @@ public class Tile : AuroraViewBase
         var canvas = surface.Canvas;
 
         using var backgroundPaint = new SKPaint();
-        float borderWidth = (float)this.BorderWidth * this._scale;
+        float borderWidth = (float)this.BorderWidth * _scale;
         float halfBorderWidth = borderWidth * .5f;
 
-        float shadowBlurRadius = (float)this.ShadowBlurRadius * this._scale;
+        float shadowBlurRadius = (float)this.ShadowBlurRadius * _scale;
 
-        float shadowLocationX = (float)this.ShadowLocation.X * this._scale;
-        float shadowLocationY = (float)this.ShadowLocation.Y * this._scale;
+        float shadowLocationX = (float)this.ShadowLocation.X * _scale;
+        float shadowLocationY = (float)this.ShadowLocation.Y * _scale;
 
-        float cornerRadius = (float)this.CornerRadius * this._scale;
+        float cornerRadius = (float)this.CornerRadius * _scale;
 
         // TODO: Negative Shadows are busted
         var rect =
@@ -457,57 +457,57 @@ public class Tile : AuroraViewBase
         backgroundPaint.Color = this.ButtonBackgroundColor.ToSKColor();
 
         canvas.Clear();
-        this._backgroundPath.Reset();
+        _backgroundPath.Reset();
 
         if (this.ShadowColor != Colors.White && this.ShadowLocation != Point.Zero)
         {
             using (new SKAutoCanvasRestore(canvas))
             {
-                float sigma = SKMaskFilter.ConvertRadiusToSigma(shadowBlurRadius) * (1f - (float)this._tapAnimationPercentage);
-                this._shadowPaint.IsAntialias = true;
-                this._shadowPaint.Color = this.ShadowColor.ToSKColor();
-                this._shadowPaint.Style = SKPaintStyle.Fill;
-                this._shadowPaint.IsAntialias = true;
-                this._shadowPaint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, sigma);
+                float sigma = SKMaskFilter.ConvertRadiusToSigma(shadowBlurRadius) * (1f - (float)_tapAnimationPercentage);
+                _shadowPaint.IsAntialias = true;
+                _shadowPaint.Color = this.ShadowColor.ToSKColor();
+                _shadowPaint.Style = SKPaintStyle.Fill;
+                _shadowPaint.IsAntialias = true;
+                _shadowPaint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, sigma);
 
                 canvas.Translate(new SKPoint(shadowLocationX, shadowLocationY));
 
                 var shadowRect = new SKRect(rect.Left + sigma, rect.Top + sigma, rect.Right - (sigma * 2f), rect.Bottom - (sigma * 2f));
 
-                canvas.DrawRoundRect(shadowRect, cornerRadius, cornerRadius, this._shadowPaint);
+                canvas.DrawRoundRect(shadowRect, cornerRadius, cornerRadius, _shadowPaint);
             }
         }
 
         using (new SKAutoCanvasRestore(canvas))
         {
-            double translateX = this._tapAnimationPercentage * shadowLocationX;
-            double translateY = this._tapAnimationPercentage * shadowLocationY;
+            double translateX = _tapAnimationPercentage * shadowLocationX;
+            double translateY = _tapAnimationPercentage * shadowLocationY;
 
             canvas.Translate(new SKPoint((float)translateX, (float)translateY));
 
-            this._backgroundPath.AddRoundRect(rect, cornerRadius, cornerRadius);
-            canvas.DrawPath(this._backgroundPath, backgroundPaint);
+            _backgroundPath.AddRoundRect(rect, cornerRadius, cornerRadius);
+            canvas.DrawPath(_backgroundPath, backgroundPaint);
 
-            if (this._lastTouchLocation != SKPoint.Empty && this._rippleAnimationPercentage > 0.0d)
+            if (_lastTouchLocation != SKPoint.Empty && _rippleAnimationPercentage > 0.0d)
             {
                 using var ripplePath = new SKPath();
-                this._ripplePaint.IsAntialias = true;
-                this._ripplePaint.Style = SKPaintStyle.Fill;
-                this._ripplePaint.Color =
+                _ripplePaint.IsAntialias = true;
+                _ripplePaint.Style = SKPaintStyle.Fill;
+                _ripplePaint.Color =
                     this.ButtonBackgroundColor != Colors.White
-                        ? this.ButtonBackgroundColor.AddLuminosity(-.2f).MultiplyAlpha((1f - (float)this._rippleAnimationPercentage) * .5f).ToSKColor()
+                        ? this.ButtonBackgroundColor.AddLuminosity(-.2f).MultiplyAlpha((1f - (float)_rippleAnimationPercentage) * .5f).ToSKColor()
                         : Colors.Transparent.ToSKColor();
 
                 float startingRippleSize = Math.Min(info.Width, info.Height) * .75f;
-                float maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * this._rippleAnimationPercentage);
+                float maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * _rippleAnimationPercentage);
                 float offsetAmount = -maxRippleSize / 2f;
-                var offsetPoint = new SKPoint(this._lastTouchLocation.X + offsetAmount, this._lastTouchLocation.Y + offsetAmount);
+                var offsetPoint = new SKPoint(_lastTouchLocation.X + offsetAmount, _lastTouchLocation.Y + offsetAmount);
                 var rippleSize = SKRect.Create(offsetPoint, new SKSize(maxRippleSize, maxRippleSize));
 
                 ripplePath.AddOval(rippleSize);
 
-                using var finalRipple = ripplePath.Op(this._backgroundPath, SKPathOp.Intersect);
-                canvas.DrawPath(finalRipple, this._ripplePaint);
+                using var finalRipple = ripplePath.Op(_backgroundPath, SKPathOp.Intersect);
+                canvas.DrawPath(finalRipple, _ripplePaint);
             }
 
             if (borderWidth > 0d && this.BorderColor != Colors.White)
@@ -518,47 +518,47 @@ public class Tile : AuroraViewBase
                 backgroundPaint.Style = SKPaintStyle.Stroke;
                 backgroundPaint.IsAntialias = true;
 
-                canvas.DrawPath(this._backgroundPath, backgroundPaint);
+                canvas.DrawPath(_backgroundPath, backgroundPaint);
             }
 
             var textBounds = SKRect.Empty;
 
             if (!string.IsNullOrEmpty(this.Text))
             {
-                this._fontPaint.Color = this.FontColor.ToSKColor();
-                this._fontPaint.TextSize = (float)this.FontSize * this._scale;
-                this._fontPaint.IsAntialias = true;
-                this._fontPaint.Typeface = this.Typeface ?? PlatformInfo.DefaultTypeface;
+                _fontPaint.Color = this.FontColor.ToSKColor();
+                _fontPaint.TextSize = (float)this.FontSize * _scale;
+                _fontPaint.IsAntialias = true;
+                _fontPaint.Typeface = this.Typeface ?? PlatformInfo.DefaultTypeface;
 
-                textBounds = canvas.GetTextContainerRectAt(this.Text, SKPoint.Empty, this._fontPaint);
+                textBounds = canvas.GetTextContainerRectAt(this.Text, SKPoint.Empty, _fontPaint);
 
                 float textY = rect.Top + rect.Height - (float)this.ContentPadding.Bottom - textBounds.Height - (borderWidth * 2f);
 
                 if (this.IsIconifiedText)
                 {
-                    canvas.DrawCenteredIconifiedText(this.Text, rect.MidX, textY, this._fontPaint);
+                    canvas.DrawCenteredIconifiedText(this.Text, rect.MidX, textY, _fontPaint);
                 }
                 else
                 {
-                    this._fontPaint.EnsureHasValidFont(this.Text);
-                    canvas.DrawTextAt(this.Text, new SKPoint(rect.MidX, textY), this._fontPaint, TextDrawLocation.Centered, TextDrawLocation.At);
+                    _fontPaint.EnsureHasValidFont(this.Text);
+                    canvas.DrawTextAt(this.Text, new SKPoint(rect.MidX, textY), _fontPaint, TextDrawLocation.Centered, TextDrawLocation.At);
                 }
             }
 
-            if (!string.IsNullOrEmpty(this._pictureName))
+            if (!string.IsNullOrEmpty(_pictureName))
             {
                 // TODO: The text measurement here seems not right
                 var contentRect = new SKRect(
-                    rect.Left + (float)(this.ContentPadding.Left * this._scale),
-                    rect.Top + (float)(this.ContentPadding.Top * this._scale),
-                    rect.Right - (float)(this.ContentPadding.Right * this._scale),
-                    rect.Bottom - textBounds.Height - (float)(this.ContentPadding.Bottom * this._scale));
+                    rect.Left + (float)(this.ContentPadding.Left * _scale),
+                    rect.Top + (float)(this.ContentPadding.Top * _scale),
+                    rect.Right - (float)(this.ContentPadding.Right * _scale),
+                    rect.Bottom - textBounds.Height - (float)(this.ContentPadding.Bottom * _scale));
 
-                var imageSize = contentRect.AspectFit(this._svg.Picture.CullRect.Size);
+                var imageSize = contentRect.AspectFit(_svg.Picture.CullRect.Size);
 
                 float scaleAmount =
                     this.MaxImageSize == Size.Zero
-                        ? Math.Min(imageSize.Width / this._svg.Picture.CullRect.Width, imageSize.Height / this._svg.Picture.CullRect.Height)
+                        ? Math.Min(imageSize.Width / _svg.Picture.CullRect.Width, imageSize.Height / _svg.Picture.CullRect.Height)
                         : 1f;
 
                 var svgScale = SKMatrix.CreateScale(scaleAmount, scaleAmount);
@@ -566,7 +566,7 @@ public class Tile : AuroraViewBase
                 var translation =
                     this.MaxImageSize == Size.Zero
                         ? SKMatrix.CreateTranslation(imageSize.Left, imageSize.Top)
-                        : SKMatrix.CreateTranslation(imageSize.MidX - (this._svg.Picture.CullRect.Width / 2f), imageSize.MidY - (this._svg.Picture.CullRect.Height / 2f));
+                        : SKMatrix.CreateTranslation(imageSize.MidX - (_svg.Picture.CullRect.Width / 2f), imageSize.MidY - (_svg.Picture.CullRect.Height / 2f));
 
                 svgScale = svgScale.PostConcat(translation);
 
@@ -574,19 +574,19 @@ public class Tile : AuroraViewBase
                 {
                     using (new SKAutoCanvasRestore(canvas))
                     {
-                        this._overlayPaint.BlendMode = SKBlendMode.SrcATop;
-                        this._overlayPaint.IsAntialias = true;
-                        this._overlayPaint.Color = this.OverlayColor.ToSKColor();
+                        _overlayPaint.BlendMode = SKBlendMode.SrcATop;
+                        _overlayPaint.IsAntialias = true;
+                        _overlayPaint.Color = this.OverlayColor.ToSKColor();
 
                         canvas.SaveLayer(null);
                         canvas.Clear();
-                        canvas.DrawPicture(this._svg.Picture, ref svgScale);
-                        canvas.DrawPaint(this._overlayPaint);
+                        canvas.DrawPicture(_svg.Picture, ref svgScale);
+                        canvas.DrawPaint(_overlayPaint);
                     }
                 }
                 else
                 {
-                    canvas.DrawPicture(this._svg.Picture, ref svgScale);
+                    canvas.DrawPicture(_svg.Picture, ref svgScale);
                 }
             }
         }
@@ -595,8 +595,8 @@ public class Tile : AuroraViewBase
         {
             float badgeSize = (float)Math.Min(info.Rect.Height * .33d, info.Rect.Width * .33d);
 
-            double maxBadgeSize = this.NotificationBadge.MaxBadgeSize * this._scale;
-            double minBadgeSize = this.NotificationBadge.MinBadgeSize * this._scale;
+            double maxBadgeSize = this.NotificationBadge.MaxBadgeSize * _scale;
+            double minBadgeSize = this.NotificationBadge.MinBadgeSize * _scale;
 
             if (maxBadgeSize > 0 && badgeSize > maxBadgeSize)
             {

@@ -164,7 +164,7 @@ public class LinearGauge : AuroraViewBase
                 break;
         }
 
-        float scaledProgressThickness = this._scale * (float)this.ProgressThickness;
+        float scaledProgressThickness = _scale * (float)this.ProgressThickness;
 
         progressPaint.IsAntialias = true;
         progressPaint.StrokeCap = endCapType;

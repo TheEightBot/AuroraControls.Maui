@@ -10,11 +10,11 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
     private readonly char[] _invalidFilenameChars;
 
-    private readonly SemaphoreSlim _iconLock = new SemaphoreSlim(1, 1);
+    private readonly SemaphoreSlim _iconLock = new(1, 1);
 
-    private readonly Dictionary<string, string> _resolvedIcons = new Dictionary<string, string>();
+    private readonly Dictionary<string, string> _resolvedIcons = new();
 
-    private readonly SKPaint _paint = new SKPaint { BlendMode = SKBlendMode.SrcATop, Style = SKPaintStyle.Fill };
+    private readonly SKPaint _paint = new() { BlendMode = SKBlendMode.SrcATop, Style = SKPaintStyle.Fill };
 
     private readonly float _platformScalingFactor;
 
@@ -351,11 +351,11 @@ public abstract class IconCacheBase : IIconCache, IDisposable
             return;
         }
 
-        this._iconLock?.Dispose();
-        this._colorspace.Dispose();
-        this._paint.Dispose();
+        _iconLock?.Dispose();
+        _colorspace.Dispose();
+        _paint.Dispose();
 
-        this._disposedValue = true;
+        _disposedValue = true;
     }
 
     public void Dispose()

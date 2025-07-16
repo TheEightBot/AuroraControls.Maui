@@ -11,7 +11,7 @@ public class FontCache : FontMapper
     /// <summary>
     /// Gets a dictionary containing a string representing the resource name and the SKTypeface resource.
     /// </summary>
-    public Dictionary<string, List<SKTypeface>> RegisteredFonts { get; } = new Dictionary<string, List<SKTypeface>>();
+    public Dictionary<string, List<SKTypeface>> RegisteredFonts { get; } = new();
 
     public static FontCache Instance { get; } = new();
 

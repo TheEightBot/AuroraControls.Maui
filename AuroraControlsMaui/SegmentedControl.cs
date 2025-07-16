@@ -8,7 +8,7 @@ namespace AuroraControls;
 [ContentProperty(nameof(Segments))]
 public class SegmentedControl : AuroraViewBase
 {
-    private readonly ObservableCollection<Segment> _segments = new ObservableCollection<Segment>();
+    private readonly ObservableCollection<Segment> _segments = new();
 
     private SKRect _controlRect;
     private int _segmentCount, _previousIndex;
@@ -308,7 +308,7 @@ public class SegmentedControl : AuroraViewBase
                             selected
                                 ? this.ForegroundTextColor != default(Color) ? this.ForegroundTextColor.ToSKColor() : backgroundColor
                                 : this.BackgroundTextColor != default(Color) ? this.BackgroundTextColor.ToSKColor() : segmentForegroundColor;
-                        fontPaint.TextSize = (float)this.FontSize * this._scale;
+                        fontPaint.TextSize = (float)this.FontSize * _scale;
                         fontPaint.Typeface = FontCache.Instance.TypefaceFromFontFamily(this.FontFamily);
                         fontPaint.IsAntialias = true;
 
@@ -384,7 +384,7 @@ public class SegmentedControl : AuroraViewBase
             return;
         }
 
-        float segmentSize = _controlRect.Width / this._segmentCount;
+        float segmentSize = _controlRect.Width / _segmentCount;
 
         e.Handled = true;
 
@@ -520,7 +520,7 @@ public class Segment : BindableObject, IDisposable
         _svg = new SKSvg();
 
         using var imageStream = EmbeddedResourceLoader.Load(this.EmbeddedImageName);
-        this._svg.Load(imageStream);
+        _svg.Load(imageStream);
     }
 
     protected virtual void Dispose(bool disposing)

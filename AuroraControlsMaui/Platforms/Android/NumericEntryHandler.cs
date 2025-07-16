@@ -41,7 +41,7 @@ public partial class NumericEntryHandler : EntryHandler, IDisposable
 
     public class NumericInputFilter : Java.Lang.Object, IInputFilter
     {
-        private static readonly Java.Lang.String _emptyJavaString = new Java.Lang.String(string.Empty);
+        private static readonly Java.Lang.String _emptyJavaString = new(string.Empty);
 
         private NumericEntry _numericEntry;
 
@@ -87,7 +87,7 @@ public partial class NumericEntryHandler : EntryHandler, IDisposable
     {
         if (disposing)
         {
-            this._numericInputFilter?.Dispose();
+            _numericInputFilter?.Dispose();
         }
     }
 

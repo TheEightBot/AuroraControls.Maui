@@ -10,7 +10,7 @@ namespace AuroraControls;
 public class CupertinoToggleSwitch : AuroraViewBase
 #pragma warning restore CA1001 // Types that own disposable fields should be disposable
 {
-    private readonly SKPath _backgroundPath = new SKPath();
+    private readonly SKPath _backgroundPath = new();
 
     private readonly string _animateToggleAnimationName;
 
@@ -330,7 +330,7 @@ public class CupertinoToggleSwitch : AuroraViewBase
 
     private void AnimateToggle(bool toggled) =>
         this.TransitionTo(
-            this._animateToggleAnimationName,
+            _animateToggleAnimationName,
             x =>
             {
                 _toggleAnimationPercentage = x;

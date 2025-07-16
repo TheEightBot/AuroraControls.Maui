@@ -6,7 +6,7 @@ namespace AuroraControls.VisualEffects;
 
 public class VisualEffectCollection : BindableObject, IList<VisualEffect>, INotifyCollectionChanged
 {
-    private readonly List<VisualEffect> _items = new List<VisualEffect>();
+    private readonly List<VisualEffect> _items = new();
 
     public event NotifyCollectionChangedEventHandler CollectionChanged;
 
@@ -14,20 +14,20 @@ public class VisualEffectCollection : BindableObject, IList<VisualEffect>, INoti
 
     ~VisualEffectCollection()
     {
-        if (this._items != null)
+        if (_items != null)
         {
-            foreach (var item in this._items)
+            foreach (var item in _items)
             {
                 item.PropertyChanged -= HandlePropertyChangedEventHandler;
             }
         }
     }
 
-    public int IndexOf(VisualEffect item) => this._items.IndexOf(item);
+    public int IndexOf(VisualEffect item) => _items.IndexOf(item);
 
     public void Insert(int index, VisualEffect item)
     {
-        this._items.Insert(index, item);
+        _items.Insert(index, item);
 
         item.PropertyChanged -= HandlePropertyChangedEventHandler;
         item.PropertyChanged += HandlePropertyChangedEventHandler;
@@ -40,7 +40,7 @@ public class VisualEffectCollection : BindableObject, IList<VisualEffect>, INoti
     public void RemoveAt(int index)
     {
         var oldItem = this[index];
-        this._items.RemoveAt(index);
+        _items.RemoveAt(index);
         oldItem.PropertyChanged -= HandlePropertyChangedEventHandler;
         CollectionChanged?.Invoke(
             this,
@@ -49,7 +49,7 @@ public class VisualEffectCollection : BindableObject, IList<VisualEffect>, INoti
 
     public VisualEffect this[int index]
     {
-        get => this._items[index];
+        get => _items[index];
 
         set
         {
@@ -57,7 +57,7 @@ public class VisualEffectCollection : BindableObject, IList<VisualEffect>, INoti
 
             var imageProcessingBase = (VisualEffect)value;
 
-            this._items[index] = imageProcessingBase;
+            _items[index] = imageProcessingBase;
 
             imageProcessingBase.PropertyChanged -= HandlePropertyChangedEventHandler;
             imageProcessingBase.PropertyChanged += HandlePropertyChangedEventHandler;
@@ -76,7 +76,7 @@ public class VisualEffectCollection : BindableObject, IList<VisualEffect>, INoti
             return;
         }
 
-        this._items.Add(item);
+        _items.Add(item);
         item.PropertyChanged -= HandlePropertyChangedEventHandler;
         item.PropertyChanged += HandlePropertyChangedEventHandler;
 
@@ -87,17 +87,17 @@ public class VisualEffectCollection : BindableObject, IList<VisualEffect>, INoti
 
     public void Clear()
     {
-        foreach (var item in this._items)
+        foreach (var item in _items)
         {
             item.PropertyChanged -= HandlePropertyChangedEventHandler;
         }
 
-        this._items.Clear();
+        _items.Clear();
 
         CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
     }
 
-    public bool Contains(VisualEffect item) => this._items.Contains(item);
+    public bool Contains(VisualEffect item) => _items.Contains(item);
 
     public void CopyTo(VisualEffect[] array, int arrayIndex)
     {
@@ -107,14 +107,14 @@ public class VisualEffectCollection : BindableObject, IList<VisualEffect>, INoti
             item.PropertyChanged += HandlePropertyChangedEventHandler;
         }
 
-        this._items.CopyTo(array, arrayIndex);
+        _items.CopyTo(array, arrayIndex);
     }
 
     public bool Remove(VisualEffect item)
     {
         int oldIndex = IndexOf(item);
 
-        if (this._items.Remove(item))
+        if (_items.Remove(item))
         {
             item.PropertyChanged -= HandlePropertyChangedEventHandler;
             CollectionChanged?.Invoke(
@@ -126,11 +126,11 @@ public class VisualEffectCollection : BindableObject, IList<VisualEffect>, INoti
         return false;
     }
 
-    public int Count => this._items.Count;
+    public int Count => _items.Count;
 
     public bool IsReadOnly => false;
 
-    public IEnumerator<VisualEffect> GetEnumerator() => this._items.GetEnumerator();
+    public IEnumerator<VisualEffect> GetEnumerator() => _items.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 

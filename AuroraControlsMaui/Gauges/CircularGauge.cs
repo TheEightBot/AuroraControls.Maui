@@ -134,7 +134,7 @@ public class CircularGauge : AuroraViewBase
                 break;
         }
 
-        float progressThickness = (float)this.ProgressThickness * this._scale;
+        float progressThickness = (float)this.ProgressThickness * _scale;
 
         progressPaint.Style = SKPaintStyle.Stroke;
         progressPaint.Color = this.ProgressColor.ToSKColor();
