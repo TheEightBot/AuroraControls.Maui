@@ -1,5 +1,7 @@
 using Microsoft.Maui.Animations;
 using Microsoft.Maui.Platform;
+using ContentView = Microsoft.Maui.Controls.ContentView;
+using IAnimatable = Microsoft.Maui.Controls.IAnimatable;
 
 #if IOS || MACCATALYST
 using CoreGraphics;
