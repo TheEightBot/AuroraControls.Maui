@@ -36,7 +36,7 @@ public class SvgImageButton : AuroraViewBase
     public static readonly BindableProperty EmbeddedImageNameProperty =
         BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(SvgImageButton),
             propertyChanged:
-            async (bindable, _, _) =>
+            (bindable, _, _) =>
             {
                 if (bindable is SvgImageButton cgv)
                 {
@@ -61,7 +61,7 @@ public class SvgImageButton : AuroraViewBase
     public static readonly BindableProperty MaxImageSizeProperty =
         BindableProperty.Create(nameof(MaxImageSize), typeof(Size), typeof(SvgImageButton), default(Size),
             propertyChanged:
-            async (bindable, _, _) =>
+            (bindable, _, _) =>
             {
                 if (bindable is SvgImageButton cgv)
                 {

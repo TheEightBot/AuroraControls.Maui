@@ -1062,11 +1062,13 @@ public class CalendarView : AuroraViewBase
             _pressedIndex = null;
         }
 
-        if (updatedContainers)
+        if (!updatedContainers)
         {
-            base.OnPropertyChanged(SelectedDatesProperty.PropertyName);
-            this.InvalidateSurface();
+            return;
         }
+
+        base.OnPropertyChanged(SelectedDatesProperty.PropertyName);
+        this.InvalidateSurface();
     }
 
     /// <summary>
@@ -1085,7 +1087,7 @@ public class CalendarView : AuroraViewBase
                 case NotifyCollectionChangedAction.Add:
                     if (SelectionType == CalendarSelectionType.Single)
                     {
-                        Device.BeginInvokeOnMainThread(() =>
+                        MainThread.BeginInvokeOnMainThread(() =>
                         {
                             for (int i = SelectedDates.Count - 1; i >= 0; i--)
                             {

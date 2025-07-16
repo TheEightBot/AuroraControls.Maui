@@ -18,7 +18,7 @@ public class ConfettiView : SceneViewBase
 
     private ConfettiParticle[] _particles;
     private double _angle;
-    private bool _confettiActive = true;
+    private bool _confettiActive;
     private int _currentParticleCount;
     private int _canvasWidth;
     private int _canvasHeight;

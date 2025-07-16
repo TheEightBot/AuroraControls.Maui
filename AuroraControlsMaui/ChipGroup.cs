@@ -205,7 +205,6 @@ public class ChipGroup : ContentView, IDisposable
     /// <summary>
     /// Scrolls to make the specified chip visible in the viewport.
     /// </summary>
-    /// <param name="chip">The chip to scroll to.</param>
     /// <returns>True if the chip was found and scrolled to, false otherwise.</returns>
     public bool ScrollToChip(Chip chip, ScrollToPosition position, bool animated = true)
     {
@@ -226,8 +225,6 @@ public class ChipGroup : ContentView, IDisposable
     /// <summary>
     /// Finds a chip with a matching value and scrolls to make it visible.
     /// </summary>
-    /// <param name="value">The value to match against chip's Value.</param>
-    /// <param name="comparer">Optional custom comparer for value matching. If null, the default equality comparison is used.</param>
     /// <returns>True if a matching chip was found and scrolled to, false otherwise.</returns>
     public bool ScrollToChipWithValue<T>(T value, ScrollToPosition position, bool animated = true, IEqualityComparer<T>? comparer = null)
     {
@@ -548,8 +545,7 @@ public class ChipGroup : ContentView, IDisposable
     /// Updates the SelectedValues collection and raises property changed notification.
     /// </summary>
     private void UpdateSelectedValues() =>
-        // For the OneWay binding of SelectedValues
-        OnPropertyChanged(nameof(SelectedValues));
+        OnPropertyChanged(nameof(SelectedValues)); // For the OneWay binding of SelectedValues
 
     /// <summary>
     /// Selects a chip by its value.
@@ -837,8 +833,7 @@ public class ChipGroup : ContentView, IDisposable
     }
 
     private void OnChipSizeChanged(object? sender, EventArgs e) =>
-        // Request a layout update when a chip size changes
-        UpdateLayout();
+        UpdateLayout(); // Request a layout update when a chip size changes
 
     private void OnChipTapped(object? sender, EventArgs e)
     {
