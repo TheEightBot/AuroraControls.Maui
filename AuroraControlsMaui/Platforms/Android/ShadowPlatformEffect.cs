@@ -25,7 +25,7 @@ public class ShadowPlatformEffect : PlatformEffect
         _originalOutlineProvider = view.OutlineProvider;
 
         view.ClipToOutline = true;
-        view.OutlineProvider = Android.Views.ViewOutlineProvider.Bounds;
+        view.OutlineProvider = ViewOutlineProvider.Bounds;
 
         _scalingFactor = PlatformInfo.ScalingFactor;
 

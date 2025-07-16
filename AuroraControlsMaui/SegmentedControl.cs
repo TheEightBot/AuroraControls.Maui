@@ -181,9 +181,9 @@ public class SegmentedControl : AuroraViewBase
     {
         base.OnPropertyChanged(propertyName);
 
-        if (propertyName.Equals(VisualElement.HeightProperty.PropertyName) ||
-           propertyName.Equals(VisualElement.WidthProperty.PropertyName) ||
-           propertyName.Equals(View.MarginProperty.PropertyName))
+        if (propertyName.Equals(HeightProperty.PropertyName) ||
+           propertyName.Equals(WidthProperty.PropertyName) ||
+           propertyName.Equals(MarginProperty.PropertyName))
         {
             this.InvalidateSurface();
         }

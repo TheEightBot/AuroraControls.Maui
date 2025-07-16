@@ -19,7 +19,7 @@ public class Circular : ImageProcessingBase, IImageProcessor
     /// <param name="imageProcessor">Image processor.</param>
     public SKBitmap ProcessImage(SKBitmap processingImage, ImageProcessingBase imageProcessor)
     {
-        if (imageProcessor is not AuroraControls.ImageProcessing.Circular)
+        if (imageProcessor is not Circular)
         {
             return processingImage;
         }

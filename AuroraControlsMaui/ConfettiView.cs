@@ -211,9 +211,9 @@ public class ConfettiView : SceneViewBase
     {
         base.OnPropertyChanged(propertyName);
 
-        if (propertyName?.Equals(VisualElement.HeightProperty.PropertyName) == true ||
-            propertyName?.Equals(VisualElement.WidthProperty.PropertyName) == true ||
-            propertyName?.Equals(View.MarginProperty.PropertyName) == true)
+        if (propertyName?.Equals(HeightProperty.PropertyName) == true ||
+            propertyName?.Equals(WidthProperty.PropertyName) == true ||
+            propertyName?.Equals(MarginProperty.PropertyName) == true)
         {
             InvalidateSurface();
         }

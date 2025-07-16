@@ -12,7 +12,7 @@ public class IconCache : IconCacheBase
             return null;
         }
 
-        using var image = await imageSource.GetHandler().LoadImageAsync(imageSource, Microsoft.Maui.ApplicationModel.Platform.CurrentActivity).ConfigureAwait(false);
+        using var image = await imageSource.GetHandler().LoadImageAsync(imageSource, Platform.CurrentActivity).ConfigureAwait(false);
         return image.ToSKBitmap();
     }
 
@@ -23,7 +23,7 @@ public class IconCache : IconCacheBase
             return null;
         }
 
-        using var image = await imageSource.GetHandler().LoadImageAsync(imageSource, Microsoft.Maui.ApplicationModel.Platform.CurrentActivity).ConfigureAwait(false);
+        using var image = await imageSource.GetHandler().LoadImageAsync(imageSource, Platform.CurrentActivity).ConfigureAwait(false);
         using var stream = new MemoryStream();
         await image.CompressAsync(Bitmap.CompressFormat.Png, 100, stream).ConfigureAwait(false);
         return stream.ToArray();
@@ -36,7 +36,7 @@ public class IconCache : IconCacheBase
             return null;
         }
 
-        using var image = await imageSource.GetHandler().LoadImageAsync(imageSource, Microsoft.Maui.ApplicationModel.Platform.CurrentActivity);
+        using var image = await imageSource.GetHandler().LoadImageAsync(imageSource, Platform.CurrentActivity);
         var stream = new MemoryStream();
         await image.CompressAsync(Bitmap.CompressFormat.Png, 100, stream).ConfigureAwait(false);
         return stream;

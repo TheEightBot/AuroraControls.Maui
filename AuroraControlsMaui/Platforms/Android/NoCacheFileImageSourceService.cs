@@ -16,7 +16,7 @@ namespace AuroraControls;
 
 internal partial class NoCacheFileImageSourceService
 {
-    public override Task<IImageSourceServiceResult?> LoadDrawableAsync(IImageSource imageSource, Android.Widget.ImageView imageView,
+    public override Task<IImageSourceServiceResult?> LoadDrawableAsync(IImageSource imageSource, ImageView imageView,
         CancellationToken cancellationToken = default)
     {
         var fileImageSource = (INoCacheFileImageSource)imageSource;

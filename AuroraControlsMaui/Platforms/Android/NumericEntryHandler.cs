@@ -17,7 +17,7 @@ public partial class NumericEntryHandler : EntryHandler, IDisposable
     {
         base.ConnectHandler(platformView);
 
-        platformView.InputType = Android.Text.InputTypes.NumberFlagDecimal;
+        platformView.InputType = InputTypes.NumberFlagDecimal;
 
         _startingInputFilters = platformView.GetFilters();
 

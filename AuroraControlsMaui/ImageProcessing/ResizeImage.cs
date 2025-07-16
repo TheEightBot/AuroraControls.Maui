@@ -51,9 +51,9 @@ public class ResizeImage : ImageProcessingBase, IImageProcessor
     /// <param name="imageProcessor">Image processor.</param>
     public SKBitmap ProcessImage(SKBitmap processingImage, ImageProcessingBase imageProcessor)
     {
-        if (imageProcessor is AuroraControls.ImageProcessing.ResizeImage)
+        if (imageProcessor is ResizeImage)
         {
-            var resizeImageProcessor = imageProcessor as AuroraControls.ImageProcessing.ResizeImage;
+            var resizeImageProcessor = imageProcessor as ResizeImage;
             int maxHeight = resizeImageProcessor.MaxHeight;
             int maxWidth = resizeImageProcessor.MaxWidth;
 

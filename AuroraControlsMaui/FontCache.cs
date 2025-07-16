@@ -6,7 +6,7 @@ namespace AuroraControls;
 /// Font cache.
 /// Ported from https://github.com/toptensoftware/RichTextKit/issues/7.
 /// </summary>
-public class FontCache : Topten.RichTextKit.FontMapper
+public class FontCache : FontMapper
 {
     /// <summary>
     /// Gets a dictionary containing a string representing the resource name and the SKTypeface resource.
@@ -15,7 +15,7 @@ public class FontCache : Topten.RichTextKit.FontMapper
 
     public static FontCache Instance { get; } = new();
 
-    private FontCache() => FontMapper.Default = this;
+    private FontCache() => Default = this;
 
     public void Add(string embeddedResourceName, string shortNameOverride = null)
     {

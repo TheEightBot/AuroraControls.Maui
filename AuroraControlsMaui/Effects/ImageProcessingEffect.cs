@@ -210,7 +210,7 @@ public class ImageProcessingPlatformEffect : PlatformEffect
             return;
         }
 
-        if (this.Element?.Effects?.FirstOrDefault(e => e is Effects.ImageProcessingEffect) is ImageProcessingEffect effect)
+        if (this.Element?.Effects?.FirstOrDefault(e => e is ImageProcessingEffect) is ImageProcessingEffect effect)
         {
             effect.ImageProcessingEffects.PropertyChanged += ImageProcessingEffects_PropertyChanged;
         }

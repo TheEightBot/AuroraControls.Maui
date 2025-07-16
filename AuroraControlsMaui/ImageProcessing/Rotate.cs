@@ -36,7 +36,7 @@ public class Rotate : ImageProcessingBase, IImageProcessor
     /// <param name="imageProcessor">Image processor.</param>
     public SKBitmap ProcessImage(SKBitmap processingImage, ImageProcessingBase imageProcessor)
     {
-        if (imageProcessor is AuroraControls.ImageProcessing.Rotate processor)
+        if (imageProcessor is Rotate processor)
         {
             int width = 0;
             int height = 0;

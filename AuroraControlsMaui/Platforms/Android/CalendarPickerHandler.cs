@@ -6,7 +6,7 @@ namespace AuroraControls;
 public partial class CalendarPickerHandler : DatePickerHandler
 {
     public static PropertyMapper<CalendarPicker, CalendarPickerHandler> NullableDatePickerPropertyMapper =
-        new(DatePickerHandler.ViewMapper)
+        new(ViewMapper)
         {
             [nameof(CalendarPicker.Date)] = MapDate,
         };

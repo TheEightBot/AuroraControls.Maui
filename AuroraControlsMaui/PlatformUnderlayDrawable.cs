@@ -241,7 +241,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
     private void Canvas_FocusChange(object? sender, Android.Views.View.FocusChangeEventArgs e)
     {
-        if (e.HasFocus && _virtualView is Microsoft.Maui.Controls.ContentView cv && cv.Content is IView view)
+        if (e.HasFocus && _virtualView is ContentView cv && cv.Content is IView view)
         {
             view.Focus();
         }
@@ -257,7 +257,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
     private void OnPaintSurface(object? sender, SKPaintSurfaceEventArgs e)
     {
-        if (_virtualView is IUnderlayDrawable ud && _virtualView is Microsoft.Maui.Controls.ContentView cv && cv.Content is not null)
+        if (_virtualView is IUnderlayDrawable ud && _virtualView is ContentView cv && cv.Content is not null)
         {
             DrawUnderlay(ud, cv, cv.Content.Frame, e.Surface, e.Info);
         }
@@ -324,7 +324,7 @@ public class PlatformUnderlayDrawable : IDisposable
             _platformView.AddView(_canvas, 0);
 #endif
 
-            if (_virtualView is Microsoft.Maui.Controls.ContentView cv)
+            if (_virtualView is ContentView cv)
             {
                 _content = cv.Content;
                 this.UpdateOpacity();
@@ -387,7 +387,7 @@ public class PlatformUnderlayDrawable : IDisposable
             return;
         }
 
-        if (e.PropertyName == nameof(Microsoft.Maui.Controls.VisualElement.IsFocused))
+        if (e.PropertyName == nameof(VisualElement.IsFocused))
         {
             AnimateHasFocus();
             return;
@@ -399,7 +399,7 @@ public class PlatformUnderlayDrawable : IDisposable
     private void AnimateHasFocus()
     {
 #if IOS || MACCATALYST || ANDROID
-        if (_virtualView is IUnderlayDrawable ud && _virtualView is Microsoft.Maui.Controls.VisualElement animatable)
+        if (_virtualView is IUnderlayDrawable ud && _virtualView is VisualElement animatable)
         {
             bool hasFocus = _content?.IsFocused ?? false;
 
@@ -437,7 +437,7 @@ public class PlatformUnderlayDrawable : IDisposable
             return;
         }
 
-        if (_virtualView is IUnderlayDrawable ud && _virtualView is Microsoft.Maui.Controls.IAnimatable animatable)
+        if (_virtualView is IUnderlayDrawable ud && _virtualView is IAnimatable animatable)
         {
             double endHasValue = hasValue ? 1d : 0d;
 
@@ -511,7 +511,7 @@ public class PlatformUnderlayDrawable : IDisposable
 #if IOS || MACCATALYST || ANDROID
         float scale = (float)DeviceDisplay.Current.MainDisplayInfo.Density;
 
-        (_virtualView as Microsoft.Maui.Controls.ContentView).Padding = new Thickness(inset.Left, inset.Top, inset.Right, inset.Bottom);
+        (_virtualView as ContentView).Padding = new Thickness(inset.Left, inset.Top, inset.Right, inset.Bottom);
 #endif
     }
 

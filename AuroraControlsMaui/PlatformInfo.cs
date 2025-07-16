@@ -77,7 +77,7 @@ public static class PlatformInfo
             _defaultTypeface = SKTypeface.CreateDefault();
 #elif IOS || MACCATALYST
 
-            using var fontFamily = UIKit.UIFont.SystemFontOfSize(UIKit.UIFont.ButtonFontSize);
+            using var fontFamily = UIFont.SystemFontOfSize(UIFont.ButtonFontSize);
             _defaultTypeface = SKTypeface.FromFamilyName(fontFamily.FamilyName, SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
 #endif
             return _defaultTypeface;

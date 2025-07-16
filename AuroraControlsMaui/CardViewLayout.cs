@@ -2,7 +2,7 @@ using AuroraControls.Effects;
 
 namespace AuroraControls;
 
-[ContentProperty(nameof(CardViewLayout.Content))]
+[ContentProperty(nameof(Content))]
 public class CardViewLayout : ContentView
 {
     /// <summary>

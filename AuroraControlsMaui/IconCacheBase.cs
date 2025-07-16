@@ -24,7 +24,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
     public IconCacheBase()
     {
-        _invalidFilenameChars = System.IO.Path.GetInvalidFileNameChars();
+        _invalidFilenameChars = Path.GetInvalidFileNameChars();
         _platformScalingFactor = (float)PlatformInfo.ScalingFactor;
     }
 
@@ -134,7 +134,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
             return null;
         }
 
-        string filePath = System.IO.Path.Combine(PlatformInfo.IconCacheDirectory, key);
+        string filePath = Path.Combine(PlatformInfo.IconCacheDirectory, key);
 
         if (!File.Exists(filePath))
         {
