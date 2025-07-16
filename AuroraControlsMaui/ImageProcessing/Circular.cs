@@ -39,17 +39,13 @@ public class Circular : ImageProcessingBase, IImageProcessor
 
         var rect = new SKRect(left, top, right, bottom);
 
-        using (var outer = new SKPath())
-        using (var cutout = new SKPath())
-        {
-            outer.AddRect(processingImage.Info.Rect);
-            cutout.AddOval(rect);
-            using (var finalPath = outer.Op(cutout, SKPathOp.Difference))
-            {
-                canvas.DrawPath(finalPath, paint);
-                canvas.Flush();
-            }
-        }
+        using var outer = new SKPath();
+        using var cutout = new SKPath();
+        outer.AddRect(processingImage.Info.Rect);
+        cutout.AddOval(rect);
+        using var finalPath = outer.Op(cutout, SKPathOp.Difference);
+        canvas.DrawPath(finalPath, paint);
+        canvas.Flush();
 
         return processingImage;
     }

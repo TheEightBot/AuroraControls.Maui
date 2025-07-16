@@ -277,110 +277,106 @@ public class ToggleBox : AuroraViewBase
 
         var cornerRadius = new SKSize((float)CornerRadius * _scale, (float)CornerRadius * _scale);
 
-        using (var backgroundPaint = new SKPaint())
+        using var backgroundPaint = new SKPaint();
+        float halfCheckSize = info.Height * .5f;
+
+        this._rect = new SKRect(
+            info.Rect.MidX - halfCheckSize + borderWidth, info.Rect.MidY - halfCheckSize + borderWidth,
+            info.Rect.MidX + halfCheckSize - borderWidth, info.Rect.MidY + halfCheckSize - borderWidth);
+
+        backgroundPaint.Color =
+            this.IsToggled
+                ? this.ToggledBackgroundColor.ToSKColor()
+                : this.BackgroundColor.ToSKColor();
+
+        backgroundPaint.IsAntialias = true;
+        backgroundPaint.Style = SKPaintStyle.Fill;
+
+        // draw fill
+        switch (this.Shape)
         {
-            float halfCheckSize = info.Height * .5f;
+            case ToggleBoxShape.Circular:
+                canvas.DrawOval(this._rect, backgroundPaint);
+                break;
+            case ToggleBoxShape.RoundedSquare:
+                canvas.DrawRoundRect(this._rect, cornerRadius, backgroundPaint);
+                break;
+            default:
+                canvas.DrawRect(this._rect, backgroundPaint);
+                break;
+        }
 
-            _rect = new SKRect(
-                info.Rect.MidX - halfCheckSize + borderWidth, info.Rect.MidY - halfCheckSize + borderWidth,
-                info.Rect.MidX + halfCheckSize - borderWidth, info.Rect.MidY + halfCheckSize - borderWidth);
+        var innerRect = new SKRect
+        {
+            Left = this._rect.Left + halfBorderWidth,
+            Right = this._rect.Right - halfBorderWidth,
+            Top = this._rect.Top + halfBorderWidth,
+            Bottom = this._rect.Bottom - halfBorderWidth,
+        };
 
-            backgroundPaint.Color =
-                IsToggled
-                    ? ToggledBackgroundColor.ToSKColor()
-                    : BackgroundColor.ToSKColor();
+        if (this.IsToggled)
+        {
+            using var checkPaint = new SKPaint();
+            checkPaint.Style = SKPaintStyle.Stroke;
+            checkPaint.Color = this.CheckColor.ToSKColor();
+            checkPaint.StrokeWidth = halfMarkWidth;
+            checkPaint.StrokeCap = SKStrokeCap.Square;
+            checkPaint.IsAntialias = true;
 
-            backgroundPaint.IsAntialias = true;
-            backgroundPaint.Style = SKPaintStyle.Fill;
-
-            // draw fill
-            switch (this.Shape)
+            switch (this.CheckType)
             {
-                case ToggleBoxShape.Circular:
-                    canvas.DrawOval(_rect, backgroundPaint);
+                case ToggleBoxCheckType.Check:
+                    var checkPath = new SKPath();
+                    checkPath.MoveTo(this._rect.Left + (this._rect.Width * .3f), this._rect.Top + (this._rect.Height * .5f));
+                    checkPath.LineTo(this._rect.Left + (this._rect.Width * .5f), this._rect.Top + (this._rect.Height * .7f));
+                    checkPath.LineTo(this._rect.Left + (this._rect.Width * .75f), this._rect.Top + (this._rect.Height * .3f));
+                    canvas.DrawPath(checkPath, checkPaint);
                     break;
-                case ToggleBoxShape.RoundedSquare:
-                    canvas.DrawRoundRect(_rect, cornerRadius, backgroundPaint);
+                case ToggleBoxCheckType.RoundedCheck:
+                    checkPaint.StrokeCap = SKStrokeCap.Round;
+                    var roundedCheckPath = new SKPath();
+                    roundedCheckPath.MoveTo(this._rect.Left + (this._rect.Width * .3f), this._rect.Top + (this._rect.Height * .5f));
+                    roundedCheckPath.LineTo(this._rect.Left + (this._rect.Width * .5f), this._rect.Top + (this._rect.Height * .7f));
+                    roundedCheckPath.LineTo(this._rect.Left + (this._rect.Width * .75f), this._rect.Top + (this._rect.Height * .3f));
+                    canvas.DrawPath(roundedCheckPath, checkPaint);
                     break;
-                default:
-                    canvas.DrawRect(_rect, backgroundPaint);
+                case ToggleBoxCheckType.Cross:
+                    canvas.DrawLine(
+                        this._rect.Left + halfMarkWidth + halfBorderWidth,
+                        this._rect.Top + halfMarkWidth + halfBorderWidth,
+                        this._rect.Left + this._rect.Width - halfMarkWidth - halfBorderWidth,
+                        this._rect.Top + this._rect.Height - halfMarkWidth - halfBorderWidth,
+                        checkPaint);
+
+                    canvas.DrawLine(
+                        this._rect.Left + halfMarkWidth + halfBorderWidth,
+                        this._rect.Top + this._rect.Height - halfMarkWidth - halfBorderWidth,
+                        this._rect.Left + this._rect.Width - halfMarkWidth - halfBorderWidth,
+                        this._rect.Top + halfMarkWidth + halfBorderWidth,
+                        checkPaint);
+                    break;
+                case ToggleBoxCheckType.Circular:
+                    checkPaint.Style = SKPaintStyle.Fill;
+                    canvas.DrawCircle(this._rect.MidX, rect.MidY, innerRect.Width * .20f, checkPaint);
                     break;
             }
+        }
 
-            var innerRect = new SKRect
-            {
-                Left = _rect.Left + halfBorderWidth,
-                Right = _rect.Right - halfBorderWidth,
-                Top = _rect.Top + halfBorderWidth,
-                Bottom = _rect.Bottom - halfBorderWidth,
-            };
+        backgroundPaint.StrokeWidth = halfBorderWidth;
+        backgroundPaint.Style = SKPaintStyle.Stroke;
+        backgroundPaint.Color = this.BorderColor.ToSKColor();
 
-            if (IsToggled)
-            {
-                using (var checkPaint = new SKPaint())
-                {
-                    checkPaint.Style = SKPaintStyle.Stroke;
-                    checkPaint.Color = CheckColor.ToSKColor();
-                    checkPaint.StrokeWidth = halfMarkWidth;
-                    checkPaint.StrokeCap = SKStrokeCap.Square;
-                    checkPaint.IsAntialias = true;
-
-                    switch (CheckType)
-                    {
-                        case ToggleBoxCheckType.Check:
-                            var checkPath = new SKPath();
-                            checkPath.MoveTo(_rect.Left + (_rect.Width * .3f), _rect.Top + (_rect.Height * .5f));
-                            checkPath.LineTo(_rect.Left + (_rect.Width * .5f), _rect.Top + (_rect.Height * .7f));
-                            checkPath.LineTo(_rect.Left + (_rect.Width * .75f), _rect.Top + (_rect.Height * .3f));
-                            canvas.DrawPath(checkPath, checkPaint);
-                            break;
-                        case ToggleBoxCheckType.RoundedCheck:
-                            checkPaint.StrokeCap = SKStrokeCap.Round;
-                            var roundedCheckPath = new SKPath();
-                            roundedCheckPath.MoveTo(_rect.Left + (_rect.Width * .3f), _rect.Top + (_rect.Height * .5f));
-                            roundedCheckPath.LineTo(_rect.Left + (_rect.Width * .5f), _rect.Top + (_rect.Height * .7f));
-                            roundedCheckPath.LineTo(_rect.Left + (_rect.Width * .75f), _rect.Top + (_rect.Height * .3f));
-                            canvas.DrawPath(roundedCheckPath, checkPaint);
-                            break;
-                        case ToggleBoxCheckType.Cross:
-                            canvas.DrawLine(
-                                _rect.Left + halfMarkWidth + halfBorderWidth,
-                                _rect.Top + halfMarkWidth + halfBorderWidth,
-                                _rect.Left + _rect.Width - halfMarkWidth - halfBorderWidth,
-                                _rect.Top + this._rect.Height - halfMarkWidth - halfBorderWidth,
-                                checkPaint);
-
-                            canvas.DrawLine(
-                                _rect.Left + halfMarkWidth + halfBorderWidth,
-                                _rect.Top + this._rect.Height - halfMarkWidth - halfBorderWidth,
-                                _rect.Left + _rect.Width - halfMarkWidth - halfBorderWidth,
-                                _rect.Top + halfMarkWidth + halfBorderWidth,
-                                checkPaint);
-                            break;
-                        case ToggleBoxCheckType.Circular:
-                            checkPaint.Style = SKPaintStyle.Fill;
-                            canvas.DrawCircle(_rect.MidX, rect.MidY, innerRect.Width * .20f, checkPaint);
-                            break;
-                    }
-                }
-            }
-
-            backgroundPaint.StrokeWidth = halfBorderWidth;
-            backgroundPaint.Style = SKPaintStyle.Stroke;
-            backgroundPaint.Color = BorderColor.ToSKColor();
-
-            switch (this.Shape)
-            {
-                case ToggleBoxShape.Circular:
-                    canvas.DrawOval(_rect, backgroundPaint);
-                    break;
-                case ToggleBoxShape.RoundedSquare:
-                    canvas.DrawRoundRect(_rect, cornerRadius, backgroundPaint);
-                    break;
-                default:
-                    canvas.DrawRect(_rect, backgroundPaint);
-                    break;
-            }
+        switch (this.Shape)
+        {
+            case ToggleBoxShape.Circular:
+                canvas.DrawOval(this._rect, backgroundPaint);
+                break;
+            case ToggleBoxShape.RoundedSquare:
+                canvas.DrawRoundRect(this._rect, cornerRadius, backgroundPaint);
+                break;
+            default:
+                canvas.DrawRect(this._rect, backgroundPaint);
+                break;
         }
     }
 

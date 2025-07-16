@@ -19,10 +19,8 @@ public class FontCache : Topten.RichTextKit.FontMapper
 
     public void Add(string embeddedResourceName, string shortNameOverride = null)
     {
-        using (var stream = EmbeddedResourceLoader.Load(embeddedResourceName))
-        {
-            Add(SKTypeface.FromStream(stream), shortNameOverride);
-        }
+        using var stream = EmbeddedResourceLoader.Load(embeddedResourceName);
+        this.Add(SKTypeface.FromStream(stream), shortNameOverride);
     }
 
     public void Add(SKTypeface typeface, string shortNameOverride = null)

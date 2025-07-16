@@ -84,43 +84,41 @@ public class CircularFillGauge : AuroraViewBase
     {
         var canvas = surface.Canvas;
 
-        using (var progressPaint = new SKPaint())
-        using (var progressPath = new SKPath())
-        using (var progressBackgroundPaint = new SKPaint())
-        using (var backgroundProgressPath = new SKPath())
+        using var progressPaint = new SKPaint();
+        using var progressPath = new SKPath();
+        using var progressBackgroundPaint = new SKPaint();
+        using var backgroundProgressPath = new SKPath();
+        progressPaint.IsAntialias = true;
+        progressPaint.Style = SKPaintStyle.Fill;
+        progressPaint.Color = this.ProgressColor.ToSKColor();
+
+        progressBackgroundPaint.IsAntialias = true;
+        progressBackgroundPaint.Style = SKPaintStyle.Fill;
+        progressBackgroundPaint.Color = this.ProgressBackgroundColor.ToSKColor();
+
+        int size = Math.Min(info.Width, info.Height);
+
+        float left = (info.Width - size) / 2f;
+        float top = (info.Height - size) / 2f;
+        float right = left + size;
+        float bottom = top + size;
+
+        var arcRect = new SKRect(left, top, right, bottom);
+
+        backgroundProgressPath.AddOval(arcRect);
+
+        float halfWidth = arcRect.Width * .5f;
+        float halfHeight = arcRect.Height * .5f;
+        var newRect = SKRect.Inflate(arcRect, -halfWidth + (((float)this.ProgressPercentage / 100f) * halfWidth), -halfHeight + (((float)this.ProgressPercentage / 100f) * halfHeight));
+
+        progressPath.AddOval(newRect);
+
+        canvas.Clear();
+        canvas.DrawPath(backgroundProgressPath, progressBackgroundPaint);
+
+        if (this.ProgressPercentage > 0)
         {
-            progressPaint.IsAntialias = true;
-            progressPaint.Style = SKPaintStyle.Fill;
-            progressPaint.Color = ProgressColor.ToSKColor();
-
-            progressBackgroundPaint.IsAntialias = true;
-            progressBackgroundPaint.Style = SKPaintStyle.Fill;
-            progressBackgroundPaint.Color = ProgressBackgroundColor.ToSKColor();
-
-            int size = Math.Min(info.Width, info.Height);
-
-            float left = (info.Width - size) / 2f;
-            float top = (info.Height - size) / 2f;
-            float right = left + size;
-            float bottom = top + size;
-
-            var arcRect = new SKRect(left, top, right, bottom);
-
-            backgroundProgressPath.AddOval(arcRect);
-
-            float halfWidth = arcRect.Width * .5f;
-            float halfHeight = arcRect.Height * .5f;
-            var newRect = SKRect.Inflate(arcRect, -halfWidth + (((float)ProgressPercentage / 100f) * halfWidth), -halfHeight + (((float)ProgressPercentage / 100f) * halfHeight));
-
-            progressPath.AddOval(newRect);
-
-            canvas.Clear();
-            canvas.DrawPath(backgroundProgressPath, progressBackgroundPaint);
-
-            if (ProgressPercentage > 0)
-            {
-                canvas.DrawPath(progressPath, progressPaint);
-            }
+            canvas.DrawPath(progressPath, progressPaint);
         }
     }
 

@@ -177,64 +177,57 @@ public class GradientColorView : AuroraViewBase
     {
         var canvas = surface.Canvas;
 
-        using (var overlayPaint = new SKPaint())
-        using (
-            var shader =
-                SKShader
-                    .CreateLinearGradient(
-                        new SKPoint(0, 0), new SKPoint(info.Width, 0),
-                        new SKColor[] { GradientStartColor.ToSKColor(), GradientStopColor.ToSKColor() },
-                        new float[] { 0, 1 },
-                        SKShaderTileMode.Clamp))
+        using var overlayPaint = new SKPaint();
+        using var shader =
+            SKShader
+                .CreateLinearGradient(
+                    new SKPoint(0, 0), new SKPoint(info.Width, 0),
+                    new SKColor[] { this.GradientStartColor.ToSKColor(), this.GradientStopColor.ToSKColor() },
+                    new float[] { 0, 1 },
+                    SKShaderTileMode.Clamp);
+        overlayPaint.BlendMode = SKBlendMode.Color;
+        overlayPaint.Shader = shader;
+        overlayPaint.IsAntialias = true;
+
+        double size = Math.Min(info.Width - this.Margin.Left - this.Margin.Right, info.Height - this.Margin.Top - this.Margin.Bottom);
+
+        float left = (info.Width - (float)size) / 2f;
+        float top = (info.Height - (float)size) / 2f;
+
+        canvas.Clear();
+        this._backgroundPath.Reset();
+
+        this._backgroundPath.AddRect(new SKRect(0, 0, info.Width, info.Height));
+
+        if (this._lastTouchLocation != SKPoint.Empty && this._rippleAnimationPercentage > 0.0d)
         {
-            overlayPaint.BlendMode = SKBlendMode.Color;
-            overlayPaint.Shader = shader;
-            overlayPaint.IsAntialias = true;
+            using var ripplePath = new SKPath();
+            using var ripplePaint = new SKPaint();
+            ripplePaint.IsAntialias = true;
+            ripplePaint.Style = SKPaintStyle.Fill;
+            ripplePaint.Color =
+                this.GradientStartColor != Colors.Transparent
+                    ? this.GradientStartColor.AddLuminosity(-.2f).MultiplyAlpha((1f - (float)this._rippleAnimationPercentage) * .5f).ToSKColor()
+                    : Colors.Transparent.ToSKColor();
 
-            double size = Math.Min(info.Width - Margin.Left - Margin.Right, info.Height - Margin.Top - Margin.Bottom);
+            float startingRippleSize = Math.Min(info.Width, info.Height) * .75f;
+            float maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * this._rippleAnimationPercentage);
+            float offsetAmount = -maxRippleSize / 2f;
+            var offsetPoint = new SKPoint(this._lastTouchLocation.X + offsetAmount, this._lastTouchLocation.Y + offsetAmount);
+            var rippleSize = SKRect.Create(offsetPoint, new SKSize(maxRippleSize, maxRippleSize));
+            ripplePath.AddOval(rippleSize);
 
-            float left = (info.Width - (float)size) / 2f;
-            float top = (info.Height - (float)size) / 2f;
+            using var finalRipple = ripplePath.Op(this._backgroundPath, SKPathOp.Intersect);
+            canvas.DrawPath(finalRipple, ripplePaint);
+        }
 
-            canvas.Clear();
-            _backgroundPath.Reset();
+        SKMatrix.CreateTranslation(info.Width / 2f, info.Height / 2f);
 
-            _backgroundPath.AddRect(new SKRect(0, 0, info.Width, info.Height));
+        using (new SKAutoCanvasRestore(canvas))
+        {
+            canvas.RotateDegrees((float)this.GradientRotationAngle, info.Width / 2f, info.Height / 2f);
 
-            if (_lastTouchLocation != SKPoint.Empty && _rippleAnimationPercentage > 0.0d)
-            {
-                using (var ripplePath = new SKPath())
-                using (var ripplePaint = new SKPaint())
-                {
-                    ripplePaint.IsAntialias = true;
-                    ripplePaint.Style = SKPaintStyle.Fill;
-                    ripplePaint.Color =
-                        GradientStartColor != Colors.Transparent
-                            ? GradientStartColor.AddLuminosity(-.2f).MultiplyAlpha((1f - (float)_rippleAnimationPercentage) * .5f).ToSKColor()
-                            : Colors.Transparent.ToSKColor();
-
-                    float startingRippleSize = Math.Min(info.Width, info.Height) * .75f;
-                    float maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * _rippleAnimationPercentage);
-                    float offsetAmount = -maxRippleSize / 2f;
-                    var offsetPoint = new SKPoint(_lastTouchLocation.X + offsetAmount, _lastTouchLocation.Y + offsetAmount);
-                    var rippleSize = SKRect.Create(offsetPoint, new SKSize(maxRippleSize, maxRippleSize));
-                    ripplePath.AddOval(rippleSize);
-
-                    using (var finalRipple = ripplePath.Op(_backgroundPath, SKPathOp.Intersect))
-                    {
-                        canvas.DrawPath(finalRipple, ripplePaint);
-                    }
-                }
-            }
-
-            SKMatrix.CreateTranslation(info.Width / 2f, info.Height / 2f);
-
-            using (new SKAutoCanvasRestore(canvas))
-            {
-                canvas.RotateDegrees((float)GradientRotationAngle, info.Width / 2f, info.Height / 2f);
-
-                canvas.DrawPaint(overlayPaint);
-            }
+            canvas.DrawPaint(overlayPaint);
         }
     }
 

@@ -303,49 +303,47 @@ public class SegmentedControl : AuroraViewBase
                     }
                     else if (!string.IsNullOrEmpty(segment.Text))
                     {
-                        using (var fontPaint = new SKPaint())
+                        using var fontPaint = new SKPaint();
+                        fontPaint.Color =
+                            selected
+                                ? this.ForegroundTextColor != default(Color) ? this.ForegroundTextColor.ToSKColor() : backgroundColor
+                                : this.BackgroundTextColor != default(Color) ? this.BackgroundTextColor.ToSKColor() : segmentForegroundColor;
+                        fontPaint.TextSize = (float)this.FontSize * this._scale;
+                        fontPaint.Typeface = FontCache.Instance.TypefaceFromFontFamily(this.FontFamily);
+                        fontPaint.IsAntialias = true;
+
+                        float textMid = (segmentSize * i) + halfSegmentSize;
+
+                        if (segment.IsIconifiedText)
                         {
-                            fontPaint.Color =
-                                selected
-                                    ? ForegroundTextColor != default(Color) ? ForegroundTextColor.ToSKColor() : backgroundColor
-                                    : BackgroundTextColor != default(Color) ? BackgroundTextColor.ToSKColor() : segmentForegroundColor;
-                            fontPaint.TextSize = (float)FontSize * _scale;
-                            fontPaint.Typeface = FontCache.Instance.TypefaceFromFontFamily(FontFamily);
-                            fontPaint.IsAntialias = true;
+                            var textBounds = SKRect.Empty;
+                            textBounds = fontPaint.MeasureIconifiedText(segment.Text);
 
-                            float textMid = (segmentSize * i) + halfSegmentSize;
+                            float maxSegmentSize = segmentSize - (borderSize * 4f);
 
-                            if (segment.IsIconifiedText)
+                            while (textBounds.Width > 0 && fontPaint.TextSize > 0 && textBounds.Width > maxSegmentSize)
                             {
-                                var textBounds = SKRect.Empty;
+                                fontPaint.TextSize--;
                                 textBounds = fontPaint.MeasureIconifiedText(segment.Text);
-
-                                float maxSegmentSize = segmentSize - (borderSize * 4f);
-
-                                while (textBounds.Width > 0 && fontPaint.TextSize > 0 && textBounds.Width > maxSegmentSize)
-                                {
-                                    fontPaint.TextSize--;
-                                    textBounds = fontPaint.MeasureIconifiedText(segment.Text);
-                                }
-
-                                canvas.DrawCenteredIconifiedText(segment.Text, textMid, info.Rect.MidY, fontPaint);
                             }
-                            else
+
+                            canvas.DrawCenteredIconifiedText(segment.Text, textMid, info.Rect.MidY, fontPaint);
+                        }
+                        else
+                        {
+                            fontPaint.EnsureHasValidFont(segment.Text);
+
+                            var textBounds = SKRect.Empty;
+                            fontPaint.MeasureText(segment.Text, ref textBounds);
+
+                            while (textBounds.Width > 0 && fontPaint.TextSize > 0 && textBounds.Width > segmentSize - borderSize)
                             {
-                                fontPaint.EnsureHasValidFont(segment.Text);
+                                fontPaint.TextSize--;
 
-                                var textBounds = SKRect.Empty;
                                 fontPaint.MeasureText(segment.Text, ref textBounds);
-
-                                while (textBounds.Width > 0 && fontPaint.TextSize > 0 && textBounds.Width > segmentSize - borderSize)
-                                {
-                                    fontPaint.TextSize--;
-
-                                    fontPaint.MeasureText(segment.Text, ref textBounds);
-                                }
-
-                                canvas.DrawCenteredText(segment.Text, textMid, info.Rect.MidY, fontPaint);
                             }
+
+                            canvas.DrawCenteredText(segment.Text, textMid, info.Rect.MidY, fontPaint);
                         }
                     }
                 }
@@ -366,19 +364,15 @@ public class SegmentedControl : AuroraViewBase
             {
                 paint.Color = foregroundColor;
 
-                using (var outerPath = new SKPath())
-                using (var innerPath = new SKPath())
-                {
-                    outerPath.AddRect(info.Rect);
-                    innerPath
-                        .AddRoundRect(
-                            new SKRect(borderSize, borderSize, info.Width - borderSize, info.Height - borderSize),
-                            scaledCornerRadius, scaledCornerRadius);
-                    using (var finalPath = outerPath.Op(innerPath, SKPathOp.Difference))
-                    {
-                        canvas.DrawPath(finalPath, paint);
-                    }
-                }
+                using var outerPath = new SKPath();
+                using var innerPath = new SKPath();
+                outerPath.AddRect(info.Rect);
+                innerPath
+                    .AddRoundRect(
+                        new SKRect(borderSize, borderSize, info.Width - borderSize, info.Height - borderSize),
+                        scaledCornerRadius, scaledCornerRadius);
+                using var finalPath = outerPath.Op(innerPath, SKPathOp.Difference);
+                canvas.DrawPath(finalPath, paint);
             }
         }
     }
@@ -525,10 +519,8 @@ public class Segment : BindableObject, IDisposable
 
         _svg = new SKSvg();
 
-        using (var imageStream = EmbeddedResourceLoader.Load(EmbeddedImageName))
-        {
-            _svg.Load(imageStream);
-        }
+        using var imageStream = EmbeddedResourceLoader.Load(this.EmbeddedImageName);
+        this._svg.Load(imageStream);
     }
 
     protected virtual void Dispose(bool disposing)

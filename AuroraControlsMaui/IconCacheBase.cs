@@ -154,11 +154,9 @@ public abstract class IconCacheBase : IIconCache, IDisposable
     {
         Directory.CreateDirectory(PlatformInfo.IconCacheDirectory);
 
-        using (var file = File.OpenWrite(Path.Combine(PlatformInfo.IconCacheDirectory, key)))
-        {
-            await imageStream.CopyToAsync(file).ConfigureAwait(false);
-            await file.FlushAsync().ConfigureAwait(false);
-        }
+        using var file = File.OpenWrite(Path.Combine(PlatformInfo.IconCacheDirectory, key));
+        await imageStream.CopyToAsync(file).ConfigureAwait(false);
+        await file.FlushAsync().ConfigureAwait(false);
     }
 
     private async Task GenerateImageFromEmbedded(string key, string svgName, Size size, Color? colorOverride = null)

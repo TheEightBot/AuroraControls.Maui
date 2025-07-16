@@ -358,16 +358,14 @@ public class SvgImageButton : AuroraViewBase
 
                 if (this.OverlayColor != Colors.Transparent)
                 {
-                    using (var paint = new SKPaint { BlendMode = SKBlendMode.SrcATop, Style = SKPaintStyle.Fill, IsAntialias = true })
-                    {
-                        canvas.SaveLayer(info.Rect, null);
-                        canvas.Clear();
+                    using var paint = new SKPaint { BlendMode = SKBlendMode.SrcATop, Style = SKPaintStyle.Fill, IsAntialias = true };
+                    canvas.SaveLayer(info.Rect, null);
+                    canvas.Clear();
 
-                        canvas.DrawPicture(this._svg.Picture, ref transform);
+                    canvas.DrawPicture(this._svg.Picture, ref transform);
 
-                        paint.Color = this.OverlayColor.ToSKColor();
-                        canvas.DrawPaint(paint);
-                    }
+                    paint.Color = this.OverlayColor.ToSKColor();
+                    canvas.DrawPaint(paint);
                 }
                 else
                 {

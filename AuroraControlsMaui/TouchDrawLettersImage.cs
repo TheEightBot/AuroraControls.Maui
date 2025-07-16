@@ -235,7 +235,7 @@ public class TouchDrawLettersImage : AuroraViewBase
 
                     if (!string.IsNullOrEmpty(touchDrawLetter.Value))
                     {
-                        using (var drawPath = new SKPath())
+                        using var drawPath = new SKPath();
                         using (new SKAutoCanvasRestore(canvas))
                         {
                             drawPath.AddOval(drawLocationRect);
@@ -246,7 +246,7 @@ public class TouchDrawLettersImage : AuroraViewBase
                                 : this.DrawItemForegroundColor.ToSKColor();
                             paint.Style = SKPaintStyle.Fill;
                             paint.TextSize = halfScaledTouchSize;
-                            paint.Typeface = Typeface ?? PlatformInfo.DefaultTypeface;
+                            paint.Typeface = this.Typeface ?? PlatformInfo.DefaultTypeface;
 
                             SKRect textBounds = SKRect.Empty;
                             paint.MeasureText(touchDrawLetter.Value, ref textBounds);

@@ -323,134 +323,128 @@ public class GradientPillButton : AuroraViewBase
             ButtonBackgroundEndColor = ButtonBackgroundStartColor.WithHue(.5f);
         }
 
-        using (var backgroundPaint = new SKPaint())
+        using var backgroundPaint = new SKPaint();
+        float halfBorder = (float)this.BorderWidth / 2f;
+
+        float scale = info.Height / (float)this.Height;
+        var rect = new SKRect((float)this.ShadowLocation.X + (float)this.ShadowBlurRadius + halfBorder, (float)this.ShadowLocation.Y + (float)this.ShadowBlurRadius + halfBorder,
+            info.Width - (float)this.ShadowLocation.X - (float)this.ShadowBlurRadius - halfBorder, info.Height - (float)this.ShadowLocation.Y - (float)this.ShadowBlurRadius - halfBorder);
+
+        SKPoint gradientPointStart = SKPoint.Empty, gradientPointEnd = SKPoint.Empty;
+
+        switch (this.GradientDirection)
         {
-            float halfBorder = (float)this.BorderWidth / 2f;
+            case GradientDirection.Horizontal:
+                gradientPointStart = new SKPoint(rect.Left, 0);
+                gradientPointEnd = new SKPoint(rect.Right, 0);
+                break;
+            case GradientDirection.Vertical:
+                gradientPointStart = new SKPoint(0f, 0f);
+                gradientPointEnd = new SKPoint(0f, rect.Bottom);
+                break;
+            default:
+                break;
+        }
 
-            float scale = info.Height / (float)Height;
-            var rect = new SKRect((float)ShadowLocation.X + (float)ShadowBlurRadius + halfBorder, (float)ShadowLocation.Y + (float)ShadowBlurRadius + halfBorder,
-                  info.Width - (float)ShadowLocation.X - (float)ShadowBlurRadius - halfBorder, info.Height - (float)ShadowLocation.Y - (float)ShadowBlurRadius - halfBorder);
+        var shader =
+            SKShader
+                .CreateLinearGradient(
+                    gradientPointStart, gradientPointEnd,
+                    new SKColor[] { this.ButtonBackgroundStartColor.ToSKColor(), this.ButtonBackgroundEndColor.ToSKColor() },
+                    new float[] { 0, 1 },
+                    SKShaderTileMode.Clamp);
 
-            SKPoint gradientPointStart = SKPoint.Empty, gradientPointEnd = SKPoint.Empty;
+        backgroundPaint.IsAntialias = true;
+        backgroundPaint.Style = SKPaintStyle.Fill;
+        backgroundPaint.Shader = shader;
 
-            switch (this.GradientDirection)
-            {
-                case GradientDirection.Horizontal:
-                    gradientPointStart = new SKPoint(rect.Left, 0);
-                    gradientPointEnd = new SKPoint(rect.Right, 0);
-                    break;
-                case GradientDirection.Vertical:
-                    gradientPointStart = new SKPoint(0f, 0f);
-                    gradientPointEnd = new SKPoint(0f, rect.Bottom);
-                    break;
-                default:
-                    break;
-            }
+        canvas.Clear();
 
-            var shader =
-                SKShader
-                    .CreateLinearGradient(
-                        gradientPointStart, gradientPointEnd,
-                        new SKColor[] { ButtonBackgroundStartColor.ToSKColor(), ButtonBackgroundEndColor.ToSKColor() },
-                        new float[] { 0, 1 },
-                        SKShaderTileMode.Clamp);
+        if (this._backgroundPath is null)
+        {
+            return;
+        }
 
-            backgroundPaint.IsAntialias = true;
-            backgroundPaint.Style = SKPaintStyle.Fill;
-            backgroundPaint.Shader = shader;
+        this._backgroundPath.Reset();
 
-            canvas.Clear();
-
-            if (_backgroundPath is null)
-            {
-                return;
-            }
-
-            _backgroundPath.Reset();
-
-            if (ShadowColor != default(Color) && ShadowLocation != Point.Zero)
-            {
-                using (var shadowPaint = new SKPaint())
-                using (new SKAutoCanvasRestore(canvas))
-                {
-                    shadowPaint.IsAntialias = true;
-                    shadowPaint.Color = ShadowColor.ToSKColor();
-                    shadowPaint.Style = SKPaintStyle.Fill;
-                    shadowPaint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, SKMaskFilter.ConvertRadiusToSigma((float)ShadowBlurRadius));
-
-                    canvas.Translate(ShadowLocation.ToSKPoint());
-                    canvas.DrawRoundRect(rect, info.Height / 2f, info.Height / 2f, shadowPaint);
-                }
-            }
-
+        if (this.ShadowColor != default(Color) && this.ShadowLocation != Point.Zero)
+        {
+            using var shadowPaint = new SKPaint();
             using (new SKAutoCanvasRestore(canvas))
             {
-                if (Tapped)
-                {
-                    canvas.Translate(ShadowLocation.ToSKPoint());
-                }
+                shadowPaint.IsAntialias = true;
+                shadowPaint.Color = this.ShadowColor.ToSKColor();
+                shadowPaint.Style = SKPaintStyle.Fill;
+                shadowPaint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, SKMaskFilter.ConvertRadiusToSigma((float)this.ShadowBlurRadius));
 
-                _backgroundPath.AddRoundRect(rect, info.Height / 2f, info.Height / 2f);
-                canvas.DrawPath(_backgroundPath, backgroundPaint);
+                canvas.Translate(this.ShadowLocation.ToSKPoint());
+                canvas.DrawRoundRect(rect, info.Height / 2f, info.Height / 2f, shadowPaint);
+            }
+        }
 
-                if (_lastTouchLocation != SKPoint.Empty && _rippleAnimationPercentage > 0.0d)
-                {
-                    using (var ripplePath = new SKPath())
-                    using (var ripplePaint = new SKPaint())
-                    {
-                        ripplePaint.IsAntialias = true;
-                        ripplePaint.Style = SKPaintStyle.Fill;
-                        ripplePaint.Color =
-                            ButtonBackgroundStartColor != default(Color)
-                                ? ButtonBackgroundEndColor.AddLuminosity(-.2f).MultiplyAlpha((1 - (float)_rippleAnimationPercentage) * .5f).ToSKColor()
-                                : Colors.Transparent.ToSKColor();
-
-                        float startingRippleSize = Math.Min(info.Width, info.Height) * 1.5f;
-                        float maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * _rippleAnimationPercentage);
-                        float offsetAmount = -maxRippleSize / 2f;
-                        var offsetPoint = new SKPoint(_lastTouchLocation.X + offsetAmount, _lastTouchLocation.Y + offsetAmount);
-                        var rippleSize = SKRect.Create(offsetPoint, new SKSize(maxRippleSize, maxRippleSize));
-                        ripplePath.AddOval(rippleSize);
-
-                        using (var finalRipple = ripplePath.Op(_backgroundPath, SKPathOp.Intersect))
-                        {
-                            canvas.DrawPath(finalRipple, ripplePaint);
-                        }
-                    }
-                }
-
-                if (BorderWidth > 0d && BorderColor != default(Color))
-                {
-                    backgroundPaint.StrokeWidth = (float)BorderWidth;
-                    backgroundPaint.Color = BorderColor.ToSKColor();
-                    backgroundPaint.Shader = null;
-                    backgroundPaint.Style = SKPaintStyle.Stroke;
-
-                    canvas.DrawPath(_backgroundPath, backgroundPaint);
-                }
-
-                if (!string.IsNullOrEmpty(Text))
-                {
-                    var text =
-                        new RichString()
-                            .Add(
-                                Text,
-                                textColor: FontColor.ToSKColor(),
-                                fontSize: (float)FontSize * scale,
-                                fontFamily: FontFamily)
-                            .Alignment(Topten.RichTextKit.TextAlignment.Center);
-
-                    var drawPoint =
-                        new SKPoint(
-                            rect.MidX - (text.MeasuredWidth * .5f),
-                            rect.MidY - (text.MeasuredHeight * .5f));
-
-                    text.Paint(canvas, drawPoint);
-                }
+        using (new SKAutoCanvasRestore(canvas))
+        {
+            if (this.Tapped)
+            {
+                canvas.Translate(this.ShadowLocation.ToSKPoint());
             }
 
-            shader?.Dispose();
+            this._backgroundPath.AddRoundRect(rect, info.Height / 2f, info.Height / 2f);
+            canvas.DrawPath(this._backgroundPath, backgroundPaint);
+
+            if (this._lastTouchLocation != SKPoint.Empty && this._rippleAnimationPercentage > 0.0d)
+            {
+                using var ripplePath = new SKPath();
+                using var ripplePaint = new SKPaint();
+                ripplePaint.IsAntialias = true;
+                ripplePaint.Style = SKPaintStyle.Fill;
+                ripplePaint.Color =
+                    this.ButtonBackgroundStartColor != default(Color)
+                        ? this.ButtonBackgroundEndColor.AddLuminosity(-.2f).MultiplyAlpha((1 - (float)this._rippleAnimationPercentage) * .5f).ToSKColor()
+                        : Colors.Transparent.ToSKColor();
+
+                float startingRippleSize = Math.Min(info.Width, info.Height) * 1.5f;
+                float maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * this._rippleAnimationPercentage);
+                float offsetAmount = -maxRippleSize / 2f;
+                var offsetPoint = new SKPoint(this._lastTouchLocation.X + offsetAmount, this._lastTouchLocation.Y + offsetAmount);
+                var rippleSize = SKRect.Create(offsetPoint, new SKSize(maxRippleSize, maxRippleSize));
+                ripplePath.AddOval(rippleSize);
+
+                using var finalRipple = ripplePath.Op(this._backgroundPath, SKPathOp.Intersect);
+                canvas.DrawPath(finalRipple, ripplePaint);
+            }
+
+            if (this.BorderWidth > 0d && this.BorderColor != default(Color))
+            {
+                backgroundPaint.StrokeWidth = (float)this.BorderWidth;
+                backgroundPaint.Color = this.BorderColor.ToSKColor();
+                backgroundPaint.Shader = null;
+                backgroundPaint.Style = SKPaintStyle.Stroke;
+
+                canvas.DrawPath(this._backgroundPath, backgroundPaint);
+            }
+
+            if (!string.IsNullOrEmpty(this.Text))
+            {
+                var text =
+                    new RichString()
+                        .Add(
+                            this.Text,
+                            textColor: this.FontColor.ToSKColor(),
+                            fontSize: (float)this.FontSize * scale,
+                            fontFamily: this.FontFamily)
+                        .Alignment(Topten.RichTextKit.TextAlignment.Center);
+
+                var drawPoint =
+                    new SKPoint(
+                        rect.MidX - (text.MeasuredWidth * .5f),
+                        rect.MidY - (text.MeasuredHeight * .5f));
+
+                text.Paint(canvas, drawPoint);
+            }
         }
+
+        shader?.Dispose();
     }
 
     /// <summary>
