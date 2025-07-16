@@ -342,7 +342,7 @@ public class Tile : AuroraViewBase
     /// The command parameter property.
     /// </summary>
     public static readonly BindableProperty CommandParameterProperty =
-        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(Tile), default(object));
+        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(Tile), default);
 
     /// <summary>
     /// Gets or sets the command parameter.

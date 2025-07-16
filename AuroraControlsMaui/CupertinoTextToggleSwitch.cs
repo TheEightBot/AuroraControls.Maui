@@ -268,7 +268,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The command parameter property.
     /// </summary>
     public static readonly BindableProperty CommandParameterProperty =
-        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(CupertinoTextToggleSwitch), default(object));
+        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(CupertinoTextToggleSwitch), default);
 
     /// <summary>
     /// Gets or sets the command parameter.

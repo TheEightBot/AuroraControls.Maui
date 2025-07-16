@@ -206,7 +206,7 @@ public class SvgImageButton : AuroraViewBase
     /// The command parameter property.
     /// </summary>
     public static readonly BindableProperty CommandParameterProperty =
-        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(SvgImageButton), default(object));
+        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(SvgImageButton), default);
 
     /// <summary>
     /// Gets or sets the command parameter.

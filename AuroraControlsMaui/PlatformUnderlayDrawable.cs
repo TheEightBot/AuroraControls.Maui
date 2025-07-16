@@ -573,7 +573,7 @@ public class PlatformUnderlayDrawable : IDisposable
             double controlXLeft = controlFrame.Left * scale;
 
             var placeholderOffset = underlayDrawable.PlaceholderOffset;
-            if (placeholderOffset != default(Point))
+            if (placeholderOffset != default)
             {
                 controlYCenter += placeholderOffset.Y * scale;
                 controlXLeft += placeholderOffset.X * scale;

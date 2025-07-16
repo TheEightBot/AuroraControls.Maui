@@ -261,7 +261,7 @@ public class GradientPillButton : AuroraViewBase
     /// The command parameter property.
     /// </summary>
     public static readonly BindableProperty CommandParameterProperty =
-        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(GradientPillButton), default(object));
+        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(GradientPillButton), default);
 
     /// <summary>
     /// Gets or sets the command parameter.

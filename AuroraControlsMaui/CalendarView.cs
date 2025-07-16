@@ -964,7 +964,7 @@ public class CalendarView : AuroraViewBase
                     var comparisonDate = new DateTime(CurrentYear, CurrentMonth, i - startingDayOfWeek + 2).Date;
                     var foundItem = _selectedDates.FirstOrDefault(x => x.Date == comparisonDate);
 
-                    if (foundItem != default(DateTime))
+                    if (foundItem != default)
                     {
                         _selectedDates.Remove(foundItem);
                     }
@@ -1038,11 +1038,11 @@ public class CalendarView : AuroraViewBase
                                         currIndex - startingDayOfWeek + 2).Date;
                                     var foundItem = _selectedDates.FirstOrDefault(x => x.Date == comparisonDate);
 
-                                    if (foundItem != default(DateTime) && !_wasSelected)
+                                    if (foundItem != default && !_wasSelected)
                                     {
                                         _selectedDates.Remove(foundItem);
                                     }
-                                    else if (foundItem == default(DateTime) && _wasSelected)
+                                    else if (foundItem == default && _wasSelected)
                                     {
                                         _selectedDates.Add(comparisonDate);
                                     }

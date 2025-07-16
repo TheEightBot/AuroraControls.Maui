@@ -48,7 +48,7 @@ public static class UnderlayDrawableElement
         BindableProperty.Create(nameof(IUnderlayDrawable.Command), typeof(ICommand), typeof(IUnderlayDrawable), default(ICommand));
 
     public static readonly BindableProperty CommandParameterProperty =
-        BindableProperty.Create(nameof(IUnderlayDrawable.CommandParameter), typeof(object), typeof(IUnderlayDrawable), default(object));
+        BindableProperty.Create(nameof(IUnderlayDrawable.CommandParameter), typeof(object), typeof(IUnderlayDrawable), default);
 
     public static readonly BindableProperty InternalMarginProperty =
         BindableProperty.Create(nameof(IUnderlayDrawable.InternalMargin), typeof(Thickness), typeof(IUnderlayDrawable), new Thickness(2),

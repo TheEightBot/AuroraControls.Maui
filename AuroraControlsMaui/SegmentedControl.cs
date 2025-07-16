@@ -483,7 +483,7 @@ public class Segment : BindableObject, IDisposable
     public SKSvg SVG => _svg;
 
     public static readonly BindableProperty ValueProperty =
-        BindableProperty.Create(nameof(Value), typeof(object), typeof(Segment), default(object));
+        BindableProperty.Create(nameof(Value), typeof(object), typeof(Segment), default);
 
     public object Value
     {

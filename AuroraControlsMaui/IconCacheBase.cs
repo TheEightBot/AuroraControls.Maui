@@ -234,7 +234,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         SKRect resize;
         SKMatrix scaleMatrix = SKMatrix.Identity;
 
-        if (size != default(Size) && skSvg.Picture?.CullRect != default)
+        if (size != default && skSvg.Picture?.CullRect != default)
         {
             var svgRect = skSvg.Picture!.CullRect;
 
@@ -276,7 +276,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
         canvas.Clear(SKColors.Transparent);
 
-        if (size != default(Size) && !scaleMatrix.IsIdentity)
+        if (size != default && !scaleMatrix.IsIdentity)
         {
             canvas.SetMatrix(scaleMatrix);
         }
