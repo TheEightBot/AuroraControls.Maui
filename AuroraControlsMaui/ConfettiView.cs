@@ -157,7 +157,7 @@ public class ConfettiView : SceneViewBase
     /// The colors property. Allows setting custom colors for confetti particles.
     /// </summary>
     public static BindableProperty ColorsProperty =
-        BindableProperty.Create(nameof(Colors), typeof(IList<Color>), typeof(ConfettiView), null,
+        BindableProperty.Create(nameof(Colors), typeof(IList<Color>), typeof(ConfettiView),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>

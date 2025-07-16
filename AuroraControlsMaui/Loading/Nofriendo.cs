@@ -60,7 +60,7 @@ public class Nofriendo : LoadingViewBase
     /// The loading start color property.
     /// </summary>
     public static readonly BindableProperty LoadingStartColorProperty =
-        BindableProperty.Create(nameof(LoadingStartColor), typeof(Color), typeof(Nofriendo), default(Color),
+        BindableProperty.Create(nameof(LoadingStartColor), typeof(Color), typeof(Nofriendo),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -77,7 +77,7 @@ public class Nofriendo : LoadingViewBase
     /// The loading end color property.
     /// </summary>
     public static readonly BindableProperty LoadingEndColorProperty =
-        BindableProperty.Create(nameof(LoadingEndColor), typeof(Color), typeof(Nofriendo), default(Color),
+        BindableProperty.Create(nameof(LoadingEndColor), typeof(Color), typeof(Nofriendo),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>

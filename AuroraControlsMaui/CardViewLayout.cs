@@ -77,7 +77,7 @@ public class CardViewLayout : ContentView
     /// The content property.
     /// </summary>
     public static new readonly BindableProperty ContentProperty =
-        BindableProperty.Create(nameof(Content), typeof(View), typeof(CardViewLayout), default(View),
+        BindableProperty.Create(nameof(Content), typeof(View), typeof(CardViewLayout),
             propertyChanged: (bindable, _, newValue) =>
             {
                 if (bindable is CardViewLayout clv)
@@ -100,7 +100,7 @@ public class CardViewLayout : ContentView
     /// The card background color property.
     /// </summary>
     public static new readonly BindableProperty BackgroundColorProperty =
-        BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(CardViewLayout), default(Color),
+        BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(CardViewLayout),
             propertyChanged: (bindable, _, newValue) =>
             {
                 if (bindable is CardViewLayout clv && clv.Content != null)

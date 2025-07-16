@@ -34,7 +34,7 @@ public class SvgImageButton : AuroraViewBase
     /// The name of the embedded image to display.
     /// </summary>
     public static readonly BindableProperty EmbeddedImageNameProperty =
-        BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(SvgImageButton), null,
+        BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(SvgImageButton),
             propertyChanged:
             async (bindable, _, _) =>
             {
@@ -51,8 +51,8 @@ public class SvgImageButton : AuroraViewBase
     /// <value>string value. default value is null.</value>
     public string EmbeddedImageName
     {
-        get { return (string)GetValue(EmbeddedImageNameProperty); }
-        set { SetValue(EmbeddedImageNameProperty, value); }
+        get => (string)GetValue(EmbeddedImageNameProperty);
+        set => SetValue(EmbeddedImageNameProperty, value);
     }
 
     /// <summary>
@@ -102,8 +102,8 @@ public class SvgImageButton : AuroraViewBase
     /// <value><c>true</c> if animated; otherwise, <c>false</c>.</value>
     public bool Animated
     {
-        get { return (bool)GetValue(AnimatedProperty); }
-        set { SetValue(AnimatedProperty, value); }
+        get => (bool)GetValue(AnimatedProperty);
+        set => SetValue(AnimatedProperty, value);
     }
 
     public static readonly BindableProperty AnimationScaleAmountProperty =
@@ -128,8 +128,8 @@ public class SvgImageButton : AuroraViewBase
     /// <value>takes a Easing. Default value is Easing.CubicInOut.</value>
     public Easing AnimationEasing
     {
-        get { return (Easing)GetValue(AnimationEasingProperty); }
-        set { SetValue(AnimationEasingProperty, value); }
+        get => (Easing)GetValue(AnimationEasingProperty);
+        set => SetValue(AnimationEasingProperty, value);
     }
 
     /// <summary>
@@ -145,8 +145,8 @@ public class SvgImageButton : AuroraViewBase
     /// <value>Expects a Color. Default is Transparent.</value>
     public Color OverlayColor
     {
-        get { return (Color)GetValue(OverlayColorProperty); }
-        set { SetValue(OverlayColorProperty, value); }
+        get => (Color)GetValue(OverlayColorProperty);
+        set => SetValue(OverlayColorProperty, value);
     }
 
     /// <summary>
@@ -162,8 +162,8 @@ public class SvgImageButton : AuroraViewBase
     /// <value>Expects a Color. Default Color.Transparent.</value>
     public new Color BackgroundColor
     {
-        get { return (Color)GetValue(BackgroundColorProperty); }
-        set { SetValue(BackgroundColorProperty, value); }
+        get => (Color)GetValue(BackgroundColorProperty);
+        set => SetValue(BackgroundColorProperty, value);
     }
 
     public static readonly BindableProperty BackgroundShapeProperty =
@@ -190,7 +190,7 @@ public class SvgImageButton : AuroraViewBase
     /// The command property. Fires on tap.
     /// </summary>
     public static readonly BindableProperty CommandProperty =
-        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(SvgImageButton), default(ICommand));
+        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(SvgImageButton));
 
     /// <summary>
     /// Gets or sets the command.
@@ -198,15 +198,15 @@ public class SvgImageButton : AuroraViewBase
     /// <value>Takes a System.Windows.Input.ICommand. Default value is default(ICommand).</value>
     public ICommand Command
     {
-        get { return (ICommand)GetValue(CommandProperty); }
-        set { SetValue(CommandProperty, value); }
+        get => (ICommand)GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
     }
 
     /// <summary>
     /// The command parameter property.
     /// </summary>
     public static readonly BindableProperty CommandParameterProperty =
-        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(SvgImageButton), default);
+        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(SvgImageButton));
 
     /// <summary>
     /// Gets or sets the command parameter.
@@ -214,8 +214,8 @@ public class SvgImageButton : AuroraViewBase
     /// <value>The command parameter.</value>
     public object CommandParameter
     {
-        get { return (object)GetValue(CommandParameterProperty); }
-        set { SetValue(CommandParameterProperty, value); }
+        get => (object)GetValue(CommandParameterProperty);
+        set => SetValue(CommandParameterProperty, value);
     }
 
     protected override void Attached()

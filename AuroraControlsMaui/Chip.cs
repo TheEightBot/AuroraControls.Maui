@@ -935,8 +935,5 @@ public class Chip : AuroraViewBase, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    ~Chip()
-    {
-        Dispose(false);
-    }
+    ~Chip() => Dispose(false);
 }

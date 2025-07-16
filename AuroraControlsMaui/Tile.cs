@@ -36,7 +36,7 @@ public class Tile : AuroraViewBase
     /// The embedded svg image name property.
     /// </summary>
     public static readonly BindableProperty EmbeddedImageNameProperty =
-        BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(Tile), null,
+        BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(Tile),
             propertyChanged:
                 static (bindable, _, _) =>
                 {
@@ -214,7 +214,7 @@ public class Tile : AuroraViewBase
     /// The tiles text property.
     /// </summary>
     public static readonly BindableProperty TextProperty =
-        BindableProperty.Create(nameof(Text), typeof(string), typeof(Tile), default(string),
+        BindableProperty.Create(nameof(Text), typeof(string), typeof(Tile),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -265,7 +265,7 @@ public class Tile : AuroraViewBase
     /// The typeface property.
     /// </summary>
     public static readonly BindableProperty TypefaceProperty =
-        BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(Tile), default(SKTypeface),
+        BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(Tile),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -326,7 +326,7 @@ public class Tile : AuroraViewBase
     /// The command property. Fires on tap.
     /// </summary>
     public static readonly BindableProperty CommandProperty =
-        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(Tile), default(ICommand));
+        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(Tile));
 
     /// <summary>
     /// Gets or sets the command.
@@ -342,7 +342,7 @@ public class Tile : AuroraViewBase
     /// The command parameter property.
     /// </summary>
     public static readonly BindableProperty CommandParameterProperty =
-        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(Tile), default);
+        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(Tile));
 
     /// <summary>
     /// Gets or sets the command parameter.
@@ -383,7 +383,7 @@ public class Tile : AuroraViewBase
     }
 
     public static readonly BindableProperty NotificationBadgeProperty =
-        BindableProperty.Create(nameof(NotificationBadge), typeof(NotificationBadge), typeof(Tile), default(NotificationBadge));
+        BindableProperty.Create(nameof(NotificationBadge), typeof(NotificationBadge), typeof(Tile));
 
     public NotificationBadge NotificationBadge
     {
@@ -541,7 +541,7 @@ public class Tile : AuroraViewBase
                 else
                 {
                     _fontPaint.EnsureHasValidFont(this.Text);
-                    canvas.DrawTextAt(this.Text, new SKPoint(rect.MidX, textY), _fontPaint, TextDrawLocation.Centered, TextDrawLocation.At);
+                    canvas.DrawTextAt(this.Text, new SKPoint(rect.MidX, textY), _fontPaint, TextDrawLocation.Centered);
                 }
             }
 

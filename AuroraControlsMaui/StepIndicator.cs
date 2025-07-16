@@ -45,8 +45,8 @@ public class StepIndicator : AuroraViewBase
     /// <value>Takes an int value. default value is 0.</value>
     public int NumberOfSteps
     {
-        get { return (int)GetValue(NumberOfStepsProperty); }
-        set { SetValue(NumberOfStepsProperty, value); }
+        get => (int)GetValue(NumberOfStepsProperty);
+        set => SetValue(NumberOfStepsProperty, value);
     }
 
     /// <summary>
@@ -62,8 +62,8 @@ public class StepIndicator : AuroraViewBase
     /// <value>Takes an int. Default value is default(int).</value>
     public int CurrentStep
     {
-        get { return (int)GetValue(CurrentStepProperty); }
-        set { SetValue(CurrentStepProperty, value); }
+        get => (int)GetValue(CurrentStepProperty);
+        set => SetValue(CurrentStepProperty, value);
     }
 
     public static BindableProperty DrawConnectingLineProperty =
@@ -89,8 +89,8 @@ public class StepIndicator : AuroraViewBase
     /// <value><c>true</c> if display step number; otherwise, <c>false</c>.</value>
     public bool DisplayStepNumber
     {
-        get { return (bool)GetValue(DisplayStepNumberProperty); }
-        set { SetValue(DisplayStepNumberProperty, value); }
+        get => (bool)GetValue(DisplayStepNumberProperty);
+        set => SetValue(DisplayStepNumberProperty, value);
     }
 
     /// <summary>
@@ -106,8 +106,8 @@ public class StepIndicator : AuroraViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
     public Color? LineColor
     {
-        get { return (Color?)GetValue(LineColorProperty); }
-        set { SetValue(LineColorProperty, value); }
+        get => (Color?)GetValue(LineColorProperty);
+        set => SetValue(LineColorProperty, value);
     }
 
     /// <summary>
@@ -123,8 +123,8 @@ public class StepIndicator : AuroraViewBase
     /// <value>Takes a double. Default value is default(double).</value>
     public double LineWidth
     {
-        get { return (double)GetValue(LineWidthProperty); }
-        set { SetValue(LineWidthProperty, value); }
+        get => (double)GetValue(LineWidthProperty);
+        set => SetValue(LineWidthProperty, value);
     }
 
     /// <summary>
@@ -140,8 +140,8 @@ public class StepIndicator : AuroraViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
     public Color? HighlightColor
     {
-        get { return (Color)GetValue(HighlightColorProperty); }
-        set { SetValue(HighlightColorProperty, value); }
+        get => (Color)GetValue(HighlightColorProperty);
+        set => SetValue(HighlightColorProperty, value);
     }
 
     /// <summary>
@@ -157,8 +157,8 @@ public class StepIndicator : AuroraViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
     public Color? InactiveColor
     {
-        get { return (Color)GetValue(InactiveColorProperty); }
-        set { SetValue(InactiveColorProperty, value); }
+        get => (Color)GetValue(InactiveColorProperty);
+        set => SetValue(InactiveColorProperty, value);
     }
 
     /// <summary>
@@ -174,8 +174,8 @@ public class StepIndicator : AuroraViewBase
     /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
     public Color? FontColor
     {
-        get { return (Color)GetValue(FontColorProperty); }
-        set { SetValue(FontColorProperty, value); }
+        get => (Color)GetValue(FontColorProperty);
+        set => SetValue(FontColorProperty, value);
     }
 
     public static BindableProperty TypefaceProperty =
@@ -201,8 +201,8 @@ public class StepIndicator : AuroraViewBase
     /// <value>Takes a Xamarin.Forms.Thickness. Default value is default(Xamarin.Forms.Thickness).</value>
     public Thickness Padding
     {
-        get { return (Thickness)GetValue(PaddingProperty); }
-        set { SetValue(PaddingProperty, value); }
+        get => (Thickness)GetValue(PaddingProperty);
+        set => SetValue(PaddingProperty, value);
     }
 
     /// <summary>

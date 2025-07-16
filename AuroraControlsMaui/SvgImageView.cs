@@ -22,7 +22,7 @@ public class SvgImageView : AuroraViewBase
     /// The name of the embedded image to display.
     /// </summary>
     public static readonly BindableProperty EmbeddedImageNameProperty =
-        BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(SvgImageView), null,
+        BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(SvgImageView),
             propertyChanged:
                 (bindable, oldValue, newValue) =>
                 {

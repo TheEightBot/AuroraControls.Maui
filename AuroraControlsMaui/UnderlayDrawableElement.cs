@@ -39,16 +39,16 @@ public static class UnderlayDrawableElement
         BindableProperty.Create(nameof(IUnderlayDrawable.IsError), typeof(bool), typeof(IUnderlayDrawable), false);
 
     public static readonly BindableProperty ErrorTextProperty =
-        BindableProperty.Create(nameof(IUnderlayDrawable.ErrorText), typeof(string), typeof(IUnderlayDrawable), null);
+        BindableProperty.Create(nameof(IUnderlayDrawable.ErrorText), typeof(string), typeof(IUnderlayDrawable));
 
     public static readonly BindableProperty ErrorColorProperty =
         BindableProperty.Create(nameof(IUnderlayDrawable.ErrorColor), typeof(Color), typeof(IUnderlayDrawable), Colors.Red);
 
     public static readonly BindableProperty CommandProperty =
-        BindableProperty.Create(nameof(IUnderlayDrawable.Command), typeof(ICommand), typeof(IUnderlayDrawable), default(ICommand));
+        BindableProperty.Create(nameof(IUnderlayDrawable.Command), typeof(ICommand), typeof(IUnderlayDrawable));
 
     public static readonly BindableProperty CommandParameterProperty =
-        BindableProperty.Create(nameof(IUnderlayDrawable.CommandParameter), typeof(object), typeof(IUnderlayDrawable), default);
+        BindableProperty.Create(nameof(IUnderlayDrawable.CommandParameter), typeof(object), typeof(IUnderlayDrawable));
 
     public static readonly BindableProperty InternalMarginProperty =
         BindableProperty.Create(nameof(IUnderlayDrawable.InternalMargin), typeof(Thickness), typeof(IUnderlayDrawable), new Thickness(2),
@@ -126,7 +126,7 @@ public static class HavePlaceholderElement
     internal static readonly Color DefaultPlaceholderColor = Color.FromArgb("#808080");
 
     public static readonly BindableProperty PlaceholderProperty =
-        BindableProperty.Create(nameof(IHavePlaceholder.Placeholder), typeof(string), typeof(IHavePlaceholder), default(string));
+        BindableProperty.Create(nameof(IHavePlaceholder.Placeholder), typeof(string), typeof(IHavePlaceholder));
 
     public static readonly BindableProperty InheritPlaceholderFromContentProperty =
         BindableProperty.Create(nameof(IHavePlaceholder.Placeholder), typeof(bool), typeof(IHavePlaceholder), true);
