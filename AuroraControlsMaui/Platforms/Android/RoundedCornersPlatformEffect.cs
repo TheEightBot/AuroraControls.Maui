@@ -4,6 +4,7 @@ using Android.OS;
 using Android.Views;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Microsoft.Maui.Controls.Platform;
+using Color = Microsoft.Maui.Graphics.Color;
 
 namespace AuroraControls;
 
@@ -107,12 +108,14 @@ public class RoundedCornersPlatformEffect : PlatformEffect
             var foregroundShape = new GradientDrawable() { };
             foregroundShape.SetColor(0);
             foregroundShape.SetCornerRadius(scaledCornerRadius * 0.80f /* A magic number for rounding down the corner radius so that it overlaps the clip bounds better */);
-            foregroundShape.SetStroke(scaledBorderSize, borderColor.ToAndroid());
+
+            foregroundShape.SetStroke(scaledBorderSize, borderColor?.ToAndroid() ?? Android.Graphics.Color.Transparent);
 
             var backgroundShape = new GradientDrawable() { };
-            backgroundShape.SetColor(ve.BackgroundColor.ToAndroid());
+
+            backgroundShape.SetColor(ve.BackgroundColor?.ToAndroid() ?? Android.Graphics.Color.Transparent);
             backgroundShape.SetCornerRadius(scaledCornerRadius);
-            backgroundShape.SetStroke(scaledBorderSize, borderColor.ToAndroid());
+            backgroundShape.SetStroke(scaledBorderSize, borderColor?.ToAndroid() ?? Android.Graphics.Color.Transparent);
 
             var background = view.Background;
             var foreground = view.Foreground;

@@ -64,10 +64,10 @@ public class RoundedCornersPlatformEffect : PlatformEffect
         }
 
         view.BackgroundColor = UIColor.Clear;
-        view.Layer.BackgroundColor = ve.BackgroundColor.ToCGColor();
+        view.Layer.BackgroundColor = ve.BackgroundColor?.ToCGColor() ?? UIColor.Clear.CGColor;
         view.Layer.EdgeAntialiasingMask = CoreAnimation.CAEdgeAntialiasingMask.All;
         view.Layer.BorderWidth = (NFloat)Effects.RoundedCornersEffect.GetBorderSize(this.Element);
-        view.Layer.BorderColor = Effects.RoundedCornersEffect.GetBorderColor(this.Element).ToCGColor();
+        view.Layer.BorderColor = Effects.RoundedCornersEffect.GetBorderColor(this.Element)?.ToCGColor() ?? UIColor.Clear.CGColor;
         view.Layer.CornerRadius = (NFloat)Effects.RoundedCornersEffect.GetCornerRadius(this.Element);
     }
 }

@@ -130,7 +130,7 @@ public class ShadowPlatformEffect : PlatformEffect
             return;
         }
 
-        var androidShadowColor = shadowColor.ToAndroid();
+        var androidShadowColor = shadowColor?.ToAndroid() ?? Android.Graphics.Color.Black;
 
         view.SetOutlineAmbientShadowColor(androidShadowColor);
         view.SetOutlineSpotShadowColor(androidShadowColor);
