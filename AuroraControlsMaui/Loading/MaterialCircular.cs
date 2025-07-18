@@ -209,14 +209,14 @@ public class MaterialCircular : SceneViewBase
             canvas.SetMatrix(matrix);
             canvas.Clear();
 
-            if (this._backgroundProgressPath != null)
+            if (_backgroundProgressPath != null)
             {
-                canvas.DrawPath(this._backgroundProgressPath, this._progressBackgroundPaint);
+                canvas.DrawPath(_backgroundProgressPath, _progressBackgroundPaint);
             }
 
-            if (this._progressPath != null)
+            if (_progressPath != null)
             {
-                canvas.DrawPath(this._progressPath, this._progressPaint);
+                canvas.DrawPath(_progressPath, _progressPaint);
             }
         }
 

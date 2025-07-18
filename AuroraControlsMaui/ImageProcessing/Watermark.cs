@@ -110,66 +110,64 @@ public class Watermark : ImageProcessingBase, IImageProcessor
 
         if (imageProcessor is Watermark)
         {
-            using (SKCanvas canvas = new(processingImage))
-            using (SKPaint paint = new())
+            using SKCanvas canvas = new(processingImage);
+            using SKPaint paint = new();
+            paint.IsAntialias = true;
+            paint.Style = SKPaintStyle.Fill;
+            paint.TextSize = (float)this.FontSize;
+            paint.Typeface = this.Typeface ?? PlatformInfo.DefaultTypeface;
+
+            paint.EnsureHasValidFont(text);
+
+            SKRect measuredText = SKRect.Empty;
+            paint.MeasureText(text, ref measuredText);
+            float x = 0f;
+            float y = 0f;
+
+            SKRect rect = new(0f, 0f, processingImage.Width, processingImage.Height);
+
+            switch (this.HorizontalWatermarkLocation)
             {
-                paint.IsAntialias = true;
-                paint.Style = SKPaintStyle.Fill;
-                paint.TextSize = (float)this.FontSize;
-                paint.Typeface = this.Typeface ?? PlatformInfo.DefaultTypeface;
-
-                paint.EnsureHasValidFont(text);
-
-                SKRect measuredText = SKRect.Empty;
-                paint.MeasureText(text, ref measuredText);
-                float x = 0f;
-                float y = 0f;
-
-                SKRect rect = new(0f, 0f, processingImage.Width, processingImage.Height);
-
-                switch (this.HorizontalWatermarkLocation)
-                {
-                    case WatermarkLocation.Center:
-                        x = rect.MidX - measuredText.MidX;
-                        break;
-                    case WatermarkLocation.End:
-                        x = rect.Left + rect.Width - measuredText.Width - (float)this.WatermarkPadding;
-                        break;
-                    case WatermarkLocation.Start:
-                    default:
-                        x = rect.Left + (float)this.WatermarkPadding;
-                        break;
-                }
-
-                switch (this.VerticalWatermarkLocation)
-                {
-                    case WatermarkLocation.Center:
-                        y = rect.MidY - (measuredText.Height / 2f);
-                        break;
-                    case WatermarkLocation.End:
-                        y = rect.Top + rect.Height - (measuredText.Height / 2f) - (float)this.WatermarkPadding;
-                        break;
-                    case WatermarkLocation.Start:
-                    default:
-                        y = rect.Top + (measuredText.Height / 2f) + (float)this.WatermarkPadding;
-                        break;
-                }
-
-                paint.Color = this.BackgroundColor.ToSKColor();
-                float halfPadding = (float)this.WatermarkPadding / 2f;
-                canvas.DrawRoundRect(
-                    x - halfPadding, y - (measuredText.Height / 2f) - halfPadding,
-                    measuredText.Width + (float)this.WatermarkPadding, measuredText.Height + (float)this.WatermarkPadding,
-                    (float)this.BackgroundCornerRadius, (float)this.BackgroundCornerRadius,
-                    paint);
-
-                paint.Color = this.ForegroundColor.ToSKColor();
-                canvas.DrawTextCenteredVertically(text, new SKPoint(x, y), paint);
-
-                canvas.Flush();
-
-                return processingImage;
+                case WatermarkLocation.Center:
+                    x = rect.MidX - measuredText.MidX;
+                    break;
+                case WatermarkLocation.End:
+                    x = rect.Left + rect.Width - measuredText.Width - (float)this.WatermarkPadding;
+                    break;
+                case WatermarkLocation.Start:
+                default:
+                    x = rect.Left + (float)this.WatermarkPadding;
+                    break;
             }
+
+            switch (this.VerticalWatermarkLocation)
+            {
+                case WatermarkLocation.Center:
+                    y = rect.MidY - (measuredText.Height / 2f);
+                    break;
+                case WatermarkLocation.End:
+                    y = rect.Top + rect.Height - (measuredText.Height / 2f) - (float)this.WatermarkPadding;
+                    break;
+                case WatermarkLocation.Start:
+                default:
+                    y = rect.Top + (measuredText.Height / 2f) + (float)this.WatermarkPadding;
+                    break;
+            }
+
+            paint.Color = this.BackgroundColor.ToSKColor();
+            float halfPadding = (float)this.WatermarkPadding / 2f;
+            canvas.DrawRoundRect(
+                x - halfPadding, y - (measuredText.Height / 2f) - halfPadding,
+                measuredText.Width + (float)this.WatermarkPadding, measuredText.Height + (float)this.WatermarkPadding,
+                (float)this.BackgroundCornerRadius, (float)this.BackgroundCornerRadius,
+                paint);
+
+            paint.Color = this.ForegroundColor.ToSKColor();
+            canvas.DrawTextCenteredVertically(text, new SKPoint(x, y), paint);
+
+            canvas.Flush();
+
+            return processingImage;
         }
 
         return processingImage;

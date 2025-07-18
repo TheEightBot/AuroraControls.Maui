@@ -132,7 +132,7 @@ public abstract class AuroraGLViewBase : SKGLView, IAuroraView
                 {
                     var image = surface.Snapshot();
 
-                    if (_overrideDrawableArea != default(SKRect))
+                    if (_overrideDrawableArea != default)
                     {
                         surface.Canvas.ClipRect(_overrideDrawableArea);
                     }

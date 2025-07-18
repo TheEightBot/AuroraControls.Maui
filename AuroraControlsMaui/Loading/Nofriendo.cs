@@ -60,7 +60,7 @@ public class Nofriendo : LoadingViewBase
     /// The loading start color property.
     /// </summary>
     public static readonly BindableProperty LoadingStartColorProperty =
-        BindableProperty.Create(nameof(LoadingStartColor), typeof(Color), typeof(Nofriendo), default(Color),
+        BindableProperty.Create(nameof(LoadingStartColor), typeof(Color), typeof(Nofriendo),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -77,7 +77,7 @@ public class Nofriendo : LoadingViewBase
     /// The loading end color property.
     /// </summary>
     public static readonly BindableProperty LoadingEndColorProperty =
-        BindableProperty.Create(nameof(LoadingEndColor), typeof(Color), typeof(Nofriendo), default(Color),
+        BindableProperty.Create(nameof(LoadingEndColor), typeof(Color), typeof(Nofriendo),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -99,67 +99,65 @@ public class Nofriendo : LoadingViewBase
     {
         var canvas = surface.Canvas;
 
-        using (var foregroundPaint = new SKPaint())
-        using (var foregroundPath = new SKPath())
+        using var foregroundPaint = new SKPaint();
+        using var foregroundPath = new SKPath();
+        int animationStep = this.CurrentAnimationStep;
+        double previousStepProgress = _previousAnimationStep / (double)this.MaxAnimationSteps;
+        double currentStepProcess = animationStep / (double)this.MaxAnimationSteps;
+
+        var previousStepColor = this.LoadingStartColor.Lerp(this.LoadingEndColor, previousStepProgress).ToSKColor();
+        var currentStepColor = this.LoadingStartColor.Lerp(this.LoadingEndColor, currentStepProcess).ToSKColor();
+
+        foregroundPaint.Style = SKPaintStyle.Fill;
+        foregroundPaint.Color = currentStepColor;
+
+        double animatingPercentage = this.AnimatingPercentage * 100;
+
+        if (!this.Animating)
         {
-            int animationStep = CurrentAnimationStep;
-            double previousStepProgress = _previousAnimationStep / (double)MaxAnimationSteps;
-            double currentStepProcess = animationStep / (double)MaxAnimationSteps;
+            canvas.DrawColor(previousStepColor);
+            return;
+        }
 
-            var previousStepColor = LoadingStartColor.Lerp(LoadingEndColor, previousStepProgress).ToSKColor();
-            var currentStepColor = LoadingStartColor.Lerp(LoadingEndColor, currentStepProcess).ToSKColor();
+        float stepHeight = (float)(info.Height / (double)this.StepCount);
+        double individualStepCompletion = 100 / (double)this.StepCount;
+        bool startsAtRight = animationStep % 2 == 0;
 
-            foregroundPaint.Style = SKPaintStyle.Fill;
-            foregroundPaint.Color = currentStepColor;
+        for (int i = 0; i < this.StepCount; i++)
+        {
+            double stepProgressEnd = individualStepCompletion * (i + 1);
 
-            double animatingPercentage = AnimatingPercentage * 100;
+            SKRect drawRect;
 
-            if (!Animating)
+            if (this.CurrentAnimationStep == 0)
             {
-                canvas.DrawColor(previousStepColor);
-                return;
+                canvas.Clear();
             }
 
-            float stepHeight = (float)(info.Height / (double)StepCount);
-            double individualStepCompletion = 100 / (double)StepCount;
-            bool startsAtRight = animationStep % 2 == 0;
-
-            for (int i = 0; i < StepCount; i++)
+            if (animatingPercentage > stepProgressEnd)
             {
-                double stepProgressEnd = individualStepCompletion * (i + 1);
+                drawRect = SKRect.Create(0, stepHeight * i, info.Width, stepHeight);
+            }
+            else
+            {
+                double currentStepProgress = animatingPercentage / stepProgressEnd;
 
-                SKRect drawRect;
+                float currentStepWidth = info.Width * (float)currentStepProgress;
 
-                if (CurrentAnimationStep == 0)
+                if (startsAtRight)
                 {
-                    canvas.Clear();
-                }
-
-                if (animatingPercentage > stepProgressEnd)
-                {
-                    drawRect = SKRect.Create(0, stepHeight * i, info.Width, stepHeight);
+                    drawRect = SKRect.Create(info.Width - currentStepWidth, stepHeight * i, currentStepWidth, stepHeight);
                 }
                 else
                 {
-                    double currentStepProgress = animatingPercentage / stepProgressEnd;
-
-                    float currentStepWidth = info.Width * (float)currentStepProgress;
-
-                    if (startsAtRight)
-                    {
-                        drawRect = SKRect.Create(info.Width - currentStepWidth, stepHeight * i, currentStepWidth, stepHeight);
-                    }
-                    else
-                    {
-                        drawRect = SKRect.Create(0, stepHeight * i, currentStepWidth, stepHeight);
-                    }
+                    drawRect = SKRect.Create(0, stepHeight * i, currentStepWidth, stepHeight);
                 }
-
-                foregroundPath.AddRect(drawRect);
             }
 
-            canvas.DrawPath(foregroundPath, foregroundPaint);
+            foregroundPath.AddRect(drawRect);
         }
+
+        canvas.DrawPath(foregroundPath, foregroundPaint);
     }
 
     protected override void StartAnimationValues() => CurrentAnimationStep = 0;

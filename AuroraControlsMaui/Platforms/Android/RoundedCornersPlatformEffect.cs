@@ -4,6 +4,7 @@ using Android.OS;
 using Android.Views;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Microsoft.Maui.Controls.Platform;
+using Color = Microsoft.Maui.Graphics.Color;
 
 namespace AuroraControls;
 
@@ -26,8 +27,8 @@ public class RoundedCornersPlatformEffect : PlatformEffect
 
         _originalClipToOutline = view.ClipToOutline;
         _originalOutlineProvider = view.OutlineProvider;
-        this._originalForeground = view.Foreground;
-        this._originalBackground = view.Background;
+        _originalForeground = view.Foreground;
+        _originalBackground = view.Background;
 
         view.ClipToOutline = true;
         view.OutlineProvider = ViewOutlineProvider.Bounds;
@@ -57,8 +58,8 @@ public class RoundedCornersPlatformEffect : PlatformEffect
 
             view.ClipToOutline = _originalClipToOutline;
             view.OutlineProvider = _originalOutlineProvider;
-            view.Foreground = this._originalForeground;
-            view.Background = this._originalBackground;
+            view.Foreground = _originalForeground;
+            view.Background = _originalBackground;
         }
         catch (ObjectDisposedException)
         {
@@ -107,12 +108,14 @@ public class RoundedCornersPlatformEffect : PlatformEffect
             var foregroundShape = new GradientDrawable() { };
             foregroundShape.SetColor(0);
             foregroundShape.SetCornerRadius(scaledCornerRadius * 0.80f /* A magic number for rounding down the corner radius so that it overlaps the clip bounds better */);
-            foregroundShape.SetStroke(scaledBorderSize, borderColor.ToAndroid());
+
+            foregroundShape.SetStroke(scaledBorderSize, borderColor?.ToAndroid() ?? Android.Graphics.Color.Transparent);
 
             var backgroundShape = new GradientDrawable() { };
-            backgroundShape.SetColor(ve.BackgroundColor.ToAndroid());
+
+            backgroundShape.SetColor(ve.BackgroundColor?.ToAndroid() ?? Android.Graphics.Color.Transparent);
             backgroundShape.SetCornerRadius(scaledCornerRadius);
-            backgroundShape.SetStroke(scaledBorderSize, borderColor.ToAndroid());
+            backgroundShape.SetStroke(scaledBorderSize, borderColor?.ToAndroid() ?? Android.Graphics.Color.Transparent);
 
             var background = view.Background;
             var foreground = view.Foreground;

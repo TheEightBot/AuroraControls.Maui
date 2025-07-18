@@ -115,7 +115,7 @@ public class ShadowPlatformEffect : PlatformEffect
             return;
         }
 
-        if (view.Layer.ShadowPath != null && view.Layer.ShadowPath != this._originalShadowPath)
+        if (view.Layer.ShadowPath != null && view.Layer.ShadowPath != _originalShadowPath)
         {
             var sp = view.Layer.ShadowPath;
             view.Layer.ShadowPath = null;

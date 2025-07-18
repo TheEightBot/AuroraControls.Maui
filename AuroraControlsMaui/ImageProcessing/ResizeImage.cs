@@ -51,9 +51,9 @@ public class ResizeImage : ImageProcessingBase, IImageProcessor
     /// <param name="imageProcessor">Image processor.</param>
     public SKBitmap ProcessImage(SKBitmap processingImage, ImageProcessingBase imageProcessor)
     {
-        if (imageProcessor is AuroraControls.ImageProcessing.ResizeImage)
+        if (imageProcessor is ResizeImage)
         {
-            var resizeImageProcessor = imageProcessor as AuroraControls.ImageProcessing.ResizeImage;
+            var resizeImageProcessor = imageProcessor as ResizeImage;
             int maxHeight = resizeImageProcessor.MaxHeight;
             int maxWidth = resizeImageProcessor.MaxWidth;
 
@@ -109,40 +109,34 @@ public class ResizeImage : ImageProcessingBase, IImageProcessor
     /// <param name="imageFormat">Image format.</param>
     private static SKData ResizeImageInternal(byte[] imageBytes, int maxHeight = 100, int maxWidth = 100, int quality = 80, SKEncodedImageFormat imageFormat = SKEncodedImageFormat.Png)
     {
-        using (SKData data = SKData.CreateCopy(imageBytes))
+        using SKData data = SKData.CreateCopy(imageBytes);
+        using SKCodec codec = SKCodec.Create(data);
+        var info = codec.Info;
+
+        float supportedScale =
+            info.Height > info.Width
+                ? (float)maxHeight / info.Height
+                : (float)maxWidth / info.Width;
+
+        int scaledWidth = (int)(info.Width * supportedScale);
+        int scaledHeight = (int)(info.Height * supportedScale);
+
+        // decode the bitmap at the nearest size
+        SKBitmap bmp = null;
+        try
         {
-            using (SKCodec codec = SKCodec.Create(data))
-            {
-                var info = codec.Info;
+            bmp = SKBitmap.Decode(codec);
 
-                float supportedScale =
-                    info.Height > info.Width
-                        ? (float)maxHeight / info.Height
-                        : (float)maxWidth / info.Width;
+            SKImageInfo desired = new(scaledWidth, scaledHeight);
+            bmp = bmp.Resize(desired, SKFilterQuality.High);
 
-                int scaledWidth = (int)(info.Width * supportedScale);
-                int scaledHeight = (int)(info.Height * supportedScale);
-
-                // decode the bitmap at the nearest size
-                SKBitmap bmp = null;
-                try
-                {
-                    bmp = SKBitmap.Decode(codec);
-
-                    SKImageInfo desired = new SKImageInfo(scaledWidth, scaledHeight);
-                    bmp = bmp.Resize(desired, SKFilterQuality.High);
-
-                    using (var image = SKImage.FromBitmap(bmp))
-                    {
-                        return image.Encode(imageFormat, quality);
-                    }
-                }
-                finally
-                {
-                    bmp?.Dispose();
-                    bmp = null;
-                }
-            }
+            using var image = SKImage.FromBitmap(bmp);
+            return image.Encode(imageFormat, quality);
+        }
+        finally
+        {
+            bmp?.Dispose();
+            bmp = null;
         }
     }
 }

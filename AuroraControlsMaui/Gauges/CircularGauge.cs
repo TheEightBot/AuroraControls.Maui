@@ -118,53 +118,51 @@ public class CircularGauge : AuroraViewBase
     {
         var canvas = surface.Canvas;
 
-        using (var progressPaint = new SKPaint())
-        using (var progressPath = new SKPath())
-        using (var progressBackgroundPaint = new SKPaint())
-        using (var backgroundProgressPath = new SKPath())
+        using var progressPaint = new SKPaint();
+        using var progressPath = new SKPath();
+        using var progressBackgroundPaint = new SKPaint();
+        using var backgroundProgressPath = new SKPath();
+        progressPaint.IsAntialias = true;
+
+        switch (this.EndCapType)
         {
-            progressPaint.IsAntialias = true;
+            case EndCapType.Square:
+                progressPaint.StrokeCap = SKStrokeCap.Butt;
+                break;
+            case EndCapType.Rounded:
+                progressPaint.StrokeCap = SKStrokeCap.Round;
+                break;
+        }
 
-            switch (EndCapType)
-            {
-                case EndCapType.Square:
-                    progressPaint.StrokeCap = SKStrokeCap.Butt;
-                    break;
-                case EndCapType.Rounded:
-                    progressPaint.StrokeCap = SKStrokeCap.Round;
-                    break;
-            }
+        float progressThickness = (float)this.ProgressThickness * _scale;
 
-            float progressThickness = (float)ProgressThickness * _scale;
+        progressPaint.Style = SKPaintStyle.Stroke;
+        progressPaint.Color = this.ProgressColor.ToSKColor();
+        progressPaint.StrokeWidth = progressThickness;
 
-            progressPaint.Style = SKPaintStyle.Stroke;
-            progressPaint.Color = ProgressColor.ToSKColor();
-            progressPaint.StrokeWidth = progressThickness;
+        progressBackgroundPaint.IsAntialias = true;
+        progressBackgroundPaint.Style = SKPaintStyle.Stroke;
+        progressBackgroundPaint.Color = this.ProgressBackgroundColor.ToSKColor();
+        progressBackgroundPaint.StrokeWidth = progressThickness;
 
-            progressBackgroundPaint.IsAntialias = true;
-            progressBackgroundPaint.Style = SKPaintStyle.Stroke;
-            progressBackgroundPaint.Color = ProgressBackgroundColor.ToSKColor();
-            progressBackgroundPaint.StrokeWidth = progressThickness;
+        float size = Math.Min(info.Width, info.Height) - progressThickness;
 
-            float size = Math.Min(info.Width, info.Height) - progressThickness;
+        float left = (info.Width - size) / 2f;
+        float top = (info.Height - size) / 2f;
+        float right = left + size;
+        float bottom = top + size;
 
-            float left = (info.Width - size) / 2f;
-            float top = (info.Height - size) / 2f;
-            float right = left + size;
-            float bottom = top + size;
+        var arcRect = new SKRect(left, top, right, bottom);
 
-            var arcRect = new SKRect(left, top, right, bottom);
+        backgroundProgressPath.AddArc(arcRect, 0, 360);
+        progressPath.AddArc(arcRect, (float)this.StartingDegree, (float)this.EndingDegree);
 
-            backgroundProgressPath.AddArc(arcRect, 0, 360);
-            progressPath.AddArc(arcRect, (float)StartingDegree, (float)EndingDegree);
+        canvas.Clear();
+        canvas.DrawPath(backgroundProgressPath, progressBackgroundPaint);
 
-            canvas.Clear();
-            canvas.DrawPath(backgroundProgressPath, progressBackgroundPaint);
-
-            if (StartingDegree != EndingDegree)
-            {
-                canvas.DrawPath(progressPath, progressPaint);
-            }
+        if (this.StartingDegree != this.EndingDegree)
+        {
+            canvas.DrawPath(progressPath, progressPaint);
         }
     }
 

@@ -503,7 +503,7 @@ public class CalendarView : AuroraViewBase
             return;
         }
 
-        this._currentCalendarNeedsRebuild = true;
+        _currentCalendarNeedsRebuild = true;
         this?.InvalidateSurface();
     }
 
@@ -531,7 +531,7 @@ public class CalendarView : AuroraViewBase
         var currentCultureDateFormat = CultureInfo.CurrentUICulture.DateTimeFormat;
 
         string[] daysOfWeekNames =
-            this._daysOfWeekNames
+            _daysOfWeekNames
                 .Select(
                     dayOfWeek =>
                     {
@@ -603,12 +603,12 @@ public class CalendarView : AuroraViewBase
             columnPosition = startingDayOfWeek,
             rowPosition = 1;
 
-        if (this._currentCalendarNeedsRebuild)
+        if (_currentCalendarNeedsRebuild)
         {
-            this._currentCalendarNeedsRebuild = false;
+            _currentCalendarNeedsRebuild = false;
 
-            this._rowSize = rowSize;
-            this._columnSize = columnSize;
+            _rowSize = rowSize;
+            _columnSize = columnSize;
 
             int rowIncrementer = 0;
             int columnIncrementer = 0;
@@ -617,7 +617,7 @@ public class CalendarView : AuroraViewBase
                 float rowLocation = dayHeaderHeight + (rowIncrementer * rowSize);
                 float columnLocation = columnIncrementer * columnSize;
 
-                var cellInfo = this._dateContainers?.ElementAtOrDefault(currIndex);
+                var cellInfo = _dateContainers?.ElementAtOrDefault(currIndex);
 
                 if (cellInfo != null)
                 {
@@ -625,12 +625,12 @@ public class CalendarView : AuroraViewBase
                                          currIndex < daysInMonth + startingDayOfWeek - 1;
                     cellInfo.Location = new SKRect(columnLocation, rowLocation, columnLocation + columnSize,
                         rowLocation + rowSize);
-                    cellInfo.Selected = this._dateContainers?.ElementAt(currIndex)?.Selected ?? false;
+                    cellInfo.Selected = _dateContainers?.ElementAt(currIndex)?.Selected ?? false;
 
                     if (cellInfo.Available)
                     {
                         var date = new DateTime(currentYear, currentMonth, currIndex - startingDayOfWeek + 2).Date;
-                        cellInfo.Selected = this._selectedDates.Contains(date);
+                        cellInfo.Selected = _selectedDates.Contains(date);
                     }
                     else
                     {
@@ -650,282 +650,272 @@ public class CalendarView : AuroraViewBase
 
         canvas.Clear();
 
-        using (var unavailablePaint = new SKPaint())
-        using (var availablePaint = new SKPaint())
-        using (var selectedPaint = new SKPaint())
-        using (var separatorPaint = new SKPaint())
-        using (var fontPaint = new SKPaint())
-        using (var calendarEventPaint = new SKPaint())
-        using (var dateBackgroundPaint = new SKPaint())
-        using (var eventTextPaint = new SKPaint())
+        using var unavailablePaint = new SKPaint();
+        using var availablePaint = new SKPaint();
+        using var selectedPaint = new SKPaint();
+        using var separatorPaint = new SKPaint();
+        using var fontPaint = new SKPaint();
+        using var calendarEventPaint = new SKPaint();
+        using var dateBackgroundPaint = new SKPaint();
+        using var eventTextPaint = new SKPaint();
+        fontPaint.Color = this.DateColor.ToSKColor();
+        fontPaint.TextSize = minSize * .5f;
+        fontPaint.Typeface = PlatformInfo.DefaultTypeface;
+        fontPaint.IsAntialias = true;
+        fontPaint.LcdRenderText = true;
+        fontPaint.SubpixelText = true;
+
+        eventTextPaint.Typeface = PlatformInfo.DefaultTypeface;
+        eventTextPaint.IsAntialias = true;
+        eventTextPaint.TextAlign = SKTextAlign.Center;
+        eventTextPaint.LcdRenderText = true;
+        eventTextPaint.SubpixelText = true;
+
+        availablePaint.Color = this.AvailableDateColor.ToSKColor();
+        unavailablePaint.Color = this.UnavailableDateColor.ToSKColor();
+
+        selectedPaint.Color = this.SelectedDateColor.ToSKColor();
+        selectedPaint.IsAntialias = true;
+
+        calendarEventPaint.IsAntialias = true;
+
+        separatorPaint.Color = this.SeparatorColor.ToSKColor();
+
+        dateBackgroundPaint.Color = this.DateBackgroundColor.ToSKColor();
+
+        dateFontPaint.Color = this.HeaderTextColor.ToSKColor();
+
+        for (int index = 0; index < _daysOfWeekNames.Count; index++)
         {
-            fontPaint.Color = this.DateColor.ToSKColor();
-            fontPaint.TextSize = minSize * .5f;
-            fontPaint.Typeface = PlatformInfo.DefaultTypeface;
-            fontPaint.IsAntialias = true;
-            fontPaint.LcdRenderText = true;
-            fontPaint.SubpixelText = true;
+            canvas.DrawRect(
+                new SKRect(index * columnSize, 0f, (index * columnSize) + columnSize, dayHeaderHeight),
+                dateBackgroundPaint);
+            canvas.DrawText(
+                daysOfWeekNames[index],
+                (index * columnSize) + (columnSize * .5f),
+                dateFontPaint.FontMetrics.CapHeight + ((dayHeaderHeight - dateFontPaint.FontMetrics.CapHeight) * .5f),
+                dateFontPaint);
+        }
 
-            eventTextPaint.Typeface = PlatformInfo.DefaultTypeface;
-            eventTextPaint.IsAntialias = true;
-            eventTextPaint.TextAlign = SKTextAlign.Center;
-            eventTextPaint.LcdRenderText = true;
-            eventTextPaint.SubpixelText = true;
+        dateFontPaint.Color = dateFontPaintColor;
 
-            availablePaint.Color = this.AvailableDateColor.ToSKColor();
-            unavailablePaint.Color = this.UnavailableDateColor.ToSKColor();
+        for (int i = 0; i < _dateContainers.Count; i++)
+        {
+            var dateContainer = _dateContainers?.ElementAtOrDefault(i);
 
-            selectedPaint.Color = this.SelectedDateColor.ToSKColor();
-            selectedPaint.IsAntialias = true;
-
-            calendarEventPaint.IsAntialias = true;
-
-            separatorPaint.Color = this.SeparatorColor.ToSKColor();
-
-            dateBackgroundPaint.Color = this.DateBackgroundColor.ToSKColor();
-
-            dateFontPaint.Color = this.HeaderTextColor.ToSKColor();
-
-            for (int index = 0; index < this._daysOfWeekNames.Count; index++)
+            if (dateContainer != null)
             {
-                canvas.DrawRect(
-                    new SKRect(index * columnSize, 0f, (index * columnSize) + columnSize, dayHeaderHeight),
-                    dateBackgroundPaint);
-                canvas.DrawText(
-                    daysOfWeekNames[index],
-                    (index * columnSize) + (columnSize * .5f),
-                    dateFontPaint.FontMetrics.CapHeight + ((dayHeaderHeight - dateFontPaint.FontMetrics.CapHeight) * .5f),
-                    dateFontPaint);
-            }
-
-            dateFontPaint.Color = dateFontPaintColor;
-
-            for (int i = 0; i < this._dateContainers.Count; i++)
-            {
-                var dateContainer = this._dateContainers?.ElementAtOrDefault(i);
-
-                if (dateContainer != null)
+                if (!dateContainer.Available)
                 {
-                    if (!dateContainer.Available)
+                    canvas.DrawRect(dateContainer.Location, unavailablePaint);
+                }
+                else if (dateContainer.Available && !dateContainer.Selected)
+                {
+                    canvas.DrawRect(dateContainer.Location, availablePaint);
+                }
+                else
+                {
+                    canvas.DrawRect(dateContainer.Location, availablePaint);
+
+                    bool previousContainerSelected =
+                        _dateContainers?.ElementAtOrDefault(i - 1)?.Selected ?? false;
+                    bool nextContainerSelected = _dateContainers?.ElementAtOrDefault(i + 1)?.Selected ?? false;
+
+                    if (previousContainerSelected && nextContainerSelected)
                     {
-                        canvas.DrawRect(dateContainer.Location, unavailablePaint);
+                        canvas.DrawRect(
+                            new SKRect(
+                                dateContainer.Location.Left,
+                                dateContainer.Location.MidY - halfSelectionSize,
+                                dateContainer.Location.Right,
+                                dateContainer.Location.MidY + halfSelectionSize),
+                            selectedPaint);
                     }
-                    else if (dateContainer.Available && !dateContainer.Selected)
+                    else if (previousContainerSelected)
                     {
-                        canvas.DrawRect(dateContainer.Location, availablePaint);
+                        using var selectionCircle = new SKPath();
+                        using var selectionRect = new SKPath();
+                        selectionCircle.AddCircle(dateContainer.Location.MidX, dateContainer.Location.MidY,
+                            halfSelectionSize);
+                        selectionRect.AddRect(new SKRect(
+                            dateContainer.Location.Left,
+                            dateContainer.Location.MidY - halfSelectionSize,
+                            dateContainer.Location.Right - (dateContainer.Location.Width * .5f),
+                            dateContainer.Location.MidY + halfSelectionSize));
+
+                        using var selectionBackground = selectionRect.Op(selectionCircle, SKPathOp.Union);
+                        canvas.DrawPath(selectionBackground, selectedPaint);
+                    }
+                    else if (nextContainerSelected)
+                    {
+                        using var selectionCircle = new SKPath();
+                        using var selectionRect = new SKPath();
+                        selectionCircle.AddCircle(dateContainer.Location.MidX, dateContainer.Location.MidY,
+                            halfSelectionSize);
+                        selectionRect.AddRect(new SKRect(
+                            dateContainer.Location.Left + (dateContainer.Location.Width * .5f),
+                            dateContainer.Location.MidY - halfSelectionSize,
+                            dateContainer.Location.Right,
+                            dateContainer.Location.MidY + halfSelectionSize));
+
+                        using var selectionBackground = selectionRect.Op(selectionCircle, SKPathOp.Union);
+                        canvas.DrawPath(selectionBackground, selectedPaint);
                     }
                     else
                     {
-                        canvas.DrawRect(dateContainer.Location, availablePaint);
-
-                        bool previousContainerSelected =
-                            this._dateContainers?.ElementAtOrDefault(i - 1)?.Selected ?? false;
-                        bool nextContainerSelected = this._dateContainers?.ElementAtOrDefault(i + 1)?.Selected ?? false;
-
-                        if (previousContainerSelected && nextContainerSelected)
-                        {
-                            canvas.DrawRect(
-                                new SKRect(
-                                    dateContainer.Location.Left,
-                                    dateContainer.Location.MidY - halfSelectionSize,
-                                    dateContainer.Location.Right,
-                                    dateContainer.Location.MidY + halfSelectionSize),
-                                selectedPaint);
-                        }
-                        else if (previousContainerSelected)
-                        {
-                            using (var selectionCircle = new SKPath())
-                            using (var selectionRect = new SKPath())
-                            {
-                                selectionCircle.AddCircle(dateContainer.Location.MidX, dateContainer.Location.MidY,
-                                    halfSelectionSize);
-                                selectionRect.AddRect(new SKRect(
-                                    dateContainer.Location.Left,
-                                    dateContainer.Location.MidY - halfSelectionSize,
-                                    dateContainer.Location.Right - (dateContainer.Location.Width * .5f),
-                                    dateContainer.Location.MidY + halfSelectionSize));
-
-                                using (var selectionBackground = selectionRect.Op(selectionCircle, SKPathOp.Union))
-                                {
-                                    canvas.DrawPath(selectionBackground, selectedPaint);
-                                }
-                            }
-                        }
-                        else if (nextContainerSelected)
-                        {
-                            using (var selectionCircle = new SKPath())
-                            using (var selectionRect = new SKPath())
-                            {
-                                selectionCircle.AddCircle(dateContainer.Location.MidX, dateContainer.Location.MidY,
-                                    halfSelectionSize);
-                                selectionRect.AddRect(new SKRect(
-                                    dateContainer.Location.Left + (dateContainer.Location.Width * .5f),
-                                    dateContainer.Location.MidY - halfSelectionSize,
-                                    dateContainer.Location.Right,
-                                    dateContainer.Location.MidY + halfSelectionSize));
-
-                                using (var selectionBackground = selectionRect.Op(selectionCircle, SKPathOp.Union))
-                                {
-                                    canvas.DrawPath(selectionBackground, selectedPaint);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            canvas.DrawCircle(dateContainer.Location.MidX, dateContainer.Location.MidY,
-                                halfSelectionSize, selectedPaint);
-                        }
+                        canvas.DrawCircle(dateContainer.Location.MidX, dateContainer.Location.MidY,
+                            halfSelectionSize, selectedPaint);
                     }
                 }
             }
+        }
 
-            for (int i = 1; i < Columns; i++)
+        for (int i = 1; i < Columns; i++)
+        {
+            float columnLocation = i * columnSize;
+            canvas.DrawLine(columnLocation, dayHeaderHeight, columnLocation, info.Height, separatorPaint);
+        }
+
+        for (int i = 1; i < Rows; i++)
+        {
+            float rowLocation = dayHeaderHeight + (i * rowSize);
+            canvas.DrawLine(0, rowLocation, info.Width, rowLocation, separatorPaint);
+        }
+
+        float verticalPadding = 8f;
+        float horizontalPadding = 10f;
+
+        while (dayOfMonth <= daysInMonth)
+        {
+            string dayOfMonthText = dayOfMonth.ToString();
+
+            float columnPlacement = columnPosition * columnSize;
+            float rowPlacement = rowPosition * rowSize;
+
+            switch (this.CalendarDayDisplayLocation)
             {
-                float columnLocation = i * columnSize;
-                canvas.DrawLine(columnLocation, dayHeaderHeight, columnLocation, info.Height, separatorPaint);
+                case CalendarDayDisplayLocationType.UpperRight:
+                    fontPaint.TextSize = minSize * .25f;
+                    fontPaint.TextAlign = SKTextAlign.Left;
+                    fontPaint.Color = dateFontPaintColor;
+                    var measured = canvas.TextSize(dayOfMonthText, fontPaint);
+                    float fontXUpperRightPlacement = columnPlacement - (float)measured.Width - horizontalPadding;
+                    float fontYUpperRightPlacement = -rowSize - fontPaint.FontMetrics.Ascent + verticalPadding;
+                    canvas.DrawText(dayOfMonthText, fontXUpperRightPlacement, dayHeaderHeight + rowPlacement + fontYUpperRightPlacement, fontPaint);
+                    break;
+                case CalendarDayDisplayLocationType.Centered:
+                default:
+                    fontPaint.TextSize = minSize * .5f;
+                    fontPaint.TextAlign = SKTextAlign.Center;
+                    fontPaint.Color = _dateContainers[currentPosition - 1].Selected
+                        ? selectedDateFontPaintColor
+                        : dateFontPaintColor;
+                    float fontXCenteredPlacement = columnSize * .5f;
+                    float fontYCenteredPlacement = (rowSize - fontPaint.FontMetrics.CapHeight) * .5f;
+                    canvas.DrawText(dayOfMonthText, columnPlacement - fontXCenteredPlacement,
+                        dayHeaderHeight + rowPlacement - fontYCenteredPlacement, fontPaint);
+                    break;
             }
 
-            for (int i = 1; i < Rows; i++)
+            var currentDate = new DateTime(currentYear, currentMonth, dayOfMonth);
+            var calendarEventsForDay = this.Events.Where(x => x.EventDate.Date.Equals(currentDate)).ToList();
+
+            if (calendarEventsForDay?.Any() ?? false)
             {
-                float rowLocation = dayHeaderHeight + (i * rowSize);
-                canvas.DrawLine(0, rowLocation, info.Width, rowLocation, separatorPaint);
-            }
+                var largeEvent = calendarEventsForDay.FirstOrDefault(x =>
+                    x.CalendarEventDisplay == CalendarEventDisplayType.LargeEvent);
 
-            float verticalPadding = 8f;
-            float horizontalPadding = 10f;
-
-            while (dayOfMonth <= daysInMonth)
-            {
-                string dayOfMonthText = dayOfMonth.ToString();
-
-                float columnPlacement = columnPosition * columnSize;
-                float rowPlacement = rowPosition * rowSize;
-
-                switch (this.CalendarDayDisplayLocation)
+                if (largeEvent != null)
                 {
-                    case CalendarDayDisplayLocationType.UpperRight:
-                        fontPaint.TextSize = minSize * .25f;
-                        fontPaint.TextAlign = SKTextAlign.Left;
-                        fontPaint.Color = dateFontPaintColor;
-                        var measured = canvas.TextSize(dayOfMonthText, fontPaint);
-                        float fontXUpperRightPlacement = columnPlacement - (float)measured.Width - horizontalPadding;
-                        float fontYUpperRightPlacement = -rowSize - fontPaint.FontMetrics.Ascent + verticalPadding;
-                        canvas.DrawText(dayOfMonthText, fontXUpperRightPlacement, dayHeaderHeight + rowPlacement + fontYUpperRightPlacement, fontPaint);
-                        break;
-                    case CalendarDayDisplayLocationType.Centered:
-                    default:
-                        fontPaint.TextSize = minSize * .5f;
-                        fontPaint.TextAlign = SKTextAlign.Center;
-                        fontPaint.Color = this._dateContainers[currentPosition - 1].Selected
-                            ? selectedDateFontPaintColor
-                            : dateFontPaintColor;
-                        float fontXCenteredPlacement = columnSize * .5f;
-                        float fontYCenteredPlacement = (rowSize - fontPaint.FontMetrics.CapHeight) * .5f;
-                        canvas.DrawText(dayOfMonthText, columnPlacement - fontXCenteredPlacement,
-                            dayHeaderHeight + rowPlacement - fontYCenteredPlacement, fontPaint);
-                        break;
-                }
+                    calendarEventPaint.Color = largeEvent.Color != default(Color)
+                        ? largeEvent.Color.ToSKColor()
+                        : SKColors.Transparent;
 
-                var currentDate = new DateTime(currentYear, currentMonth, dayOfMonth);
-                var calendarEventsForDay = this.Events.Where(x => x.EventDate.Date.Equals(currentDate)).ToList();
+                    // We basically have to force it to this size to make it work right
+                    dateFontPaint.TextSize = minSize * .25f;
+                    float circleSize = Math.Abs(dateFontPaint.FontMetrics.Ascent) * .5f;
 
-                if (calendarEventsForDay?.Any() ?? false)
-                {
-                    var largeEvent = calendarEventsForDay.FirstOrDefault(x =>
-                        x.CalendarEventDisplay == CalendarEventDisplayType.LargeEvent);
+                    canvas.DrawCircle(
+                        columnPlacement - columnSize + circleSize + verticalPadding,
+                        dayHeaderHeight + rowPlacement - rowSize + circleSize + horizontalPadding,
+                        circleSize, calendarEventPaint);
 
-                    if (largeEvent != null)
+                    if (!string.IsNullOrEmpty(largeEvent.DisplayText))
                     {
-                        calendarEventPaint.Color = largeEvent.Color != default(Color)
-                            ? largeEvent.Color.ToSKColor()
-                            : SKColors.Transparent;
+                        eventTextPaint.Color = largeEvent.TextColor.ToSKColor();
+                        eventTextPaint.TextSize = dateFontPaint.TextSize * .8f;
 
-                        // We basically have to force it to this size to make it work right
-                        dateFontPaint.TextSize = minSize * .25f;
-                        float circleSize = Math.Abs(dateFontPaint.FontMetrics.Ascent) * .5f;
+                        bool fontSizeGood = false;
 
+                        float x = columnPlacement - columnSize + (columnSize * .5f);
+                        float y = dayHeaderHeight + rowPlacement - rowSize + (circleSize * 2f) + verticalPadding;
+                        float yAvailable = rowSize - (circleSize * 2f) - (verticalPadding * 2f);
+
+                        Size textSize = Size.Zero;
+
+                        while (!fontSizeGood)
+                        {
+                            textSize = canvas.TextSize(largeEvent.DisplayText, eventTextPaint);
+
+                            if (textSize.Width <= columnSize - (horizontalPadding * 2f) &&
+                                textSize.Height <= yAvailable)
+                            {
+                                fontSizeGood = true;
+                                break;
+                            }
+
+                            eventTextPaint.TextSize = eventTextPaint.TextSize - .5f;
+                        }
+
+                        canvas.DrawMultiLineText(
+                            largeEvent.DisplayText,
+                            x, y + verticalPadding + ((yAvailable - (float)textSize.Height) * .5f),
+                            eventTextPaint);
+                    }
+                }
+                else
+                {
+                    int count = calendarEventsForDay.Count;
+
+                    float fontYPlacement = (rowSize - fontPaint.FontMetrics.CapHeight) * .5f;
+
+                    float standardEventSize = fontYPlacement * .25f;
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        var calendarEvent = calendarEventsForDay[i];
+                        calendarEventPaint.Color = calendarEvent.Color != default(Color)
+                            ? calendarEvent.Color.ToSKColor()
+                            : SKColors.OrangeRed;
+                        float columnOffset = columnSize * ((i + 1f) / (count + 1));
                         canvas.DrawCircle(
-                            columnPlacement - columnSize + circleSize + verticalPadding,
-                            dayHeaderHeight + rowPlacement - rowSize + circleSize + horizontalPadding,
-                            circleSize, calendarEventPaint);
+                            columnPlacement - columnOffset,
+                            dayHeaderHeight + rowPlacement - (fontYPlacement * .5f), standardEventSize,
+                            calendarEventPaint);
 
-                        if (!string.IsNullOrEmpty(largeEvent.DisplayText))
+                        if (!string.IsNullOrEmpty(calendarEvent.DisplayText))
                         {
-                            eventTextPaint.Color = largeEvent.TextColor.ToSKColor();
-                            eventTextPaint.TextSize = dateFontPaint.TextSize * .8f;
-
-                            bool fontSizeGood = false;
-
-                            float x = columnPlacement - columnSize + (columnSize * .5f);
-                            float y = dayHeaderHeight + rowPlacement - rowSize + (circleSize * 2f) + verticalPadding;
-                            float yAvailable = rowSize - (circleSize * 2f) - (verticalPadding * 2f);
-
-                            Size textSize = Size.Zero;
-
-                            while (!fontSizeGood)
-                            {
-                                textSize = canvas.TextSize(largeEvent.DisplayText, eventTextPaint);
-
-                                if (textSize.Width <= columnSize - (horizontalPadding * 2f) &&
-                                    textSize.Height <= yAvailable)
-                                {
-                                    fontSizeGood = true;
-                                    break;
-                                }
-
-                                eventTextPaint.TextSize = eventTextPaint.TextSize - .5f;
-                            }
-
-                            canvas.DrawMultiLineText(
-                                largeEvent.DisplayText,
-                                x, y + verticalPadding + ((yAvailable - (float)textSize.Height) * .5f),
-                                eventTextPaint);
-                        }
-                    }
-                    else
-                    {
-                        int count = calendarEventsForDay.Count;
-
-                        float fontYPlacement = (rowSize - fontPaint.FontMetrics.CapHeight) * .5f;
-
-                        float standardEventSize = fontYPlacement * .25f;
-
-                        for (int i = 0; i < count; i++)
-                        {
-                            var calendarEvent = calendarEventsForDay[i];
-                            calendarEventPaint.Color = calendarEvent.Color != default(Color)
-                                ? calendarEvent.Color.ToSKColor()
-                                : SKColors.OrangeRed;
-                            float columnOffset = columnSize * ((i + 1f) / (count + 1));
-                            canvas.DrawCircle(
-                                columnPlacement - columnOffset,
-                                dayHeaderHeight + rowPlacement - (fontYPlacement * .5f), standardEventSize,
-                                calendarEventPaint);
-
-                            if (!string.IsNullOrEmpty(calendarEvent.DisplayText))
-                            {
-                                eventTextPaint.Color = calendarEvent.TextColor.ToSKColor();
-                                eventTextPaint.TextSize = standardEventSize;
-                                canvas
-                                    .DrawText(
-                                        calendarEvent.DisplayText,
-                                        columnPlacement - columnOffset,
-                                        dayHeaderHeight + rowPlacement + (eventTextPaint.FontMetrics.XHeight * .5f) - (fontYPlacement * .5f),
-                                        eventTextPaint);
-                            }
+                            eventTextPaint.Color = calendarEvent.TextColor.ToSKColor();
+                            eventTextPaint.TextSize = standardEventSize;
+                            canvas
+                                .DrawText(
+                                    calendarEvent.DisplayText,
+                                    columnPlacement - columnOffset,
+                                    dayHeaderHeight + rowPlacement + (eventTextPaint.FontMetrics.XHeight * .5f) - (fontYPlacement * .5f),
+                                    eventTextPaint);
                         }
                     }
                 }
+            }
 
-                dayOfMonth++;
-                currentPosition++;
-                columnPosition++;
+            dayOfMonth++;
+            currentPosition++;
+            columnPosition++;
 
-                if (columnPosition > 7)
-                {
-                    columnPosition = 1;
-                    rowPosition++;
-                }
+            if (columnPosition > 7)
+            {
+                columnPosition = 1;
+                rowPosition++;
             }
         }
     }
@@ -974,7 +964,7 @@ public class CalendarView : AuroraViewBase
                     var comparisonDate = new DateTime(CurrentYear, CurrentMonth, i - startingDayOfWeek + 2).Date;
                     var foundItem = _selectedDates.FirstOrDefault(x => x.Date == comparisonDate);
 
-                    if (foundItem != default(DateTime))
+                    if (foundItem != default)
                     {
                         _selectedDates.Remove(foundItem);
                     }
@@ -1048,11 +1038,11 @@ public class CalendarView : AuroraViewBase
                                         currIndex - startingDayOfWeek + 2).Date;
                                     var foundItem = _selectedDates.FirstOrDefault(x => x.Date == comparisonDate);
 
-                                    if (foundItem != default(DateTime) && !_wasSelected)
+                                    if (foundItem != default && !_wasSelected)
                                     {
                                         _selectedDates.Remove(foundItem);
                                     }
-                                    else if (foundItem == default(DateTime) && _wasSelected)
+                                    else if (foundItem == default && _wasSelected)
                                     {
                                         _selectedDates.Add(comparisonDate);
                                     }
@@ -1072,11 +1062,13 @@ public class CalendarView : AuroraViewBase
             _pressedIndex = null;
         }
 
-        if (updatedContainers)
+        if (!updatedContainers)
         {
-            base.OnPropertyChanged(SelectedDatesProperty.PropertyName);
-            this.InvalidateSurface();
+            return;
         }
+
+        base.OnPropertyChanged(SelectedDatesProperty.PropertyName);
+        this.InvalidateSurface();
     }
 
     /// <summary>
@@ -1095,13 +1087,13 @@ public class CalendarView : AuroraViewBase
                 case NotifyCollectionChangedAction.Add:
                     if (SelectionType == CalendarSelectionType.Single)
                     {
-                        Device.BeginInvokeOnMainThread(() =>
+                        MainThread.BeginInvokeOnMainThread(() =>
                         {
                             for (int i = SelectedDates.Count - 1; i >= 0; i--)
                             {
                                 if (i != e.NewStartingIndex)
                                 {
-                                    this._selectedDates.RemoveAt(i);
+                                    _selectedDates.RemoveAt(i);
                                 }
                             }
                         });
@@ -1161,7 +1153,7 @@ public class CalendarEvent : BindableObject
     }
 
     public static readonly BindableProperty DisplayTextProperty =
-        BindableProperty.Create(nameof(DisplayText), typeof(string), typeof(CalendarEvent), default(string));
+        BindableProperty.Create(nameof(DisplayText), typeof(string), typeof(CalendarEvent));
 
     public string DisplayText
     {

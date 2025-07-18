@@ -191,7 +191,7 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 Placeholder = "Nullable Date Picker",
                                 Content =
                                     new CalendarPicker()
-                                        .Assign(out this._calendarPicker),
+                                        .Assign(out _calendarPicker),
                             },
                             new Button { Text = "Clear Nullable Date Picker", }
                                 .Assign(out _clearNullableDatePicker),
@@ -512,13 +512,13 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                     },
             };
 
-        this._clearNullableDatePicker.Clicked +=
-            (sender, args) => { this._calendarPicker.Date = null; };
+        _clearNullableDatePicker.Clicked +=
+            (sender, args) => { _calendarPicker.Date = null; };
 
-        this._svgImageViewTapped.Clicked +=
+        _svgImageViewTapped.Clicked +=
             (sender, args) =>
             {
-                this._svgImageView.VisualEffects.Clear();
+                _svgImageView.VisualEffects.Clear();
 
                 var rngesus = new Random(Guid.NewGuid().GetHashCode());
 

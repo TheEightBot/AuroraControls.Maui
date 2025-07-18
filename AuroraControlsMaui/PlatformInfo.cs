@@ -22,7 +22,7 @@ public static class PlatformInfo
 
     private static string _iconCacheDirectory;
 
-    private static Rect _unknownLocation = new Rect(-1d, -1d, -1d, -1d);
+    private static Rect _unknownLocation = new(-1d, -1d, -1d, -1d);
 
     public static void Init()
     {
@@ -77,7 +77,7 @@ public static class PlatformInfo
             _defaultTypeface = SKTypeface.CreateDefault();
 #elif IOS || MACCATALYST
 
-            using var fontFamily = UIKit.UIFont.SystemFontOfSize(UIKit.UIFont.ButtonFontSize);
+            using var fontFamily = UIFont.SystemFontOfSize(UIFont.ButtonFontSize);
             _defaultTypeface = SKTypeface.FromFamilyName(fontFamily.FamilyName, SKFontStyleWeight.Normal, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
 #endif
             return _defaultTypeface;

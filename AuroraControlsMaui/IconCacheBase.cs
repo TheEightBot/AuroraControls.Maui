@@ -10,11 +10,11 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
     private readonly char[] _invalidFilenameChars;
 
-    private readonly SemaphoreSlim _iconLock = new SemaphoreSlim(1, 1);
+    private readonly SemaphoreSlim _iconLock = new(1, 1);
 
-    private readonly Dictionary<string, string> _resolvedIcons = new Dictionary<string, string>();
+    private readonly Dictionary<string, string> _resolvedIcons = new();
 
-    private readonly SKPaint _paint = new SKPaint { BlendMode = SKBlendMode.SrcATop, Style = SKPaintStyle.Fill };
+    private readonly SKPaint _paint = new() { BlendMode = SKBlendMode.SrcATop, Style = SKPaintStyle.Fill };
 
     private readonly float _platformScalingFactor;
 
@@ -24,7 +24,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
     public IconCacheBase()
     {
-        _invalidFilenameChars = System.IO.Path.GetInvalidFileNameChars();
+        _invalidFilenameChars = Path.GetInvalidFileNameChars();
         _platformScalingFactor = (float)PlatformInfo.ScalingFactor;
     }
 
@@ -134,7 +134,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
             return null;
         }
 
-        string filePath = System.IO.Path.Combine(PlatformInfo.IconCacheDirectory, key);
+        string filePath = Path.Combine(PlatformInfo.IconCacheDirectory, key);
 
         if (!File.Exists(filePath))
         {
@@ -154,11 +154,9 @@ public abstract class IconCacheBase : IIconCache, IDisposable
     {
         Directory.CreateDirectory(PlatformInfo.IconCacheDirectory);
 
-        using (var file = File.OpenWrite(Path.Combine(PlatformInfo.IconCacheDirectory, key)))
-        {
-            await imageStream.CopyToAsync(file).ConfigureAwait(false);
-            await file.FlushAsync().ConfigureAwait(false);
-        }
+        using var file = File.OpenWrite(Path.Combine(PlatformInfo.IconCacheDirectory, key));
+        await imageStream.CopyToAsync(file).ConfigureAwait(false);
+        await file.FlushAsync().ConfigureAwait(false);
     }
 
     private async Task GenerateImageFromEmbedded(string key, string svgName, Size size, Color? colorOverride = null)
@@ -236,7 +234,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         SKRect resize;
         SKMatrix scaleMatrix = SKMatrix.Identity;
 
-        if (size != default(Size) && skSvg.Picture?.CullRect != default)
+        if (size != default && skSvg.Picture?.CullRect != default)
         {
             var svgRect = skSvg.Picture!.CullRect;
 
@@ -278,7 +276,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
         canvas.Clear(SKColors.Transparent);
 
-        if (size != default(Size) && !scaleMatrix.IsIdentity)
+        if (size != default && !scaleMatrix.IsIdentity)
         {
             canvas.SetMatrix(scaleMatrix);
         }
@@ -353,11 +351,11 @@ public abstract class IconCacheBase : IIconCache, IDisposable
             return;
         }
 
-        this._iconLock?.Dispose();
-        this._colorspace.Dispose();
-        this._paint.Dispose();
+        _iconLock?.Dispose();
+        _colorspace.Dispose();
+        _paint.Dispose();
 
-        this._disposedValue = true;
+        _disposedValue = true;
     }
 
     public void Dispose()

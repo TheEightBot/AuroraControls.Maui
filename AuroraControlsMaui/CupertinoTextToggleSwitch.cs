@@ -10,7 +10,7 @@ namespace AuroraControls;
 public class CupertinoTextToggleSwitch : AuroraViewBase
 #pragma warning restore CA1001 // Types that own disposable fields should be disposable
 {
-    private readonly SKPath _backgroundPath = new SKPath();
+    private readonly SKPath _backgroundPath = new();
     private readonly string _animateToggleAnimationName;
 
     private float _calculatedWidth;
@@ -113,7 +113,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The command property. Fires on tap.
     /// </summary>
     public static readonly BindableProperty CommandProperty =
-        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(CupertinoTextToggleSwitch), default(ICommand));
+        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(CupertinoTextToggleSwitch));
 
     /// <summary>
     /// The toggle maximum width property.
@@ -153,7 +153,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The text on the toggle switch.
     /// </summary>
     public static readonly BindableProperty EnabledTextProperty =
-        BindableProperty.Create(nameof(EnabledText), typeof(string), typeof(CupertinoTextToggleSwitch), default(string),
+        BindableProperty.Create(nameof(EnabledText), typeof(string), typeof(CupertinoTextToggleSwitch),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -170,7 +170,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The text on the toggle switch.
     /// </summary>
     public static readonly BindableProperty DisabledTextProperty =
-        BindableProperty.Create(nameof(DisabledText), typeof(string), typeof(CupertinoTextToggleSwitch), default(string),
+        BindableProperty.Create(nameof(DisabledText), typeof(string), typeof(CupertinoTextToggleSwitch),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -201,7 +201,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     }
 
     public static readonly BindableProperty EnabledFontColorProperty =
-        BindableProperty.Create(nameof(EnabledFontColor), typeof(Color), typeof(CupertinoTextToggleSwitch), default(Color),
+        BindableProperty.Create(nameof(EnabledFontColor), typeof(Color), typeof(CupertinoTextToggleSwitch),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     public Color EnabledFontColor
@@ -231,7 +231,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The typeface of the text.
     /// </summary>
     public static readonly BindableProperty TypefaceProperty =
-        BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(CupertinoTextToggleSwitch), default(SKTypeface),
+        BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(CupertinoTextToggleSwitch),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -268,7 +268,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// The command parameter property.
     /// </summary>
     public static readonly BindableProperty CommandParameterProperty =
-        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(CupertinoTextToggleSwitch), default(object));
+        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(CupertinoTextToggleSwitch));
 
     /// <summary>
     /// Gets or sets the command parameter.
@@ -360,7 +360,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
         float borderWidth = (float)BorderWidth * _scale;
 
         float thumbSize = rect.Height - (borderWidth * 2f);
-        float thumbLocation = rect.Left + borderWidth + ((rect.Width - thumbSize - (borderWidth * 2f)) * this._toggleAnimationPercentage);
+        float thumbLocation = rect.Left + borderWidth + ((rect.Width - thumbSize - (borderWidth * 2f)) * _toggleAnimationPercentage);
         var thumbRect = new SKRect(thumbLocation, rect.Top + borderWidth, thumbLocation + thumbSize, rect.Top + borderWidth + thumbSize);
         float halfThumbRectWidth = thumbRect.Width * .5f;
         var trackColor =
@@ -370,7 +370,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
 
         _backgroundPaint.IsAntialias = true;
         _backgroundPaint.Style = SKPaintStyle.Stroke;
-        _backgroundPaint.StrokeWidth = (borderWidth * 2f) + (info.Height * this._toggleAnimationPercentage);
+        _backgroundPaint.StrokeWidth = (borderWidth * 2f) + (info.Height * _toggleAnimationPercentage);
         _backgroundPaint.Color = trackColor;
 
         canvas.Clear();
@@ -494,7 +494,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
 
         if (_calculatedWidth > size.Width)
         {
-            return new Size(this._calculatedWidth, size.Height);
+            return new Size(_calculatedWidth, size.Height);
         }
 
         return size;

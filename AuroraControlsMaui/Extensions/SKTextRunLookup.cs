@@ -2,7 +2,7 @@
 
 public class SKTextRunLookup : IDisposable
 {
-    private static readonly Lazy<SKTextRunLookup> instance = new Lazy<SKTextRunLookup>(() => new SKTextRunLookup(true));
+    private static readonly Lazy<SKTextRunLookup> instance = new(() => new SKTextRunLookup(true));
 
     private readonly List<SKTextRunLookupEntry> _entries;
     private readonly bool _disposeEntries;
@@ -14,7 +14,7 @@ public class SKTextRunLookup : IDisposable
 
     public SKTextRunLookup(bool disposeEntries)
     {
-        this._disposeEntries = disposeEntries;
+        _disposeEntries = disposeEntries;
         _entries = new List<SKTextRunLookupEntry>();
     }
 

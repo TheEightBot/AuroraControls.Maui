@@ -22,7 +22,7 @@ public class SvgImageView : AuroraViewBase
     /// The name of the embedded image to display.
     /// </summary>
     public static readonly BindableProperty EmbeddedImageNameProperty =
-        BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(SvgImageView), null,
+        BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(SvgImageView),
             propertyChanged:
                 (bindable, oldValue, newValue) =>
                 {
@@ -133,7 +133,7 @@ public class SvgImageView : AuroraViewBase
         {
             float scaleAmount =
                 this.MaxImageSize == Size.Zero
-                    ? Math.Min(displayArea.Width / this._svg.Picture.CullRect.Width, displayArea.Height / this._svg.Picture.CullRect.Height)
+                    ? Math.Min(displayArea.Width / _svg.Picture.CullRect.Width, displayArea.Height / _svg.Picture.CullRect.Height)
                     : 1f;
 
             var scale = SKMatrix.CreateScale(scaleAmount, scaleAmount);

@@ -8,7 +8,7 @@ public static class RegisteredImageProcessors
     /// <summary>
     /// A static dictionary of registered Image processors and their adjacent keys.
     /// </summary>
-    private static readonly Dictionary<string, IImageProcessor> _imageProcessors = new Dictionary<string, IImageProcessor>();
+    private static readonly Dictionary<string, IImageProcessor> _imageProcessors = new();
 
     static RegisteredImageProcessors()
     {

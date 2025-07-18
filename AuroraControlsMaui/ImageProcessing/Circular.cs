@@ -19,7 +19,7 @@ public class Circular : ImageProcessingBase, IImageProcessor
     /// <param name="imageProcessor">Image processor.</param>
     public SKBitmap ProcessImage(SKBitmap processingImage, ImageProcessingBase imageProcessor)
     {
-        if (imageProcessor is not AuroraControls.ImageProcessing.Circular)
+        if (imageProcessor is not Circular)
         {
             return processingImage;
         }
@@ -39,17 +39,13 @@ public class Circular : ImageProcessingBase, IImageProcessor
 
         var rect = new SKRect(left, top, right, bottom);
 
-        using (var outer = new SKPath())
-        using (var cutout = new SKPath())
-        {
-            outer.AddRect(processingImage.Info.Rect);
-            cutout.AddOval(rect);
-            using (var finalPath = outer.Op(cutout, SKPathOp.Difference))
-            {
-                canvas.DrawPath(finalPath, paint);
-                canvas.Flush();
-            }
-        }
+        using var outer = new SKPath();
+        using var cutout = new SKPath();
+        outer.AddRect(processingImage.Info.Rect);
+        cutout.AddOval(rect);
+        using var finalPath = outer.Op(cutout, SKPathOp.Difference);
+        canvas.DrawPath(finalPath, paint);
+        canvas.Flush();
 
         return processingImage;
     }

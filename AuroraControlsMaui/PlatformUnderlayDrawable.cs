@@ -1,5 +1,7 @@
 using Microsoft.Maui.Animations;
 using Microsoft.Maui.Platform;
+using ContentView = Microsoft.Maui.Controls.ContentView;
+using IAnimatable = Microsoft.Maui.Controls.IAnimatable;
 
 #if IOS || MACCATALYST
 using CoreGraphics;
@@ -115,41 +117,41 @@ public class PlatformUnderlayDrawable : IDisposable
 
     public void OnCommandSet()
     {
-        if (this._virtualView is not IUnderlayDrawable ud)
+        if (_virtualView is not IUnderlayDrawable ud)
         {
             return;
         }
 
         if (ud.Command is not null)
         {
-            if (this._commandView is null)
+            if (_commandView is null)
             {
-                float width = this._virtualView.Width > 0d ? (float)this._virtualView.Width : 0f;
-                float height = this._virtualView.Height > 0d ? (float)this._virtualView.Height : 0f;
+                float width = _virtualView.Width > 0d ? (float)_virtualView.Width : 0f;
+                float height = _virtualView.Height > 0d ? (float)_virtualView.Height : 0f;
 
-                this._commandView =
+                _commandView =
                     new UIView
                     {
                         BackgroundColor = UIColor.Clear,
                         UserInteractionEnabled = true,
                         Frame = new CGRect(0f, 0f, width, height),
                     };
-                this._commandView.AddGestureRecognizer(
-                    this._commandViewTapped = new UITapGestureRecognizer(() =>
+                _commandView.AddGestureRecognizer(
+                    _commandViewTapped = new UITapGestureRecognizer(() =>
                     {
-                        if (this._virtualView is IUnderlayDrawable ude && (ude.Command?.CanExecute(ude.CommandParameter) ?? false))
+                        if (_virtualView is IUnderlayDrawable ude && (ude.Command?.CanExecute(ude.CommandParameter) ?? false))
                         {
                             ude.Command.Execute(ude.CommandParameter);
                         }
                     }));
             }
 
-            this._platformView.AddSubview(this._commandView);
-            this._platformView.BringSubviewToFront(this._commandView);
+            _platformView.AddSubview(_commandView);
+            _platformView.BringSubviewToFront(_commandView);
         }
-        else if (ud.Command is null && this._commandView is not null)
+        else if (ud.Command is null && _commandView is not null)
         {
-            this._commandView?.RemoveFromSuperview();
+            _commandView?.RemoveFromSuperview();
         }
     }
 
@@ -171,17 +173,17 @@ public class PlatformUnderlayDrawable : IDisposable
         _platformView = platformView;
         _virtualView = virtualView;
 
-        if (this._canvas is not null)
+        if (_canvas is not null)
         {
             return;
         }
 
-        this._canvas = new SKCanvasView(platformView.Context);
+        _canvas = new SKCanvasView(platformView.Context);
 
-        this._canvas.PaintSurface += this.OnPaintSurface;
-        this._canvas.FocusChange += this.Canvas_FocusChange;
-        this._canvas.Layout(0, 0, platformView.Width, platformView.Height);
-        this._canvas.Invalidate();
+        _canvas.PaintSurface += this.OnPaintSurface;
+        _canvas.FocusChange += this.Canvas_FocusChange;
+        _canvas.Layout(0, 0, platformView.Width, platformView.Height);
+        _canvas.Invalidate();
 
         this.Invalidate();
     }
@@ -212,36 +214,36 @@ public class PlatformUnderlayDrawable : IDisposable
 
     public void OnCommandSet()
     {
-        if (this._virtualView is not IUnderlayDrawable ud)
+        if (_virtualView is not IUnderlayDrawable ud)
         {
             return;
         }
 
         if (ud.Command is not null)
         {
-            if (this._commandButton is null)
+            if (_commandButton is null)
             {
-                this._commandButton =
-                    new Android.Widget.Button(this._platformView.Context)
+                _commandButton =
+                    new Android.Widget.Button(_platformView.Context)
                     {
                         Background = new ColorDrawable(Android.Graphics.Color.Transparent),
                     };
 
-                this._commandButton.Click += this.CommandClicked;
+                _commandButton.Click += this.CommandClicked;
             }
 
-            this._platformView.AddView(this._commandButton);
-            this._commandButton.Layout(0, 0, this._platformView.Width, this._platformView.Height);
+            _platformView.AddView(_commandButton);
+            _commandButton.Layout(0, 0, _platformView.Width, _platformView.Height);
         }
-        else if (ud.Command is null && this._commandButton is not null)
+        else if (ud.Command is null && _commandButton is not null)
         {
-            this._commandButton?.RemoveFromParent();
+            _commandButton?.RemoveFromParent();
         }
     }
 
     private void Canvas_FocusChange(object? sender, Android.Views.View.FocusChangeEventArgs e)
     {
-        if (e.HasFocus && _virtualView is Microsoft.Maui.Controls.ContentView cv && cv.Content is IView view)
+        if (e.HasFocus && _virtualView is ContentView cv && cv.Content is IView view)
         {
             view.Focus();
         }
@@ -257,7 +259,7 @@ public class PlatformUnderlayDrawable : IDisposable
 
     private void OnPaintSurface(object? sender, SKPaintSurfaceEventArgs e)
     {
-        if (_virtualView is IUnderlayDrawable ud && _virtualView is Microsoft.Maui.Controls.ContentView cv && cv.Content is not null)
+        if (_virtualView is IUnderlayDrawable ud && _virtualView is ContentView cv && cv.Content is not null)
         {
             DrawUnderlay(ud, cv, cv.Content.Frame, e.Surface, e.Info);
         }
@@ -324,7 +326,7 @@ public class PlatformUnderlayDrawable : IDisposable
             _platformView.AddView(_canvas, 0);
 #endif
 
-            if (_virtualView is Microsoft.Maui.Controls.ContentView cv)
+            if (_virtualView is ContentView cv)
             {
                 _content = cv.Content;
                 this.UpdateOpacity();
@@ -387,7 +389,7 @@ public class PlatformUnderlayDrawable : IDisposable
             return;
         }
 
-        if (e.PropertyName == nameof(Microsoft.Maui.Controls.VisualElement.IsFocused))
+        if (e.PropertyName == nameof(VisualElement.IsFocused))
         {
             AnimateHasFocus();
             return;
@@ -399,7 +401,7 @@ public class PlatformUnderlayDrawable : IDisposable
     private void AnimateHasFocus()
     {
 #if IOS || MACCATALYST || ANDROID
-        if (_virtualView is IUnderlayDrawable ud && _virtualView is Microsoft.Maui.Controls.VisualElement animatable)
+        if (_virtualView is IUnderlayDrawable ud && _virtualView is VisualElement animatable)
         {
             bool hasFocus = _content?.IsFocused ?? false;
 
@@ -437,7 +439,7 @@ public class PlatformUnderlayDrawable : IDisposable
             return;
         }
 
-        if (_virtualView is IUnderlayDrawable ud && _virtualView is Microsoft.Maui.Controls.IAnimatable animatable)
+        if (_virtualView is IUnderlayDrawable ud && _virtualView is IAnimatable animatable)
         {
             double endHasValue = hasValue ? 1d : 0d;
 
@@ -511,7 +513,7 @@ public class PlatformUnderlayDrawable : IDisposable
 #if IOS || MACCATALYST || ANDROID
         float scale = (float)DeviceDisplay.Current.MainDisplayInfo.Density;
 
-        (_virtualView as Microsoft.Maui.Controls.ContentView).Padding = new Thickness(inset.Left, inset.Top, inset.Right, inset.Bottom);
+        (_virtualView as ContentView).Padding = new Thickness(inset.Left, inset.Top, inset.Right, inset.Bottom);
 #endif
     }
 
@@ -573,7 +575,7 @@ public class PlatformUnderlayDrawable : IDisposable
             double controlXLeft = controlFrame.Left * scale;
 
             var placeholderOffset = underlayDrawable.PlaceholderOffset;
-            if (placeholderOffset != default(Point))
+            if (placeholderOffset != default)
             {
                 controlYCenter += placeholderOffset.Y * scale;
                 controlXLeft += placeholderOffset.X * scale;

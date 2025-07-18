@@ -4,7 +4,7 @@ namespace AuroraControls;
 
 internal class ObservableUniqueCollection<T> : ObservableCollection<T>
 {
-    private readonly object _lock = new object();
+    private readonly object _lock = new();
 
     /// <summary>
     /// Inserts the item into the observable collection.

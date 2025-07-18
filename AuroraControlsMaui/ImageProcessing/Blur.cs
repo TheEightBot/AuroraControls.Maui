@@ -60,12 +60,12 @@ public class Blur : ImageProcessingBase, IImageProcessor
     /// <param name="imageProcessor">Image processor.</param>
     public SKBitmap ProcessImage(SKBitmap processingImage, ImageProcessingBase imageProcessor)
     {
-        if (imageProcessor is not AuroraControls.ImageProcessing.Blur)
+        if (imageProcessor is not Blur)
         {
             return processingImage;
         }
 
-        var blur = imageProcessor as AuroraControls.ImageProcessing.Blur;
+        var blur = imageProcessor as Blur;
 
         float blurAmount = (float)blur.BlurAmount;
         var blurLocation = blur.BlurringLocation;
@@ -77,7 +77,7 @@ public class Blur : ImageProcessingBase, IImageProcessor
         paint.IsAntialias = true;
         paint.Style = SKPaintStyle.Fill;
 
-        if (blurLocation == AuroraControls.ImageProcessing.Blur.BlurLocation.Inside)
+        if (blurLocation == BlurLocation.Inside)
         {
             paint.BlendMode = SKBlendMode.SrcOver;
         }
@@ -86,7 +86,7 @@ public class Blur : ImageProcessingBase, IImageProcessor
 
         canvas.Clear();
 
-        if (blurLocation == AuroraControls.ImageProcessing.Blur.BlurLocation.Full)
+        if (blurLocation == BlurLocation.Full)
         {
             canvas.DrawBitmap(processingImage, processingImage.Info.Rect);
         }

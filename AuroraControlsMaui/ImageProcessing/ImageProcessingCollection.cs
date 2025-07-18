@@ -11,7 +11,7 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
     /// <summary>
     /// The collection of image processors.
     /// </summary>
-    private readonly List<ImageProcessingBase> _items = new List<ImageProcessingBase>();
+    private readonly List<ImageProcessingBase> _items = new();
 
     /// <summary>
     /// Occurs when collection changed.
@@ -25,12 +25,12 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
     /// </summary>
     ~ImageProcessingCollection()
     {
-        if (this._items == null)
+        if (_items == null)
         {
             return;
         }
 
-        foreach (var item in this._items)
+        foreach (var item in _items)
         {
             item.PropertyChanged -= this.HandlePropertyChangedEventHandler;
         }
@@ -41,7 +41,7 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
     /// </summary>
     /// <returns>The index of the processor.</returns>
     /// <param name="item">Item.</param>
-    public int IndexOf(ImageProcessingBase item) => this._items.IndexOf(item);
+    public int IndexOf(ImageProcessingBase item) => _items.IndexOf(item);
 
     /// <summary>
     /// Inserts the processor at the specified index.
@@ -50,7 +50,7 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
     /// <param name="item">Image processor.</param>
     public void Insert(int index, ImageProcessingBase item)
     {
-        this._items.Insert(index, item);
+        _items.Insert(index, item);
 
         item.PropertyChanged -= HandlePropertyChangedEventHandler;
         item.PropertyChanged += HandlePropertyChangedEventHandler;
@@ -66,7 +66,7 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
     public void RemoveAt(int index)
     {
         var oldItem = this[index];
-        this._items.RemoveAt(index);
+        _items.RemoveAt(index);
         oldItem.PropertyChanged -= HandlePropertyChangedEventHandler;
         SetValue(Effects.ImageProcessingEffect.ProcessorChangedProperty, oldItem);
         CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, oldItem, index));
@@ -78,7 +78,7 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
     /// <param name="index">Index.</param>
     public ImageProcessingBase this[int index]
     {
-        get => this._items[index];
+        get => _items[index];
 
         set
         {
@@ -86,7 +86,7 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
 
             var imageProcessingBase = (ImageProcessingBase)value;
 
-            this._items[index] = imageProcessingBase;
+            _items[index] = imageProcessingBase;
 
             imageProcessingBase.PropertyChanged -= HandlePropertyChangedEventHandler;
             imageProcessingBase.PropertyChanged += HandlePropertyChangedEventHandler;
@@ -103,7 +103,7 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
     /// <param name="item">Image processor.</param>
     public void Add(ImageProcessingBase item)
     {
-        this._items.Add(item);
+        _items.Add(item);
 
         item.PropertyChanged -= HandlePropertyChangedEventHandler;
         item.PropertyChanged += HandlePropertyChangedEventHandler;
@@ -117,12 +117,12 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
     /// </summary>
     public void Clear()
     {
-        foreach (var item in this._items)
+        foreach (var item in _items)
         {
             item.PropertyChanged -= HandlePropertyChangedEventHandler;
         }
 
-        this._items.Clear();
+        _items.Clear();
 
         SetValue(Effects.ImageProcessingEffect.ProcessorChangedProperty, null);
         CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
@@ -133,7 +133,7 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
     /// </summary>
     /// <returns>Returns <c>true</c> if the item exists in the list, otherwise <c>false</c>.</returns>
     /// <param name="item">Item.</param>
-    public bool Contains(ImageProcessingBase item) => this._items.Contains(item);
+    public bool Contains(ImageProcessingBase item) => _items.Contains(item);
 
     /// <summary>
     /// Copies items to list.
@@ -148,7 +148,7 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
             item.PropertyChanged += HandlePropertyChangedEventHandler;
         }
 
-        this._items.CopyTo(array, arrayIndex);
+        _items.CopyTo(array, arrayIndex);
     }
 
     /// <summary>
@@ -160,7 +160,7 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
     {
         int oldIndex = IndexOf(item);
 
-        if (!this._items.Remove(item))
+        if (!_items.Remove(item))
         {
             return false;
         }
@@ -175,7 +175,7 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
     /// Gets the count.
     /// </summary>
     /// <value>The count.</value>
-    public int Count => this._items.Count;
+    public int Count => _items.Count;
 
     /// <summary>
     /// Gets a value indicating whether this <see cref="T:AuroraControls.ImageProcessing.ImageProcessingCollection"/> is
@@ -188,7 +188,7 @@ public class ImageProcessingCollection : BindableObject, IList<ImageProcessingBa
     /// Gets the enumerator.
     /// </summary>
     /// <returns>The enumerator.</returns>
-    public IEnumerator<ImageProcessingBase> GetEnumerator() => this._items.GetEnumerator();
+    public IEnumerator<ImageProcessingBase> GetEnumerator() => _items.GetEnumerator();
 
     /// <summary>
     /// System.s the collections. IE numerable. get enumerator.

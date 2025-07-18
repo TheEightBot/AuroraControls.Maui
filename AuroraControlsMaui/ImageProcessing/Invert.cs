@@ -19,23 +19,21 @@ public class Invert : ImageProcessingBase, IImageProcessor
     /// <param name="imageProcessor">Image processor.</param>
     public SKBitmap ProcessImage(SKBitmap processingImage, ImageProcessingBase imageProcessor)
     {
-        using (var canvas = new SKCanvas(processingImage))
-        using (var paint = new SKPaint())
-        {
-            paint.IsAntialias = true;
-            paint.Style = SKPaintStyle.Fill;
-            paint.ColorFilter = SKColorFilter.CreateColorMatrix(
-                [
-                    -1f,  0f,  0f, 0f, 255f,
-                    0f, -1f,  0f, 0f, 255f,
-                    0f,  0f, -1f, 0f, 255f,
-                    0f,  0f,  0f, 1f, 0f
-                ]);
+        using var canvas = new SKCanvas(processingImage);
+        using var paint = new SKPaint();
+        paint.IsAntialias = true;
+        paint.Style = SKPaintStyle.Fill;
+        paint.ColorFilter = SKColorFilter.CreateColorMatrix(
+        [
+            -1f,  0f,  0f, 0f, 255f,
+            0f, -1f,  0f, 0f, 255f,
+            0f,  0f, -1f, 0f, 255f,
+            0f,  0f,  0f, 1f, 0f
+        ]);
 
-            canvas.Clear();
-            canvas.DrawBitmap(processingImage, processingImage.Info.Rect, paint);
-            canvas.Flush();
-        }
+        canvas.Clear();
+        canvas.DrawBitmap(processingImage, processingImage.Info.Rect, paint);
+        canvas.Flush();
 
         return processingImage;
     }

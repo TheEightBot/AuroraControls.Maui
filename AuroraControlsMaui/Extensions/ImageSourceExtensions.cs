@@ -5,7 +5,7 @@ namespace AuroraControls;
 
 public static class ImageSourceExtensions
 {
-    private static readonly object _iconCacheLock = new object();
+    private static readonly object _iconCacheLock = new();
 
     private static IIconCache _iconCache;
 

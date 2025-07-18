@@ -23,40 +23,40 @@ public partial class TouchDrawLettersImagePage : ContentPage
 
     private void AddLetter_Clicked(object sender, System.EventArgs e)
     {
-        this._counter++;
+        _counter++;
 
         this.control
             .TouchDrawLetters
             .Add(
                 new TouchDrawLetter
                 {
-                    Value = this._counter.ToString(),
+                    Value = _counter.ToString(),
                     ForegroundColorOverride =
-                        Color.FromRgba(this._rngesus.Next(0, 255), this._rngesus.Next(0, 255), this._rngesus.Next(0, 255),
-                            this._rngesus.Next(0, 255)),
-                    BackgroundColorOverride = Color.FromRgba(this._rngesus.Next(0, 255), this._rngesus.Next(0, 255),
-                        this._rngesus.Next(0, 255), this._rngesus.Next(0, 255)),
+                        Color.FromRgba(_rngesus.Next(0, 255), _rngesus.Next(0, 255), _rngesus.Next(0, 255),
+                            _rngesus.Next(0, 255)),
+                    BackgroundColorOverride = Color.FromRgba(_rngesus.Next(0, 255), _rngesus.Next(0, 255),
+                        _rngesus.Next(0, 255), _rngesus.Next(0, 255)),
                 });
 
         this.control.VisualEffects.Add(
             new Watermark
             {
-                WatermarkText = $"Eight-Bot {this._counter}",
-                FontSize = this._fontSize++,
+                WatermarkText = $"Eight-Bot {_counter}",
+                FontSize = _fontSize++,
                 ForegroundColor =
-                    Color.FromRgba(this._rngesus.Next(0, 255), this._rngesus.Next(0, 255), this._rngesus.Next(0, 255),
-                        this._rngesus.Next(0, 255)),
+                    Color.FromRgba(_rngesus.Next(0, 255), _rngesus.Next(0, 255), _rngesus.Next(0, 255),
+                        _rngesus.Next(0, 255)),
                 BackgroundColor =
-                    Color.FromRgba(this._rngesus.Next(0, 255), this._rngesus.Next(0, 255), this._rngesus.Next(0, 255),
-                        this._rngesus.Next(0, 255)),
-                HorizontalWatermarkLocation = Extensions.RandomEnum<Watermark.WatermarkLocation>(this._rngesus),
-                VerticalWatermarkLocation = Extensions.RandomEnum<Watermark.WatermarkLocation>(this._rngesus),
+                    Color.FromRgba(_rngesus.Next(0, 255), _rngesus.Next(0, 255), _rngesus.Next(0, 255),
+                        _rngesus.Next(0, 255)),
+                HorizontalWatermarkLocation = Extensions.RandomEnum<Watermark.WatermarkLocation>(_rngesus),
+                VerticalWatermarkLocation = Extensions.RandomEnum<Watermark.WatermarkLocation>(_rngesus),
             });
     }
 
     private async void Export_Clicked(object sender, System.EventArgs e)
     {
-        this._counter = 'A';
+        _counter = 'A';
 
         var fileName = $"touchletters-{Guid.NewGuid()}.jpg";
         var outputFile = Path.Combine(FileSystem.CacheDirectory, $"dest-{fileName}");

@@ -30,7 +30,7 @@ public struct SafeArea
 
     public SafeArea(bool left, bool top, bool right, bool bottom)
     {
-        this._isParameterized = true;
+        _isParameterized = true;
 
         Left = left;
         Top = top;
@@ -39,10 +39,10 @@ public struct SafeArea
     }
 
     public static implicit operator SafeArea(bool uniformSafeArea)
-        => new SafeArea(uniformSafeArea);
+        => new(uniformSafeArea);
 
     private bool Equals(SafeArea other)
-        => (!this._isParameterized &&
+        => (!_isParameterized &&
             !other._isParameterized) ||
            (Left == other.Left &&
             Top == other.Top &&

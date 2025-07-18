@@ -7,7 +7,7 @@ namespace AuroraControls;
 public class GradientCircularButton : AuroraViewBase
 #pragma warning restore CA1001
 {
-    private readonly SKPath _backgroundPath = new SKPath();
+    private readonly SKPath _backgroundPath = new();
 
     private SKPoint _lastTouchLocation;
     private double _rippleAnimationPercentage;
@@ -247,12 +247,12 @@ public class GradientCircularButton : AuroraViewBase
 
         set
         {
-            if (this._tapped == value)
+            if (_tapped == value)
             {
                 return;
             }
 
-            this._tapped = value;
+            _tapped = value;
             this.InvalidateSurface();
         }
     }
@@ -339,7 +339,7 @@ public class GradientCircularButton : AuroraViewBase
         backgroundPaint.Shader = shader;
 
         canvas.Clear();
-        this._backgroundPath.Reset();
+        _backgroundPath.Reset();
 
         if (!this.ShadowColor.Equals(Colors.Transparent) && this.ShadowLocation != Point.Zero)
         {
@@ -363,10 +363,10 @@ public class GradientCircularButton : AuroraViewBase
                 canvas.Translate(this.ShadowLocation.ToSKPoint());
             }
 
-            this._backgroundPath.AddOval(rect);
-            canvas.DrawPath(this._backgroundPath, backgroundPaint);
+            _backgroundPath.AddOval(rect);
+            canvas.DrawPath(_backgroundPath, backgroundPaint);
 
-            if (this._lastTouchLocation != SKPoint.Empty && this._rippleAnimationPercentage > 0.0d)
+            if (_lastTouchLocation != SKPoint.Empty && _rippleAnimationPercentage > 0.0d)
             {
                 using var ripplePath = new SKPath();
                 using var ripplePaint = new SKPaint();
@@ -374,16 +374,16 @@ public class GradientCircularButton : AuroraViewBase
                 ripplePaint.Style = SKPaintStyle.Fill;
                 ripplePaint.Color =
                     !this.ButtonBackgroundColor.Equals(Colors.Transparent)
-                        ? this.ButtonBackgroundColor.AddLuminosity(-.2f).MultiplyAlpha((1f - (float)this._rippleAnimationPercentage) * .5f).ToSKColor()
+                        ? this.ButtonBackgroundColor.AddLuminosity(-.2f).MultiplyAlpha((1f - (float)_rippleAnimationPercentage) * .5f).ToSKColor()
                         : Colors.Transparent.ToSKColor();
 
                 float startingRippleSize = (float)size * .5f;
-                float maxRippleSize = startingRippleSize + ((float)(size * .4f) * (float)this._rippleAnimationPercentage);
+                float maxRippleSize = startingRippleSize + ((float)(size * .4f) * (float)_rippleAnimationPercentage);
                 float offsetAmount = -maxRippleSize / 2f;
-                var offsetPoint = new SKPoint(this._lastTouchLocation.X + offsetAmount, this._lastTouchLocation.Y + offsetAmount);
+                var offsetPoint = new SKPoint(_lastTouchLocation.X + offsetAmount, _lastTouchLocation.Y + offsetAmount);
                 var rippleSize = SKRect.Create(offsetPoint, new SKSize(maxRippleSize, maxRippleSize));
                 ripplePath.AddOval(rippleSize);
-                using var finalRipple = ripplePath.Op(this._backgroundPath, SKPathOp.Intersect);
+                using var finalRipple = ripplePath.Op(_backgroundPath, SKPathOp.Intersect);
                 canvas.DrawPath(finalRipple, ripplePaint);
             }
 
@@ -394,7 +394,7 @@ public class GradientCircularButton : AuroraViewBase
                 backgroundPaint.Shader = null;
                 backgroundPaint.Style = SKPaintStyle.Stroke;
 
-                canvas.DrawPath(this._backgroundPath, backgroundPaint);
+                canvas.DrawPath(_backgroundPath, backgroundPaint);
             }
 
             if (!string.IsNullOrEmpty(this.Text))

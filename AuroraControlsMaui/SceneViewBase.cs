@@ -5,8 +5,8 @@ namespace AuroraControls;
 
 public abstract class SceneViewBase : AuroraViewBase
 {
-    private readonly object _surfaceLocker = new object();
-    private readonly object _imageLocker = new object();
+    private readonly object _surfaceLocker = new();
+    private readonly object _imageLocker = new();
 
     private ITicker _ticker;
 

@@ -11,10 +11,8 @@ public class IconCache : IconCacheBase
             return null;
         }
 
-        using (var image = await imageSource.GetHandler().LoadImageAsync(imageSource).ConfigureAwait(false))
-        {
-            return image.ToSKBitmap();
-        }
+        using var image = await imageSource.GetHandler().LoadImageAsync(imageSource).ConfigureAwait(false);
+        return image.ToSKBitmap();
     }
 
     public override async Task<byte[]> ByteArrayFromSource(ImageSource imageSource)
@@ -24,13 +22,11 @@ public class IconCache : IconCacheBase
             return null;
         }
 
-        using (var image = await imageSource.GetHandler().LoadImageAsync(imageSource).ConfigureAwait(false))
-        using (var data = image.AsPNG())
-        {
-            byte[] dataBytes = new byte[data.Length];
-            System.Runtime.InteropServices.Marshal.Copy(data.Bytes, dataBytes, 0, (int)data.Length);
-            return dataBytes;
-        }
+        using var image = await imageSource.GetHandler().LoadImageAsync(imageSource).ConfigureAwait(false);
+        using var data = image.AsPNG();
+        byte[] dataBytes = new byte[data.Length];
+        System.Runtime.InteropServices.Marshal.Copy(data.Bytes, dataBytes, 0, (int)data.Length);
+        return dataBytes;
     }
 
     public override async Task<Stream> StreamFromSource(ImageSource imageSource)
@@ -40,9 +36,7 @@ public class IconCache : IconCacheBase
             return null;
         }
 
-        using (var image = await imageSource.GetHandler().LoadImageAsync(imageSource).ConfigureAwait(false))
-        {
-            return image.AsPNG().AsStream();
-        }
+        using var image = await imageSource.GetHandler().LoadImageAsync(imageSource).ConfigureAwait(false);
+        return image.AsPNG().AsStream();
     }
 }

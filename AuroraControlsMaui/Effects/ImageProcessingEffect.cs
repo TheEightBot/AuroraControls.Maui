@@ -23,7 +23,7 @@ public class ImageProcessingEffect : RoutingEffect
     /// </summary>
     /// <value>The image processing effects.</value>
     public ImageProcessing.ImageProcessingCollection ImageProcessingEffects { get; private set; }
-        = new ImageProcessing.ImageProcessingCollection();
+        = new();
 
     /// <summary>
     /// The processor changed property.
@@ -210,7 +210,7 @@ public class ImageProcessingPlatformEffect : PlatformEffect
             return;
         }
 
-        if (this.Element?.Effects?.FirstOrDefault(e => e is Effects.ImageProcessingEffect) is ImageProcessingEffect effect)
+        if (this.Element?.Effects?.FirstOrDefault(e => e is ImageProcessingEffect) is ImageProcessingEffect effect)
         {
             effect.ImageProcessingEffects.PropertyChanged += ImageProcessingEffects_PropertyChanged;
         }

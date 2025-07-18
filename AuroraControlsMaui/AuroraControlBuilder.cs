@@ -54,9 +54,9 @@ public static class AuroraControlBuilder
 #if ANDROID
         mauiAppBuilder.Services.AddSingleton<IIconCache, AuroraControls.Platforms.Android.IconCache>();
 #elif IOS
-        mauiAppBuilder.Services.AddSingleton<IIconCache, AuroraControls.Platforms.iOS.IconCache>();
+        mauiAppBuilder.Services.AddSingleton<IIconCache, Platforms.iOS.IconCache>();
 #elif MACCATALYST
-        mauiAppBuilder.Services.AddSingleton<IIconCache, AuroraControls.Platforms.MacCatalyst.IconCache>();
+        mauiAppBuilder.Services.AddSingleton<IIconCache, Platforms.MacCatalyst.IconCache>();
 #endif
 
         return mauiAppBuilder;

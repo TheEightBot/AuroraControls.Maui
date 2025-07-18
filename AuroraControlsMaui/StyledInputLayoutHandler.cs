@@ -14,7 +14,7 @@ namespace AuroraControls;
 public class StyledInputLayoutHandler : ContentViewHandler, IHavePlatformUnderlayDrawable
 {
     public static readonly PropertyMapper StyledInputLayoutMapper =
-        new PropertyMapper<StyledInputLayout, StyledInputLayoutHandler>(ContentViewHandler.Mapper)
+        new PropertyMapper<StyledInputLayout, StyledInputLayoutHandler>(Mapper)
         {
             [nameof(IContentView.Content)] = MapStyledInputContent,
             [nameof(IView.Background)] = MapStyledInputLayoutBackground,
