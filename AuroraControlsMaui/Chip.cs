@@ -18,11 +18,11 @@ public enum ChipState
 
 public class Chip : AuroraViewBase, IDisposable
 {
-    private static readonly Size _minSize = new(32, 32);
-
     private readonly SKPath _backgroundPath = new();
     private readonly bool _cantHandleTouch;
     private bool _disposed;
+
+    internal static readonly Size _minSize = new(32, 32);
 
     public event EventHandler<bool> Toggled;
 
