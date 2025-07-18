@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.Content;
+using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Widget;
 using Bumptech.Glide;
@@ -11,12 +12,13 @@ using Bumptech.Glide.Request.Target;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Platform;
+using Path = System.IO.Path;
 
 namespace AuroraControls;
 
 internal partial class NoCacheFileImageSourceService
 {
-    public override Task<IImageSourceServiceResult?> LoadDrawableAsync(IImageSource imageSource, ImageView imageView,
+    public override async Task<IImageSourceServiceResult?> LoadDrawableAsync(IImageSource imageSource, ImageView imageView,
         CancellationToken cancellationToken = default)
     {
         var fileImageSource = (INoCacheFileImageSource)imageSource;
@@ -33,14 +35,15 @@ internal partial class NoCacheFileImageSourceService
                     if (id > 0)
                     {
                         imageView.SetImageResource(id);
-                        return Task.FromResult<IImageSourceServiceResult?>(new ImageSourceServiceLoadResult());
+                        return new ImageSourceServiceLoadResult();
                     }
                 }
 
-                using var pathDrawable = Drawable.CreateFromPath(file);
+                using var pathBitmap = await BitmapFactory.DecodeFileAsync(file);
+                using var pathDrawable = new BitmapDrawable(Platform.AppContext.Resources, pathBitmap);
                 imageView.SetImageDrawable(pathDrawable);
 
-                return Task.FromResult<IImageSourceServiceResult?>(new ImageSourceServiceLoadResult());
+                return new ImageSourceServiceLoadResult();
             }
             catch (Exception ex)
             {
@@ -49,10 +52,10 @@ internal partial class NoCacheFileImageSourceService
             }
         }
 
-        return Task.FromResult<IImageSourceServiceResult?>(null);
+        return null;
     }
 
-    public override Task<IImageSourceServiceResult<Drawable>?> GetDrawableAsync(IImageSource imageSource, Context context,
+    public override async Task<IImageSourceServiceResult<Drawable>?> GetDrawableAsync(IImageSource imageSource, Context context,
         CancellationToken cancellationToken = default)
     {
         var fileImageSource = (INoCacheFileImageSource)imageSource;
@@ -70,13 +73,14 @@ internal partial class NoCacheFileImageSourceService
                         var d = context?.GetDrawable(id);
                         if (d is not null)
                         {
-                            return Task.FromResult<IImageSourceServiceResult<Drawable>?>(new ImageSourceServiceResult(d));
+                            return new ImageSourceServiceResult(d);
                         }
                     }
                 }
 
-                var pathDrawable = Drawable.CreateFromPath(file);
-                return Task.FromResult<IImageSourceServiceResult<Drawable>?>(new ImageSourceServiceResult(pathDrawable));
+                var pathBitmap = await BitmapFactory.DecodeFileAsync(file);
+                var pathDrawable = new BitmapDrawable(Platform.AppContext.Resources, pathBitmap);
+                return new ImageSourceServiceResult(pathDrawable);
             }
             catch (Exception ex)
             {
@@ -85,7 +89,7 @@ internal partial class NoCacheFileImageSourceService
             }
         }
 
-        return Task.FromResult<IImageSourceServiceResult<Drawable>?>(null);
+        return null;
     }
 }
 
