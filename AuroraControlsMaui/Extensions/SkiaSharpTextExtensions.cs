@@ -13,7 +13,7 @@ public static class SkiaSharpTextExtensions
         this SKCanvas canvas, string text, SKPoint drawPoint, SKPaint paint,
         TextDrawLocation horizontalLocation = TextDrawLocation.At, TextDrawLocation verticalLocation = TextDrawLocation.At)
     {
-        SKRect textBounds = default(SKRect);
+        SKRect textBounds = default;
         paint.EnsureHasValidFont(text);
         paint.MeasureText(text, ref textBounds);
 
@@ -51,7 +51,7 @@ public static class SkiaSharpTextExtensions
 
     public static (SKPoint Start, SKPoint End) GetBaselineAt(this SKCanvas canvas, string text, SKPoint drawPoint, SKPaint textPaint, SKPaint baselinePaint, float baselinePadding = 0f)
     {
-        SKRect textBounds = default(SKRect);
+        SKRect textBounds = default;
         textPaint.EnsureHasValidFont(text);
         textPaint.MeasureText(text, ref textBounds);
 
@@ -65,7 +65,7 @@ public static class SkiaSharpTextExtensions
 
     public static SKRect GetTextDrawPointAt(this SKCanvas canvas, string text, SKPoint drawPoint, SKPaint paint)
     {
-        SKRect textBounds = default(SKRect);
+        SKRect textBounds = default;
         paint.EnsureHasValidFont(text);
         paint.MeasureText(text, ref textBounds);
 

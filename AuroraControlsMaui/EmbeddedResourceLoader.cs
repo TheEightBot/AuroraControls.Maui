@@ -10,7 +10,7 @@ public static class EmbeddedResourceLoader
     /// <summary>
     /// A list of key value pairs of assemblies and resource names.
     /// </summary>
-    private static readonly List<KeyValuePair<Assembly, string[]>> _assemblies = new List<KeyValuePair<Assembly, string[]>>();
+    private static readonly List<KeyValuePair<Assembly, string[]>> _assemblies = new();
 
     /// <summary>
     /// Loads the assembly.
@@ -51,6 +51,11 @@ public static class EmbeddedResourceLoader
             }
         }
 
-        return stream ?? Stream.Null;
+        if (stream is null)
+        {
+            throw new ArgumentException($"Resource '{name}' not found in any loaded assemblies.");
+        }
+
+        return stream;
     }
 }

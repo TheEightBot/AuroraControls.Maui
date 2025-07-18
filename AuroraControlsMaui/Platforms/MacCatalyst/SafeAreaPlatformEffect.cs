@@ -24,10 +24,10 @@ public class SafeAreaPlatformEffect : PlatformEffect
             return;
         }
 
-        this._orientationDidChangeNotificationObserver = NSNotificationCenter.DefaultCenter.AddObserver(
+        _orientationDidChangeNotificationObserver = NSNotificationCenter.DefaultCenter.AddObserver(
             UIDevice.OrientationDidChangeNotification, _ => UpdateInsets());
 
-        this._initialMargin = Element.Margin;
+        _initialMargin = Element.Margin;
         UpdateInsets();
     }
 
@@ -38,14 +38,14 @@ public class SafeAreaPlatformEffect : PlatformEffect
             return;
         }
 
-        if (this._orientationDidChangeNotificationObserver != null)
+        if (_orientationDidChangeNotificationObserver != null)
         {
-            NSNotificationCenter.DefaultCenter.RemoveObserver(this._orientationDidChangeNotificationObserver);
-            this._orientationDidChangeNotificationObserver?.Dispose();
-            this._orientationDidChangeNotificationObserver = null;
+            NSNotificationCenter.DefaultCenter.RemoveObserver(_orientationDidChangeNotificationObserver);
+            _orientationDidChangeNotificationObserver?.Dispose();
+            _orientationDidChangeNotificationObserver = null;
         }
 
-        Element.Margin = this._initialMargin;
+        Element.Margin = _initialMargin;
     }
 
     private void UpdateInsets()
@@ -60,10 +60,10 @@ public class SafeAreaPlatformEffect : PlatformEffect
         var safeArea = SafeAreaEffect.GetSafeArea(Element);
 
         Element.Margin = new Thickness(
-            this._initialMargin.Left + CalculateInsets(insets.Left, safeArea.Left),
-            this._initialMargin.Top + CalculateInsets(insets.Top, safeArea.Top),
-            this._initialMargin.Right + CalculateInsets(insets.Right, safeArea.Right),
-            this._initialMargin.Bottom + CalculateInsets(insets.Bottom, safeArea.Bottom));
+            _initialMargin.Left + CalculateInsets(insets.Left, safeArea.Left),
+            _initialMargin.Top + CalculateInsets(insets.Top, safeArea.Top),
+            _initialMargin.Right + CalculateInsets(insets.Right, safeArea.Right),
+            _initialMargin.Bottom + CalculateInsets(insets.Bottom, safeArea.Bottom));
     }
 
     private double CalculateInsets(double insetsComponent, bool shouldUseInsetsComponent) => shouldUseInsetsComponent ? insetsComponent : 0;

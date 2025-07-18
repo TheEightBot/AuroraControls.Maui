@@ -280,33 +280,31 @@ internal static class SKCanvasExtensions
         {
             if (run.Text?.Length > 0)
             {
-                using (var newPaint = paint.Clone())
+                using var newPaint = paint.Clone();
+                if (run.Typeface is not null)
                 {
-                    if (run.Typeface is not null)
-                    {
-                        newPaint.Typeface = run.Typeface;
-                    }
+                    newPaint.Typeface = run.Typeface;
+                }
 
-                    newPaint.EnsureHasValidFont(run.Text);
+                newPaint.EnsureHasValidFont(run.Text);
 
-                    if (run.FontSize is not null)
-                    {
-                        newPaint.TextSize = run.FontSize.Value;
-                    }
+                if (run.FontSize is not null)
+                {
+                    newPaint.TextSize = run.FontSize.Value;
+                }
 
-                    if (run.Color is not null)
-                    {
-                        newPaint.Color = run.Color.Value;
-                    }
+                if (run.Color is not null)
+                {
+                    newPaint.Color = run.Color.Value;
+                }
 
-                    var rect = default(SKRect);
-                    newPaint.MeasureText(run.Text, ref rect);
-                    width += rect.Width;
+                var rect = default(SKRect);
+                newPaint.MeasureText(run.Text, ref rect);
+                width += rect.Width;
 
-                    if (rect.Height > maxHeight)
-                    {
-                        maxHeight = rect.Height;
-                    }
+                if (rect.Height > maxHeight)
+                {
+                    maxHeight = rect.Height;
                 }
             }
         }
@@ -333,30 +331,28 @@ internal static class SKCanvasExtensions
 
         foreach (var run in runs)
         {
-            using (var newPaint = paint.Clone())
+            using var newPaint = paint.Clone();
+            if (run.Typeface is not null)
             {
-                if (run.Typeface is not null)
-                {
-                    newPaint.Typeface = run.Typeface;
-                }
+                newPaint.Typeface = run.Typeface;
+            }
 
-                newPaint.EnsureHasValidFont(run.Text);
+            newPaint.EnsureHasValidFont(run.Text);
 
-                if (run.FontSize is not null)
-                {
-                    newPaint.TextSize = run.FontSize.Value;
-                }
+            if (run.FontSize is not null)
+            {
+                newPaint.TextSize = run.FontSize.Value;
+            }
 
-                if (run.Color is not null)
-                {
-                    newPaint.Color = run.Color.Value;
-                }
+            if (run.Color is not null)
+            {
+                newPaint.Color = run.Color.Value;
+            }
 
-                if (run.Text?.Length > 0)
-                {
-                    canvas.DrawText(run.Text, x + run.Offset.X, y + run.Offset.Y, newPaint);
-                    x += newPaint.MeasureText(run.Text);
-                }
+            if (run.Text?.Length > 0)
+            {
+                canvas.DrawText(run.Text, x + run.Offset.X, y + run.Offset.Y, newPaint);
+                x += newPaint.MeasureText(run.Text);
             }
         }
     }
@@ -409,35 +405,33 @@ internal static class SKCanvasExtensions
         {
             if (run.Text?.Length > 0)
             {
-                using (var newPaint = paint.Clone())
+                using var newPaint = paint.Clone();
+                if (run.Typeface is not null)
                 {
-                    if (run.Typeface is not null)
-                    {
-                        newPaint.Typeface = run.Typeface;
-                    }
-
-                    newPaint.EnsureHasValidFont(run.Text);
-
-                    if (run.FontSize is not null)
-                    {
-                        newPaint.TextSize = run.FontSize.Value;
-                    }
-
-                    if (run.Color is not null)
-                    {
-                        newPaint.Color = run.Color.Value;
-                    }
-
-                    var rect = default(SKRect);
-                    float measuredWidth = newPaint.MeasureText(run.Text, ref rect);
-
-                    if (rect.Height > height)
-                    {
-                        height = rect.Height;
-                    }
-
-                    width += measuredWidth;
+                    newPaint.Typeface = run.Typeface;
                 }
+
+                newPaint.EnsureHasValidFont(run.Text);
+
+                if (run.FontSize is not null)
+                {
+                    newPaint.TextSize = run.FontSize.Value;
+                }
+
+                if (run.Color is not null)
+                {
+                    newPaint.Color = run.Color.Value;
+                }
+
+                var rect = default(SKRect);
+                float measuredWidth = newPaint.MeasureText(run.Text, ref rect);
+
+                if (rect.Height > height)
+                {
+                    height = rect.Height;
+                }
+
+                width += measuredWidth;
             }
         }
 

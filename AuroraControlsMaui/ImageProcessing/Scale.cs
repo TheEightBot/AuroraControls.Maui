@@ -35,9 +35,9 @@ public class Scale : ImageProcessingBase, IImageProcessor
     /// <param name="imageProcessor">Image processor.</param>
     public SKBitmap ProcessImage(SKBitmap processingImage, ImageProcessingBase imageProcessor)
     {
-        if (imageProcessor is AuroraControls.ImageProcessing.Scale)
+        if (imageProcessor is Scale)
         {
-            var scaleProcessor = imageProcessor as AuroraControls.ImageProcessing.Scale;
+            var scaleProcessor = imageProcessor as Scale;
 
             float scaleAmount = (float)scaleProcessor.ScaleAmount;
 

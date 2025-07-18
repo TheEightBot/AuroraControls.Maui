@@ -64,11 +64,11 @@ public class Contrast : VisualEffect
             x = contrastAdjustment % 1;
             if (Math.Abs(x) < float.Epsilon)
             {
-                x = (float)this._deltaIndex[contrastAdjustment];
+                x = (float)_deltaIndex[contrastAdjustment];
             }
             else
             {
-                x = (float)((this._deltaIndex[contrastAdjustment << 0] * (1 - x)) + (this._deltaIndex[(contrastAdjustment << 0) + 1] * x)); // use linear interpolation for more granularity.
+                x = (float)((_deltaIndex[contrastAdjustment << 0] * (1 - x)) + (_deltaIndex[(contrastAdjustment << 0) + 1] * x)); // use linear interpolation for more granularity.
             }
 
             x = (x * 127) + 127;

@@ -82,8 +82,7 @@ public class ChipGroup : ContentView, IDisposable
     /// The currently selected chips in multi-selection mode.
     /// </summary>
     public static readonly BindableProperty SelectedChipsProperty =
-        BindableProperty.Create(nameof(SelectedChips), typeof(IList<Chip>), typeof(ChipGroup), null,
-            BindingMode.OneWay);
+        BindableProperty.Create(nameof(SelectedChips), typeof(IList<Chip>), typeof(ChipGroup));
 
     /// <summary>
     /// Gets the currently selected chips in multi-selection mode.
@@ -142,7 +141,7 @@ public class ChipGroup : ContentView, IDisposable
     /// The source collection of items to create chips from.
     /// </summary>
     public static readonly BindableProperty ItemsSourceProperty =
-        BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(ChipGroup), null,
+        BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(ChipGroup),
             propertyChanged: OnItemsSourceChanged);
 
     /// <summary>
@@ -158,7 +157,7 @@ public class ChipGroup : ContentView, IDisposable
     /// The template to use for creating chips from the ItemsSource.
     /// </summary>
     public static readonly BindableProperty ItemTemplateProperty =
-        BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(ChipGroup), null,
+        BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(ChipGroup),
             propertyChanged: OnItemTemplateChanged);
 
     /// <summary>
@@ -190,8 +189,7 @@ public class ChipGroup : ContentView, IDisposable
     /// The currently selected chip values in multi-selection mode.
     /// </summary>
     public static readonly BindableProperty SelectedValuesProperty =
-        BindableProperty.Create(nameof(SelectedValues), typeof(IList<object>), typeof(ChipGroup), null,
-            BindingMode.OneWay);
+        BindableProperty.Create(nameof(SelectedValues), typeof(IList<object>), typeof(ChipGroup));
 
     /// <summary>
     /// Gets the values of currently selected chips in multi-selection mode.
@@ -207,7 +205,6 @@ public class ChipGroup : ContentView, IDisposable
     /// <summary>
     /// Scrolls to make the specified chip visible in the viewport.
     /// </summary>
-    /// <param name="chip">The chip to scroll to.</param>
     /// <returns>True if the chip was found and scrolled to, false otherwise.</returns>
     public bool ScrollToChip(Chip chip, ScrollToPosition position, bool animated = true)
     {
@@ -228,8 +225,6 @@ public class ChipGroup : ContentView, IDisposable
     /// <summary>
     /// Finds a chip with a matching value and scrolls to make it visible.
     /// </summary>
-    /// <param name="value">The value to match against chip's Value.</param>
-    /// <param name="comparer">Optional custom comparer for value matching. If null, the default equality comparison is used.</param>
     /// <returns>True if a matching chip was found and scrolled to, false otherwise.</returns>
     public bool ScrollToChipWithValue<T>(T value, ScrollToPosition position, bool animated = true, IEqualityComparer<T>? comparer = null)
     {
@@ -549,11 +544,8 @@ public class ChipGroup : ContentView, IDisposable
     /// <summary>
     /// Updates the SelectedValues collection and raises property changed notification.
     /// </summary>
-    private void UpdateSelectedValues()
-    {
-        // For the OneWay binding of SelectedValues
-        OnPropertyChanged(nameof(SelectedValues));
-    }
+    private void UpdateSelectedValues() =>
+        OnPropertyChanged(nameof(SelectedValues)); // For the OneWay binding of SelectedValues
 
     /// <summary>
     /// Selects a chip by its value.
@@ -840,11 +832,8 @@ public class ChipGroup : ContentView, IDisposable
         _chips.Remove(chip);
     }
 
-    private void OnChipSizeChanged(object? sender, EventArgs e)
-    {
-        // Request a layout update when a chip size changes
-        UpdateLayout();
-    }
+    private void OnChipSizeChanged(object? sender, EventArgs e) =>
+        UpdateLayout(); // Request a layout update when a chip size changes
 
     private void OnChipTapped(object? sender, EventArgs e)
     {
@@ -1162,10 +1151,7 @@ public class ChipGroup : ContentView, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    ~ChipGroup()
-    {
-        Dispose(false);
-    }
+    ~ChipGroup() => Dispose(false);
 }
 
 public class ChipSelectionChangedEventArgs : EventArgs

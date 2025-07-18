@@ -421,10 +421,7 @@ public class SignaturePad : AuroraViewBase
         }
     }
 
-    private SignaturePoint CreateSignaturePoint(SKPoint location, long timestamp)
-    {
-        return new SignaturePoint { X = location.X, Y = location.Y, Timestamp = timestamp };
-    }
+    private SignaturePoint CreateSignaturePoint(SKPoint location, long timestamp) => new() { X = location.X, Y = location.Y, Timestamp = timestamp };
 
     private float CalculateVelocity(SignaturePoint p1, SignaturePoint p2)
     {

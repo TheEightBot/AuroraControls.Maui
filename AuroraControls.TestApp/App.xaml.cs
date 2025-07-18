@@ -6,7 +6,7 @@ public partial class App : Application
 
     public App(MainPage mainPage)
     {
-        this._mainPage = mainPage;
+        _mainPage = mainPage;
         InitializeComponent();
     }
 

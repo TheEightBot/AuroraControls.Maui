@@ -53,7 +53,7 @@ public class CalendarPicker : DatePicker
     {
         base.OnPropertyChanged(propertyName);
 
-        if (propertyName == VisualElement.IsFocusedProperty.PropertyName ||
+        if (propertyName == IsFocusedProperty.PropertyName ||
             (this.IsFocused && propertyName == DatePicker.DateProperty.PropertyName))
         {
             this.Date = base.Date;

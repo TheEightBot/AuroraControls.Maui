@@ -35,32 +35,32 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
         switch (maxWidth)
         {
             case <= 0 when maxHeight <= 0:
-                width = (int)this._overrideDrawableArea.Width;
-                height = height = (int)this._overrideDrawableArea.Height;
+                width = (int)_overrideDrawableArea.Width;
+                height = height = (int)_overrideDrawableArea.Height;
                 break;
             case > 0 when maxHeight <= 0:
-                float scaleAmount = maxWidth / this._overrideDrawableArea.Width;
+                float scaleAmount = maxWidth / _overrideDrawableArea.Width;
 
-                width = (int)this._overrideDrawableArea.Width;
-                height = (int)(this._overrideDrawableArea.Height * scaleAmount);
+                width = (int)_overrideDrawableArea.Width;
+                height = (int)(_overrideDrawableArea.Height * scaleAmount);
                 break;
             default:
                 if (maxHeight > 0 && maxWidth <= 0)
                 {
-                    float defaultScaleAmount = maxHeight / this._overrideDrawableArea.Height;
+                    float defaultScaleAmount = maxHeight / _overrideDrawableArea.Height;
 
-                    height = (int)this._overrideDrawableArea.Height;
-                    width = (int)(this._overrideDrawableArea.Width * defaultScaleAmount);
+                    height = (int)_overrideDrawableArea.Height;
+                    width = (int)(_overrideDrawableArea.Width * defaultScaleAmount);
                 }
                 else
                 {
-                    float scaledHeightAmount = maxHeight / this._overrideDrawableArea.Height;
-                    float scaledWidthAmount = maxWidth / this._overrideDrawableArea.Width;
+                    float scaledHeightAmount = maxHeight / _overrideDrawableArea.Height;
+                    float scaledWidthAmount = maxWidth / _overrideDrawableArea.Width;
 
                     float minScale = Math.Min(scaledHeightAmount, scaledWidthAmount);
 
-                    height = (int)(this._overrideDrawableArea.Height * minScale);
-                    width = (int)(this._overrideDrawableArea.Width * minScale);
+                    height = (int)(_overrideDrawableArea.Height * minScale);
+                    width = (int)(_overrideDrawableArea.Width * minScale);
                 }
 
                 break;
@@ -194,7 +194,7 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
 
             _enabledVisualEffects = VisualEffects.Where(x => x.Enabled).ToList();
 
-            if (!this._enabledVisualEffects.Any())
+            if (!_enabledVisualEffects.Any())
             {
                 return;
             }
@@ -208,19 +208,19 @@ public abstract class AuroraViewBase : SKCanvasView, IAuroraView
             {
                 var image = surface.Snapshot();
 
-                if (this._overrideDrawableArea != default(SKRect))
+                if (_overrideDrawableArea != default)
                 {
-                    surface.Canvas.ClipRect(this._overrideDrawableArea);
+                    surface.Canvas.ClipRect(_overrideDrawableArea);
                 }
 
-                foreach (var visualEffect in this._enabledVisualEffects)
+                foreach (var visualEffect in _enabledVisualEffects)
                 {
                     if (!this.IsAttached)
                     {
                         return;
                     }
 
-                    var tmpImage = visualEffect.ApplyEffect(image, surface, info, this._overrideDrawableArea);
+                    var tmpImage = visualEffect.ApplyEffect(image, surface, info, _overrideDrawableArea);
                     image?.Dispose();
                     image = tmpImage;
                 }

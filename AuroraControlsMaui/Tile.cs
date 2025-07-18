@@ -10,11 +10,11 @@ namespace AuroraControls;
 public class Tile : AuroraViewBase
 #pragma warning restore CA1001 // Types that own disposable fields should be disposable
 {
-    private readonly SKPath _backgroundPath = new SKPath();
+    private readonly SKPath _backgroundPath = new();
 
     private readonly string _rippleAnimationName, _tapAnimationName;
 
-    private readonly object _pictureLock = new object();
+    private readonly object _pictureLock = new();
 
     private SKPoint _lastTouchLocation;
     private double _rippleAnimationPercentage, _tapAnimationPercentage;
@@ -36,7 +36,7 @@ public class Tile : AuroraViewBase
     /// The embedded svg image name property.
     /// </summary>
     public static readonly BindableProperty EmbeddedImageNameProperty =
-        BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(Tile), null,
+        BindableProperty.Create(nameof(EmbeddedImageName), typeof(string), typeof(Tile),
             propertyChanged:
                 static (bindable, _, _) =>
                 {
@@ -214,7 +214,7 @@ public class Tile : AuroraViewBase
     /// The tiles text property.
     /// </summary>
     public static readonly BindableProperty TextProperty =
-        BindableProperty.Create(nameof(Text), typeof(string), typeof(Tile), default(string),
+        BindableProperty.Create(nameof(Text), typeof(string), typeof(Tile),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -265,7 +265,7 @@ public class Tile : AuroraViewBase
     /// The typeface property.
     /// </summary>
     public static readonly BindableProperty TypefaceProperty =
-        BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(Tile), default(SKTypeface),
+        BindableProperty.Create(nameof(Typeface), typeof(SKTypeface), typeof(Tile),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -326,7 +326,7 @@ public class Tile : AuroraViewBase
     /// The command property. Fires on tap.
     /// </summary>
     public static readonly BindableProperty CommandProperty =
-        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(Tile), default(ICommand));
+        BindableProperty.Create(nameof(Command), typeof(ICommand), typeof(Tile));
 
     /// <summary>
     /// Gets or sets the command.
@@ -342,7 +342,7 @@ public class Tile : AuroraViewBase
     /// The command parameter property.
     /// </summary>
     public static readonly BindableProperty CommandParameterProperty =
-        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(Tile), default(object));
+        BindableProperty.Create(nameof(CommandParameter), typeof(object), typeof(Tile));
 
     /// <summary>
     /// Gets or sets the command parameter.
@@ -383,7 +383,7 @@ public class Tile : AuroraViewBase
     }
 
     public static readonly BindableProperty NotificationBadgeProperty =
-        BindableProperty.Create(nameof(NotificationBadge), typeof(NotificationBadge), typeof(Tile), default(NotificationBadge));
+        BindableProperty.Create(nameof(NotificationBadge), typeof(NotificationBadge), typeof(Tile));
 
     public NotificationBadge NotificationBadge
     {
@@ -433,189 +433,183 @@ public class Tile : AuroraViewBase
     {
         var canvas = surface.Canvas;
 
-        using (var backgroundPaint = new SKPaint())
+        using var backgroundPaint = new SKPaint();
+        float borderWidth = (float)this.BorderWidth * _scale;
+        float halfBorderWidth = borderWidth * .5f;
+
+        float shadowBlurRadius = (float)this.ShadowBlurRadius * _scale;
+
+        float shadowLocationX = (float)this.ShadowLocation.X * _scale;
+        float shadowLocationY = (float)this.ShadowLocation.Y * _scale;
+
+        float cornerRadius = (float)this.CornerRadius * _scale;
+
+        // TODO: Negative Shadows are busted
+        var rect =
+            new SKRect(
+                shadowLocationX + shadowBlurRadius + halfBorderWidth,
+                shadowLocationY + shadowBlurRadius + halfBorderWidth,
+                info.Width - (shadowLocationX * 2f) - (shadowBlurRadius * 2f) - halfBorderWidth,
+                info.Height - (shadowLocationY * 2f) - (shadowBlurRadius * 2f) - halfBorderWidth);
+
+        backgroundPaint.IsAntialias = true;
+        backgroundPaint.Style = SKPaintStyle.Fill;
+        backgroundPaint.Color = this.ButtonBackgroundColor.ToSKColor();
+
+        canvas.Clear();
+        _backgroundPath.Reset();
+
+        if (this.ShadowColor != Colors.White && this.ShadowLocation != Point.Zero)
         {
-            float borderWidth = (float)this.BorderWidth * _scale;
-            float halfBorderWidth = borderWidth * .5f;
-
-            float shadowBlurRadius = (float)ShadowBlurRadius * _scale;
-
-            float shadowLocationX = (float)ShadowLocation.X * _scale;
-            float shadowLocationY = (float)ShadowLocation.Y * _scale;
-
-            float cornerRadius = (float)CornerRadius * _scale;
-
-            // TODO: Negative Shadows are busted
-            var rect =
-                new SKRect(
-                    shadowLocationX + shadowBlurRadius + halfBorderWidth,
-                    shadowLocationY + shadowBlurRadius + halfBorderWidth,
-                    info.Width - (shadowLocationX * 2f) - (shadowBlurRadius * 2f) - halfBorderWidth,
-                    info.Height - (shadowLocationY * 2f) - (shadowBlurRadius * 2f) - halfBorderWidth);
-
-            backgroundPaint.IsAntialias = true;
-            backgroundPaint.Style = SKPaintStyle.Fill;
-            backgroundPaint.Color = ButtonBackgroundColor.ToSKColor();
-
-            canvas.Clear();
-            _backgroundPath.Reset();
-
-            if (ShadowColor != Colors.White && ShadowLocation != Point.Zero)
-            {
-                using (new SKAutoCanvasRestore(canvas))
-                {
-                    float sigma = SKMaskFilter.ConvertRadiusToSigma(shadowBlurRadius) * (1f - (float)_tapAnimationPercentage);
-                    _shadowPaint.IsAntialias = true;
-                    _shadowPaint.Color = ShadowColor.ToSKColor();
-                    _shadowPaint.Style = SKPaintStyle.Fill;
-                    _shadowPaint.IsAntialias = true;
-                    _shadowPaint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, sigma);
-
-                    canvas.Translate(new SKPoint(shadowLocationX, shadowLocationY));
-
-                    var shadowRect = new SKRect(rect.Left + sigma, rect.Top + sigma, rect.Right - (sigma * 2f), rect.Bottom - (sigma * 2f));
-
-                    canvas.DrawRoundRect(shadowRect, cornerRadius, cornerRadius, _shadowPaint);
-                }
-            }
-
             using (new SKAutoCanvasRestore(canvas))
             {
-                double translateX = _tapAnimationPercentage * shadowLocationX;
-                double translateY = _tapAnimationPercentage * shadowLocationY;
+                float sigma = SKMaskFilter.ConvertRadiusToSigma(shadowBlurRadius) * (1f - (float)_tapAnimationPercentage);
+                _shadowPaint.IsAntialias = true;
+                _shadowPaint.Color = this.ShadowColor.ToSKColor();
+                _shadowPaint.Style = SKPaintStyle.Fill;
+                _shadowPaint.IsAntialias = true;
+                _shadowPaint.MaskFilter = SKMaskFilter.CreateBlur(SKBlurStyle.Normal, sigma);
 
-                canvas.Translate(new SKPoint((float)translateX, (float)translateY));
+                canvas.Translate(new SKPoint(shadowLocationX, shadowLocationY));
 
-                _backgroundPath.AddRoundRect(rect, cornerRadius, cornerRadius);
-                canvas.DrawPath(_backgroundPath, backgroundPaint);
+                var shadowRect = new SKRect(rect.Left + sigma, rect.Top + sigma, rect.Right - (sigma * 2f), rect.Bottom - (sigma * 2f));
 
-                if (_lastTouchLocation != SKPoint.Empty && _rippleAnimationPercentage > 0.0d)
-                {
-                    using (var ripplePath = new SKPath())
-                    {
-                        _ripplePaint.IsAntialias = true;
-                        _ripplePaint.Style = SKPaintStyle.Fill;
-                        _ripplePaint.Color =
-                            ButtonBackgroundColor != Colors.White
-                                ? ButtonBackgroundColor.AddLuminosity(-.2f).MultiplyAlpha((1f - (float)_rippleAnimationPercentage) * .5f).ToSKColor()
-                                : Colors.Transparent.ToSKColor();
-
-                        float startingRippleSize = Math.Min(info.Width, info.Height) * .75f;
-                        float maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * _rippleAnimationPercentage);
-                        float offsetAmount = -maxRippleSize / 2f;
-                        var offsetPoint = new SKPoint(_lastTouchLocation.X + offsetAmount, _lastTouchLocation.Y + offsetAmount);
-                        var rippleSize = SKRect.Create(offsetPoint, new SKSize(maxRippleSize, maxRippleSize));
-
-                        ripplePath.AddOval(rippleSize);
-
-                        using (var finalRipple = ripplePath.Op(_backgroundPath, SKPathOp.Intersect))
-                        {
-                            canvas.DrawPath(finalRipple, _ripplePaint);
-                        }
-                    }
-                }
-
-                if (borderWidth > 0d && BorderColor != Colors.White)
-                {
-                    backgroundPaint.StrokeWidth = borderWidth;
-                    backgroundPaint.Color = BorderColor.ToSKColor();
-                    backgroundPaint.Shader = null;
-                    backgroundPaint.Style = SKPaintStyle.Stroke;
-                    backgroundPaint.IsAntialias = true;
-
-                    canvas.DrawPath(_backgroundPath, backgroundPaint);
-                }
-
-                var textBounds = SKRect.Empty;
-
-                if (!string.IsNullOrEmpty(Text))
-                {
-                    _fontPaint.Color = FontColor.ToSKColor();
-                    _fontPaint.TextSize = (float)FontSize * _scale;
-                    _fontPaint.IsAntialias = true;
-                    _fontPaint.Typeface = Typeface ?? PlatformInfo.DefaultTypeface;
-
-                    textBounds = canvas.GetTextContainerRectAt(Text, SKPoint.Empty, _fontPaint);
-
-                    float textY = rect.Top + rect.Height - (float)ContentPadding.Bottom - textBounds.Height - (borderWidth * 2f);
-
-                    if (IsIconifiedText)
-                    {
-                        canvas.DrawCenteredIconifiedText(Text, rect.MidX, textY, _fontPaint);
-                    }
-                    else
-                    {
-                        _fontPaint.EnsureHasValidFont(Text);
-                        canvas.DrawTextAt(Text, new SKPoint(rect.MidX, textY), _fontPaint, TextDrawLocation.Centered, TextDrawLocation.At);
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(_pictureName))
-                {
-                    // TODO: The text measurement here seems not right
-                    var contentRect = new SKRect(
-                        rect.Left + (float)(ContentPadding.Left * _scale),
-                        rect.Top + (float)(ContentPadding.Top * _scale),
-                        rect.Right - (float)(ContentPadding.Right * _scale),
-                        rect.Bottom - textBounds.Height - (float)(ContentPadding.Bottom * _scale));
-
-                    var imageSize = contentRect.AspectFit(_svg.Picture.CullRect.Size);
-
-                    float scaleAmount =
-                        this.MaxImageSize == Size.Zero
-                            ? Math.Min(imageSize.Width / this._svg.Picture.CullRect.Width, imageSize.Height / this._svg.Picture.CullRect.Height)
-                            : 1f;
-
-                    var svgScale = SKMatrix.CreateScale(scaleAmount, scaleAmount);
-
-                    var translation =
-                        this.MaxImageSize == Size.Zero
-                            ? SKMatrix.CreateTranslation(imageSize.Left, imageSize.Top)
-                            : SKMatrix.CreateTranslation(imageSize.MidX - (_svg.Picture.CullRect.Width / 2f), imageSize.MidY - (_svg.Picture.CullRect.Height / 2f));
-
-                    svgScale = svgScale.PostConcat(translation);
-
-                    if (OverlayColor != Colors.Transparent)
-                    {
-                        using (new SKAutoCanvasRestore(canvas))
-                        {
-                            _overlayPaint.BlendMode = SKBlendMode.SrcATop;
-                            _overlayPaint.IsAntialias = true;
-                            _overlayPaint.Color = OverlayColor.ToSKColor();
-
-                            canvas.SaveLayer(null);
-                            canvas.Clear();
-                            canvas.DrawPicture(_svg.Picture, ref svgScale);
-                            canvas.DrawPaint(_overlayPaint);
-                        }
-                    }
-                    else
-                    {
-                        canvas.DrawPicture(_svg.Picture, ref svgScale);
-                    }
-                }
+                canvas.DrawRoundRect(shadowRect, cornerRadius, cornerRadius, _shadowPaint);
             }
+        }
 
-            if (NotificationBadge != null)
+        using (new SKAutoCanvasRestore(canvas))
+        {
+            double translateX = _tapAnimationPercentage * shadowLocationX;
+            double translateY = _tapAnimationPercentage * shadowLocationY;
+
+            canvas.Translate(new SKPoint((float)translateX, (float)translateY));
+
+            _backgroundPath.AddRoundRect(rect, cornerRadius, cornerRadius);
+            canvas.DrawPath(_backgroundPath, backgroundPaint);
+
+            if (_lastTouchLocation != SKPoint.Empty && _rippleAnimationPercentage > 0.0d)
             {
-                float badgeSize = (float)Math.Min(info.Rect.Height * .33d, info.Rect.Width * .33d);
+                using var ripplePath = new SKPath();
+                _ripplePaint.IsAntialias = true;
+                _ripplePaint.Style = SKPaintStyle.Fill;
+                _ripplePaint.Color =
+                    this.ButtonBackgroundColor != Colors.White
+                        ? this.ButtonBackgroundColor.AddLuminosity(-.2f).MultiplyAlpha((1f - (float)_rippleAnimationPercentage) * .5f).ToSKColor()
+                        : Colors.Transparent.ToSKColor();
 
-                double maxBadgeSize = NotificationBadge.MaxBadgeSize * _scale;
-                double minBadgeSize = NotificationBadge.MinBadgeSize * _scale;
+                float startingRippleSize = Math.Min(info.Width, info.Height) * .75f;
+                float maxRippleSize = startingRippleSize + (float)((Math.Max(info.Width, info.Height) * .4) * _rippleAnimationPercentage);
+                float offsetAmount = -maxRippleSize / 2f;
+                var offsetPoint = new SKPoint(_lastTouchLocation.X + offsetAmount, _lastTouchLocation.Y + offsetAmount);
+                var rippleSize = SKRect.Create(offsetPoint, new SKSize(maxRippleSize, maxRippleSize));
 
-                if (maxBadgeSize > 0 && badgeSize > maxBadgeSize)
-                {
-                    badgeSize = (float)maxBadgeSize;
-                }
+                ripplePath.AddOval(rippleSize);
 
-                if (minBadgeSize > 0 && badgeSize < minBadgeSize)
-                {
-                    badgeSize = (float)minBadgeSize;
-                }
-
-                var badgeRect = new SKRect(info.Rect.Width - badgeSize, 0, info.Rect.Width, badgeSize);
-                NotificationBadge?.DrawNotificationBadge(surface, badgeRect, false);
+                using var finalRipple = ripplePath.Op(_backgroundPath, SKPathOp.Intersect);
+                canvas.DrawPath(finalRipple, _ripplePaint);
             }
+
+            if (borderWidth > 0d && this.BorderColor != Colors.White)
+            {
+                backgroundPaint.StrokeWidth = borderWidth;
+                backgroundPaint.Color = this.BorderColor.ToSKColor();
+                backgroundPaint.Shader = null;
+                backgroundPaint.Style = SKPaintStyle.Stroke;
+                backgroundPaint.IsAntialias = true;
+
+                canvas.DrawPath(_backgroundPath, backgroundPaint);
+            }
+
+            var textBounds = SKRect.Empty;
+
+            if (!string.IsNullOrEmpty(this.Text))
+            {
+                _fontPaint.Color = this.FontColor.ToSKColor();
+                _fontPaint.TextSize = (float)this.FontSize * _scale;
+                _fontPaint.IsAntialias = true;
+                _fontPaint.Typeface = this.Typeface ?? PlatformInfo.DefaultTypeface;
+
+                textBounds = canvas.GetTextContainerRectAt(this.Text, SKPoint.Empty, _fontPaint);
+
+                float textY = rect.Top + rect.Height - (float)this.ContentPadding.Bottom - textBounds.Height - (borderWidth * 2f);
+
+                if (this.IsIconifiedText)
+                {
+                    canvas.DrawCenteredIconifiedText(this.Text, rect.MidX, textY, _fontPaint);
+                }
+                else
+                {
+                    _fontPaint.EnsureHasValidFont(this.Text);
+                    canvas.DrawTextAt(this.Text, new SKPoint(rect.MidX, textY), _fontPaint, TextDrawLocation.Centered);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(_pictureName))
+            {
+                // TODO: The text measurement here seems not right
+                var contentRect = new SKRect(
+                    rect.Left + (float)(this.ContentPadding.Left * _scale),
+                    rect.Top + (float)(this.ContentPadding.Top * _scale),
+                    rect.Right - (float)(this.ContentPadding.Right * _scale),
+                    rect.Bottom - textBounds.Height - (float)(this.ContentPadding.Bottom * _scale));
+
+                var imageSize = contentRect.AspectFit(_svg.Picture.CullRect.Size);
+
+                float scaleAmount =
+                    this.MaxImageSize == Size.Zero
+                        ? Math.Min(imageSize.Width / _svg.Picture.CullRect.Width, imageSize.Height / _svg.Picture.CullRect.Height)
+                        : 1f;
+
+                var svgScale = SKMatrix.CreateScale(scaleAmount, scaleAmount);
+
+                var translation =
+                    this.MaxImageSize == Size.Zero
+                        ? SKMatrix.CreateTranslation(imageSize.Left, imageSize.Top)
+                        : SKMatrix.CreateTranslation(imageSize.MidX - (_svg.Picture.CullRect.Width / 2f), imageSize.MidY - (_svg.Picture.CullRect.Height / 2f));
+
+                svgScale = svgScale.PostConcat(translation);
+
+                if (this.OverlayColor != Colors.Transparent)
+                {
+                    using (new SKAutoCanvasRestore(canvas))
+                    {
+                        _overlayPaint.BlendMode = SKBlendMode.SrcATop;
+                        _overlayPaint.IsAntialias = true;
+                        _overlayPaint.Color = this.OverlayColor.ToSKColor();
+
+                        canvas.SaveLayer(null);
+                        canvas.Clear();
+                        canvas.DrawPicture(_svg.Picture, ref svgScale);
+                        canvas.DrawPaint(_overlayPaint);
+                    }
+                }
+                else
+                {
+                    canvas.DrawPicture(_svg.Picture, ref svgScale);
+                }
+            }
+        }
+
+        if (this.NotificationBadge != null)
+        {
+            float badgeSize = (float)Math.Min(info.Rect.Height * .33d, info.Rect.Width * .33d);
+
+            double maxBadgeSize = this.NotificationBadge.MaxBadgeSize * _scale;
+            double minBadgeSize = this.NotificationBadge.MinBadgeSize * _scale;
+
+            if (maxBadgeSize > 0 && badgeSize > maxBadgeSize)
+            {
+                badgeSize = (float)maxBadgeSize;
+            }
+
+            if (minBadgeSize > 0 && badgeSize < minBadgeSize)
+            {
+                badgeSize = (float)minBadgeSize;
+            }
+
+            var badgeRect = new SKRect(info.Rect.Width - badgeSize, 0, info.Rect.Width, badgeSize);
+            this.NotificationBadge?.DrawNotificationBadge(surface, badgeRect, false);
         }
     }
 

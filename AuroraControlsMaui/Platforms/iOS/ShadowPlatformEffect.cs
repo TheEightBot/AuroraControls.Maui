@@ -120,7 +120,7 @@ public class ShadowPlatformEffect : PlatformEffect
             return;
         }
 
-        view.Layer.ShadowColor = shadowColor.ToCGColor();
+        view.Layer.ShadowColor = shadowColor?.ToCGColor() ?? UIColor.Black.CGColor;
     }
 
     private void UpdateShadowPath()
@@ -141,7 +141,7 @@ public class ShadowPlatformEffect : PlatformEffect
             return;
         }
 
-        if (view.Layer.ShadowPath != null && view.Layer.ShadowPath != this._originalShadowPath)
+        if (view.Layer.ShadowPath != null && view.Layer.ShadowPath != _originalShadowPath)
         {
             var sp = view.Layer.ShadowPath;
             view.Layer.ShadowPath = null;

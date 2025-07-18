@@ -14,11 +14,11 @@ public class ConfettiView : SceneViewBase
 #pragma warning restore CA1001
 {
     private readonly Random _rng;
-    private readonly SKPaint _paint = new SKPaint();
+    private readonly SKPaint _paint = new();
 
     private ConfettiParticle[] _particles;
     private double _angle;
-    private bool _confettiActive = true;
+    private bool _confettiActive;
     private int _currentParticleCount;
     private int _canvasWidth;
     private int _canvasHeight;
@@ -157,7 +157,7 @@ public class ConfettiView : SceneViewBase
     /// The colors property. Allows setting custom colors for confetti particles.
     /// </summary>
     public static BindableProperty ColorsProperty =
-        BindableProperty.Create(nameof(Colors), typeof(IList<Color>), typeof(ConfettiView), null,
+        BindableProperty.Create(nameof(Colors), typeof(IList<Color>), typeof(ConfettiView),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
@@ -211,9 +211,9 @@ public class ConfettiView : SceneViewBase
     {
         base.OnPropertyChanged(propertyName);
 
-        if (propertyName?.Equals(VisualElement.HeightProperty.PropertyName) == true ||
-            propertyName?.Equals(VisualElement.WidthProperty.PropertyName) == true ||
-            propertyName?.Equals(View.MarginProperty.PropertyName) == true)
+        if (propertyName?.Equals(HeightProperty.PropertyName) == true ||
+            propertyName?.Equals(WidthProperty.PropertyName) == true ||
+            propertyName?.Equals(MarginProperty.PropertyName) == true)
         {
             InvalidateSurface();
         }

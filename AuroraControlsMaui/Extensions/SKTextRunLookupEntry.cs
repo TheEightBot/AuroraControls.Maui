@@ -18,7 +18,7 @@ public class SKTextRunLookupEntry : IDisposable
             throw new ArgumentNullException(nameof(characters));
         }
 
-        this._disposeTypeface = disposeTypeface;
+        _disposeTypeface = disposeTypeface;
         Typeface = typeface;
         Characters = characters;
     }

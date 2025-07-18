@@ -26,7 +26,7 @@ public partial class ImageProcessing : ContentPage
         _scale = new AuroraControls.ImageProcessing.Scale();
         _sepia = new AuroraControls.ImageProcessing.Sepia();
 
-        this._imageProcessing.AddRange([_blur, _circular, _grayscale, _invert, _scale, _sepia]);
+        _imageProcessing.AddRange([_blur, _circular, _grayscale, _invert, _scale, _sepia]);
     }
 
     private void Handle_ValueChanged(object? sender, ValueChangedEventArgs e)
@@ -41,7 +41,7 @@ public partial class ImageProcessing : ContentPage
             _index = 0;
         }
 
-        var processingEffect = this._imageProcessing.ElementAt(_index);
+        var processingEffect = _imageProcessing.ElementAt(_index);
 
         if (ImageProcessingEffect.ImageProcessingEffects.Contains(processingEffect))
         {

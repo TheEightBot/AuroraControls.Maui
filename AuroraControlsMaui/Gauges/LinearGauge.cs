@@ -148,94 +148,92 @@ public class LinearGauge : AuroraViewBase
     {
         var canvas = surface.Canvas;
 
-        using (var progressPaint = new SKPaint())
-        using (var progressPath = new SKPath())
-        using (var progressBackgroundPaint = new SKPaint())
-        using (var backgroundProgressPath = new SKPath())
+        using var progressPaint = new SKPaint();
+        using var progressPath = new SKPath();
+        using var progressBackgroundPaint = new SKPaint();
+        using var backgroundProgressPath = new SKPath();
+        SKStrokeCap endCapType = SKStrokeCap.Round;
+
+        switch (this.EndCapType)
         {
-            SKStrokeCap endCapType = SKStrokeCap.Round;
+            case EndCapType.Rounded:
+                endCapType = SKStrokeCap.Round;
+                break;
+            case EndCapType.Square:
+                endCapType = SKStrokeCap.Square;
+                break;
+        }
 
-            switch (EndCapType)
+        float scaledProgressThickness = _scale * (float)this.ProgressThickness;
+
+        progressPaint.IsAntialias = true;
+        progressPaint.StrokeCap = endCapType;
+        progressPaint.Style = SKPaintStyle.Stroke;
+        progressPaint.Color = this.ProgressColor.ToSKColor();
+        progressPaint.StrokeWidth = scaledProgressThickness;
+
+        progressBackgroundPaint.IsAntialias = true;
+        progressBackgroundPaint.StrokeCap = endCapType;
+        progressBackgroundPaint.Style = SKPaintStyle.Stroke;
+        progressBackgroundPaint.Color = this.ProgressBackgroundColor.ToSKColor();
+        progressBackgroundPaint.StrokeWidth = scaledProgressThickness;
+
+        var orientation = this.Orientation;
+
+        switch (orientation)
+        {
+            case LinearGaugeOrientation.Horizontal:
+            case LinearGaugeOrientation.ReverseHorizontal:
+                double startHorizontal = ((info.Width * (this.StartingPercent / 100)) + scaledProgressThickness).Clamp(scaledProgressThickness, info.Width - scaledProgressThickness);
+                double endHorizontal = ((info.Width * (this.EndingPercent / 100)) - scaledProgressThickness).Clamp(scaledProgressThickness, info.Width - scaledProgressThickness);
+
+                float startBackgroundHorizontal = scaledProgressThickness.Clamp(scaledProgressThickness, info.Width - scaledProgressThickness);
+                float endBackgroundHorizontal = (info.Width - scaledProgressThickness).Clamp(scaledProgressThickness, info.Width - scaledProgressThickness);
+
+                float centerVertical = info.Height / 2f;
+
+                progressPath.MoveTo((float)startHorizontal, centerVertical);
+                progressPath.LineTo((float)endHorizontal, centerVertical);
+
+                backgroundProgressPath.MoveTo(startBackgroundHorizontal, centerVertical);
+                backgroundProgressPath.LineTo(endBackgroundHorizontal, centerVertical);
+                break;
+
+            case LinearGaugeOrientation.Vertical:
+            case LinearGaugeOrientation.ReverseVertical:
+                double startVertical = ((info.Height * (this.StartingPercent / 100)) + scaledProgressThickness).Clamp(scaledProgressThickness, info.Height - scaledProgressThickness);
+                double endVertical = ((info.Height * (this.EndingPercent / 100)) - scaledProgressThickness).Clamp(scaledProgressThickness, info.Height - scaledProgressThickness);
+
+                float startBackgroundVertical = scaledProgressThickness.Clamp(scaledProgressThickness, info.Height - scaledProgressThickness);
+                float endBackgroundVertical = (info.Height - scaledProgressThickness).Clamp(scaledProgressThickness, info.Height - scaledProgressThickness);
+
+                float centerHorizontal = info.Width / 2f;
+
+                progressPath.MoveTo(centerHorizontal, (float)startVertical);
+                progressPath.LineTo(centerHorizontal, (float)endVertical);
+
+                backgroundProgressPath.MoveTo(centerHorizontal, startBackgroundVertical);
+                backgroundProgressPath.LineTo(centerHorizontal, endBackgroundVertical);
+                break;
+        }
+
+        canvas.Clear();
+        canvas.DrawPath(backgroundProgressPath, progressBackgroundPaint);
+
+        if (this.StartingPercent != this.EndingPercent)
+        {
+            using (new SKAutoCanvasRestore(canvas, true))
             {
-                case EndCapType.Rounded:
-                    endCapType = SKStrokeCap.Round;
-                    break;
-                case EndCapType.Square:
-                    endCapType = SKStrokeCap.Square;
-                    break;
-            }
-
-            float scaledProgressThickness = _scale * (float)ProgressThickness;
-
-            progressPaint.IsAntialias = true;
-            progressPaint.StrokeCap = endCapType;
-            progressPaint.Style = SKPaintStyle.Stroke;
-            progressPaint.Color = ProgressColor.ToSKColor();
-            progressPaint.StrokeWidth = scaledProgressThickness;
-
-            progressBackgroundPaint.IsAntialias = true;
-            progressBackgroundPaint.StrokeCap = endCapType;
-            progressBackgroundPaint.Style = SKPaintStyle.Stroke;
-            progressBackgroundPaint.Color = ProgressBackgroundColor.ToSKColor();
-            progressBackgroundPaint.StrokeWidth = scaledProgressThickness;
-
-            var orientation = this.Orientation;
-
-            switch (orientation)
-            {
-                case LinearGaugeOrientation.Horizontal:
-                case LinearGaugeOrientation.ReverseHorizontal:
-                    double startHorizontal = ((info.Width * (this.StartingPercent / 100)) + scaledProgressThickness).Clamp(scaledProgressThickness, info.Width - scaledProgressThickness);
-                    double endHorizontal = ((info.Width * (this.EndingPercent / 100)) - scaledProgressThickness).Clamp(scaledProgressThickness, info.Width - scaledProgressThickness);
-
-                    float startBackgroundHorizontal = scaledProgressThickness.Clamp(scaledProgressThickness, info.Width - scaledProgressThickness);
-                    float endBackgroundHorizontal = (info.Width - scaledProgressThickness).Clamp(scaledProgressThickness, info.Width - scaledProgressThickness);
-
-                    float centerVertical = info.Height / 2f;
-
-                    progressPath.MoveTo((float)startHorizontal, centerVertical);
-                    progressPath.LineTo((float)endHorizontal, centerVertical);
-
-                    backgroundProgressPath.MoveTo(startBackgroundHorizontal, centerVertical);
-                    backgroundProgressPath.LineTo(endBackgroundHorizontal, centerVertical);
-                    break;
-
-                case LinearGaugeOrientation.Vertical:
-                case LinearGaugeOrientation.ReverseVertical:
-                    double startVertical = ((info.Height * (this.StartingPercent / 100)) + scaledProgressThickness).Clamp(scaledProgressThickness, info.Height - scaledProgressThickness);
-                    double endVertical = ((info.Height * (this.EndingPercent / 100)) - scaledProgressThickness).Clamp(scaledProgressThickness, info.Height - scaledProgressThickness);
-
-                    float startBackgroundVertical = scaledProgressThickness.Clamp(scaledProgressThickness, info.Height - scaledProgressThickness);
-                    float endBackgroundVertical = (info.Height - scaledProgressThickness).Clamp(scaledProgressThickness, info.Height - scaledProgressThickness);
-
-                    float centerHorizontal = info.Width / 2f;
-
-                    progressPath.MoveTo(centerHorizontal, (float)startVertical);
-                    progressPath.LineTo(centerHorizontal, (float)endVertical);
-
-                    backgroundProgressPath.MoveTo(centerHorizontal, startBackgroundVertical);
-                    backgroundProgressPath.LineTo(centerHorizontal, endBackgroundVertical);
-                    break;
-            }
-
-            canvas.Clear();
-            canvas.DrawPath(backgroundProgressPath, progressBackgroundPaint);
-
-            if (StartingPercent != EndingPercent)
-            {
-                using (new SKAutoCanvasRestore(canvas, true))
+                if (orientation == LinearGaugeOrientation.ReverseHorizontal)
                 {
-                    if (orientation == LinearGaugeOrientation.ReverseHorizontal)
-                    {
-                        canvas.Scale(-1, 1, info.Width * .5f, 0f);
-                    }
-                    else if (orientation == LinearGaugeOrientation.ReverseVertical)
-                    {
-                        canvas.Scale(1, -1, 0f, info.Height * .5f);
-                    }
-
-                    canvas.DrawPath(progressPath, progressPaint);
+                    canvas.Scale(-1, 1, info.Width * .5f, 0f);
                 }
+                else if (orientation == LinearGaugeOrientation.ReverseVertical)
+                {
+                    canvas.Scale(1, -1, 0f, info.Height * .5f);
+                }
+
+                canvas.DrawPath(progressPath, progressPaint);
             }
         }
     }
