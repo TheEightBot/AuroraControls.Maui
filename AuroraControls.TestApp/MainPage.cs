@@ -104,7 +104,7 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                         Children =
                         {
                             new Button { BackgroundColor = Colors.Fuchsia, }
-                                .SetSvgIcon("splatoon.svg", 40, colorOverride: Colors.White),
+                                .SetSvgIcon("dollar_sign.svg", 75, colorOverride: Colors.White),
 
                             new Button { Text = "View Image Processing", }
                                 .BindClicked(async () => await this.Navigation.PushAsync(new ImageProcessing()))
@@ -172,6 +172,10 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                             new Button { Text = "View ConfettiView Test Page", }
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new ConfettiViewTestPage())),
+
+                            new Button { Text = "Grid Image Page", }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new GridImagePage())),
 
                             new ToggleBox
                             {
