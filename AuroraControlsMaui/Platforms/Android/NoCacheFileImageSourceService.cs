@@ -78,7 +78,7 @@ internal partial class NoCacheFileImageSourceService
                     }
                 }
 
-                var pathBitmap = await BitmapFactory.DecodeFileAsync(file);
+                var pathBitmap = BitmapFactory.DecodeFile(file);
                 var pathDrawable = new BitmapDrawable(Platform.AppContext.Resources, pathBitmap);
                 return new ImageSourceServiceResult(pathDrawable);
             }
