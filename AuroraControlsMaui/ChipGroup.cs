@@ -285,7 +285,6 @@ public class ChipGroup : ContentView, IDisposable
             Direction = FlexDirection.Row,
             Wrap = IsScrollable ? FlexWrap.NoWrap : FlexWrap.Wrap,
             JustifyContent = FlexJustify.Start,
-            AlignItems = FlexAlignItems.Center,
         };
 
         ApplyChipInset();
