@@ -10,6 +10,7 @@ using Bumptech.Glide;
 using Bumptech.Glide.Request;
 using Bumptech.Glide.Request.Target;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Platform;
 using Path = System.IO.Path;
@@ -18,78 +19,140 @@ namespace AuroraControls;
 
 internal partial class NoCacheFileImageSourceService
 {
+    private static readonly BitmapFactory.Options _bitmapFactoryOptions =
+        new()
+        {
+            InSampleSize = 1,
+            InPreferredConfig = Bitmap.Config.Argb8888, // Uses less memory than ARGB_8888
+            InDither = false,
+            InTempStorage = new byte[32 * 1024], // 32KB buffer for decoding
+        };
+
     public override async Task<IImageSourceServiceResult?> LoadDrawableAsync(IImageSource imageSource, ImageView imageView,
         CancellationToken cancellationToken = default)
     {
         var fileImageSource = (INoCacheFileImageSource)imageSource;
 
-        if (!fileImageSource.IsEmpty)
+        if (fileImageSource.IsEmpty)
         {
-            var file = fileImageSource.File;
-
-            try
-            {
-                if (!Path.IsPathRooted(file) || !File.Exists(file))
-                {
-                    var id = imageView.Context?.GetDrawableId(file) ?? -1;
-                    if (id > 0)
-                    {
-                        imageView.SetImageResource(id);
-                        return new ImageSourceServiceLoadResult();
-                    }
-                }
-
-                using var pathBitmap = await BitmapFactory.DecodeFileAsync(file);
-                using var pathDrawable = new BitmapDrawable(Platform.AppContext.Resources, pathBitmap);
-                imageView.SetImageDrawable(pathDrawable);
-
-                return new ImageSourceServiceLoadResult();
-            }
-            catch (Exception ex)
-            {
-                Logger?.LogWarning(ex, "Unable to load image file '{File}'.", file);
-                throw;
-            }
+            return null;
         }
 
-        return null;
+        var file = fileImageSource.File;
+
+        try
+        {
+            if (!Path.IsPathRooted(file) || !File.Exists(file))
+            {
+                var id = imageView.Context?.GetDrawableId(file) ?? -1;
+                if (id > 0)
+                {
+                    imageView.SetImageResource(id);
+                    return new ImageSourceServiceLoadResult();
+                }
+            }
+
+            var pathDrawable = CreateDrawableModern(file, imageView.Context!);
+            if (pathDrawable != null)
+            {
+                imageView.SetImageDrawable(pathDrawable);
+                return new ImageSourceServiceLoadResult(() => pathDrawable.Dispose());
+            }
+
+            return null;
+        }
+        catch (Exception ex)
+        {
+            this.Logger?.LogWarning(ex, "Unable to load image file '{File}'.", file);
+            throw;
+        }
     }
 
     public override async Task<IImageSourceServiceResult<Drawable>?> GetDrawableAsync(IImageSource imageSource, Context context,
         CancellationToken cancellationToken = default)
     {
         var fileImageSource = (INoCacheFileImageSource)imageSource;
-        if (!fileImageSource.IsEmpty)
+        if (fileImageSource.IsEmpty)
         {
-            var file = fileImageSource.File;
-
-            try
-            {
-                if (!Path.IsPathRooted(file) || !File.Exists(file))
-                {
-                    var id = context?.GetDrawableId(file) ?? -1;
-                    if (id > 0)
-                    {
-                        var d = context?.GetDrawable(id);
-                        if (d is not null)
-                        {
-                            return new ImageSourceServiceResult(d);
-                        }
-                    }
-                }
-
-                var pathBitmap = BitmapFactory.DecodeFile(file);
-                var pathDrawable = new BitmapDrawable(Platform.AppContext.Resources, pathBitmap);
-                return new ImageSourceServiceResult(pathDrawable);
-            }
-            catch (Exception ex)
-            {
-                Logger?.LogWarning(ex, "Unable to load image file '{File}'.", file);
-                throw;
-            }
+            return null;
         }
 
-        return null;
+        var file = fileImageSource.File;
+
+        try
+        {
+            if (!Path.IsPathRooted(file) || !File.Exists(file))
+            {
+                var id = context?.GetDrawableId(file) ?? -1;
+                if (id > 0)
+                {
+                    var d = context?.GetDrawable(id);
+                    if (d is not null)
+                    {
+                        return new ImageSourceServiceResult(d);
+                    }
+                }
+            }
+
+            var pathDrawable = CreateDrawableModern(file, context!);
+            if (pathDrawable != null)
+            {
+                return new ImageSourceServiceResult(pathDrawable, () => pathDrawable.Dispose());
+            }
+
+            return null;
+        }
+        catch (Exception ex)
+        {
+            this.Logger?.LogWarning(ex, "Unable to load image file '{File}'.", file);
+            throw;
+        }
+    }
+
+    private static Drawable? CreateDrawableModern(string file, Context context)
+    {
+        try
+        {
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.P)
+            {
+                // Use modern ImageDecoder for Android API 28+
+                var source = ImageDecoder.CreateSource(new Java.IO.File(file));
+                var bitmap = ImageDecoder.DecodeBitmap(
+                    source,
+                    new ImageDecoderOnHeaderDecodedListener(
+                        decoder =>
+                        {
+                            decoder.SetTargetColorSpace(ColorSpace.Get(ColorSpace.Named.Srgb)!);
+                            decoder.MemorySizePolicy = ImageDecoderMemoryPolicy.Default;
+                        }));
+                return new BitmapDrawable(context.Resources, bitmap);
+            }
+            else
+            {
+                // Fallback to optimized BitmapFactory for older devices
+                var bitmap = BitmapFactory.DecodeFile(file, _bitmapFactoryOptions);
+                return new BitmapDrawable(context.Resources, bitmap);
+            }
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private class ImageDecoderOnHeaderDecodedListener : Java.Lang.Object, ImageDecoder.IOnHeaderDecodedListener
+    {
+        private readonly Action<ImageDecoder> _onHeaderDecoded;
+
+        public ImageDecoderOnHeaderDecodedListener(Action<ImageDecoder> onHeaderDecoded)
+        {
+            _onHeaderDecoded = onHeaderDecoded;
+        }
+
+        public void OnHeaderDecoded(ImageDecoder decoder, ImageDecoder.ImageInfo info, ImageDecoder.Source source)
+        {
+            _onHeaderDecoded(decoder);
+        }
     }
 }
 
