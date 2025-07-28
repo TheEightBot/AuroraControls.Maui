@@ -1,4 +1,4 @@
-﻿using Svg.Skia;
+using Svg.Skia;
 using Color = Microsoft.Maui.Graphics.Color;
 
 namespace AuroraControls;
@@ -129,7 +129,7 @@ public class SvgImageView : AuroraViewBase
 
         canvas.Clear();
 
-        if (!string.IsNullOrEmpty(_pictureName))
+        if (!string.IsNullOrEmpty(_pictureName) && _svg?.Picture != null)
         {
             float scaleAmount =
                 this.MaxImageSize == Size.Zero
@@ -144,7 +144,7 @@ public class SvgImageView : AuroraViewBase
 
             canvas.DrawPicture(_svg.Picture, ref scale);
 
-            if (OverlayColor != Colors.Transparent)
+            if (OverlayColor != Colors.Transparent && _overlayPaint != null)
             {
                 using (new SKAutoCanvasRestore(canvas))
                 {
