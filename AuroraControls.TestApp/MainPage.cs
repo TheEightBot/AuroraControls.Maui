@@ -186,6 +186,11 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                             },
                             new StyledInputLayout
                             {
+                                Placeholder = "Styled input layout with search bar",
+                                Content = new SearchBar(),
+                            },
+                            new StyledInputLayout
+                            {
                                 Command = new Command(() => this.DisplayAlert("Command Tapped", "You have successfully tapped the command", "Great, Thanks!")),
                                 Content =
                                     new Entry { Placeholder = "Styled input layout with command", },

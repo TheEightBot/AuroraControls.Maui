@@ -297,7 +297,23 @@ public class PlatformUnderlayDrawable : IDisposable
             {
                 addedView.BackgroundColor = UIColor.Clear;
 
-                if (addedView is UITextField tf)
+                // Special handling for UISearchBar
+                if (addedView is UISearchBar searchBar)
+                {
+                    searchBar.BackgroundImage = new UIImage();
+                    searchBar.BarTintColor = UIColor.Clear;
+
+                    var textField = searchBar.ValueForKey(new Foundation.NSString("searchField")) as UITextField;
+                    if (textField != null)
+                    {
+                        textField.BorderStyle = UITextBorderStyle.None;
+                        textField.BackgroundColor = UIColor.SystemBackground;
+
+                        textField.LeftView?.RemoveFromSuperview();
+                        textField.LayoutMargins = new UIEdgeInsets(0, 0, 0, 0);
+                    }
+                }
+                else if (addedView is UITextField tf)
                 {
                     tf.BorderStyle = UITextBorderStyle.None;
                 }
@@ -311,6 +327,39 @@ public class PlatformUnderlayDrawable : IDisposable
 
             _platformView.InsertSubview(_canvas, 0);
 #elif ANDROID
+            if (_platformView is SearchView searchView)
+            {
+                int searchEditTextId = searchView.Context.Resources
+                    .GetIdentifier("android:id/search_src_text", null, null);
+                var searchEditText = searchView.FindViewById<EditText>(searchEditTextId);
+
+                if (searchEditText != null)
+                {
+                    searchEditText.SetBackgroundColor(Android.Graphics.Color.Transparent);
+                    searchEditText.Background = null;
+                    searchEditText.SetIncludeFontPadding(false);
+                    searchEditText.SetPadding(0, 0, 0, 0);
+                }
+
+                int searchIconId = searchView.Context.Resources
+                    .GetIdentifier("android:id/search_mag_icon", null, null);
+                var searchIcon = searchView.FindViewById<Android.Views.View>(searchIconId);
+                if (searchIcon != null)
+                {
+                    searchIcon.Visibility = Android.Views.ViewStates.Gone;
+                }
+
+                int micIconId = searchView.Context.Resources
+                    .GetIdentifier("android:id/search_voice_btn", null, null);
+                var micIcon = searchView.FindViewById<Android.Views.View>(micIconId);
+                if (micIcon != null)
+                {
+                    micIcon.Visibility = Android.Views.ViewStates.Gone;
+                }
+
+                searchView.SetBackgroundColor(Android.Graphics.Color.Transparent);
+            }
+
             var addedView = _platformView.GetChildAt(0);
 
             if (addedView is not null)
@@ -318,6 +367,7 @@ public class PlatformUnderlayDrawable : IDisposable
                 if (addedView is EditText et)
                 {
                     et.SetBackgroundColor(Android.Graphics.Color.Transparent);
+                    et.Background = null;
                     et.SetIncludeFontPadding(false);
                     et.SetPadding(0, 0, 0, 0);
                 }

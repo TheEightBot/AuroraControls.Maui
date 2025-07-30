@@ -22,6 +22,11 @@ public class StyledInputLayout : ContentView, IUnderlayDrawable
                     nameof(Editor.Text),
                     view => !string.IsNullOrEmpty(view.Text),
                     true),
+            [typeof(SearchBar)] =
+                StyledContentTypeRegistration.Build<SearchBar>(
+                    nameof(SearchBar.Text),
+                    view => !string.IsNullOrEmpty(view.Text),
+                    false),
             [typeof(InputView)] =
                 StyledContentTypeRegistration.Build<InputView>(
                     nameof(InputView.Text),
