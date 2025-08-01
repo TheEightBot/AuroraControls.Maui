@@ -556,4 +556,22 @@ public static class VisualElementExtensions
         new(
             thickness.Left * scale, thickness.Top * scale,
             thickness.Right * scale, thickness.Bottom * scale);
+
+    public static void RemoveFromParent(this VisualElement? element)
+    {
+        if (element is null || element.Parent is null)
+        {
+            return;
+        }
+
+#if ANDROID
+        if (element.Handler?.PlatformView is Android.Views.View v &&
+            v.Parent is Android.Views.ViewGroup vg)
+        {
+            vg.RemoveView(v);
+        }
+#endif
+
+        element.Parent = null;
+    }
 }

@@ -114,6 +114,9 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 .BindClicked(async () => await this.Navigation.PushAsync(new CardViewLayoutPage()))
                                 .Assign(out _viewCardViewLayoutButton),
 
+                            new Button { Text = "View WrapLayout Test", }
+                                .BindClicked(async () => await this.Navigation.PushAsync(new WrapLayoutTestPage())),
+
                             new Button { Text = "View Calendar View", }
                                 .BindClicked(async () => await this.Navigation.PushAsync(new CalendarViewPage()))
                                 .Assign(out _viewCalendarViewButton),
