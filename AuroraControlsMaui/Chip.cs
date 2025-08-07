@@ -18,6 +18,8 @@ public enum ChipState
 
 public class Chip : AuroraViewBase, IDisposable
 {
+    private const float RemoveTouchPadding = 16f; // Additional padding around remove icon for easier tapping
+
     private static readonly Size _minSize = new(32, 32);
 
     private readonly SKPath _backgroundPath = new();
@@ -32,6 +34,9 @@ public class Chip : AuroraViewBase, IDisposable
 
     private SKRect _rect, _removeRect;
     private SKSvg? _leadingSvg, _trailingSvg;
+
+    // Expanded touch area for the remove button (invisible, larger than visual area)
+    private SKRect _removeTouchRect;
 
     private double _calculatedWidth;
 
@@ -762,6 +767,13 @@ public class Chip : AuroraViewBase, IDisposable
                 float top = _rect.Top + ((_rect.Height - size) / 2f);
                 _removeRect = new SKRect(xOffset, top, xOffset + size, top + size).Subtract(8d);
 
+                // Create the expanded touch rectangle without modifying the original _removeRect
+                _removeTouchRect = new SKRect(
+                    _removeRect.Left - RemoveTouchPadding,
+                    _removeRect.Top - RemoveTouchPadding,
+                    _removeRect.Right + RemoveTouchPadding,
+                    _removeRect.Bottom + RemoveTouchPadding);
+
                 using (new SKAutoCanvasRestore(canvas))
                 {
                     using var overlayPaint = new SKPaint();
@@ -829,7 +841,8 @@ public class Chip : AuroraViewBase, IDisposable
             return;
         }
 
-        if (this.IsRemovable && _removeRect.Contains(e.Location))
+        // Check for remove button tap using the expanded touch area for easier finger tapping
+        if (this.IsRemovable && _removeTouchRect.Contains(e.Location))
         {
             if (this.RemovedCommand?.CanExecute(this.RemovedCommandParameter) ?? false)
             {
