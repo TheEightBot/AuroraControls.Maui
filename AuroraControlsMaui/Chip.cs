@@ -366,18 +366,18 @@ public class Chip : AuroraViewBase, IDisposable
     /// <summary>
     /// The font color of the text.
     /// </summary>
-    public static readonly BindableProperty FontColorProperty =
-        BindableProperty.Create(nameof(FontColor), typeof(Color), typeof(Chip), Color.FromArgb("#272727"),
+    public static readonly BindableProperty TextColorProperty =
+        BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(Chip), Color.FromArgb("#272727"),
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>
     /// Gets or sets the color of the font.
     /// </summary>
     /// <value>Expects a Color. Default value is #272727.</value>
-    public Color FontColor
+    public Color TextColor
     {
-        get => (Color)GetValue(FontColorProperty);
-        set => SetValue(FontColorProperty, value);
+        get => (Color)GetValue(TextColorProperty);
+        set => SetValue(TextColorProperty, value);
     }
 
     public static readonly BindableProperty ToggledFontColorProperty =
@@ -589,7 +589,7 @@ public class Chip : AuroraViewBase, IDisposable
                 ? this.ToggledFontColor
                 : isReadonly
                     ? this.ReadOnlyFontColor
-                    : this.FontColor)
+                    : this.TextColor)
             .ToSKColor();
 
         var borderColor =

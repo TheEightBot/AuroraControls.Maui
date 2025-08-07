@@ -95,6 +95,7 @@ public class WrapLayout : Layout
         if (bindable is WrapLayout layout)
         {
             layout.InvalidateMeasureNonVirtual(InvalidationTrigger.HorizontalOptionsChanged);
+
             #if ANDROID
             if (layout.Handler?.PlatformView is Android.Views.View platformView)
             {
