@@ -22,9 +22,19 @@ public class ChipGroup : Layout, ILayoutManager
 
     public event EventHandler<ChipTappedEventArgs>? ChipTapped;
 
+    /// <summary>
+    /// Gets a strongly-typed collection of Chip children in this ChipGroup.
+    /// </summary>
+    public IEnumerable<Chip> Chips => this.OfType<Chip>();
+
+    /// <summary>
+    /// Gets the count of Chip children in this ChipGroup.
+    /// </summary>
+    public int ChipCount => this.OfType<Chip>().Count();
+
     public IEnumerable<Chip> SelectedChips
     {
-        get => this.Where(x => x is Chip chip && chip.IsToggled).Cast<Chip>().ToArray();
+        get => Chips.Where(chip => chip.IsToggled).ToArray();
     }
 
     public IEnumerable<object> SelectedValues
@@ -32,11 +42,9 @@ public class ChipGroup : Layout, ILayoutManager
         get => SelectedChips.Select(x => x.Value).ToArray() ?? Enumerable.Empty<object>();
         set
         {
-            var children = this.OfType<Chip>().ToArray();
-
-            foreach (var child in children)
+            foreach (var chip in Chips)
             {
-                child.IsToggled = value.Contains(child.Value);
+                chip.IsToggled = value.Contains(chip.Value);
             }
 
             OnPropertyChanged();
@@ -48,15 +56,13 @@ public class ChipGroup : Layout, ILayoutManager
         get => SelectedChips.Select(x => x.Value).FirstOrDefault();
         set
         {
-            var children = this.OfType<Chip>().ToArray();
-
             var hasToggled = false;
-            foreach (var child in children)
+            foreach (var chip in Chips)
             {
                 if (!hasToggled)
                 {
-                    var isMatch = child.Value?.Equals(value) ?? false;
-                    child.IsToggled = isMatch;
+                    var isMatch = chip.Value?.Equals(value) ?? false;
+                    chip.IsToggled = isMatch;
 
                     if (isMatch)
                     {
@@ -66,7 +72,7 @@ public class ChipGroup : Layout, ILayoutManager
                     continue;
                 }
 
-                child.IsToggled = false;
+                chip.IsToggled = false;
             }
 
             OnPropertyChanged();
@@ -184,7 +190,7 @@ public class ChipGroup : Layout, ILayoutManager
     public async Task ScrollToContextAsync(object item, ScrollToPosition scrollToPosition = ScrollToPosition.Start, bool animated = true, uint rate = 16,
         uint length = 250, Easing? easing = null)
     {
-        var matchingChip = this.OfType<Chip>().FirstOrDefault(x => x.BindingContext == item);
+        var matchingChip = Chips.FirstOrDefault(x => x.BindingContext == item);
 
         if (matchingChip == null)
         {
@@ -197,7 +203,7 @@ public class ChipGroup : Layout, ILayoutManager
     public async Task ScrollToValueAsync(object item, ScrollToPosition scrollToPosition = ScrollToPosition.Start, bool animated = true, uint rate = 16,
         uint length = 250, Easing? easing = null)
     {
-        var matchingChip = this.OfType<Chip>().FirstOrDefault(x => x.Value?.Equals(item) ?? false);
+        var matchingChip = Chips.FirstOrDefault(x => x.Value?.Equals(item) ?? false);
 
         if (matchingChip == null)
         {
@@ -293,7 +299,7 @@ public class ChipGroup : Layout, ILayoutManager
 
     private void SubscribeToChipEvents()
     {
-        foreach (var chip in this.OfType<Chip>())
+        foreach (var chip in Chips)
         {
             SubscribeToChipEvents(chip);
         }
@@ -313,7 +319,7 @@ public class ChipGroup : Layout, ILayoutManager
 
     private void UnsubscribeFromChipEvents()
     {
-        foreach (var chip in this.OfType<Chip>())
+        foreach (var chip in Chips)
         {
             UnsubscribeFromChipEvents(chip);
         }
@@ -353,7 +359,7 @@ public class ChipGroup : Layout, ILayoutManager
         {
             if ((IsSingleSelection || chip.IsSingleSelection) && chip.IsToggled)
             {
-                foreach (var child in this.OfType<Chip>())
+                foreach (var child in Chips)
                 {
                     if (child != chip)
                     {
@@ -368,7 +374,7 @@ public class ChipGroup : Layout, ILayoutManager
             }
             else if (chip.IsToggled)
             {
-                foreach (var child in this.OfType<Chip>())
+                foreach (var child in Chips)
                 {
                     if (child != chip && child.IsSingleSelection)
                     {
@@ -377,7 +383,7 @@ public class ChipGroup : Layout, ILayoutManager
                 }
             }
 
-            if (!this.OfType<Chip>().Any(x => x.IsToggled) &&
+            if (!Chips.Any(x => x.IsToggled) &&
                 _previouslySelectedChip is not null &&
                 Contains(_previouslySelectedChip))
             {
