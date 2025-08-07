@@ -7,8 +7,13 @@ namespace AuroraControls;
 /// </summary>
 public class ChipTappedEventArgs : EventArgs
 {
-    /// <summary>
-    /// Gets the chip that was tapped.
-    /// </summary>
-    public required Chip Chip { get; init; }
+    public Chip Chip { get; private set; }
+
+    public ChipState ChipState { get; private set; }
+
+    public ChipTappedEventArgs(Chip chip)
+    {
+        Chip = chip;
+        ChipState = chip.State;
+    }
 }
