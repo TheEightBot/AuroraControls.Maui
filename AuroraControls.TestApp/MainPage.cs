@@ -155,6 +155,10 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new GradientCircularButtonTestPage())),
 
+                            new Button { Text = "View Cupertino Button Test Page", }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new CupertinoButtonTestPage())),
+
                             new Button { Text = "View SafeArea Effect Test", }
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new SafeAreaTestPage()))
