@@ -6,6 +6,7 @@ public class ChipGroupLayoutManager : ILayoutManager
 {
     private readonly List<Rect> _bounds = new();
     private readonly List<Size> _childSizes = new();
+    private readonly List<bool> _childVisibility = new();
 
     public double Spacing { get; set; } = 8.0;
 
@@ -31,11 +32,16 @@ public class ChipGroupLayoutManager : ILayoutManager
 
         for (int i = 0; i < Math.Min(childrenList.Count, _bounds.Count); i++)
         {
-            var child = childrenList[i];
+            var child = childrenList[i] as Chip;
             var childBounds = _bounds[i];
+            var shouldBeVisible = i < _childVisibility.Count && _childVisibility[i];
 
-            if (childBounds == Rect.Zero)
+            if (childBounds == Rect.Zero || !shouldBeVisible)
             {
+                // Don't arrange chips that are overflowed - they get zero bounds
+                // This effectively hides them without modifying their Visibility property
+                child.Arrange(Rect.Zero);
+                child.IsVisible = false;
                 continue;
             }
 
@@ -44,6 +50,7 @@ public class ChipGroupLayoutManager : ILayoutManager
             childBounds.Y += bounds.Y;
 
             child.Arrange(childBounds);
+            child.IsVisible = true;
         }
 
         return new Size(bounds.Width, HeightRequest);
@@ -73,6 +80,7 @@ public class ChipGroupLayoutManager : ILayoutManager
     {
         _childSizes.Clear();
         _bounds.Clear();
+        _childVisibility.Clear();
 
         // Measure all children
         foreach (var child in children)
@@ -88,6 +96,7 @@ public class ChipGroupLayoutManager : ILayoutManager
     private void LayoutChildren(IList<IView> children, double widthConstraint)
     {
         _bounds.Clear();
+        _childVisibility.Clear();
 
         double x = 0;
         double y = 0;
@@ -101,6 +110,7 @@ public class ChipGroupLayoutManager : ILayoutManager
             if (child.Visibility == Visibility.Collapsed)
             {
                 _bounds.Add(Rect.Zero);
+                _childVisibility.Add(false);
                 continue;
             }
 
@@ -117,9 +127,11 @@ public class ChipGroupLayoutManager : ILayoutManager
                     Rows++;
                 }
 
+                // Check if we've exceeded the maximum rows and hide the chip
                 if (MaxRowsBeforeOverflow > 0 && Rows > MaxRowsBeforeOverflow)
                 {
                     _bounds.Add(Rect.Zero);
+                    _childVisibility.Add(false); // Mark as not visible
                     continue;
                 }
             }
@@ -131,6 +143,7 @@ public class ChipGroupLayoutManager : ILayoutManager
 
             var bounds = new Rect(x, y, childSize.Width, childSize.Height);
             _bounds.Add(bounds);
+            _childVisibility.Add(true); // Mark as visible
 
             x += childSize.Width + Spacing;
         }
