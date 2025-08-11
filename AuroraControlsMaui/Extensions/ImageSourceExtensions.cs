@@ -7,7 +7,7 @@ public static class ImageSourceExtensions
 {
     private static readonly object _iconCacheLock = new();
 
-    private static IIconCache _iconCache;
+    private static IIconCache? _iconCache;
 
     private static IIconCache IconCache
     {
@@ -20,7 +20,7 @@ public static class ImageSourceExtensions
 
             lock (_iconCacheLock)
             {
-                _iconCache = IPlatformApplication.Current.Services.GetService<IIconCache>();
+                _iconCache = IPlatformApplication.Current?.Services.GetService<IIconCache>();
             }
 
             return _iconCache;
@@ -76,7 +76,7 @@ public static class ImageSourceExtensions
         return menuItem;
     }
 
-    public static Page AsAsyncSourceFor(this Task<FileImageSource> imageSourceTask, Page page)
+    public static Page AsAsyncSourceFor(this Task<ImageSource> imageSourceTask, Page page)
     {
         imageSourceTask
             .ContinueWith(
@@ -290,6 +290,11 @@ public static class ImageSourceExtensions
         IconCache
             .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
             .AsAsyncSourceFor(image);
+
+    public static Page SetSvgIcon(this Page page, string svgName, double squareSize = 24d, Color? colorOverride = null) =>
+        IconCache
+            .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
+            .AsAsyncSourceFor(page);
 
     public static Task<SKBitmap> BitmapFromSource(this ImageSource imageSource) => IconCache.SKBitmapFromSource(imageSource);
 }
