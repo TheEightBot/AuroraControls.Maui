@@ -96,7 +96,7 @@ public partial class CupertinoButtonTestPage : ContentPage, INotifyPropertyChang
                      $"Shadow: Blur {ShadowBlurRadius:F1}\n" +
                      $"Iconified: {IsIconifiedText}";
 
-        StatusLabel.Text = details;
+        // StatusLabel.Text = details;
     }
 
     private async void OnBackgroundColorClicked(object sender, EventArgs e)
