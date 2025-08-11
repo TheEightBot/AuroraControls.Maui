@@ -67,6 +67,12 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
     private Button _viewConfettiViewTestButton;
 
+    private Button _viewKeyboardReturnKeyTypeEffectTestButton;
+
+    private Button _viewListViewHideEmptyCellsEffectTestButton;
+
+    private Button _viewShowKeyboardDoneButtonEffectTestButton;
+
     private SvgImageView _svgImageView;
 
     private Button _svgImageViewTapped;
@@ -183,6 +189,18 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                             new Button { Text = "View ConfettiView Test Page", }
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new ConfettiViewTestPage())),
+
+                            new Button { Text = "View Keyboard Return Key Type Effect Test", }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new KeyboardReturnKeyTypeEffectTestPage())),
+
+                            new Button { Text = "View ListView Hide Empty Cells Effect Test", }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new ListViewHideEmptyCellsEffectTestPage())),
+
+                            new Button { Text = "View Show Keyboard Done Button Effect Test", }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new ShowKeyboardDoneButtonEffectTestPage())),
 
                             new Button { Text = "Grid Image Page", }
                                 .BindClicked(async () =>
