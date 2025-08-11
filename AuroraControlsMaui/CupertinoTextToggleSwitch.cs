@@ -397,7 +397,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
         if (!string.IsNullOrEmpty(EnabledText))
         {
             var fontColor =
-                (EnabledFontColor != default(Color)
+                (!Equals(this.EnabledFontColor, Colors.Transparent)
                     ? EnabledFontColor
                     : DisabledFontColor)
                     .ToSKColor()

@@ -284,7 +284,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         canvas.DrawPicture(skSvg.Picture);
 
         // Apply color override if needed
-        if (colorOverride != default(Color))
+        if (!Equals(colorOverride, Colors.Transparent))
         {
             _paint.Color = colorOverride.ToSKColor();
             canvas.DrawPaint(_paint);
