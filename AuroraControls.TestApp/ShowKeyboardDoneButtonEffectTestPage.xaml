@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             x:Class="AuroraControls.TestApp.ShowKeyboardDoneButtonEffectTestPage"
+             Title="Show Keyboard Done Button Effect Test">
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+            <Label Text="Show Keyboard Done Button Effect Test"
+                   FontSize="Title"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <Label Text="This effect adds a 'Done' button above the keyboard to dismiss it. Works on iOS and macOS only."
+                   FontSize="Subtitle"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"/>
+
+            <!-- Comparison Section -->
+            <Grid ColumnDefinitions="*, *" ColumnSpacing="15">
+
+                <!-- WITHOUT Effect -->
+                <Border Grid.Column="0" Stroke="Red" Padding="15">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="WITHOUT Effect"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="Red"
+                               HorizontalOptions="Center"/>
+                        <Label Text="No Done button above keyboard"
+                               FontSize="12"
+                               TextColor="Red"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"/>
+
+                        <!-- Regular Entry -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Text Entry:" FontSize="14" FontAttributes="Bold"/>
+                            <Entry Placeholder="Regular text entry"
+                                   Text="{Binding RegularText}"/>
+                        </VerticalStackLayout>
+
+                        <!-- Numeric Entry -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Numeric Entry:" FontSize="14" FontAttributes="Bold"/>
+                            <Entry Placeholder="Numbers only"
+                                   Text="{Binding RegularNumber}"
+                                   Keyboard="Numeric"/>
+                        </VerticalStackLayout>
+
+                        <!-- Email Entry -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Email Entry:" FontSize="14" FontAttributes="Bold"/>
+                            <Entry Placeholder="Email keyboard"
+                                   Text="{Binding RegularEmail}"
+                                   Keyboard="Email"/>
+                        </VerticalStackLayout>
+
+                        <!-- Phone Entry -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Phone Entry:" FontSize="14" FontAttributes="Bold"/>
+                            <Entry Placeholder="Phone keyboard"
+                                   Text="{Binding RegularPhone}"
+                                   Keyboard="Telephone"/>
+                        </VerticalStackLayout>
+
+                        <!-- URL Entry -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="URL Entry:" FontSize="14" FontAttributes="Bold"/>
+                            <Entry Placeholder="URL keyboard"
+                                   Text="{Binding RegularUrl}"
+                                   Keyboard="Url"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- WITH Effect -->
+                <Border Grid.Column="1" Stroke="Green" Padding="15">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="WITH Effect"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="Green"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Done button appears above keyboard"
+                               FontSize="12"
+                               TextColor="Green"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"/>
+
+                        <!-- Enhanced Entry with Effect -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Text Entry:" FontSize="14" FontAttributes="Bold"/>
+                            <Entry Placeholder="Text entry with Done button"
+                                   Text="{Binding EnhancedText}">
+                                <Entry.Effects>
+                                    <aurora:ShowKeyboardDoneButtonEffect />
+                                </Entry.Effects>
+                            </Entry>
+                        </VerticalStackLayout>
+
+                        <!-- Enhanced Numeric Entry -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Numeric Entry:" FontSize="14" FontAttributes="Bold"/>
+                            <Entry Placeholder="Numbers with Done button"
+                                   Text="{Binding EnhancedNumber}"
+                                   Keyboard="Numeric">
+                                <Entry.Effects>
+                                    <aurora:ShowKeyboardDoneButtonEffect />
+                                </Entry.Effects>
+                            </Entry>
+                        </VerticalStackLayout>
+
+                        <!-- Enhanced Email Entry -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Email Entry:" FontSize="14" FontAttributes="Bold"/>
+                            <Entry Placeholder="Email with Done button"
+                                   Text="{Binding EnhancedEmail}"
+                                   Keyboard="Email">
+                                <Entry.Effects>
+                                    <aurora:ShowKeyboardDoneButtonEffect />
+                                </Entry.Effects>
+                            </Entry>
+                        </VerticalStackLayout>
+
+                        <!-- Enhanced Phone Entry -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Phone Entry:" FontSize="14" FontAttributes="Bold"/>
+                            <Entry Placeholder="Phone with Done button"
+                                   Text="{Binding EnhancedPhone}"
+                                   Keyboard="Telephone">
+                                <Entry.Effects>
+                                    <aurora:ShowKeyboardDoneButtonEffect />
+                                </Entry.Effects>
+                            </Entry>
+                        </VerticalStackLayout>
+
+                        <!-- Enhanced URL Entry -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="URL Entry:" FontSize="14" FontAttributes="Bold"/>
+                            <Entry Placeholder="URL with Done button"
+                                   Text="{Binding EnhancedUrl}"
+                                   Keyboard="Url">
+                                <Entry.Effects>
+                                    <aurora:ShowKeyboardDoneButtonEffect />
+                                </Entry.Effects>
+                            </Entry>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <!-- Editor Test Section -->
+            <Border Stroke="Blue" Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Editor Controls (Multi-line)"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="Blue"
+                           HorizontalOptions="Center"/>
+
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="15">
+                        <VerticalStackLayout Grid.Column="0" Spacing="10">
+                            <Label Text="Regular Editor:" FontSize="14" FontAttributes="Bold"/>
+                            <Editor Placeholder="Multi-line text without Done button"
+                                    Text="{Binding RegularEditorText}"
+                                    HeightRequest="100"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="10">
+                            <Label Text="Editor with Done Button:" FontSize="14" FontAttributes="Bold"/>
+                            <Editor Placeholder="Multi-line text with Done button"
+                                    Text="{Binding EnhancedEditorText}"
+                                    HeightRequest="100">
+                                <Editor.Effects>
+                                    <aurora:ShowKeyboardDoneButtonEffect />
+                                </Editor.Effects>
+                            </Editor>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Instructions -->
+            <Border Stroke="Orange" Background="#20FF9500" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="📱 Instructions:" FontSize="16" FontAttributes="Bold" TextColor="DarkOrange"/>
+                    <Label TextColor="DarkOrange">
+                        <Label.Text>
+                            • This effect only works on iOS and macOS platforms&#10;• Tap any Entry/Editor field to see the virtual keyboard&#10;• On iOS/macOS: Fields with the effect will show a toolbar with "Done" button above the keyboard&#10;• On iOS/macOS: Fields without the effect will show the standard keyboard&#10;• The "Done" button dismisses the keyboard when tapped&#10;• This is especially useful for numeric keyboards that don't have a built-in dismiss option&#10;
+                        </Label.Text>
+                    </Label>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Current Values Display -->
+            <Border Stroke="Purple" Background="#20800080" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Current Values (Live Update)" FontSize="16" FontAttributes="Bold" TextColor="Purple"/>
+
+                    <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto, Auto, Auto" ColumnSpacing="10" RowSpacing="5">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Regular Text:" TextColor="Purple"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="{Binding RegularText}" TextColor="Purple"/>
+
+                        <Label Grid.Row="1" Grid.Column="0" Text="Enhanced Text:" TextColor="Purple"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding EnhancedText}" TextColor="Purple"/>
+
+                        <Label Grid.Row="2" Grid.Column="0" Text="Regular Number:" TextColor="Purple"/>
+                        <Label Grid.Row="2" Grid.Column="1" Text="{Binding RegularNumber}" TextColor="Purple"/>
+
+                        <Label Grid.Row="3" Grid.Column="0" Text="Enhanced Number:" TextColor="Purple"/>
+                        <Label Grid.Row="3" Grid.Column="1" Text="{Binding EnhancedNumber}" TextColor="Purple"/>
+
+                        <Label Grid.Row="4" Grid.Column="0" Text="Platform:" TextColor="Purple"/>
+                        <Label Grid.Row="4" Grid.Column="1" Text="{Binding PlatformInfo}" TextColor="Purple"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Test Feedback Section -->
+            <Border Stroke="Green" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Test Results" FontSize="16" FontAttributes="Bold" TextColor="Green"/>
+                    <Label Text="{Binding TestFeedback}"
+                           TextColor="Green"
+                           IsVisible="{Binding ShowTestFeedback}"/>
+                    <Button Text="Show Test Instructions"
+                            Command="{Binding ShowInstructionsCommand}"
+                            BackgroundColor="Green"
+                            TextColor="White"/>
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -182,6 +182,10 @@ public class PlatformUnderlayDrawable : IDisposable
 
         _canvas.PaintSurface += this.OnPaintSurface;
         _canvas.FocusChange += this.Canvas_FocusChange;
+
+        _canvas.Clickable = true;
+        _canvas.Touch += this.Canvas_Touch;
+
         _canvas.Layout(0, 0, platformView.Width, platformView.Height);
         _canvas.Invalidate();
 
@@ -198,6 +202,7 @@ public class PlatformUnderlayDrawable : IDisposable
         {
             _canvas.PaintSurface -= OnPaintSurface;
             _canvas.FocusChange -= Canvas_FocusChange;
+            _canvas.Touch -= Canvas_Touch;
             _canvas.RemoveFromParent();
             _canvas?.Dispose();
             _canvas = null;
@@ -244,6 +249,14 @@ public class PlatformUnderlayDrawable : IDisposable
     private void Canvas_FocusChange(object? sender, Android.Views.View.FocusChangeEventArgs e)
     {
         if (e.HasFocus && _virtualView is ContentView cv && cv.Content is IView view)
+        {
+            view.Focus();
+        }
+    }
+
+    private void Canvas_Touch(object? sender, Android.Views.View.TouchEventArgs e)
+    {
+        if (_virtualView is ContentView cv && cv.Content is IView view)
         {
             view.Focus();
         }
