@@ -318,7 +318,7 @@ public class GradientPillButton : AuroraViewBase
     {
         var canvas = surface.Canvas;
 
-        if (ButtonBackgroundStartColor != default(Color) && ButtonBackgroundEndColor == default(Color))
+        if (!Equals(this.ButtonBackgroundStartColor, Colors.Transparent) && Equals(this.ButtonBackgroundEndColor, Colors.Transparent))
         {
             ButtonBackgroundEndColor = ButtonBackgroundStartColor.WithHue(.5f);
         }
@@ -367,7 +367,7 @@ public class GradientPillButton : AuroraViewBase
 
         _backgroundPath.Reset();
 
-        if (this.ShadowColor != default(Color) && this.ShadowLocation != Point.Zero)
+        if (this.ShadowColor != Colors.Transparent && this.ShadowLocation != Point.Zero)
         {
             using var shadowPaint = new SKPaint();
             using (new SKAutoCanvasRestore(canvas))
@@ -399,7 +399,7 @@ public class GradientPillButton : AuroraViewBase
                 ripplePaint.IsAntialias = true;
                 ripplePaint.Style = SKPaintStyle.Fill;
                 ripplePaint.Color =
-                    this.ButtonBackgroundStartColor != default(Color)
+                    this.ButtonBackgroundStartColor != Colors.Transparent
                         ? this.ButtonBackgroundEndColor.AddLuminosity(-.2f).MultiplyAlpha((1 - (float)_rippleAnimationPercentage) * .5f).ToSKColor()
                         : Colors.Transparent.ToSKColor();
 
@@ -414,7 +414,7 @@ public class GradientPillButton : AuroraViewBase
                 canvas.DrawPath(finalRipple, ripplePaint);
             }
 
-            if (this.BorderWidth > 0d && this.BorderColor != default(Color))
+            if (this.BorderWidth > 0d && this.BorderColor != Colors.Transparent)
             {
                 backgroundPaint.StrokeWidth = (float)this.BorderWidth;
                 backgroundPaint.Color = this.BorderColor.ToSKColor();

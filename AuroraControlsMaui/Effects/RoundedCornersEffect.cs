@@ -85,7 +85,7 @@ public class RoundedCornersEffect : RoutingEffect
     /// </summary>
     /// <returns>The border color.</returns>
     /// <param name="view">View to apply effect to.</param>
-    public static Color GetBorderColor(BindableObject view) => (Color)(view?.GetValue(BorderColorProperty) ?? default(Color));
+    public static Color GetBorderColor(BindableObject view) => (Color)(view?.GetValue(BorderColorProperty) ?? Colors.Transparent);
 
     /// <summary>
     /// Sets the border color.

@@ -16,14 +16,17 @@ public enum ChipState
     ReadOnly,
 }
 
-public class Chip : AuroraViewBase, IDisposable
+#pragma warning disable CA1001
+public class Chip : AuroraViewBase
+#pragma warning restore CA1001
 {
     private const float RemoveTouchPadding = 16f; // Additional padding around remove icon for easier tapping
 
     private static readonly Size _minSize = new(32, 32);
 
-    private readonly SKPath _backgroundPath = new();
     private readonly bool _cantHandleTouch;
+
+    private SKPath? _backgroundPath = new();
     private bool _disposed;
 
     public event EventHandler<bool> Toggled;
@@ -551,7 +554,19 @@ public class Chip : AuroraViewBase, IDisposable
         WidthRequest = _minSize.Width;
     }
 
-    protected override void Attached() => this.EnableTouchEvents = true;
+    protected override void Attached()
+    {
+        this.EnableTouchEvents = true;
+        _backgroundPath = new SKPath();
+    }
+
+    protected override void Detached()
+    {
+        _backgroundPath?.Dispose();
+        _leadingSvg?.Dispose();
+        _trailingSvg?.Dispose();
+        base.Detached();
+    }
 
     protected override void PaintControl(SKSurface surface, SKImageInfo info)
     {
@@ -590,7 +605,7 @@ public class Chip : AuroraViewBase, IDisposable
             .ToSKColor();
 
         var fontColor =
-            (isToggled && this.ToggledFontColor != default(Color)
+            (isToggled && !Equals(this.ToggledFontColor, Colors.Transparent)
                 ? this.ToggledFontColor
                 : isReadonly
                     ? this.ReadOnlyFontColor
@@ -598,7 +613,7 @@ public class Chip : AuroraViewBase, IDisposable
             .ToSKColor();
 
         var borderColor =
-            (isToggled && this.ToggledBorderColor != default(Color)
+            (isToggled && !Equals(this.ToggledBorderColor, Colors.Transparent)
                 ? this.ToggledBorderColor
                 : isReadonly
                     ? this.ReadOnlyBorderColor
@@ -920,33 +935,4 @@ public class Chip : AuroraViewBase, IDisposable
         _trailingSvg.Load(imageStream);
         await imageStream.FlushAsync().ConfigureAwait(false);
     }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (_disposed)
-        {
-            return;
-        }
-
-        // Free unmanaged resources and set fields to null
-        _disposed = true;
-
-        if (!disposing)
-        {
-            return;
-        }
-
-        // Dispose managed resources
-        _backgroundPath.Dispose();
-        _leadingSvg?.Dispose();
-        _trailingSvg?.Dispose();
-    }
-
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    ~Chip() => Dispose(false);
 }
