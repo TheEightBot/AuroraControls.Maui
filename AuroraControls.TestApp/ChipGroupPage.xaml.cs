@@ -1,215 +1,380 @@
-using System.Diagnostics;
-using AuroraControls.TestApp.ViewModels;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace AuroraControls.TestApp;
 
 public partial class ChipGroupPage : ContentPage
 {
-    private readonly Random _random = new();
+    private readonly ObservableCollection<string> _statusMessages = new();
+    private int _dynamicChipCounter = 1;
 
     public ChipGroupPage()
     {
         InitializeComponent();
-    }
+        UpdateStatus("ChipGroup test page loaded. Try interacting with the different chip groups!");
 
-    private void OnLayoutModeChanged(object sender, EventArgs e)
-    {
-        if (sender is Picker picker && BindingContext is ChipGroupViewModel viewModel)
-        {
-            viewModel.IsScrollable = picker.SelectedItem?.ToString() == "Single Line (Scrollable)";
-        }
-    }
-
-    private void OnSelectionModeChanged(object sender, EventArgs e)
-    {
-        if (sender is Picker picker && BindingContext is ChipGroupViewModel viewModel)
-        {
-            viewModel.AllowMultipleSelection = picker.SelectedItem?.ToString() == "Multiple Selection";
-        }
-    }
-
-    private void OnHorizontalSpacingChanged(object sender, ValueChangedEventArgs e)
-    {
-        if (ChipGroupSample != null)
-        {
-            ChipGroupSample.HorizontalSpacing = e.NewValue;
-        }
-    }
-
-    private void OnVerticalSpacingChanged(object sender, ValueChangedEventArgs e)
-    {
-        if (ChipGroupSample != null)
-        {
-            ChipGroupSample.VerticalSpacing = e.NewValue;
-        }
-    }
-
-    private void OnAddChipClicked(object sender, EventArgs e)
-    {
-        if (BindingContext is ChipGroupViewModel viewModel)
-        {
-            viewModel.AddRandomChip();
-        }
-    }
-
-    private void OnClearChipsClicked(object sender, EventArgs e)
-    {
-        if (BindingContext is ChipGroupViewModel viewModel)
-        {
-            viewModel.ClearChips();
-        }
-    }
-
-    private void OnScrollToRandomClicked(object sender, EventArgs e)
-    {
-        if (ChipGroupSample != null && ChipGroupSample.Chips.Count > 0)
-        {
-            // Get a random chip from the collection
-            int randomIndex = _random.Next(ChipGroupSample.Chips.Count);
-            var randomChip = ChipGroupSample.Chips[randomIndex];
-
-            // Scroll to the random chip
-            bool success = ChipGroupSample.ScrollToChip(randomChip, ScrollToPosition.Center);
-
-            // Provide visual feedback to the user
-            if (success)
+        // Setup property changed handlers to track selection changes
+        BasicChipGroup.PropertyChanged +=
+            (object s, PropertyChangedEventArgs e) =>
             {
-                // Briefly toggle the chip to provide visual feedback
-                randomChip.IsToggled = true;
-
-                // Create a timer to untoggle the chip after a short delay if it's not meant to stay selected
-                if (!randomChip.IsToggled)
+                if (e.PropertyName == nameof(ChipGroup.SelectedValues))
                 {
-                    var timer = Application.Current.Dispatcher.CreateTimer();
-                    timer.Interval = TimeSpan.FromMilliseconds(500);
-                    timer.Tick += (s, args) =>
-                    {
-                        randomChip.IsToggled = false;
-                        timer.Stop();
-                    };
-                    timer.Start();
+                    UpdateBasicSelectionDisplay();
                 }
-            }
-            else
+            };
+
+        SingleSelectionChipGroup.PropertyChanged += (object s, PropertyChangedEventArgs e) =>
+        {
+            if (e.PropertyName == nameof(ChipGroup.SelectedValue))
             {
-                DisplayAlert("Scrolling Failed", "Could not scroll to the selected chip. Make sure the ChipGroup is in scrollable mode.", "OK");
+                UpdateSingleSelectionDisplay();
             }
-        }
-        else
-        {
-            DisplayAlert("No Chips", "There are no chips to scroll to. Please add some chips first.", "OK");
-        }
-    }
+        };
 
-    private void OnScrollToSelectionClicked(object sender, EventArgs e)
-    {
-        if (ChipGroupSample != null)
+        ScrollableChipGroup.PropertyChanged += (object s, PropertyChangedEventArgs e) =>
         {
-            bool success = ChipGroupSample.ScrollToSelectedChip(ScrollToPosition.Center);
-
-            if (!success)
+            if (e.PropertyName == nameof(ChipGroup.SelectedValues))
             {
-                // Try to scroll to any selected chip if in multi-selection mode
-                if (ChipGroupSample.AllowMultipleSelection && ChipGroupSample.SelectedChips.Count > 0)
-                {
-                    // Scroll to the first selected chip
-                    success = ChipGroupSample.ScrollToChip(ChipGroupSample.SelectedChips[0], ScrollToPosition.MakeVisible);
-                }
-
-                if (!success)
-                {
-                    DisplayAlert("Scrolling Failed", "No selected chip to scroll to, or the ChipGroup is not in scrollable mode.", "OK");
-                }
+                UpdateScrollableSelectionDisplay();
             }
-        }
-    }
+        };
 
-    private void OnScrollToValueClicked(object sender, EventArgs e)
-    {
-        if (ValuePicker.SelectedItem is string selectedValue && !string.IsNullOrEmpty(selectedValue))
+        MaxRowsChipGroup.PropertyChanged += (object s, PropertyChangedEventArgs e) =>
         {
-            bool success = ChipGroupSample.ScrollToChipWithValue(selectedValue, ScrollToPosition.Center, true, StringComparer.OrdinalIgnoreCase);
-
-            if (!success)
+            if (e.PropertyName == nameof(ChipGroup.SelectedValues))
             {
-                DisplayAlert("Scrolling Failed", $"Could not find a chip with value '{selectedValue}' or the ChipGroup is not in scrollable mode.", "OK");
+                UpdateMaxRowsSelectionDisplay();
             }
-        }
-        else
-        {
-            DisplayAlert("No Value Selected", "Please select a value from the dropdown first.", "OK");
-        }
-    }
 
-    private void OnSelectValueClicked(object sender, EventArgs e)
-    {
-        if (ValuePicker.SelectedItem is string selectedValue && !string.IsNullOrEmpty(selectedValue))
-        {
-            // Either of these approaches work:
-
-            // Option 1: Using the SelectedValue property
-            if (BindingContext is ChipGroupViewModel viewModel)
+            if (e.PropertyName == nameof(ChipGroup.IsOverflow))
             {
-                viewModel.SelectedValue = selectedValue;
+                UpdateMaxRowsOverflowDisplay();
             }
+        };
 
-            // Option 2: Using the SelectChipByValue method
-            // bool success = ChipGroupSample.SelectChipByValue(selectedValue);
-
-            // Provide feedback on success or failure
-            DisplayAlert("Information", $"Selected chip with value: '{selectedValue}'", "OK");
-        }
-        else
+        RemovableChipGroup.PropertyChanged += (object s, PropertyChangedEventArgs e) =>
         {
-            DisplayAlert("No Value Selected", "Please select a value from the dropdown first.", "OK");
-        }
-    }
-
-    private void OnChipSelectionChanged(object sender, ChipSelectionChangedEventArgs e)
-    {
-        if (BindingContext is ChipGroupViewModel viewModel && sender is ChipGroup chipGroup)
-        {
-            // Update selected chips text
-            string selectedChips = string.Join(", ", e.SelectedItems.Select(c => c.Text));
-            viewModel.SelectedChipsText = string.IsNullOrEmpty(selectedChips) ? "None" : selectedChips;
-
-            // Update selected values text from the ChipGroup's SelectedValues
-            string selectedValues = string.Join(", ", chipGroup.SelectedValues);
-            viewModel.SelectedValuesText = string.IsNullOrEmpty(selectedValues) ? "None" : selectedValues;
-
-            Debug.WriteLine($"Selection Changed: New={e.NewSelection?.Text ?? "None"}, " +
-                           $"Old={e.OldSelection?.Text ?? "None"}, " +
-                           $"Total Selected={e.SelectedItems.Count}, " +
-                           $"SelectedValue={viewModel.SelectedValue ?? "None"}");
-        }
-    }
-
-    private async void OnShowSelectedValuesClicked(object sender, EventArgs e)
-    {
-        if (ChipGroupSample != null)
-        {
-            // Get the current selected value (for single selection mode)
-            string selectedValue = ChipGroupSample.SelectedValue?.ToString() ?? "None";
-
-            // Get all selected values (for multi-selection mode)
-            string selectedValues = string.Join(", ", ChipGroupSample.SelectedValues.Select(v => v?.ToString() ?? "null"));
-            if (string.IsNullOrEmpty(selectedValues))
+            if (e.PropertyName == nameof(ChipGroup.SelectedValues))
             {
-                selectedValues = "None";
+                UpdateRemovableSelectionDisplay();
             }
+        };
 
-            await DisplayAlert(
-                "Selected Values",
-                $"SelectedValue: {selectedValue}\n\nSelectedValues: {selectedValues}",
-                "OK");
-        }
+        StyledChipGroup.PropertyChanged += (object s, PropertyChangedEventArgs e) =>
+        {
+            if (e.PropertyName == nameof(ChipGroup.SelectedValues))
+            {
+                UpdateStyledSelectionDisplay();
+            }
+        };
+
+        // Initial display updates
+        UpdateAllSelectionDisplays();
+        UpdateMaxRowsOverflowDisplay();
     }
 
     private void OnChipTapped(object sender, ChipTappedEventArgs e)
     {
-        if (e.Chip?.State == ChipState.ReadOnly)
+        UpdateStatus($"Basic ChipGroup: '{e.Chip.Text}' tapped (Value: {e.Chip.Value})");
+    }
+
+    private void OnSingleSelectionChipTapped(object sender, ChipTappedEventArgs e)
+    {
+        UpdateStatus($"Single Selection: '{e.Chip.Text}' tapped (Value: {e.Chip.Value})");
+    }
+
+    private void OnScrollableChipTapped(object sender, ChipTappedEventArgs e)
+    {
+        UpdateStatus($"Scrollable ChipGroup: '{e.Chip.Text}' tapped (Value: {e.Chip.Value})");
+    }
+
+    private void OnMaxRowsChipTapped(object sender, ChipTappedEventArgs e)
+    {
+        UpdateStatus($"Max Rows ChipGroup: '{e.Chip.Text}' tapped (Value: {e.Chip.Value})");
+    }
+
+    private void OnRemovableChipTapped(object sender, ChipTappedEventArgs e)
+    {
+        UpdateStatus($"Removable ChipGroup: '{e.Chip.Text}' tapped (Value: {e.Chip.Value})");
+    }
+
+    private void OnStyledChipTapped(object sender, ChipTappedEventArgs e)
+    {
+        UpdateStatus($"Styled ChipGroup: '{e.Chip.Text}' tapped (Value: {e.Chip.Value})");
+    }
+
+    private async void OnScrollToStartClicked(object sender, EventArgs e)
+    {
+        try
         {
-            DisplayAlert("Chip Tapped", $"Chip: {e.Chip.Text}", "OK");
+            var firstChip = ScrollableChipGroup.Children.FirstOrDefault() as Chip;
+            if (firstChip != null)
+            {
+                await ScrollableChipGroup.ScrollToAsync(firstChip, ScrollToPosition.Start, animated: true);
+                UpdateStatus("Scrolled to start of scrollable chip group");
+            }
+        }
+        catch (Exception ex)
+        {
+            UpdateStatus($"Error scrolling to start: {ex.Message}");
+        }
+    }
+
+    private async void OnScrollToEndClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            var lastChip = ScrollableChipGroup.Children.LastOrDefault() as Chip;
+            if (lastChip != null)
+            {
+                await ScrollableChipGroup.ScrollToAsync(lastChip, ScrollToPosition.End, animated: true);
+                UpdateStatus("Scrolled to end of scrollable chip group");
+            }
+        }
+        catch (Exception ex)
+        {
+            UpdateStatus($"Error scrolling to end: {ex.Message}");
+        }
+    }
+
+    private void OnSelectFirstThreeClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            var firstThreeValues = BasicChipGroup.Children.Take(3).Select(c => (c as Chip).Value).ToList();
+            BasicChipGroup.SelectedValues = firstThreeValues;
+            UpdateStatus($"Selected first 3 chips in basic group: {string.Join(", ", firstThreeValues)}");
+        }
+        catch (Exception ex)
+        {
+            UpdateStatus($"Error selecting first three: {ex.Message}");
+        }
+    }
+
+    private void OnClearSelectionsClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            BasicChipGroup.SelectedValues = new List<object>();
+            SingleSelectionChipGroup.SelectedValue = null;
+            ScrollableChipGroup.SelectedValues = new List<object>();
+            MaxRowsChipGroup.SelectedValues = new List<object>();
+            RemovableChipGroup.SelectedValues = new List<object>();
+            StyledChipGroup.SelectedValues = new List<object>();
+
+            UpdateStatus("Cleared all selections in all chip groups");
+        }
+        catch (Exception ex)
+        {
+            UpdateStatus($"Error clearing selections: {ex.Message}");
+        }
+    }
+
+    private void OnAddDynamicChipClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            var newChip = new Chip
+            {
+                Text = $"Dynamic {_dynamicChipCounter}",
+                Value = $"dynamic_{_dynamicChipCounter}",
+                BackgroundColor = Colors.LightPink,
+                ToggledBackgroundColor = Colors.DeepPink,
+            };
+
+            BasicChipGroup.Children.Add(newChip);
+            _dynamicChipCounter++;
+
+            UpdateStatus($"Added dynamic chip: {newChip.Text}");
+        }
+        catch (Exception ex)
+        {
+            UpdateStatus($"Error adding dynamic chip: {ex.Message}");
+        }
+    }
+
+    private void OnRemoveLastChipClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            if (BasicChipGroup.Children.Count > 0)
+            {
+                var lastChip = BasicChipGroup.Children.Last() as Chip;
+                var chipText = lastChip.Text;
+                BasicChipGroup.Children.Remove(lastChip);
+                UpdateStatus($"Removed chip: {chipText}");
+            }
+            else
+            {
+                UpdateStatus("No chips to remove from basic group");
+            }
+        }
+        catch (Exception ex)
+        {
+            UpdateStatus($"Error removing chip: {ex.Message}");
+        }
+    }
+
+    private void OnToggleScrollableClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            ScrollableChipGroup.Scrollable = !ScrollableChipGroup.Scrollable;
+            UpdateStatus($"Scrollable ChipGroup scrolling: {(ScrollableChipGroup.Scrollable ? "Enabled" : "Disabled")}");
+        }
+        catch (Exception ex)
+        {
+            UpdateStatus($"Error toggling scrollable: {ex.Message}");
+        }
+    }
+
+    private void OnToggleSelectionModeClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            BasicChipGroup.IsSingleSelection = !BasicChipGroup.IsSingleSelection;
+
+            // Clear selections when changing mode
+            BasicChipGroup.SelectedValues = new List<object>();
+
+            var mode = BasicChipGroup.IsSingleSelection ? "Single Selection" : "Multi-Selection";
+            UpdateStatus($"Basic ChipGroup mode changed to: {mode}");
+        }
+        catch (Exception ex)
+        {
+            UpdateStatus($"Error toggling selection mode: {ex.Message}");
+        }
+    }
+
+    private void UpdateAllSelectionDisplays()
+    {
+        UpdateBasicSelectionDisplay();
+        UpdateSingleSelectionDisplay();
+        UpdateScrollableSelectionDisplay();
+        UpdateMaxRowsSelectionDisplay();
+        UpdateRemovableSelectionDisplay();
+        UpdateStyledSelectionDisplay();
+    }
+
+    private void UpdateBasicSelectionDisplay()
+    {
+        try
+        {
+            var selected = BasicChipGroup.SelectedValues?.ToList() ?? new List<object>();
+            var mode = BasicChipGroup.IsSingleSelection ? " (Single)" : " (Multi)";
+            BasicSelectionLabel.Text = selected.Any()
+                ? $"Selected{mode}: {string.Join(", ", selected)}"
+                : $"Selected{mode}: None";
+        }
+        catch (Exception ex)
+        {
+            BasicSelectionLabel.Text = $"Error: {ex.Message}";
+        }
+    }
+
+    private void UpdateSingleSelectionDisplay()
+    {
+        try
+        {
+            var selected = SingleSelectionChipGroup.SelectedValue;
+            SingleSelectionLabel.Text = selected != null
+                ? $"Selected: {selected}"
+                : "Selected: None";
+        }
+        catch (Exception ex)
+        {
+            SingleSelectionLabel.Text = $"Error: {ex.Message}";
+        }
+    }
+
+    private void UpdateScrollableSelectionDisplay()
+    {
+        try
+        {
+            var selected = ScrollableChipGroup.SelectedValues?.ToList() ?? new List<object>();
+            ScrollableSelectionLabel.Text = selected.Any()
+                ? $"Selected: {string.Join(", ", selected)}"
+                : "Selected: None";
+        }
+        catch (Exception ex)
+        {
+            ScrollableSelectionLabel.Text = $"Error: {ex.Message}";
+        }
+    }
+
+    private void UpdateMaxRowsSelectionDisplay()
+    {
+        try
+        {
+            var selected = MaxRowsChipGroup.SelectedValues?.ToList() ?? new List<object>();
+            MaxRowsSelectionLabel.Text = selected.Any()
+                ? $"Selected: {string.Join(", ", selected)}"
+                : "Selected: None";
+        }
+        catch (Exception ex)
+        {
+            MaxRowsSelectionLabel.Text = $"Error: {ex.Message}";
+        }
+    }
+
+    private void UpdateMaxRowsOverflowDisplay()
+    {
+        try
+        {
+            MaxRowsLabel.Text = $"Overflow Status: {(MaxRowsChipGroup.IsOverflow ? "Yes" : "No")}";
+        }
+        catch (Exception ex)
+        {
+            MaxRowsLabel.Text = $"Overflow Error: {ex.Message}";
+        }
+    }
+
+    private void UpdateRemovableSelectionDisplay()
+    {
+        try
+        {
+            var selected = RemovableChipGroup.SelectedValues?.ToList() ?? new List<object>();
+            RemovableSelectionLabel.Text = selected.Any()
+                ? $"Selected: {string.Join(", ", selected)}"
+                : "Selected: None";
+        }
+        catch (Exception ex)
+        {
+            RemovableSelectionLabel.Text = $"Error: {ex.Message}";
+        }
+    }
+
+    private void UpdateStyledSelectionDisplay()
+    {
+        try
+        {
+            var selected = StyledChipGroup.SelectedValues?.ToList() ?? new List<object>();
+            StyledSelectionLabel.Text = selected.Any()
+                ? $"Selected: {string.Join(", ", selected)}"
+                : "Selected: None";
+        }
+        catch (Exception ex)
+        {
+            StyledSelectionLabel.Text = $"Error: {ex.Message}";
+        }
+    }
+
+    private void UpdateStatus(string message)
+    {
+        try
+        {
+            StatusLabel.Text = $"{DateTime.Now:HH:mm:ss} - {message}";
+
+            // Optional: Keep a history of status messages
+            _statusMessages.Insert(0, StatusLabel.Text);
+            if (_statusMessages.Count > 10)
+            {
+                _statusMessages.RemoveAt(_statusMessages.Count - 1);
+            }
+        }
+        catch (Exception ex)
+        {
+            StatusLabel.Text = $"Status update error: {ex.Message}";
         }
     }
 }

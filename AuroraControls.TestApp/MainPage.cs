@@ -114,6 +114,9 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 .BindClicked(async () => await this.Navigation.PushAsync(new CardViewLayoutPage()))
                                 .Assign(out _viewCardViewLayoutButton),
 
+                            new Button { Text = "View WrapLayout Test", }
+                                .BindClicked(async () => await this.Navigation.PushAsync(new WrapLayoutTestPage())),
+
                             new Button { Text = "View Calendar View", }
                                 .BindClicked(async () => await this.Navigation.PushAsync(new CalendarViewPage()))
                                 .Assign(out _viewCalendarViewButton),
@@ -151,6 +154,14 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                             new Button { Text = "View GradientCircularButton Test Page", }
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new GradientCircularButtonTestPage())),
+
+                            new Button { Text = "View Cupertino Button Test Page", }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new CupertinoButtonTestPage())),
+
+                            new Button { Text = "View CutoutOverlayView Test Page", }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new CutoutOverlayViewTestPage())),
 
                             new Button { Text = "View SafeArea Effect Test", }
                                 .BindClicked(async () =>

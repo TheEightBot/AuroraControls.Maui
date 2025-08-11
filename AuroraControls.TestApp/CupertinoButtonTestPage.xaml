@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             x:Class="AuroraControls.TestApp.CupertinoButtonTestPage"
+             Title="CupertinoButton Test Page">
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="20">
+            <Label Text="CupertinoButton Test Page"
+                   FontSize="Title"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <!-- Live Property Controls -->
+            <Frame BorderColor="Gray" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Live Property Controls" FontSize="Subtitle" FontAttributes="Bold"/>
+
+                    <!-- Test Button -->
+                    <aurora:CupertinoButton x:Name="TestButton"
+                                          Text="{Binding ButtonText}"
+                                          ButtonBackgroundColor="{Binding BackgroundColor}"
+                                          BorderColor="{Binding BorderColor}"
+                                          BorderWidth="{Binding BorderWidth}"
+                                          BorderRadius="{Binding BorderRadius}"
+                                          FontColor="{Binding FontColor}"
+                                          FontSize="{Binding FontSize}"
+                                          ShadowColor="{Binding ShadowColor}"
+                                          ShadowBlurRadius="{Binding ShadowBlurRadius}"
+                                          IsIconifiedText="{Binding IsIconifiedText}"
+                                          HeightRequest="50"
+                                          WidthRequest="200"
+                                          HorizontalOptions="Center"
+                                          Command="{Binding TestCommand}"
+                                          CommandParameter="Live Test Button" />
+
+                    <!-- Property Controls -->
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10" RowSpacing="5"
+                          RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Text:" VerticalOptions="Center"/>
+                        <Entry Grid.Row="0" Grid.Column="1" Text="{Binding ButtonText}" Placeholder="Button Text"/>
+
+                        <Label Grid.Row="1" Grid.Column="0" Text="Font Size:" VerticalOptions="Center"/>
+                        <Slider Grid.Row="1" Grid.Column="1"
+                                Value="{Binding FontSize}"
+                                Minimum="8" Maximum="32"/>
+
+                        <Label Grid.Row="2" Grid.Column="0" Text="Border Width:" VerticalOptions="Center"/>
+                        <Slider Grid.Row="2" Grid.Column="1"
+                                Value="{Binding BorderWidth}"
+                                Minimum="0" Maximum="10"/>
+
+                        <Label Grid.Row="3" Grid.Column="0" Text="Border Radius:" VerticalOptions="Center"/>
+                        <Slider Grid.Row="3" Grid.Column="1"
+                                Value="{Binding BorderRadius}"
+                                Minimum="0" Maximum="25"/>
+
+                        <Label Grid.Row="4" Grid.Column="0" Text="Shadow Blur:" VerticalOptions="Center"/>
+                        <Slider Grid.Row="4" Grid.Column="1"
+                                Value="{Binding ShadowBlurRadius}"
+                                Minimum="0" Maximum="20"/>
+
+                        <Label Grid.Row="5" Grid.Column="0" Text="Iconified Text:" VerticalOptions="Center"/>
+                        <Switch Grid.Row="5" Grid.Column="1"
+                                IsToggled="{Binding IsIconifiedText}"/>
+                    </Grid>
+
+                    <!-- Color Pickers -->
+                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="10">
+                        <Button Grid.Column="0" Text="Bg Color"
+                                BackgroundColor="{Binding BackgroundColor}"
+                                TextColor="White"
+                                Clicked="OnBackgroundColorClicked"/>
+                        <Button Grid.Column="1" Text="Font Color"
+                                BackgroundColor="{Binding FontColor}"
+                                TextColor="White"
+                                Clicked="OnFontColorClicked"/>
+                        <Button Grid.Column="2" Text="Border Color"
+                                BackgroundColor="{Binding BorderColor}"
+                                TextColor="White"
+                                Clicked="OnBorderColorClicked"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Basic Examples -->
+            <Frame BorderColor="Gray" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Basic Examples" FontSize="Subtitle" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="15" RowSpacing="15">
+
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <aurora:CupertinoButton
+                                Text="Default"
+                                HeightRequest="40"
+                                WidthRequest="100"
+                                Command="{Binding TestCommand}"
+                                CommandParameter="Default Button"/>
+                            <Label Text="Default Style" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
+                            <aurora:CupertinoButton
+                                Text="Custom"
+                                ButtonBackgroundColor="Green"
+                                FontColor="White"
+                                BorderRadius="20"
+                                HeightRequest="40"
+                                WidthRequest="100"
+                                Command="{Binding TestCommand}"
+                                CommandParameter="Green Button"/>
+                            <Label Text="Green Style" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2">
+                            <aurora:CupertinoButton
+                                Text="Bordered"
+                                ButtonBackgroundColor="Transparent"
+                                FontColor="Purple"
+                                BorderColor="Purple"
+                                BorderWidth="2"
+                                BorderRadius="10"
+                                HeightRequest="40"
+                                WidthRequest="100"
+                                Command="{Binding TestCommand}"
+                                CommandParameter="Purple Border Button"/>
+                            <Label Text="Purple Border" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Shadow Examples -->
+            <Frame BorderColor="Gray" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Shadow Examples" FontSize="Subtitle" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="15" RowSpacing="15">
+
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <aurora:CupertinoButton
+                                Text="No Shadow"
+                                ButtonBackgroundColor="Orange"
+                                FontColor="White"
+                                ShadowBlurRadius="0"
+                                HeightRequest="40"
+                                WidthRequest="100"
+                                Command="{Binding TestCommand}"
+                                CommandParameter="No Shadow Button"/>
+                            <Label Text="No Shadow" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
+                            <aurora:CupertinoButton
+                                Text="Light Shadow"
+                                ButtonBackgroundColor="Blue"
+                                FontColor="White"
+                                ShadowBlurRadius="5"
+                                ShadowColor="Gray"
+                                HeightRequest="40"
+                                WidthRequest="100"
+                                Command="{Binding TestCommand}"
+                                CommandParameter="Light Shadow Button"/>
+                            <Label Text="Light Shadow" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2">
+                            <aurora:CupertinoButton
+                                Text="Heavy Shadow"
+                                ButtonBackgroundColor="Red"
+                                FontColor="White"
+                                ShadowBlurRadius="15"
+                                ShadowColor="Black"
+                                HeightRequest="40"
+                                WidthRequest="100"
+                                Command="{Binding TestCommand}"
+                                CommandParameter="Heavy Shadow Button"/>
+                            <Label Text="Heavy Shadow" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Size and Shape Examples -->
+            <Frame BorderColor="Gray" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Size and Shape Examples" FontSize="Subtitle" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="15" RowSpacing="15">
+
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <aurora:CupertinoButton
+                                Text="Small"
+                                ButtonBackgroundColor="DarkBlue"
+                                FontColor="White"
+                                FontSize="12"
+                                BorderRadius="4"
+                                HeightRequest="30"
+                                WidthRequest="80"
+                                Command="{Binding TestCommand}"
+                                CommandParameter="Small Button"/>
+                            <Label Text="Small Size" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
+                            <aurora:CupertinoButton
+                                Text="Large"
+                                ButtonBackgroundColor="DarkGreen"
+                                FontColor="White"
+                                FontSize="20"
+                                BorderRadius="15"
+                                HeightRequest="60"
+                                WidthRequest="150"
+                                Command="{Binding TestCommand}"
+                                CommandParameter="Large Button"/>
+                            <Label Text="Large Size" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2">
+                            <aurora:CupertinoButton
+                                Text="Round"
+                                ButtonBackgroundColor="Purple"
+                                FontColor="White"
+                                BorderRadius="35"
+                                HeightRequest="70"
+                                WidthRequest="70"
+                                Command="{Binding TestCommand}"
+                                CommandParameter="Round Button"/>
+                            <Label Text="Round Shape" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Icon Text Examples -->
+            <Frame BorderColor="Gray" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Iconified Text Examples" FontSize="Subtitle" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="15" RowSpacing="15">
+
+                        <VerticalStackLayout HorizontalOptions="Center">
+                            <aurora:CupertinoButton
+                                Text="Regular Text"
+                                ButtonBackgroundColor="Teal"
+                                FontColor="White"
+                                IsIconifiedText="False"
+                                HeightRequest="40"
+                                WidthRequest="120"
+                                Command="{Binding TestCommand}"
+                                CommandParameter="Regular Text Button"/>
+                            <Label Text="Regular Text" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
+                            <aurora:CupertinoButton
+                                Text="&#xE710;"
+                                ButtonBackgroundColor="Maroon"
+                                FontColor="White"
+                                IsIconifiedText="True"
+                                HeightRequest="40"
+                                WidthRequest="120"
+                                Command="{Binding TestCommand}"
+                                CommandParameter="Icon Text Button"/>
+                            <Label Text="Iconified Text" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
