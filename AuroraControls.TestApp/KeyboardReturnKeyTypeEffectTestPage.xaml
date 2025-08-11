@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             x:Class="AuroraControls.TestApp.KeyboardReturnKeyTypeEffectTestPage"
+             Title="Keyboard Return Key Type Effect Test">
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+            <Label Text="Keyboard Return Key Type Effect Test"
+                   FontSize="Title"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <Label Text="This effect changes the return key type on the keyboard for Entry controls. Test on iOS/Android devices to see the keyboard changes."
+                   FontSize="Subtitle"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"/>
+
+            <!-- Interactive Demo Section -->
+            <Border Stroke="Gray" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Interactive Demo" FontSize="Subtitle" FontAttributes="Bold"/>
+
+                    <!-- Return Key Type Selector -->
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10" RowSpacing="10">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Return Key Type:" VerticalOptions="Center"/>
+                        <Picker Grid.Row="0" Grid.Column="1"
+                                x:Name="ReturnKeyTypePicker"
+                                ItemsSource="{Binding ReturnKeyTypes}"
+                                SelectedItem="{Binding SelectedReturnKeyType}"/>
+                    </Grid>
+
+                    <!-- Test Entry with Dynamic Effect -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Test Entry (Dynamic Return Key):" FontSize="16" FontAttributes="Bold"/>
+                        <Entry x:Name="DynamicEntry"
+                               Placeholder="Tap here and check keyboard return key"
+                               Text="{Binding EntryText}"
+                               aurora:KeyboardInput.ReturnKey="{Binding SelectedReturnKeyType}"/>
+                        <Label Text="{Binding SelectedReturnKeyType, StringFormat='Current Return Key Type: {0}'}"
+                               FontSize="12"
+                               TextColor="Gray"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Static Examples Section -->
+            <Border Stroke="Gray" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Static Examples" FontSize="Subtitle" FontAttributes="Bold"/>
+                    <Label Text="Each Entry below has a different return key type configured:"
+                           FontSize="14"
+                           TextColor="Gray"/>
+
+                    <!-- Default -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Default Return Key:" FontSize="14" FontAttributes="Bold"/>
+                        <Entry Placeholder="Default return key behavior"
+                               aurora:KeyboardInput.ReturnKey="Default"/>
+                    </VerticalStackLayout>
+
+                    <!-- Done -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Done Return Key:" FontSize="14" FontAttributes="Bold"/>
+                        <Entry Placeholder="Shows 'Done' on keyboard"
+                               aurora:KeyboardInput.ReturnKey="Done"/>
+                    </VerticalStackLayout>
+
+                    <!-- Go -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Go Return Key:" FontSize="14" FontAttributes="Bold"/>
+                        <Entry Placeholder="Shows 'Go' on keyboard"
+                               aurora:KeyboardInput.ReturnKey="Go"/>
+                    </VerticalStackLayout>
+
+                    <!-- Send -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Send Return Key:" FontSize="14" FontAttributes="Bold"/>
+                        <Entry Placeholder="Shows 'Send' on keyboard"
+                               aurora:KeyboardInput.ReturnKey="Send"/>
+                    </VerticalStackLayout>
+
+                    <!-- Search -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Search Return Key:" FontSize="14" FontAttributes="Bold"/>
+                        <Entry Placeholder="Shows 'Search' on keyboard"
+                               aurora:KeyboardInput.ReturnKey="Search"/>
+                    </VerticalStackLayout>
+
+                    <!-- Next -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Next Return Key (with Focus Chain):" FontSize="14" FontAttributes="Bold"/>
+                        <Entry x:Name="NextEntry1"
+                               Placeholder="Shows 'Next' - moves to next field"
+                               aurora:KeyboardInput.ReturnKey="Next"
+                               aurora:KeyboardInput.NextVisualElement="{x:Reference NextEntry2}"/>
+                        <Entry x:Name="NextEntry2"
+                               Placeholder="Second field in chain"
+                               aurora:KeyboardInput.ReturnKey="Next"
+                               aurora:KeyboardInput.NextVisualElement="{x:Reference NextEntry3}"/>
+                        <Entry x:Name="NextEntry3"
+                               Placeholder="Final field - shows Done"
+                               aurora:KeyboardInput.ReturnKey="Done"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Instructions -->
+            <Border Stroke="Orange" Background="#20FF9500" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="📱 Instructions:" FontSize="16" FontAttributes="Bold" TextColor="DarkOrange"/>
+                    <Label TextColor="DarkOrange">
+                        <Label.FormattedText>
+                            • This effect only works on iOS and Android devices&#10;• Tap in any Entry field to see the virtual keyboard&#10;• Look at the return key (bottom-right of keyboard)&#10;• The 'Next' entries will automatically move focus to the next field&#10;• Try changing the return key type in the interactive demo
+                        </Label.FormattedText>
+                    </Label>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Feedback Section -->
+            <Border Stroke="Green" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Test Results" FontSize="16" FontAttributes="Bold" TextColor="Green"/>
+                    <Label Text="{Binding TestResult}"
+                           TextColor="Green"
+                           IsVisible="{Binding ShowTestResult}"/>
+                    <Button Text="Test Return Key Pressed"
+                            Command="{Binding TestReturnKeyCommand}"
+                            BackgroundColor="Green"
+                            TextColor="White"/>
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

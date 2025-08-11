@@ -25,4 +25,15 @@
         <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.3" />
         <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.3" />
     </ItemGroup>
+    <ItemGroup>
+      <Compile Update="Platforms\MacCatalyst\AppleKeyboardReturnKeyTypeNameEffect.cs">
+        <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+      </Compile>
+      <Compile Update="Platforms\MacCatalyst\AppleListViewHideEmptyCellsEffect.cs">
+        <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+      </Compile>
+      <Compile Update="Platforms\MacCatalyst\ShowKeyboardDoneButtonEffect.cs">
+        <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
+      </Compile>
+    </ItemGroup>
 </Project>

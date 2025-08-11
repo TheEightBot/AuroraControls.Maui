@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             x:Class="AuroraControls.TestApp.ListViewHideEmptyCellsEffectTestPage"
+             Title="ListView Hide Empty Cells Effect Test">
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+            <Label Text="ListView Hide Empty Cells Effect Test"
+                   FontSize="Title"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <Label Text="This effect hides empty cells in ListView controls. Works on iOS and macOS only."
+                   FontSize="Subtitle"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"/>
+
+            <!-- Interactive Demo Section -->
+            <Border Stroke="Gray" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Interactive Demo" FontSize="Subtitle" FontAttributes="Bold"/>
+
+                    <!-- Controls -->
+                    <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="10" RowSpacing="10">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Items Count:" VerticalOptions="Center"/>
+                        <Slider Grid.Row="0" Grid.Column="1"
+                                x:Name="ItemCountSlider"
+                                Value="{Binding ItemCount}"
+                                Minimum="1"
+                                Maximum="20"
+                                HorizontalOptions="FillAndExpand"/>
+                        <Label Grid.Row="0" Grid.Column="2"
+                               Text="{Binding ItemCount, StringFormat='{0:F0}'}"
+                               WidthRequest="30"
+                               VerticalOptions="Center"/>
+
+                        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                                Text="Add Random Item"
+                                Command="{Binding AddItemCommand}"
+                                BackgroundColor="Green"
+                                TextColor="White"/>
+
+                        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
+                                Text="Remove Last Item"
+                                Command="{Binding RemoveItemCommand}"
+                                BackgroundColor="Red"
+                                TextColor="White"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Comparison Section -->
+            <Grid ColumnDefinitions="*, *" ColumnSpacing="15">
+
+                <!-- ListView WITHOUT Effect -->
+                <Border Grid.Column="0" Stroke="Red" Padding="10">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="WITHOUT Effect"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="Red"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Shows empty cells"
+                               FontSize="12"
+                               TextColor="Red"
+                               HorizontalOptions="Center"/>
+
+                        <ListView x:Name="ListViewWithoutEffect"
+                                  ItemsSource="{Binding Items}"
+                                  HeightRequest="300"
+                                  BackgroundColor="LightGray">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Border Padding="10" Margin="2" Background="White" Stroke="LightBlue">
+                                            <VerticalStackLayout Spacing="5">
+                                                <Label Text="{Binding Name}" FontAttributes="Bold"/>
+                                                <Label Text="{Binding Description}" FontSize="12" TextColor="Gray"/>
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ListView WITH Effect -->
+                <Border Grid.Column="1" Stroke="Green" Padding="10">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="WITH Effect"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="Green"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Hides empty cells (iOS/macOS only)"
+                               FontSize="12"
+                               TextColor="Green"
+                               HorizontalOptions="Center"/>
+
+                        <ListView x:Name="ListViewWithEffect"
+                                  ItemsSource="{Binding Items}"
+                                  HeightRequest="300"
+                                  BackgroundColor="LightGray">
+                            <ListView.Effects>
+                                <aurora:ListViewHideEmptyCellsEffect />
+                            </ListView.Effects>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Border Padding="10" Margin="2" Background="White" Stroke="LightBlue">
+                                            <VerticalStackLayout Spacing="5">
+                                                <Label Text="{Binding Name}" FontAttributes="Bold"/>
+                                                <Label Text="{Binding Description}" FontSize="12" TextColor="Gray"/>
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
+            <!-- Instructions -->
+            <Border Stroke="Orange" Background="#20FF9500" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="📱 Instructions:" FontSize="16" FontAttributes="Bold" TextColor="DarkOrange"/>
+                    <Label TextColor="DarkOrange">
+                        <Label.Text>
+                            • This effect only works on iOS and macOS platforms&#10;• On other platforms, both ListViews will look identical&#10;• Adjust the item count to see fewer items in the list&#10;• On iOS/macOS: The right ListView should not show empty cells below the items&#10;• On iOS/macOS: The left ListView will show empty separator lines&#10;• Add/remove items to see the effect dynamically
+                        </Label.Text>
+                    </Label>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Current Status -->
+            <Border Stroke="Blue" Background="#200000FF" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Current Status" FontSize="16" FontAttributes="Bold" TextColor="Blue"/>
+                    <Label Text="{Binding StatusMessage}" TextColor="Blue"/>
+                    <Label Text="{Binding PlatformMessage}" TextColor="Blue" FontSize="12"/>
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

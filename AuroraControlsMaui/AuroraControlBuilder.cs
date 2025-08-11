@@ -29,13 +29,17 @@ public static class AuroraControlBuilder
                     effects
                         .Add<Effects.ImageProcessingEffect, Effects.ImageProcessingPlatformEffect>()
                         .Add<Effects.ShadowEffect, ShadowPlatformEffect>()
-                        .Add<Effects.RoundedCornersEffect, RoundedCornersPlatformEffect>();
+                        .Add<Effects.RoundedCornersEffect, RoundedCornersPlatformEffect>()
+                        .Add<Effects.KeyboardReturnKeyTypeNameEffect, DroidKeyboardReturnKeyTypeNameEffect>();
 #elif IOS || MACCATALYST
                     effects
                         .Add<Effects.ImageProcessingEffect, Effects.ImageProcessingPlatformEffect>()
                         .Add<Effects.ShadowEffect, ShadowPlatformEffect>()
                         .Add<Effects.RoundedCornersEffect, RoundedCornersPlatformEffect>()
-                        .Add<Effects.SafeAreaEffect, SafeAreaPlatformEffect>();
+                        .Add<Effects.SafeAreaEffect, SafeAreaPlatformEffect>()
+                        .Add<Effects.KeyboardReturnKeyTypeNameEffect, AppleKeyboardReturnKeyTypeNameEffect>()
+                        .Add<Effects.ListViewHideEmptyCellsEffect, AppleListViewHideEmptyCellsEffect>()
+                        .Add<Effects.ShowKeyboardDoneButtonEffect, ShowKeyboardDoneButtonEffect>();
 #endif
                 })
             .ConfigureImageSources(
