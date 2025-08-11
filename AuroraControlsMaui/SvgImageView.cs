@@ -61,7 +61,7 @@ public class SvgImageView : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the overlay.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default is Transparent.</value>
+    /// <value>Expects a Color. Default is Transparent.</value>
     public Color OverlayColor
     {
         get => (Color)GetValue(OverlayColorProperty);
@@ -78,7 +78,7 @@ public class SvgImageView : AuroraViewBase
     /// <summary>
     /// Gets or sets the maximum image size.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Size.</value>
+    /// <value>Expects a Size.</value>
     public Size MaxImageSize
     {
         get => (Size)GetValue(MaxImageSizeProperty);

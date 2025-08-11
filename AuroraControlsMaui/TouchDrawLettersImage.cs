@@ -26,7 +26,7 @@ public class TouchDrawLettersImage : AuroraViewBase
     /// <summary>
     /// Gets or sets the source.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.ImageSource. Default value is null.</value>
+    /// <value>Takes a ImageSource. Default value is null.</value>
     public ImageSource Source
     {
         get => (ImageSource)GetValue(SourceProperty);

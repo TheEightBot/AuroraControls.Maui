@@ -30,7 +30,7 @@ public class MaterialCircular : SceneViewBase
     /// <summary>
     /// Gets or sets the color of the foreground.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
+    /// <value>Takes a Color. Default value is default(Color).</value>
     public Color ForegroundLoadingColor
     {
         get => (Color)GetValue(ForegroundLoadingColorProperty);
@@ -55,7 +55,7 @@ public class MaterialCircular : SceneViewBase
     /// <summary>
     /// Gets or sets the color of the background.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
+    /// <value>Takes a Color. Default value is default(Color).</value>
     public Color BackgroundLoadingColor
     {
         get => (Color)GetValue(BackgroundLoadingColorProperty);

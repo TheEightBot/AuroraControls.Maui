@@ -36,7 +36,7 @@ public class CutoutOverlayView : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the cutout overlay.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Conlor. Default is Color.White.</value>
+    /// <value>Expects a Conlor. Default is Color.White.</value>
     public Color CutoutOverlayColor
     {
         get { return (Color)GetValue(CutoutOverlayColorProperty); }
@@ -70,7 +70,7 @@ public class CutoutOverlayView : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the border.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default is Xamarin.Forms.Color.Default.</value>
+    /// <value>Expects a Color. Default is Color.Default.</value>
     public Color BorderColor
     {
         get { return (Color)GetValue(BorderColorProperty); }
@@ -87,7 +87,7 @@ public class CutoutOverlayView : AuroraViewBase
     /// <summary>
     /// Gets or sets the cutout inset.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Thickness. Default is Xamarin.Forms.Thickness.Default.</value>
+    /// <value>Expects a Thickness. Default is Thickness.Default.</value>
     public Thickness CutoutInset
     {
         get { return (Thickness)GetValue(CutoutInsetProperty); }

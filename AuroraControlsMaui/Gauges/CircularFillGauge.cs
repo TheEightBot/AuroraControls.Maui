@@ -32,7 +32,7 @@ public class CircularFillGauge : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the progress.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Color. Default value is Color.Default.</value>
+    /// <value>Takes a Color. The default value is Colors.Transparent.</value>
     public Color ProgressColor
     {
         get => (Color)GetValue(ProgressColorProperty);
@@ -49,7 +49,7 @@ public class CircularFillGauge : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the progress background.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Color. Default value is Color.Default.</value>
+    /// <value>Takes a Color. The default value is Colors.Transparent.</value>
     public Color ProgressBackgroundColor
     {
         get => (Color)GetValue(ProgressBackgroundColorProperty);
