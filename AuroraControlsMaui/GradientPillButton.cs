@@ -27,7 +27,7 @@ public class GradientPillButton : AuroraViewBase
     /// <summary>
     /// Gets or sets the start color of the button background.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Default.</value>
+    /// <value>Expects a Color. The default value is Colors.Transparent.</value>
     public Color ButtonBackgroundStartColor
     {
         get => (Color)GetValue(ButtonBackgroundStartColorProperty);
@@ -44,7 +44,7 @@ public class GradientPillButton : AuroraViewBase
     /// <summary>
     /// Gets or sets the end color of the button background.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Default.</value>
+    /// <value>Expects a Color. The default value is Colors.Transparent.</value>
     public Color ButtonBackgroundEndColor
     {
         get => (Color)GetValue(ButtonBackgroundEndColorProperty);
@@ -78,7 +78,7 @@ public class GradientPillButton : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the border.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Default.</value>
+    /// <value>Expects a Color. The default value is Colors.Transparent.</value>
     public Color BorderColor
     {
         get => (Color)GetValue(BorderColorProperty);
@@ -95,7 +95,7 @@ public class GradientPillButton : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the shadow.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default value is Color.FromRgba(0d, 0d, 0d, .33d).</value>
+    /// <value>Expects a Color. Default value is Color.FromRgba(0d, 0d, 0d, .33d).</value>
     public Color ShadowColor
     {
         get => (Color)GetValue(ShadowColorProperty);
@@ -180,7 +180,7 @@ public class GradientPillButton : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the font.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default value is Color.White.</value>
+    /// <value>Expects a Color. Default value is Color.White.</value>
     public Color FontColor
     {
         get => (Color)GetValue(FontColorProperty);

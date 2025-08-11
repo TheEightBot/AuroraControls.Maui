@@ -27,7 +27,7 @@ public class Gradient : VisualEffect
     /// <summary>
     /// Gets or sets the starting color.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default is Xamarin.Forms.Color.Default.</value>
+    /// <value>Expects a Color. Default is Color.Default.</value>
     public Color GradientStartColor
     {
         get => (Color)GetValue(GradientStartColorProperty);
@@ -43,7 +43,7 @@ public class Gradient : VisualEffect
     /// <summary>
     /// Gets or sets the stop color.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default is Xamarin.Forms.Color.Default.</value>
+    /// <value>Expects a Color. Default is Color.Default.</value>
     public Color GradientStopColor
     {
         get => (Color)GetValue(GradientStopColorProperty);

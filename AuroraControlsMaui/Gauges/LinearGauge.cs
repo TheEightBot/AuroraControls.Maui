@@ -79,7 +79,7 @@ public class LinearGauge : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the progress.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default is Xamarin.Forms.Color.Default.</value>
+    /// <value>Expects a Color. Default is Color.Default.</value>
     public Color ProgressColor
     {
         get => (Color)GetValue(ProgressColorProperty);
@@ -130,7 +130,7 @@ public class LinearGauge : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the progress background.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default is Xamarin.Forms.Color.Default.</value>
+    /// <value>Expects a Color. Default is Color.Default.</value>
     public Color ProgressBackgroundColor
     {
         get => (Color)GetValue(ProgressBackgroundColorProperty);

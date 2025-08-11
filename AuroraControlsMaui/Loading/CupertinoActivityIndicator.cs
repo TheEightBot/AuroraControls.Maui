@@ -80,7 +80,7 @@ public class CupertinoActivityIndicator : SceneViewBase
     /// <summary>
     /// Gets or sets the color of the indicator.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default is Color.DarkGray.</value>
+    /// <value>Expects a Color. Default is Color.DarkGray.</value>
     public Color IndicatorColor
     {
         get => (Color)GetValue(IndicatorColorProperty);

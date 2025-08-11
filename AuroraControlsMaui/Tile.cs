@@ -67,7 +67,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// Gets or sets the maximum image size.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Size.</value>
+    /// <value>Expects a Size.</value>
     public Size MaxImageSize
     {
         get => (Size)GetValue(MaxImageSizeProperty);
@@ -84,7 +84,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the overlay.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Transparent.</value>
+    /// <value>Takes a Color. Default value is Color.Transparent.</value>
     public Color OverlayColor
     {
         get => (Color)GetValue(OverlayColorProperty);
@@ -101,7 +101,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the button background.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Color. Default value is Xamarin.Forms.Colors.White.</value>
+    /// <value>Takes a Color. Default value is Colors.White.</value>
     public Color ButtonBackgroundColor
     {
         get => (Color)GetValue(ButtonBackgroundColorProperty);
@@ -118,7 +118,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the border.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Color. Default value is Xamarin.Forms.Colors.White.</value>
+    /// <value>Takes a Color. Default value is Colors.White.</value>
     public Color BorderColor
     {
         get => (Color)GetValue(BorderColorProperty);
@@ -135,7 +135,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the shadow.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.FromRgba(0d, 0d, 0d, .33d).</value>
+    /// <value>Takes a Color. Default value is Color.FromRgba(0d, 0d, 0d, .33d).</value>
     public Color ShadowColor
     {
         get => (Color)GetValue(ShadowColorProperty);
@@ -152,7 +152,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// Gets or sets the shadow location.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Point. Default value is Point(0, 3).</value>
+    /// <value>Takes a Point. Default value is Point(0, 3).</value>
     public Point ShadowLocation
     {
         get => (Point)GetValue(ShadowLocationProperty);
@@ -237,7 +237,7 @@ public class Tile : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the font.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.White.</value>
+    /// <value>Takes a Color. Default value is Color.White.</value>
     public Color FontColor
     {
         get => (Color)GetValue(FontColorProperty);

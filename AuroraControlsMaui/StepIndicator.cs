@@ -103,7 +103,7 @@ public class StepIndicator : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the line.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
+    /// <value>Takes a Color. Default value is default(Color).</value>
     public Color? LineColor
     {
         get => (Color?)GetValue(LineColorProperty);
@@ -137,7 +137,7 @@ public class StepIndicator : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the highlight.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
+    /// <value>Takes a Color. Default value is default(Color).</value>
     public Color? HighlightColor
     {
         get => (Color)GetValue(HighlightColorProperty);
@@ -154,7 +154,7 @@ public class StepIndicator : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the inactive.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
+    /// <value>Takes a Color. Default value is default(Color).</value>
     public Color? InactiveColor
     {
         get => (Color)GetValue(InactiveColorProperty);
@@ -171,7 +171,7 @@ public class StepIndicator : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the font.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
+    /// <value>Takes a Color. Default value is default(Color).</value>
     public Color? FontColor
     {
         get => (Color)GetValue(FontColorProperty);
@@ -198,7 +198,7 @@ public class StepIndicator : AuroraViewBase
     /// <summary>
     /// Gets or sets the padding.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Thickness. Default value is default(Xamarin.Forms.Thickness).</value>
+    /// <value>Takes a Thickness. Default value is default(Thickness).</value>
     public Thickness Padding
     {
         get => (Thickness)GetValue(PaddingProperty);
