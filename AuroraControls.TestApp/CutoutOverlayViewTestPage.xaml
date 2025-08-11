@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             x:Class="AuroraControls.TestApp.CutoutOverlayViewTestPage"
+             Title="CutoutOverlayView Test Page">
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="20">
+            <Label Text="CutoutOverlayView Test Page"
+                   FontSize="Title"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <!-- Live Property Controls -->
+            <Border Stroke="Gray" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Live Property Controls" FontSize="Subtitle" FontAttributes="Bold"/>
+
+                    <!-- Test CutoutOverlayView -->
+                    <Border Background="LightBlue" StrokeThickness="0" Padding="0" HeightRequest="300">
+                        <Grid>
+                            <!-- Background content to demonstrate cutout effect -->
+                            <Image Source="dotnet_bot.png" Aspect="AspectFill" Opacity="0.7"/>
+
+                            <!-- The CutoutOverlayView -->
+                            <aurora:CutoutOverlayView x:Name="TestCutoutOverlay"
+                                                    CutoutShape="{Binding SelectedShape}"
+                                                    CutoutOverlayColor="{Binding OverlayColor}"
+                                                    BorderColor="{Binding BorderColor}"
+                                                    BorderWidth="{Binding BorderWidth}"
+                                                    CutoutInset="{Binding CutoutInset}"
+                                                    CornerRadius="{Binding CornerRadius}"
+                                                    Command="{Binding TapCommand}"
+                                                    CommandParameter="Cutout tapped!" />
+
+                            <!-- Content to show in the cutout area -->
+                            <Label Text="Content Behind Overlay"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   BackgroundColor="Red"
+                                   Padding="10"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Property Controls -->
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10" RowSpacing="10"
+                          RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+
+                        <!-- Shape Selection -->
+                        <Label Grid.Row="0" Grid.Column="0" Text="Shape:" VerticalOptions="Center"/>
+                        <Picker Grid.Row="0" Grid.Column="1"
+                                ItemsSource="{Binding ShapeOptions}"
+                                SelectedItem="{Binding SelectedShapeString}"/>
+
+                        <!-- Border Width -->
+                        <Label Grid.Row="1" Grid.Column="0" Text="Border Width:" VerticalOptions="Center"/>
+                        <HorizontalStackLayout Grid.Row="1" Grid.Column="1" Spacing="10">
+                            <Slider Value="{Binding BorderWidth}" Minimum="0" Maximum="20" HorizontalOptions="FillAndExpand"/>
+                            <Label Text="{Binding BorderWidth, StringFormat='{0:F1}'}" WidthRequest="40" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+
+                        <!-- Corner Radius -->
+                        <Label Grid.Row="2" Grid.Column="0" Text="Corner Radius:" VerticalOptions="Center"/>
+                        <HorizontalStackLayout Grid.Row="2" Grid.Column="1" Spacing="10">
+                            <Slider Value="{Binding CornerRadius}" Minimum="0" Maximum="50" HorizontalOptions="FillAndExpand"/>
+                            <Label Text="{Binding CornerRadius, StringFormat='{0:F1}'}" WidthRequest="40" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+
+                        <!-- Cutout Inset -->
+                        <Label Grid.Row="3" Grid.Column="0" Text="Inset (All):" VerticalOptions="Center"/>
+                        <HorizontalStackLayout Grid.Row="3" Grid.Column="1" Spacing="10">
+                            <Slider Value="{Binding InsetValue}" Minimum="0" Maximum="100" HorizontalOptions="FillAndExpand"/>
+                            <Label Text="{Binding InsetValue, StringFormat='{0:F0}'}" WidthRequest="40" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+
+                        <!-- Overlay Color -->
+                        <Label Grid.Row="4" Grid.Column="0" Text="Overlay Color:" VerticalOptions="Center"/>
+                        <Picker Grid.Row="4" Grid.Column="1"
+                                ItemsSource="{Binding OverlayColorOptions}"
+                                SelectedItem="{Binding SelectedOverlayColor}"/>
+
+                        <!-- Border Color -->
+                        <Label Grid.Row="5" Grid.Column="0" Text="Border Color:" VerticalOptions="Center"/>
+                        <Picker Grid.Row="5" Grid.Column="1"
+                                ItemsSource="{Binding BorderColorOptions}"
+                                SelectedItem="{Binding SelectedBorderColor}"/>
+
+                    </Grid>
+
+                    <!-- Tap Feedback -->
+                    <Label Text="{Binding TapMessage}"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="Green"
+                           HorizontalOptions="Center"
+                           IsVisible="{Binding ShowTapMessage}"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Preset Examples -->
+            <Border Stroke="Gray" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Preset Examples" FontSize="Subtitle" FontAttributes="Bold"/>
+
+                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="10" RowSpacing="15">
+
+                        <!-- Circular Example -->
+                        <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
+                            <Border Background="Navy" StrokeThickness="0" Padding="0" HeightRequest="150" WidthRequest="150">
+                                <Grid>
+                                    <BoxView BackgroundColor="Yellow"/>
+                                    <aurora:CutoutOverlayView
+                                        CutoutShape="Circular"
+                                        CutoutOverlayColor="Black"
+                                        CutoutInset="20"
+                                        BorderColor="Red"
+                                        BorderWidth="3"/>
+                                    <Label Text="Circle" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </Grid>
+                            </Border>
+                            <Label Text="Circular" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <!-- Square Example -->
+                        <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                            <Border Background="Navy" StrokeThickness="0" Padding="0" HeightRequest="150" WidthRequest="150">
+                                <Grid>
+                                    <BoxView BackgroundColor="Orange"/>
+                                    <aurora:CutoutOverlayView
+                                        CutoutShape="Square"
+                                        CutoutOverlayColor="Purple"
+                                        CutoutInset="25"
+                                        CornerRadius="15"
+                                        BorderColor="White"
+                                        BorderWidth="2"/>
+                                    <Label Text="Square" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </Grid>
+                            </Border>
+                            <Label Text="Square" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <!-- Rectangular Example -->
+                        <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center">
+                            <Border Background="Navy" StrokeThickness="0" Padding="0" HeightRequest="150" WidthRequest="150">
+                                <Grid>
+                                    <BoxView BackgroundColor="Green"/>
+                                    <aurora:CutoutOverlayView
+                                        CutoutShape="Rectangular"
+                                        CutoutOverlayColor="Maroon"
+                                        CutoutInset="10,30,10,30"
+                                        CornerRadius="20"
+                                        BorderColor="Cyan"
+                                        BorderWidth="4"/>
+                                    <Label Text="Rectangle" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </Grid>
+                            </Border>
+                            <Label Text="Rectangular" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                    </Grid>
+
+                    <!-- Second row of examples -->
+                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="10" RowSpacing="15" Margin="0,10,0,0">
+
+                        <!-- Oval Example -->
+                        <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
+                            <Border Background="Navy" StrokeThickness="0" Padding="0" HeightRequest="150" WidthRequest="150">
+                                <Grid>
+                                    <BoxView BackgroundColor="Pink"/>
+                                    <aurora:CutoutOverlayView
+                                        CutoutShape="Oval"
+                                        CutoutOverlayColor="DarkBlue"
+                                        CutoutInset="15"
+                                        BorderColor="Gold"
+                                        BorderWidth="5"/>
+                                    <Label Text="Oval" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </Grid>
+                            </Border>
+                            <Label Text="Oval" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <!-- No Border Example -->
+                        <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                            <Border Background="Navy" StrokeThickness="0" Padding="0" HeightRequest="150" WidthRequest="150">
+                                <Grid>
+                                    <BoxView BackgroundColor="Coral"/>
+                                    <aurora:CutoutOverlayView
+                                        CutoutShape="Circular"
+                                        CutoutOverlayColor="Black"
+                                        CutoutInset="30"
+                                        BorderWidth="0"/>
+                                    <Label Text="No Border" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </Grid>
+                            </Border>
+                            <Label Text="No Border" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <!-- Semi-transparent Example -->
+                        <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center">
+                            <Border Background="Navy" StrokeThickness="0" Padding="0" HeightRequest="150" WidthRequest="150">
+                                <Grid>
+                                    <BoxView BackgroundColor="Turquoise"/>
+                                    <aurora:CutoutOverlayView
+                                        CutoutShape="Square"
+                                        CutoutOverlayColor="#80000000"
+                                        CutoutInset="20"
+                                        CornerRadius="10"
+                                        BorderColor="White"
+                                        BorderWidth="1"/>
+                                    <Label Text="Semi-transparent" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </Grid>
+                            </Border>
+                            <Label Text="Semi-transparent" HorizontalOptions="Center" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
