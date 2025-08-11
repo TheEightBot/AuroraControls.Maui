@@ -22,7 +22,7 @@ public interface IIconCache
     /// </summary>
     /// <returns>The Icon as an Image.</returns>
     /// <param name="svgName">The name of the SVG.</param>
-    /// <param name="size">A Xamarin.Forms.Size representing the desired size of the icon.</param>
+    /// <param name="size">A Size representing the desired size of the icon.</param>
     /// <param name="additionalCacheKey">Allows for setting an addiitonal cache key.</param>
     /// <param name="colorOverride">Allows for setting the color of the icon.</param>
     Task<Image> IconFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = default);
@@ -42,7 +42,7 @@ public interface IIconCache
     /// </summary>
     /// <returns>The Icon as an ImageSource.</returns>
     /// <param name="svgName">The name of the SVG.</param>
-    /// <param name="size">A Xamarin.Forms.Size representing the desired size of the icon.</param>
+    /// <param name="size">A Size representing the desired size of the icon.</param>
     /// <param name="additionalCacheKey">Allows for setting an addiitonal cache key.</param>
     /// <param name="colorOverride">Allows for setting the color of the icon.</param>
     Task<ImageSource> ImageSourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = default);
@@ -64,7 +64,7 @@ public interface IIconCache
     /// <returns>The Icon as an ImageSource.</returns>
     /// <param name="svgName">The name of the SVG.</param>
     /// <param name="svgValue">The SVG Value.</param>
-    /// <param name="size">A Xamarin.Forms.Size representing the desired size of the icon.</param>
+    /// <param name="size">A Size representing the desired size of the icon.</param>
     /// <param name="additionalCacheKey">Allows for setting an addiitonal cache key.</param>
     /// <param name="colorOverride">Allows for setting the color of the icon.</param>
     Task<ImageSource> ImageSourceFromRawSvg(string svgName, string svgValue, Size size, string additionalCacheKey = "", Color? colorOverride = default);

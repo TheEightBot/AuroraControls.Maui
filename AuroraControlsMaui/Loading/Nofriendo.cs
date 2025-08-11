@@ -66,7 +66,7 @@ public class Nofriendo : LoadingViewBase
     /// <summary>
     /// Gets or sets the color of the loading start.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Color. Default is default(Xamarin.Forms.Color).</value>
+    /// <value>Takes a Color. Default is default(Color).</value>
     public Color LoadingStartColor
     {
         get => (Color)GetValue(LoadingStartColorProperty);
@@ -83,7 +83,7 @@ public class Nofriendo : LoadingViewBase
     /// <summary>
     /// Gets or sets the color of the loading end.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Color. Default is default(Xamarin.Forms.Color).</value>
+    /// <value>Takes a Color. Default is default(Color).</value>
     public Color LoadingEndColor
     {
         get => (Color)GetValue(LoadingEndColorProperty);

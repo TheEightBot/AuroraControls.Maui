@@ -20,7 +20,7 @@ public class NotificationBadge : AuroraViewBase
     /// <summary>
     /// Gets or sets the badge color.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default value is Color.Red.</value>
+    /// <value>Expects a Color. Default value is Color.Red.</value>
     public Color BadgeColor
     {
         get => (Color)GetValue(BadgeColorProperty);
@@ -37,7 +37,7 @@ public class NotificationBadge : AuroraViewBase
     /// <summary>
     /// Gets or sets the font color.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default value is Color.White.</value>
+    /// <value>Expects a Color. Default value is Color.White.</value>
     public Color FontColor
     {
         get => (Color)GetValue(FontColorProperty);

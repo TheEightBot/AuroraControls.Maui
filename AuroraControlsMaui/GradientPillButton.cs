@@ -27,7 +27,7 @@ public class GradientPillButton : AuroraViewBase
     /// <summary>
     /// Gets or sets the start color of the button background.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Default.</value>
+    /// <value>Expects a Color. The default value is Colors.Transparent.</value>
     public Color ButtonBackgroundStartColor
     {
         get => (Color)GetValue(ButtonBackgroundStartColorProperty);
@@ -44,7 +44,7 @@ public class GradientPillButton : AuroraViewBase
     /// <summary>
     /// Gets or sets the end color of the button background.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Default.</value>
+    /// <value>Expects a Color. The default value is Colors.Transparent.</value>
     public Color ButtonBackgroundEndColor
     {
         get => (Color)GetValue(ButtonBackgroundEndColorProperty);
@@ -78,7 +78,7 @@ public class GradientPillButton : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the border.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.Default.</value>
+    /// <value>Expects a Color. The default value is Colors.Transparent.</value>
     public Color BorderColor
     {
         get => (Color)GetValue(BorderColorProperty);
@@ -95,7 +95,7 @@ public class GradientPillButton : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the shadow.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default value is Color.FromRgba(0d, 0d, 0d, .33d).</value>
+    /// <value>Expects a Color. Default value is Color.FromRgba(0d, 0d, 0d, .33d).</value>
     public Color ShadowColor
     {
         get => (Color)GetValue(ShadowColorProperty);
@@ -180,7 +180,7 @@ public class GradientPillButton : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the font.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default value is Color.White.</value>
+    /// <value>Expects a Color. Default value is Color.White.</value>
     public Color FontColor
     {
         get => (Color)GetValue(FontColorProperty);
@@ -318,7 +318,7 @@ public class GradientPillButton : AuroraViewBase
     {
         var canvas = surface.Canvas;
 
-        if (ButtonBackgroundStartColor != default(Color) && ButtonBackgroundEndColor == default(Color))
+        if (!Equals(this.ButtonBackgroundStartColor, Colors.Transparent) && Equals(this.ButtonBackgroundEndColor, Colors.Transparent))
         {
             ButtonBackgroundEndColor = ButtonBackgroundStartColor.WithHue(.5f);
         }
@@ -367,7 +367,7 @@ public class GradientPillButton : AuroraViewBase
 
         _backgroundPath.Reset();
 
-        if (this.ShadowColor != default(Color) && this.ShadowLocation != Point.Zero)
+        if (this.ShadowColor != Colors.Transparent && this.ShadowLocation != Point.Zero)
         {
             using var shadowPaint = new SKPaint();
             using (new SKAutoCanvasRestore(canvas))
@@ -399,7 +399,7 @@ public class GradientPillButton : AuroraViewBase
                 ripplePaint.IsAntialias = true;
                 ripplePaint.Style = SKPaintStyle.Fill;
                 ripplePaint.Color =
-                    this.ButtonBackgroundStartColor != default(Color)
+                    this.ButtonBackgroundStartColor != Colors.Transparent
                         ? this.ButtonBackgroundEndColor.AddLuminosity(-.2f).MultiplyAlpha((1 - (float)_rippleAnimationPercentage) * .5f).ToSKColor()
                         : Colors.Transparent.ToSKColor();
 
@@ -414,7 +414,7 @@ public class GradientPillButton : AuroraViewBase
                 canvas.DrawPath(finalRipple, ripplePaint);
             }
 
-            if (this.BorderWidth > 0d && this.BorderColor != default(Color))
+            if (this.BorderWidth > 0d && this.BorderColor != Colors.Transparent)
             {
                 backgroundPaint.StrokeWidth = (float)this.BorderWidth;
                 backgroundPaint.Color = this.BorderColor.ToSKColor();

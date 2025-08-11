@@ -237,114 +237,116 @@ public class SegmentedControl : AuroraViewBase
             {
                 var segment = segments.ElementAtOrDefault(i);
 
-                if (segment != null)
+                if (segment == null)
                 {
-                    bool selected = i == SelectedIndex;
+                    continue;
+                }
 
-                    var segmentForegroundColor =
-                        segment.ForegroundColor != default(Color)
-                            ? segment.ForegroundColor.ToSKColor()
-                            : foregroundColor;
+                bool selected = i == this.SelectedIndex;
 
-                    paint.Color = segmentForegroundColor;
+                var segmentForegroundColor =
+                    !Equals(segment.ForegroundColor, Colors.Transparent)
+                        ? segment.ForegroundColor.ToSKColor()
+                        : foregroundColor;
 
-                    if (selected)
+                paint.Color = segmentForegroundColor;
+
+                if (selected)
+                {
+                    float selectedX = segmentSize * i;
+
+                    switch (style)
                     {
-                        float selectedX = segmentSize * i;
-
-                        switch (style)
-                        {
-                            case SegmentedControlStyle.Filled:
-                            case SegmentedControlStyle.Pill:
-                                canvas
-                                    .DrawRoundRect(
-                                        selectedX + borderSize, borderSize, segmentSize - (borderSize * 2f), info.Height - (borderSize * 2f),
-                                        scaledCornerRadius, scaledCornerRadius,
-                                        paint);
-                                break;
-                            case SegmentedControlStyle.Underline:
-                                canvas.DrawRect(selectedX, info.Height - borderSize, segmentSize, borderSize, paint);
-                                break;
-                            default:
-                                canvas.DrawRect(selectedX, 0, segmentSize, info.Height, paint);
-                                break;
-                        }
+                        case SegmentedControlStyle.Filled:
+                        case SegmentedControlStyle.Pill:
+                            canvas
+                                .DrawRoundRect(
+                                    selectedX + borderSize, borderSize, segmentSize - (borderSize * 2f), info.Height - (borderSize * 2f),
+                                    scaledCornerRadius, scaledCornerRadius,
+                                    paint);
+                            break;
+                        case SegmentedControlStyle.Underline:
+                            canvas.DrawRect(selectedX, info.Height - borderSize, segmentSize, borderSize, paint);
+                            break;
+                        default:
+                            canvas.DrawRect(selectedX, 0, segmentSize, info.Height, paint);
+                            break;
                     }
+                }
 
-                    if (segment.SVG != default(SKSvg))
+                if (segment.SVG is not null)
+                {
+                    using (new SKAutoCanvasRestore(canvas))
                     {
+                        var contentRect = new SKRect(segmentSize * i, borderSize + halfBorderSize, segmentSize * (i + 1), info.Height - borderSize - halfBorderSize);
+
+                        var imageSize = contentRect.AspectFit(segment.SVG.Picture.CullRect.Size);
+
+                        float scaleAmount = Math.Max(0, Math.Min(imageSize.Width / segment.SVG.Picture.CullRect.Width, imageSize.Height / segment.SVG.Picture.CullRect.Height));
+
+                        var svgScale = SKMatrix.CreateScale(scaleAmount, scaleAmount);
+
+                        var translation = SKMatrix.CreateTranslation(imageSize.Left, imageSize.Top);
+
+                        svgScale = svgScale.PostConcat(translation);
+
                         using (new SKAutoCanvasRestore(canvas))
+                        using (var overlayPaint = new SKPaint())
                         {
-                            var contentRect = new SKRect(segmentSize * i, borderSize + halfBorderSize, segmentSize * (i + 1), info.Height - borderSize - halfBorderSize);
+                            overlayPaint.BlendMode = SKBlendMode.SrcATop;
+                            overlayPaint.IsAntialias = true;
+                            overlayPaint.Color = selected ? backgroundColor : segmentForegroundColor;
 
-                            var imageSize = contentRect.AspectFit(segment.SVG.Picture.CullRect.Size);
-
-                            float scaleAmount = Math.Max(0, Math.Min(imageSize.Width / segment.SVG.Picture.CullRect.Width, imageSize.Height / segment.SVG.Picture.CullRect.Height));
-
-                            var svgScale = SKMatrix.CreateScale(scaleAmount, scaleAmount);
-
-                            var translation = SKMatrix.CreateTranslation(imageSize.Left, imageSize.Top);
-
-                            svgScale = svgScale.PostConcat(translation);
-
-                            using (new SKAutoCanvasRestore(canvas))
-                            using (var overlayPaint = new SKPaint())
-                            {
-                                overlayPaint.BlendMode = SKBlendMode.SrcATop;
-                                overlayPaint.IsAntialias = true;
-                                overlayPaint.Color = selected ? backgroundColor : segmentForegroundColor;
-
-                                canvas.SaveLayer(null);
-                                canvas.Clear();
-                                canvas.DrawPicture(segment.SVG.Picture, ref svgScale);
-                                canvas.DrawPaint(overlayPaint);
-                            }
+                            canvas.SaveLayer(null);
+                            canvas.Clear();
+                            canvas.DrawPicture(segment.SVG.Picture, ref svgScale);
+                            canvas.DrawPaint(overlayPaint);
                         }
                     }
-                    else if (!string.IsNullOrEmpty(segment.Text))
+                }
+                else if (!string.IsNullOrEmpty(segment.Text))
+                {
+                    using var fontPaint = new SKPaint();
+                    fontPaint.Color =
+                        selected
+                            ? this.ForegroundTextColor != Colors.Transparent ? this.ForegroundTextColor.ToSKColor() : backgroundColor
+                            : this.BackgroundTextColor != Colors.Transparent ? this.BackgroundTextColor.ToSKColor() : segmentForegroundColor;
+                    fontPaint.TextSize = (float)this.FontSize * _scale;
+                    fontPaint.Typeface = FontCache.Instance.TypefaceFromFontFamily(this.FontFamily);
+                    fontPaint.IsAntialias = true;
+
+                    float textMid = (segmentSize * i) + halfSegmentSize;
+
+                    if (segment.IsIconifiedText)
                     {
-                        using var fontPaint = new SKPaint();
-                        fontPaint.Color =
-                            selected
-                                ? this.ForegroundTextColor != default(Color) ? this.ForegroundTextColor.ToSKColor() : backgroundColor
-                                : this.BackgroundTextColor != default(Color) ? this.BackgroundTextColor.ToSKColor() : segmentForegroundColor;
-                        fontPaint.TextSize = (float)this.FontSize * _scale;
-                        fontPaint.Typeface = FontCache.Instance.TypefaceFromFontFamily(this.FontFamily);
-                        fontPaint.IsAntialias = true;
+                        var textBounds = SKRect.Empty;
+                        textBounds = fontPaint.MeasureIconifiedText(segment.Text);
 
-                        float textMid = (segmentSize * i) + halfSegmentSize;
+                        float maxSegmentSize = segmentSize - (borderSize * 4f);
 
-                        if (segment.IsIconifiedText)
+                        while (textBounds.Width > 0 && fontPaint.TextSize > 0 && textBounds.Width > maxSegmentSize)
                         {
-                            var textBounds = SKRect.Empty;
+                            fontPaint.TextSize--;
                             textBounds = fontPaint.MeasureIconifiedText(segment.Text);
-
-                            float maxSegmentSize = segmentSize - (borderSize * 4f);
-
-                            while (textBounds.Width > 0 && fontPaint.TextSize > 0 && textBounds.Width > maxSegmentSize)
-                            {
-                                fontPaint.TextSize--;
-                                textBounds = fontPaint.MeasureIconifiedText(segment.Text);
-                            }
-
-                            canvas.DrawCenteredIconifiedText(segment.Text, textMid, info.Rect.MidY, fontPaint);
                         }
-                        else
+
+                        canvas.DrawCenteredIconifiedText(segment.Text, textMid, info.Rect.MidY, fontPaint);
+                    }
+                    else
+                    {
+                        fontPaint.EnsureHasValidFont(segment.Text);
+
+                        var textBounds = SKRect.Empty;
+                        fontPaint.MeasureText(segment.Text, ref textBounds);
+
+                        while (textBounds.Width > 0 && fontPaint.TextSize > 0 && textBounds.Width > segmentSize - borderSize)
                         {
-                            fontPaint.EnsureHasValidFont(segment.Text);
+                            fontPaint.TextSize--;
 
-                            var textBounds = SKRect.Empty;
                             fontPaint.MeasureText(segment.Text, ref textBounds);
-
-                            while (textBounds.Width > 0 && fontPaint.TextSize > 0 && textBounds.Width > segmentSize - borderSize)
-                            {
-                                fontPaint.TextSize--;
-
-                                fontPaint.MeasureText(segment.Text, ref textBounds);
-                            }
-
-                            canvas.DrawCenteredText(segment.Text, textMid, info.Rect.MidY, fontPaint);
                         }
+
+                        canvas.DrawCenteredText(segment.Text, textMid, info.Rect.MidY, fontPaint);
                     }
                 }
             }

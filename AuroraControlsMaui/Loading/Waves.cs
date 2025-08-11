@@ -70,7 +70,7 @@ public class Waves : LoadingViewBase
     /// <summary>
     /// Gets or sets the color of the foreground wave.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
+    /// <value>Takes a Color. Default value is default(Color).</value>
     public Color ForegroundWaveColor
     {
         get => (Color)GetValue(ForegroundWaveColorProperty);
@@ -87,7 +87,7 @@ public class Waves : LoadingViewBase
     /// <summary>
     /// Gets or sets the color of the background wave.
     /// </summary>
-    /// <value>Takes a Xamarin.Forms.Color. Default value is default(Xamarin.Forms.Color).</value>
+    /// <value>Takes a Color. Default value is default(Color).</value>
     public Color BackgroundWaveColor
     {
         get => (Color)GetValue(BackgroundWaveColorProperty);

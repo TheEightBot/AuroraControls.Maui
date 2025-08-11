@@ -33,7 +33,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the thumb switch.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default is Color.White.</value>
+    /// <value>Expects a Color. Default is Color.White.</value>
     public Color ThumbColor
     {
         get => (Color)GetValue(ThumbColorProperty);
@@ -50,7 +50,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <summary>
     /// Gets or sets the track enabled color.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default is Color.Green.</value>
+    /// <value>Expects a Color. Default is Color.Green.</value>
     public Color TrackEnabledColor
     {
         get => (Color)GetValue(TrackEnabledColorProperty);
@@ -67,7 +67,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <summary>
     /// Gets or sets the track disabled color.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default is Color.Red.</value>
+    /// <value>Expects a Color. Default is Color.Red.</value>
     public Color TrackDisabledColor
     {
         get => (Color)GetValue(TrackDisabledColorProperty);
@@ -193,7 +193,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the font.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default value is Color.White.</value>
+    /// <value>Expects a Color. Default value is Color.White.</value>
     public Color DisabledFontColor
     {
         get => (Color)GetValue(DisabledFontColorProperty);
@@ -397,7 +397,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
         if (!string.IsNullOrEmpty(EnabledText))
         {
             var fontColor =
-                (EnabledFontColor != default(Color)
+                (!Equals(this.EnabledFontColor, Colors.Transparent)
                     ? EnabledFontColor
                     : DisabledFontColor)
                     .ToSKColor()

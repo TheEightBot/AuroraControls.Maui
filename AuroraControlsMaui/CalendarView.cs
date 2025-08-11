@@ -827,7 +827,7 @@ public class CalendarView : AuroraViewBase
 
                 if (largeEvent != null)
                 {
-                    calendarEventPaint.Color = largeEvent.Color != default(Color)
+                    calendarEventPaint.Color = !Equals(largeEvent.Color, Colors.Transparent)
                         ? largeEvent.Color.ToSKColor()
                         : SKColors.Transparent;
 
@@ -884,7 +884,7 @@ public class CalendarView : AuroraViewBase
                     for (int i = 0; i < count; i++)
                     {
                         var calendarEvent = calendarEventsForDay[i];
-                        calendarEventPaint.Color = calendarEvent.Color != default(Color)
+                        calendarEventPaint.Color = calendarEvent.Color != Colors.Transparent
                             ? calendarEvent.Color.ToSKColor()
                             : SKColors.OrangeRed;
                         float columnOffset = columnSize * ((i + 1f) / (count + 1));

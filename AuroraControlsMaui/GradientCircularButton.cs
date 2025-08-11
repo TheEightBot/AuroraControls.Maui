@@ -25,7 +25,7 @@ public class GradientCircularButton : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the button background.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default color is Xamarin.Forms.Color.Default.</value>
+    /// <value>Expects a Color. Default color is Color.Default.</value>
     public Color ButtonBackgroundColor
     {
         get => (Color)GetValue(ButtonBackgroundColorProperty);
@@ -59,7 +59,7 @@ public class GradientCircularButton : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the border.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default is Xamarin.Forms.Color.White.</value>
+    /// <value>Expects a Color. Default is Color.White.</value>
     public Color BorderColor
     {
         get => (Color)GetValue(BorderColorProperty);
@@ -76,7 +76,7 @@ public class GradientCircularButton : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the shadow.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default value is Xamarin.Forms.Color.FromRgba(0d, 0d, 0d, .33d).</value>
+    /// <value>Expects a Color. Default value is Color.FromRgba(0d, 0d, 0d, .33d).</value>
     public Color ShadowColor
     {
         get => (Color)GetValue(ShadowColorProperty);
@@ -171,7 +171,7 @@ public class GradientCircularButton : AuroraViewBase
     /// <summary>
     /// Gets or sets the color of the font.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default value is Color.White.</value>
+    /// <value>Expects a Color. Default value is Color.White.</value>
     public Color FontColor
     {
         get => (Color)GetValue(FontColorProperty);

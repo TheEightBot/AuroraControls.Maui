@@ -40,7 +40,7 @@ public class GradientColorView : AuroraViewBase
     /// <summary>
     /// Gets or sets the start color of the gradient.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default color is Xamarin.Forms.Color.Default.</value>
+    /// <value>Expects a Color. Default color is Color.Default.</value>
     public Color GradientStartColor
     {
         get => (Color)GetValue(GradientStartColorProperty);
@@ -57,7 +57,7 @@ public class GradientColorView : AuroraViewBase
     /// <summary>
     /// Gets or sets the stop color of the gradient.
     /// </summary>
-    /// <value>Expects a Xamarin.Forms.Color. Default color is Xamarin.Forms.Color.Default.</value>
+    /// <value>Expects a Color. Default color is Color.Default.</value>
     public Color GradientStopColor
     {
         get => (Color)GetValue(GradientStopColorProperty);
