@@ -38,7 +38,7 @@ public class GradientPillButton : AuroraViewBase
     /// The button background end color property.
     /// </summary>
     public static readonly BindableProperty ButtonBackgroundEndColorProperty =
-        BindableProperty.Create(nameof(ButtonBackgroundEndColor), typeof(Color), typeof(GradientPillButton),
+        BindableProperty.Create(nameof(ButtonBackgroundEndColor), typeof(Color), typeof(GradientPillButton), Colors.Transparent,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     /// <summary>

@@ -245,7 +245,7 @@ public class SegmentedControl : AuroraViewBase
                 bool selected = i == this.SelectedIndex;
 
                 var segmentForegroundColor =
-                    !Equals(segment.ForegroundColor, Colors.Transparent)
+                    segment.ForegroundColor is not null && !Equals(segment.ForegroundColor, Colors.Transparent)
                         ? segment.ForegroundColor.ToSKColor()
                         : foregroundColor;
 
@@ -457,7 +457,7 @@ public class Segment : BindableObject, IDisposable
     }
 
     public static readonly BindableProperty IsIconifiedTextProperty =
-        BindableProperty.Create(nameof(IsIconifiedText), typeof(bool), typeof(Segment), default(bool));
+        BindableProperty.Create(nameof(IsIconifiedText), typeof(bool), typeof(Segment), false);
 
     public bool IsIconifiedText
     {
@@ -503,7 +503,7 @@ public class Segment : BindableObject, IDisposable
     }
 
     public static readonly BindableProperty IsSpacerProperty =
-        BindableProperty.Create(nameof(IsSpacer), typeof(bool), typeof(Segment), default(bool));
+        BindableProperty.Create(nameof(IsSpacer), typeof(bool), typeof(Segment), false);
 
     public bool IsSpacer
     {

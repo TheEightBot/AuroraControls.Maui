@@ -201,7 +201,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
     }
 
     public static readonly BindableProperty EnabledFontColorProperty =
-        BindableProperty.Create(nameof(EnabledFontColor), typeof(Color), typeof(CupertinoTextToggleSwitch),
+        BindableProperty.Create(nameof(EnabledFontColor), typeof(Color), typeof(CupertinoTextToggleSwitch), Colors.Transparent,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     public Color EnabledFontColor
@@ -397,7 +397,7 @@ public class CupertinoTextToggleSwitch : AuroraViewBase
         if (!string.IsNullOrEmpty(EnabledText))
         {
             var fontColor =
-                (!Equals(this.EnabledFontColor, Colors.Transparent)
+                (this.EnabledFontColor is not null && !Equals(this.EnabledFontColor, Colors.Transparent)
                     ? EnabledFontColor
                     : DisabledFontColor)
                     .ToSKColor()

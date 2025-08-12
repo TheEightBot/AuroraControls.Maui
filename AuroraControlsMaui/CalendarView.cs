@@ -827,7 +827,7 @@ public class CalendarView : AuroraViewBase
 
                 if (largeEvent != null)
                 {
-                    calendarEventPaint.Color = !Equals(largeEvent.Color, Colors.Transparent)
+                    calendarEventPaint.Color = largeEvent.Color is not null && !Equals(largeEvent.Color, Colors.Transparent)
                         ? largeEvent.Color.ToSKColor()
                         : SKColors.Transparent;
 
