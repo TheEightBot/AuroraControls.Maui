@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using Svg.Skia;
@@ -494,7 +494,7 @@ public class Segment : BindableObject, IDisposable
     }
 
     public static readonly BindableProperty ForegroundColorProperty =
-        BindableProperty.Create(nameof(ForegroundColor), typeof(Color), typeof(Segment));
+        BindableProperty.Create(nameof(ForegroundColor), typeof(Color), typeof(Segment), Colors.Transparent);
 
     public Color ForegroundColor
     {
