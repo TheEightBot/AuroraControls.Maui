@@ -389,7 +389,7 @@ public class Chip : AuroraViewBase
     }
 
     public static readonly BindableProperty ToggledFontColorProperty =
-        BindableProperty.Create(nameof(ToggledFontColor), typeof(Color), typeof(Chip),
+        BindableProperty.Create(nameof(ToggledFontColor), typeof(Color), typeof(Chip), Colors.Transparent,
             propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
 
     public Color ToggledFontColor
@@ -605,7 +605,7 @@ public class Chip : AuroraViewBase
             .ToSKColor();
 
         var fontColor =
-            (isToggled && !Equals(this.ToggledFontColor, Colors.Transparent)
+            (isToggled && this.ToggledFontColor is not null && !Equals(this.ToggledFontColor, Colors.Transparent)
                 ? this.ToggledFontColor
                 : isReadonly
                     ? this.ReadOnlyFontColor
@@ -613,7 +613,7 @@ public class Chip : AuroraViewBase
             .ToSKColor();
 
         var borderColor =
-            (isToggled && !Equals(this.ToggledBorderColor, Colors.Transparent)
+            (isToggled && this.ToggledBorderColor is not null && !Equals(this.ToggledBorderColor, Colors.Transparent)
                 ? this.ToggledBorderColor
                 : isReadonly
                     ? this.ReadOnlyBorderColor

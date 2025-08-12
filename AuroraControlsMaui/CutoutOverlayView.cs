@@ -249,7 +249,7 @@ public class CutoutOverlayView : AuroraViewBase
             canvas.DrawPaint(overlayPaint);
         }
 
-        if (this.BorderWidth > 0d && !Equals(this.BorderColor, Colors.Transparent))
+        if (this.BorderWidth > 0d && this.BorderColor is not null && !Equals(this.BorderColor, Colors.Transparent))
         {
             using var borderPaint = new SKPaint();
             borderPaint.IsAntialias = true;
