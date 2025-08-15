@@ -8,7 +8,7 @@ namespace AuroraControls;
 
 public class ShadowPlatformEffect : PlatformEffect
 {
-    private NFloat _originalCornerRadius, _originalShadowOpacity, _originalShadowRadius;
+    private NFloat _originalShadowOpacity, _originalShadowRadius;
     private bool _originalMasksToBounds;
     private CGColor _originalShadowColor;
     private CGSize _originalShadowOffset;
@@ -23,7 +23,6 @@ public class ShadowPlatformEffect : PlatformEffect
             return;
         }
 
-        _originalCornerRadius = view.Layer.CornerRadius;
         _originalMasksToBounds = view.Layer.MasksToBounds;
         _originalShadowColor = view.Layer.ShadowColor;
         _originalShadowOffset = view.Layer.ShadowOffset;
@@ -40,6 +39,7 @@ public class ShadowPlatformEffect : PlatformEffect
 
         SetShadowDistance();
         SetShadowColor();
+        UpdateShadowPath();
     }
 
     protected override void OnDetached()
@@ -58,7 +58,6 @@ public class ShadowPlatformEffect : PlatformEffect
             sp?.Dispose();
         }
 
-        view.Layer.CornerRadius = _originalCornerRadius;
         view.Layer.MasksToBounds = _originalMasksToBounds;
         view.Layer.ShadowColor = _originalShadowColor;
         view.Layer.ShadowOffset = _originalShadowOffset;
@@ -79,9 +78,7 @@ public class ShadowPlatformEffect : PlatformEffect
         {
             SetShadowColor();
         }
-        else if (args.PropertyName.Equals(Effects.ShadowEffect.CornerRadiusProperty.PropertyName) ||
-                 args.PropertyName.Equals(VisualElement.HeightProperty.PropertyName) ||
-                 args.PropertyName.Equals(VisualElement.WidthProperty.PropertyName))
+        else
         {
             UpdateShadowPath();
         }
@@ -133,7 +130,6 @@ public class ShadowPlatformEffect : PlatformEffect
             return;
         }
 
-        double cornerRadius = Effects.ShadowEffect.GetCornerRadius(this.Element);
         double elevation = Effects.ShadowEffect.GetElevation(this.Element);
 
         if (ve.Bounds == Rect.Zero)
@@ -149,7 +145,7 @@ public class ShadowPlatformEffect : PlatformEffect
         }
 
         view.Layer.ShadowPath = UIBezierPath
-            .FromRoundedRect(new CGRect(0f, 0f, ve.Width, ve.Height), (float)cornerRadius).CGPath;
+            .FromRoundedRect(new CGRect(0f, 0f, ve.Width, ve.Height), (float)view.Layer.CornerRadius).CGPath;
         view.Layer.ShadowOffset = new CGSize(0, elevation);
         view.Layer.ShadowRadius = (float)elevation * .8f;
     }

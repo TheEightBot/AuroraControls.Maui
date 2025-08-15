@@ -7,6 +7,8 @@ public static class ImageSourceExtensions
 {
     private static readonly object _iconCacheLock = new();
 
+    private static HttpClient _httpClient = new HttpClient();
+
     private static IIconCache? _iconCache;
 
     private static IIconCache IconCache
@@ -296,5 +298,37 @@ public static class ImageSourceExtensions
             .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
             .AsAsyncSourceFor(page);
 
-    public static Task<SKBitmap> BitmapFromSource(this ImageSource imageSource) => IconCache.SKBitmapFromSource(imageSource);
+    public static async Task<SKBitmap?> ToSKBitmapAsync(this ImageSource imageSource)
+    {
+        if (imageSource == null)
+        {
+            return null;
+        }
+
+        Stream? stream = null;
+
+        switch (imageSource)
+        {
+            case FileImageSource fileImageSource:
+                stream = File.OpenRead(fileImageSource.File);
+                break;
+            case StreamImageSource streamImageSource:
+                stream = await streamImageSource.Stream.Invoke(System.Threading.CancellationToken.None).ConfigureAwait(false);
+                break;
+            case UriImageSource uriImageSource:
+
+                stream = await _httpClient.GetStreamAsync(uriImageSource.Uri).ConfigureAwait(false);
+                break;
+        }
+
+        if (stream == null)
+        {
+            return null;
+        }
+
+        await using (stream)
+        {
+            return SKBitmap.Decode(stream);
+        }
+    }
 }

@@ -1,29 +1,35 @@
 using AuroraControls.Effects;
+using Microsoft.Maui.Controls.Shapes;
 
 namespace AuroraControls;
 
 [ContentProperty(nameof(Content))]
-public class CardViewLayout : ContentView
+public class CardViewLayout : Border
 {
+    private readonly Shadow _shadow = new Shadow();
+
     /// <summary>
     /// The corner radius property.
     /// </summary>
     public static readonly BindableProperty CornerRadiusProperty =
         BindableProperty.Create(nameof(CornerRadius), typeof(double), typeof(CardViewLayout),
-            ShadowEffect.CornerRadiusProperty.DefaultValue,
+            RoundedCornersEffect.CornerRadiusProperty.DefaultValue,
             propertyChanged: (bindable, _, newValue) =>
             {
-                if (bindable is not CardViewLayout clv)
+                if (bindable is not CardViewLayout clv || newValue is not double doubleValue)
                 {
                     return;
                 }
 
                 if (clv.Content != null)
                 {
-                    RoundedCornersEffect.SetCornerRadius(clv.Content, (double)newValue);
+                    RoundedCornersEffect.SetCornerRadius(clv.Content, doubleValue);
                 }
 
-                ShadowEffect.SetCornerRadius(clv, (double)newValue);
+                clv.StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(doubleValue), };
+
+                // RoundedCornersEffect.SetCornerRadius(clv, doubleValue);
+                clv._shadow.Radius = (float)doubleValue;
             });
 
     /// <summary>
@@ -41,12 +47,12 @@ public class CardViewLayout : ContentView
     /// </summary>
     public static readonly BindableProperty ElevationProperty =
         BindableProperty.Create(nameof(Elevation), typeof(double), typeof(CardViewLayout),
-            ShadowEffect.ElevationProperty.DefaultValue,
+            2d,
             propertyChanged: (bindable, _, newValue) =>
             {
                 if (bindable is CardViewLayout clv)
                 {
-                    ShadowEffect.SetElevation(clv, (double)newValue);
+                    clv._shadow.Offset = new Point(0, (double)newValue);
                 }
             });
 
@@ -59,7 +65,7 @@ public class CardViewLayout : ContentView
             {
                 if (bindable is CardViewLayout clv)
                 {
-                    ShadowEffect.SetShadowColor(clv, (Color)newValue);
+                    clv._shadow.Brush = (Color)newValue;
                 }
             });
 
@@ -89,34 +95,11 @@ public class CardViewLayout : ContentView
     /// <summary>
     /// Gets or sets the content.
     /// </summary>
-    /// <value>The content to displa.</value>
+    /// <value>The content to display.</value>
     public new View Content
     {
         get => (View)GetValue(ContentProperty);
         set => SetValue(ContentProperty, value);
-    }
-
-    /// <summary>
-    /// The card background color property.
-    /// </summary>
-    public static new readonly BindableProperty BackgroundColorProperty =
-        BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(CardViewLayout),
-            propertyChanged: (bindable, _, newValue) =>
-            {
-                if (bindable is CardViewLayout clv && clv.Content != null)
-                {
-                    clv.Content.BackgroundColor = (Color)newValue;
-                }
-            });
-
-    /// <summary>
-    /// Gets or sets the color of the card background.
-    /// </summary>
-    /// <value>The color of the card background.</value>
-    public new Color BackgroundColor
-    {
-        get => (Color)GetValue(BackgroundColorProperty);
-        set => SetValue(BackgroundColorProperty, value);
     }
 
     /// <summary>
@@ -131,10 +114,7 @@ public class CardViewLayout : ContentView
                     return;
                 }
 
-                if (clv.Content != null)
-                {
-                    RoundedCornersEffect.SetBorderColor(clv.Content, (Color)newValue);
-                }
+                clv.Stroke = (Color)newValue;
             });
 
     /// <summary>
@@ -159,10 +139,12 @@ public class CardViewLayout : ContentView
                     return;
                 }
 
-                if (clv.Content != null)
+                if (clv.Content is not null)
                 {
-                    RoundedCornersEffect.SetBorderSize(clv.Content, (double)newValue);
+                    clv.Content.Margin = -(double)newValue;
                 }
+
+                clv.StrokeThickness = (double)newValue;
             });
 
     /// <summary>
@@ -187,23 +169,19 @@ public class CardViewLayout : ContentView
 
     public CardViewLayout()
     {
-        base.BackgroundColor = Colors.Transparent;
-
-        this.Effects.Add(new ShadowEffect());
-        ShadowEffect.SetCornerRadius(this, CornerRadius);
-        ShadowEffect.SetElevation(this, Elevation);
-        ShadowEffect.SetShadowColor(this, ShadowColor);
+        this.Shadow = _shadow;
+        _shadow.Brush = ShadowColor;
+        _shadow.Offset = new Point(0, Elevation);
+        _shadow.Radius = (float)CornerRadius;
 
         base.Content = this.Content;
     }
 
     private void SetContent(View view)
     {
-        view.Effects.Add(new RoundedCornersEffect());
+        RoundedCornersEffect.SetHasRoundedCorners(view, true);
         RoundedCornersEffect.SetCornerRadius(view, CornerRadius);
-
-        view.BackgroundColor = this.BackgroundColor;
-
+        view.Margin = -BorderSize;
         base.Content = view;
     }
 }

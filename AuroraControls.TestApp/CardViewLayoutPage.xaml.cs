@@ -16,13 +16,14 @@ public partial class CardViewLayoutPage : ContentPage
         var borderSize = rngesus.Next(0, 10);
         var borderColor = Color.FromRgb(rngesus.Next(0, 255), rngesus.Next(0, 255), rngesus.Next(0, 255));
         var backgroundColor = Color.FromRgb(rngesus.Next(0, 255), rngesus.Next(0, 255), rngesus.Next(0, 255));
+        var shadowColor = Color.FromRgb(rngesus.Next(0, 255), rngesus.Next(0, 255), rngesus.Next(0, 255));
 
         await Task.WhenAll(
             control.TransitionTo(c => c.CornerRadius, cornerRadius),
             control.TransitionTo(c => c.BorderSize, borderSize),
             control.ColorTo(c => c.BorderColor, borderColor),
             control.ColorTo(c => c.BackgroundColor, backgroundColor),
-            control.TransitionTo(c => c.Elevation, elevation),
-            content.ThicknessTo(c => c.Padding, new Thickness(borderSize * .5d)));
+            control.ColorTo(c => c.ShadowColor, shadowColor),
+            control.TransitionTo(c => c.Elevation, elevation));
     }
 }

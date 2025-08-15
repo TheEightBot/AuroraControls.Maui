@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using AuroraControls.Effects;
 using Microsoft.Maui.Controls.Platform;
 using Microsoft.Maui.Platform;
 using UIKit;
@@ -45,8 +46,6 @@ public class RoundedCornersPlatformEffect : PlatformEffect
         base.OnElementPropertyChanged(args);
 
         if (args.PropertyName.Equals(Effects.RoundedCornersEffect.CornerRadiusProperty.PropertyName) ||
-            args.PropertyName.Equals(Effects.RoundedCornersEffect.BorderColorProperty.PropertyName) ||
-            args.PropertyName.Equals(Effects.RoundedCornersEffect.BorderSizeProperty.PropertyName) ||
             args.PropertyName.Equals(VisualElement.BackgroundColorProperty.PropertyName))
         {
             SetCornerRadius();
@@ -63,11 +62,7 @@ public class RoundedCornersPlatformEffect : PlatformEffect
             return;
         }
 
-        view.BackgroundColor = UIColor.Clear;
-        view.Layer.BackgroundColor = ve.BackgroundColor?.ToCGColor() ?? UIColor.Clear.CGColor;
         view.Layer.EdgeAntialiasingMask = CoreAnimation.CAEdgeAntialiasingMask.All;
-        view.Layer.BorderWidth = (NFloat)Effects.RoundedCornersEffect.GetBorderSize(this.Element);
-        view.Layer.BorderColor = Effects.RoundedCornersEffect.GetBorderColor(this.Element)?.ToCGColor() ?? UIColor.Clear.CGColor;
         view.Layer.CornerRadius = (NFloat)Effects.RoundedCornersEffect.GetCornerRadius(this.Element);
     }
 }

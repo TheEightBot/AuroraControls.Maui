@@ -73,8 +73,7 @@ public class ShadowPlatformEffect : PlatformEffect
         {
             SetShadowDistance();
         }
-        else if (args.PropertyName.Equals(Effects.ShadowEffect.CornerRadiusProperty.PropertyName) ||
-                 args.PropertyName.Equals(VisualElement.HeightProperty.PropertyName) ||
+        else if (args.PropertyName.Equals(VisualElement.HeightProperty.PropertyName) ||
                  args.PropertyName.Equals(VisualElement.WidthProperty.PropertyName))
         {
             UpdateShadowPath();
@@ -107,7 +106,6 @@ public class ShadowPlatformEffect : PlatformEffect
             return;
         }
 
-        double cornerRadius = Effects.ShadowEffect.GetCornerRadius(this.Element);
         double elevation = Effects.ShadowEffect.GetElevation(this.Element);
 
         if (ve.Bounds == Rect.Zero)
@@ -123,7 +121,7 @@ public class ShadowPlatformEffect : PlatformEffect
         }
 
         view.Layer.ShadowPath = UIBezierPath
-            .FromRoundedRect(new CGRect(0f, 0f, ve.Width, ve.Height), (float)cornerRadius).CGPath;
+            .FromRoundedRect(new CGRect(0f, 0f, ve.Width, ve.Height), (float)view.Layer.CornerRadius).CGPath;
         view.Layer.ShadowOffset = new CGSize(0, elevation);
         view.Layer.ShadowRadius = (float)elevation * .8f;
     }
