@@ -6,7 +6,7 @@ namespace AuroraControls.Effects;
 public class ShadowEffect : RoutingEffect
 {
     public static readonly BindableProperty HasShadowProperty =
-        BindableProperty.CreateAttached("HasShadow", typeof(bool), typeof(ShadowEffect), true,
+        BindableProperty.CreateAttached("HasShadow", typeof(bool), typeof(ShadowEffect), false,
             propertyChanged: OnHasShadowChanged);
 
     public static double GetHasShadow(BindableObject view) => (double)view.GetValue(HasShadowProperty);
@@ -53,26 +53,6 @@ public class ShadowEffect : RoutingEffect
     /// <param name="view">View to set elevation on.</param>
     /// <param name="value">Amount of elevation.</param>
     public static void SetElevation(BindableObject view, double value) => view.SetValue(ElevationProperty, value);
-
-    /// <summary>
-    /// The corner radius property.
-    /// </summary>
-    public static readonly BindableProperty CornerRadiusProperty =
-        BindableProperty.CreateAttached("CornerRadius", typeof(double), typeof(ShadowEffect), 2d);
-
-    /// <summary>
-    /// Gets the corner radius.
-    /// </summary>
-    /// <returns>The corner radius.</returns>
-    /// <param name="view">View to get corder radius from.</param>
-    public static double GetCornerRadius(BindableObject view) => (double)view.GetValue(CornerRadiusProperty);
-
-    /// <summary>
-    /// Sets the corner radius.
-    /// </summary>
-    /// <param name="view">View to apply rounding to.</param>
-    /// <param name="value">Amount of rounding to apply.</param>
-    public static void SetCornerRadius(BindableObject view, double value) => view.SetValue(CornerRadiusProperty, value);
 
     /// <summary>
     /// The shadow color property.

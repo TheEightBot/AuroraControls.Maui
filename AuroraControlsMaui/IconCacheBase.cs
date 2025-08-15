@@ -324,12 +324,6 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         return Task.CompletedTask;
     }
 
-    public abstract Task<SKBitmap> SKBitmapFromSource(ImageSource imageSource);
-
-    public abstract Task<byte[]> ByteArrayFromSource(ImageSource imageSource);
-
-    public abstract Task<Stream> StreamFromSource(ImageSource imageSource);
-
     private string CreateIconKey(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null)
     {
         string key = $"{svgName.Replace(".svg", string.Empty, StringComparison.OrdinalIgnoreCase)}_{additionalCacheKey}_{size.Width}_{size.Height}_{colorOverride?.GetHashCode()}".Trim(_underscore);

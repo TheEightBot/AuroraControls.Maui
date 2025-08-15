@@ -14,8 +14,10 @@
                 Clicked="UpdateValues_Clicked"
                 Grid.Row="0" Grid.Column="0"  />
         <aurora:CardViewLayout x:Name="control"
-                               Margin="24,24,24,24" BackgroundColor="Fuchsia"
-                               ShadowColor="Chartreuse" Elevation="10"
+                               Margin="24,24,24,24" BackgroundColor="Chartreuse"
+                               ShadowColor="DarkBlue" Elevation="10"
+                               CornerRadius="16" BorderColor="Fuchsia" BorderSize="8"
+                               Padding="0"
                                Grid.Row="1" Grid.Column="0">
             <Grid x:Name="content">
                 <Grid.RowDefinitions>
@@ -25,15 +27,15 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Image Aspect="AspectFill" Source="https://api.floodmagazine.com/wp-content/uploads/2016/07/Steve_Brule-2016-Marc_Lemoine-5-677x1024.jpg"
-                       Grid.Column="0" Grid.Row="0" Grid.RowSpan="4"/>
+                       Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Margin="-4"/>
                 <Label Text="WORLD PREMIERE"
-                       TextColor="White" FontAttributes="Bold" Margin="16"
+                       TextColor="LightSlateGray" FontAttributes="Bold" Margin="16"
                        Grid.Column="0" Grid.Row="0" />
                 <Label Text="The Art of the Dingus"
-                       TextColor="White" FontSize="30" FontAttributes="Bold"  Margin="16"
+                       TextColor="LightSlateGray" FontSize="30" FontAttributes="Bold"  Margin="16"
                        Grid.Column="0" Grid.Row="1" />
                 <Label Text="Inside the wonderful world of Dr. Steve Brule. For Your Health."
-                       TextColor="White" FontAttributes="Bold" Margin="16"
+                       TextColor="LightSlateGray" FontAttributes="Bold" Margin="16"
                        Grid.Column="0" Grid.Row="3" />
             </Grid>
         </aurora:CardViewLayout>

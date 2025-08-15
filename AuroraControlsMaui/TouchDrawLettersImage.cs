@@ -19,7 +19,7 @@ public class TouchDrawLettersImage : AuroraViewBase
                     return;
                 }
 
-                tbi._imageBitmap = await source.BitmapFromSource();
+                tbi._imageBitmap = await source.ToSKBitmapAsync();
                 tbi.InvalidateSurface();
             });
 
