@@ -354,7 +354,6 @@ public class PlatformUnderlayDrawable : IDisposable
                         if (_content is InputView iv)
                         {
                             ud.Placeholder = iv.Placeholder;
-                            ud.PlaceholderColor = iv.PlaceholderColor;
                             iv.PlaceholderColor = Colors.Transparent;
                         }
 
