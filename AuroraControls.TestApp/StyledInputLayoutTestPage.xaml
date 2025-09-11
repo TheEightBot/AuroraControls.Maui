@@ -45,7 +45,7 @@
                         Background="LightPink" Padding="10">
                     <aurora:StyledInputLayout
 
-                        PlaceholderColor="Black"
+                        PlaceholderColor="HotPink"
                         ActiveColor="Transparent"
                         InactiveColor="Transparent"
                         VerticalOptions="Start"
@@ -58,7 +58,7 @@
                         StrokeThickness="1" Stroke="Red"
                         Background="LightPink" Padding="10">
                     <aurora:StyledInputLayout
-                        PlaceholderColor="Black"
+                        PlaceholderColor="Chartreuse"
                         ActiveColor="Red"
                         InactiveColor="Green"
                         VerticalOptions="Center"

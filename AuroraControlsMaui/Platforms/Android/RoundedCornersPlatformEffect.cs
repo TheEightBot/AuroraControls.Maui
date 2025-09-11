@@ -4,6 +4,7 @@ using Android.OS;
 using Android.Views;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Microsoft.Maui.Controls.Platform;
+using Microsoft.Maui.Platform;
 using Color = Microsoft.Maui.Graphics.Color;
 
 namespace AuroraControls;
@@ -31,7 +32,7 @@ public class RoundedCornersPlatformEffect : PlatformEffect
         _originalBackground = view.Background;
 
         view.ClipToOutline = true;
-        view.OutlineProvider = ViewOutlineProvider.Bounds;
+        view.OutlineProvider = ViewOutlineProvider.Background;
 
         _scalingFactor = PlatformInfo.ScalingFactor;
 
@@ -71,14 +72,38 @@ public class RoundedCornersPlatformEffect : PlatformEffect
         base.OnElementPropertyChanged(args);
 
         if (args.PropertyName.Equals(Effects.RoundedCornersEffect.CornerRadiusProperty.PropertyName) ||
-            args.PropertyName.Equals(Effects.RoundedCornersEffect.BorderColorProperty.PropertyName) ||
-            args.PropertyName.Equals(Effects.RoundedCornersEffect.BorderSizeProperty.PropertyName) ||
             args.PropertyName.Equals(VisualElement.BackgroundColorProperty.PropertyName))
         {
             SetCornerRadius();
         }
     }
 
+    private void SetCornerRadius()
+{
+    var view = Container;
+
+    if (view == null || view.Handle == IntPtr.Zero || Build.VERSION.SdkInt < BuildVersionCodes.Lollipop)
+    {
+        return;
+    }
+
+    double cornerRadius = Effects.RoundedCornersEffect.GetCornerRadius(this.Element);
+
+    if (view.OutlineProvider != null & view.OutlineProvider.Handle != IntPtr.Zero &&
+        view.OutlineProvider != _originalOutlineProvider)
+    {
+        var op = view.OutlineProvider;
+        view.OutlineProvider = null;
+        op.Dispose();
+    }
+
+    int scaledCornerRadius = (int)(cornerRadius * _scalingFactor);
+
+    view.OutlineProvider = new RoundedViewOutline(scaledCornerRadius);
+    view.SetClipToOutline(true);
+}
+
+    /*
     private void SetCornerRadius()
     {
         var view = Container;
@@ -107,7 +132,7 @@ public class RoundedCornersPlatformEffect : PlatformEffect
 
             var foregroundShape = new GradientDrawable() { };
             foregroundShape.SetColor(0);
-            foregroundShape.SetCornerRadius(scaledCornerRadius * 0.80f /* A magic number for rounding down the corner radius so that it overlaps the clip bounds better */);
+            foregroundShape.SetCornerRadius(scaledCornerRadius * 0.80f);
 
             foregroundShape.SetStroke(scaledBorderSize, borderColor?.ToAndroid() ?? Android.Graphics.Color.Transparent);
 
@@ -126,7 +151,9 @@ public class RoundedCornersPlatformEffect : PlatformEffect
         }
 
         view.OutlineProvider = new RoundedViewOutline(scaledCornerRadius);
+        view.SetClipToOutline(true);
     }
+    */
 
     internal class RoundedViewOutline(int radius) : ViewOutlineProvider
     {

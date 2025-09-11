@@ -1,4 +1,5 @@
 using Android.Graphics;
+using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Views;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
@@ -8,8 +9,6 @@ namespace AuroraControls;
 
 public class ShadowPlatformEffect : PlatformEffect
 {
-    private bool _originalClipToOutline;
-    private ViewOutlineProvider _originalOutlineProvider;
     private double _scalingFactor;
 
     protected override void OnAttached()
@@ -21,16 +20,9 @@ public class ShadowPlatformEffect : PlatformEffect
             return;
         }
 
-        _originalClipToOutline = view.ClipToOutline;
-        _originalOutlineProvider = view.OutlineProvider;
-
-        view.ClipToOutline = true;
-        view.OutlineProvider = ViewOutlineProvider.Bounds;
-
         _scalingFactor = PlatformInfo.ScalingFactor;
 
         SetElevation();
-        SetCornerRadius();
         SetShadowColor();
     }
 
@@ -42,22 +34,6 @@ public class ShadowPlatformEffect : PlatformEffect
         {
             return;
         }
-
-        try
-        {
-            if (view.OutlineProvider != null && view.OutlineProvider != _originalOutlineProvider)
-            {
-                var op = view.OutlineProvider;
-                view.OutlineProvider = null;
-                op.Dispose();
-            }
-
-            view.ClipToOutline = _originalClipToOutline;
-            view.OutlineProvider = _originalOutlineProvider;
-        }
-        catch (ObjectDisposedException)
-        {
-        }
     }
 
     protected override void OnElementPropertyChanged(System.ComponentModel.PropertyChangedEventArgs args)
@@ -67,10 +43,6 @@ public class ShadowPlatformEffect : PlatformEffect
         if (args.PropertyName.Equals(Effects.ShadowEffect.ElevationProperty.PropertyName))
         {
             SetElevation();
-        }
-        else if (args.PropertyName.Equals(Effects.ShadowEffect.CornerRadiusProperty.PropertyName))
-        {
-            SetCornerRadius();
         }
         else if (args.PropertyName.Equals(Effects.ShadowEffect.ShadowColorProperty.PropertyName))
         {
@@ -93,27 +65,6 @@ public class ShadowPlatformEffect : PlatformEffect
         view.TranslationZ = elevation;
     }
 
-    private void SetCornerRadius()
-    {
-        var view = this.Container;
-
-        if (view == null || view.Handle == IntPtr.Zero || Build.VERSION.SdkInt < BuildVersionCodes.Lollipop)
-        {
-            return;
-        }
-
-        double cornerRadius = Effects.ShadowEffect.GetCornerRadius(this.Element);
-
-        if (view.OutlineProvider != null && view.OutlineProvider != _originalOutlineProvider)
-        {
-            var op = view.OutlineProvider;
-            view.OutlineProvider = null;
-            op.Dispose();
-        }
-
-        view.OutlineProvider = new RoundedViewOutline((int)(cornerRadius * _scalingFactor));
-    }
-
     private void SetShadowColor()
     {
         var view = this.Container;
@@ -130,18 +81,9 @@ public class ShadowPlatformEffect : PlatformEffect
             return;
         }
 
-        var androidShadowColor = shadowColor?.ToAndroid() ?? Android.Graphics.Color.Black;
+        var androidShadowColor = shadowColor?.ToAndroidColor() ?? Android.Graphics.Color.Black;
 
         view.SetOutlineAmbientShadowColor(androidShadowColor);
         view.SetOutlineSpotShadowColor(androidShadowColor);
-    }
-
-    internal class RoundedViewOutline : ViewOutlineProvider
-    {
-        private int _radius;
-
-        public RoundedViewOutline(int radius) => _radius = radius;
-
-        public override void GetOutline(Android.Views.View view, Outline outline) => outline.SetRoundRect(0, 0, view.Width, view.Height, _radius);
     }
 }
