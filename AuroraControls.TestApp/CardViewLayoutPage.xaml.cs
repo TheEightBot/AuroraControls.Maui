@@ -7,23 +7,72 @@ public partial class CardViewLayoutPage : ContentPage
         InitializeComponent();
     }
 
-    private async void UpdateValues_Clicked(object sender, System.EventArgs e)
+    private void OnCornerRadiusChanged(object sender, ValueChangedEventArgs e)
     {
-        var rngesus = new Random(Guid.NewGuid().GetHashCode());
+        sampleCard.CornerRadius = e.NewValue;
+    }
 
-        var elevation = rngesus.Next(0, 8);
-        var cornerRadius = rngesus.Next(0, 24);
-        var borderSize = rngesus.Next(0, 10);
-        var borderColor = Color.FromRgb(rngesus.Next(0, 255), rngesus.Next(0, 255), rngesus.Next(0, 255));
-        var backgroundColor = Color.FromRgb(rngesus.Next(0, 255), rngesus.Next(0, 255), rngesus.Next(0, 255));
-        var shadowColor = Color.FromRgb(rngesus.Next(0, 255), rngesus.Next(0, 255), rngesus.Next(0, 255));
+    private void OnElevationChanged(object sender, ValueChangedEventArgs e)
+    {
+        sampleCard.Elevation = e.NewValue;
+    }
 
-        await Task.WhenAll(
-            control.TransitionTo(c => c.CornerRadius, cornerRadius),
-            control.TransitionTo(c => c.BorderSize, borderSize),
-            control.ColorTo(c => c.BorderColor, borderColor),
-            control.ColorTo(c => c.BackgroundColor, backgroundColor),
-            control.ColorTo(c => c.ShadowColor, shadowColor),
-            control.TransitionTo(c => c.Elevation, elevation));
+    private void OnBorderSizeChanged(object sender, ValueChangedEventArgs e)
+    {
+        sampleCard.BorderSize = e.NewValue;
+    }
+
+    private void OnShadowColorChanged(object sender, EventArgs e)
+    {
+        if (sender is Button button)
+        {
+            Color shadowColor = button.Text switch
+            {
+                "Gray" => Colors.Gray,
+                "Blue" => Colors.Blue,
+                "Red" => Colors.Red,
+                "Green" => Colors.Green,
+                "Purple" => Colors.Purple,
+                _ => Color.FromArgb("#576076"), // Default shadow color
+            };
+
+            sampleCard.ShadowColor = shadowColor;
+        }
+    }
+
+    private void OnBorderColorChanged(object sender, EventArgs e)
+    {
+        if (sender is Button button)
+        {
+            Color borderColor = button.Text switch
+            {
+                "None" => Colors.Transparent,
+                "Black" => Colors.Black,
+                "Blue" => Colors.Blue,
+                "Red" => Colors.Red,
+                "Green" => Colors.Green,
+                _ => Colors.Transparent,
+            };
+
+            sampleCard.BorderColor = borderColor;
+        }
+    }
+
+    private void OnBackgroundColorChanged(object sender, EventArgs e)
+    {
+        if (sender is Button button)
+        {
+            Color backgroundColor = button.Text switch
+            {
+                "White" => Colors.White,
+                "Light Blue" => Colors.LightBlue,
+                "Light Green" => Colors.LightGreen,
+                "Light Pink" => Colors.LightPink,
+                "Light Yellow" => Colors.LightYellow,
+                _ => Colors.White,
+            };
+
+            cardContent.BackgroundColor = backgroundColor;
+        }
     }
 }
