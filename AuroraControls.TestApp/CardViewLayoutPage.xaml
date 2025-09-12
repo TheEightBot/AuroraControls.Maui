@@ -1,43 +1,119 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-	xmlns:aurora="http://auroracontrols.maui/controls"
-	x:Class="AuroraControls.TestApp.CardViewLayoutPage"
-    Padding="8">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Button Text="Update Values"
-                Clicked="UpdateValues_Clicked"
-                Grid.Row="0" Grid.Column="0"  />
-        <aurora:CardViewLayout x:Name="control"
-                               Margin="24,24,24,24" BackgroundColor="Chartreuse"
-                               ShadowColor="DarkBlue" Elevation="10"
-                               CornerRadius="16" BorderColor="Fuchsia" BorderSize="8"
-                               Padding="0"
-                               Grid.Row="1" Grid.Column="0">
-            <Grid x:Name="content">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Image Aspect="AspectFill" Source="https://api.floodmagazine.com/wp-content/uploads/2016/07/Steve_Brule-2016-Marc_Lemoine-5-677x1024.jpg"
-                       Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Margin="-4"/>
-                <Label Text="WORLD PREMIERE"
-                       TextColor="LightSlateGray" FontAttributes="Bold" Margin="16"
-                       Grid.Column="0" Grid.Row="0" />
-                <Label Text="The Art of the Dingus"
-                       TextColor="LightSlateGray" FontSize="30" FontAttributes="Bold"  Margin="16"
-                       Grid.Column="0" Grid.Row="1" />
-                <Label Text="Inside the wonderful world of Dr. Steve Brule. For Your Health."
-                       TextColor="LightSlateGray" FontAttributes="Bold" Margin="16"
-                       Grid.Column="0" Grid.Row="3" />
-            </Grid>
-        </aurora:CardViewLayout>
-    </Grid>
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="AuroraControls.TestApp.CardViewLayoutPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             Title="CardViewLayout Test">
+    <ScrollView>
+        <Grid RowDefinitions="Auto,*" Padding="20">
+            <!-- Control Panel -->
+            <StackLayout Grid.Row="0" Spacing="15" BackgroundColor="LightGray" Padding="20">
+                <Label Text="CardViewLayout Configuration" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
+
+                <!-- Corner Radius -->
+                <StackLayout>
+                    <Label Text="{Binding Source={x:Reference cornerRadiusSlider}, Path=Value, StringFormat='Corner Radius: {0:F1}'}" />
+                    <Slider x:Name="cornerRadiusSlider"
+                            Minimum="0"
+                            Maximum="50"
+                            Value="0"
+                            ValueChanged="OnCornerRadiusChanged" />
+                </StackLayout>
+
+                <!-- Elevation -->
+                <StackLayout>
+                    <Label Text="{Binding Source={x:Reference elevationSlider}, Path=Value, StringFormat='Elevation: {0:F1}'}" />
+                    <Slider x:Name="elevationSlider"
+                            Minimum="0"
+                            Maximum="20"
+                            Value="2"
+                            ValueChanged="OnElevationChanged" />
+                </StackLayout>
+
+                <!-- Border Size -->
+                <StackLayout>
+                    <Label Text="{Binding Source={x:Reference borderSizeSlider}, Path=Value, StringFormat='Border Size: {0:F1}'}" />
+                    <Slider x:Name="borderSizeSlider"
+                            Minimum="0"
+                            Maximum="10"
+                            Value="0"
+                            ValueChanged="OnBorderSizeChanged" />
+                </StackLayout>
+
+                <!-- Shadow Color -->
+                <StackLayout>
+                    <Label Text="Shadow Color" />
+                    <StackLayout Orientation="Horizontal" Spacing="10">
+                        <Button Text="Gray" BackgroundColor="Gray" Clicked="OnShadowColorChanged" />
+                        <Button Text="Blue" BackgroundColor="Blue" Clicked="OnShadowColorChanged" />
+                        <Button Text="Red" BackgroundColor="Red" Clicked="OnShadowColorChanged" />
+                        <Button Text="Green" BackgroundColor="Green" Clicked="OnShadowColorChanged" />
+                        <Button Text="Purple" BackgroundColor="Purple" Clicked="OnShadowColorChanged" />
+                    </StackLayout>
+                </StackLayout>
+
+                <!-- Border Color -->
+                <StackLayout>
+                    <Label Text="Border Color" />
+                    <StackLayout Orientation="Horizontal" Spacing="10">
+                        <Button Text="None" BackgroundColor="Transparent" Clicked="OnBorderColorChanged" />
+                        <Button Text="Black" BackgroundColor="Black" Clicked="OnBorderColorChanged" />
+                        <Button Text="Blue" BackgroundColor="Blue" Clicked="OnBorderColorChanged" />
+                        <Button Text="Red" BackgroundColor="Red" Clicked="OnBorderColorChanged" />
+                        <Button Text="Green" BackgroundColor="Green" Clicked="OnBorderColorChanged" />
+                    </StackLayout>
+                </StackLayout>
+
+                <!-- Background Color for the card content -->
+                <StackLayout>
+                    <Label Text="Card Background Color" />
+                    <StackLayout Orientation="Horizontal" Spacing="10">
+                        <Button Text="White" BackgroundColor="White" Clicked="OnBackgroundColorChanged" />
+                        <Button Text="Light Blue" BackgroundColor="LightBlue" Clicked="OnBackgroundColorChanged" />
+                        <Button Text="Light Green" BackgroundColor="LightGreen" Clicked="OnBackgroundColorChanged" />
+                        <Button Text="Light Pink" BackgroundColor="LightPink" Clicked="OnBackgroundColorChanged" />
+                        <Button Text="Light Yellow" BackgroundColor="LightYellow" Clicked="OnBackgroundColorChanged" />
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+
+            <!-- Card Display Area -->
+            <StackLayout Grid.Row="1" Padding="20" Spacing="20">
+                <Label Text="Card Preview" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center" />
+
+                <!-- Sample CardViewLayout -->
+                <aurora:CardViewLayout x:Name="sampleCard"
+                                       CornerRadius="0"
+                                       Elevation="2"
+                                       ShadowColor="#576076"
+                                       BorderColor="Transparent"
+                                       BorderSize="0"
+                                       HeightRequest="200"
+                                       Margin="20">
+                    <StackLayout x:Name="cardContent"
+                                 BackgroundColor="White"
+                                 Padding="20"
+                                 Spacing="10">
+                        <Label Text="Sample Card Content"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center" />
+                        <Label Text="This is a sample card to demonstrate the CardViewLayout control. You can modify its appearance using the controls above."
+                               FontSize="14"
+                               TextColor="Gray"
+                               HorizontalTextAlignment="Center" />
+                        <Button Text="Sample Button"
+                                BackgroundColor="Blue"
+                                TextColor="White"
+                                CornerRadius="5"
+                                HorizontalOptions="Center" />
+                        <Label Text="Adjust the settings above to see how they affect this card's appearance."
+                               FontSize="12"
+                               TextColor="DarkGray"
+                               HorizontalTextAlignment="Center" />
+                    </StackLayout>
+                </aurora:CardViewLayout>
+            </StackLayout>
+        </Grid>
+    </ScrollView>
 </ContentPage>
