@@ -60,7 +60,7 @@ public class CardViewLayout : Border
     /// The card shadow color property.
     /// </summary>
     public static readonly BindableProperty ShadowColorProperty =
-        BindableProperty.Create(nameof(ShadowColor), typeof(Color), typeof(CardViewLayout), Colors.Transparent,
+        BindableProperty.Create(nameof(ShadowColor), typeof(Color), typeof(CardViewLayout), Color.FromArgb("#576076"),
             propertyChanged: (bindable, _, newValue) =>
             {
                 if (bindable is CardViewLayout clv)
