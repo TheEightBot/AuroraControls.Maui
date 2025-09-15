@@ -75,7 +75,7 @@ public partial class CalendarPickerHandler : DatePickerHandler
     {
         if (sender is UIDatePicker datePicker && this.VirtualView is CalendarPicker calendarPicker)
         {
-            if (calendarPicker.DateUpdateMode == CalendarPickerUpdateMode.Immediately)
+            if (calendarPicker.UpdateMode == CalendarPickerUpdateMode.Immediately)
             {
                 calendarPicker.Date = datePicker.Date.ToDateTime();
 
