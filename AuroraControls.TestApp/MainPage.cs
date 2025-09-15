@@ -83,6 +83,8 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
 
     private CalendarPicker _calendarPicker;
 
+    private Label _calendarPickerValue;
+
     private Button _clearNullableDatePicker;
 
     public MainPage(ILogger<TestRxViewModel> logger)
@@ -224,8 +226,13 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 Placeholder = "Nullable Date Picker",
                                 Content =
                                     new CalendarPicker()
+                                    {
+                                        DateUpdateMode = CalendarPickerUpdateMode.WhenDone,
+                                    }
                                         .Assign(out _calendarPicker),
                             },
+                            new Label()
+                                .Assign(out _calendarPickerValue),
                             new Button { Text = "Clear Nullable Date Picker", }
                                 .Assign(out _clearNullableDatePicker),
                             new StyledInputLayout
@@ -544,6 +551,10 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                         },
                     },
             };
+
+        this.Bind(ViewModel, x => x.NullableDateTimeValue, x => x._calendarPicker.Date);
+
+        this.OneWayBind(ViewModel, x => x.NullableDateTimeValue, x => x._calendarPickerValue.Text, x => x?.ToString("D") ?? "null");
 
         _clearNullableDatePicker.Clicked +=
             (sender, args) => { _calendarPicker.Date = null; };

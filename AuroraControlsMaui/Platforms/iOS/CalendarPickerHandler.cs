@@ -34,6 +34,9 @@ public partial class CalendarPickerHandler : DatePickerHandler
 
             dp.PreferredDatePickerStyle = UIDatePickerStyle.Inline;
             dp.Mode = UIDatePickerMode.Date;
+
+            // Add ValueChanged event handler to update the Date when user selects from calendar
+            dp.ValueChanged += OnDatePickerValueChanged;
         }
 
         if (platformView.InputAccessoryView is UIToolbar tb)
@@ -49,13 +52,37 @@ public partial class CalendarPickerHandler : DatePickerHandler
                     el.Unfocus();
                     el.Date = null;
                 });
+
             var items = new List<UIBarButtonItem>(tb.Items);
             items.Insert(0, clearButton);
             tb.Items = items.ToArray();
         }
     }
 
+    protected override void DisconnectHandler(MauiDatePicker platformView)
+    {
+        if (platformView.InputView is UIDatePicker dp)
+        {
+            dp.ValueChanged -= OnDatePickerValueChanged;
+        }
+
+        base.DisconnectHandler(platformView);
+    }
+
     public static void MapDate(CalendarPickerHandler handler, CalendarPicker view) => handler.TryShowEmptyState();
+
+    private void OnDatePickerValueChanged(object sender, EventArgs e)
+    {
+        if (sender is UIDatePicker datePicker && this.VirtualView is CalendarPicker calendarPicker)
+        {
+            if (calendarPicker.DateUpdateMode == CalendarPickerUpdateMode.Immediately)
+            {
+                calendarPicker.Date = datePicker.Date.ToDateTime();
+
+                TryShowEmptyState();
+            }
+        }
+    }
 
     public void TryShowEmptyState()
     {
