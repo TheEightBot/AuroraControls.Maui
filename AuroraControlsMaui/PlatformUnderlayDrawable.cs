@@ -693,25 +693,28 @@ public class PlatformUnderlayDrawable : IDisposable
                         if (borderSize > 0d)
                         {
                             _placeholderPaint.TextSize = placeholderFontSize;
-                            var placeholderRectSize = canvas.GetTextContainerRectAt(isError ? underlayDrawable.ErrorText : placeholder, new SKPoint((float)controlXLeft, 0.0f), _placeholderPaint);
+                            var placeholderRectSize = canvas.GetTextContainerRectAt(isError && !string.IsNullOrEmpty(underlayDrawable.ErrorText) ? underlayDrawable.ErrorText : placeholder, new SKPoint((float)controlXLeft, 0.0f), _placeholderPaint);
 
                             canvas.DrawRoundRect(roundedRectBackgroundPlaceholderThrough, cornerRadiusSize, _borderPaint);
 
-                            float bufferSize = 2f;
-                            float top = roundedRectBackgroundPlaceholderThrough.Top - (_borderPaint.StrokeWidth * .5f);
+                            if (hasValueAnimationPercentage > 0.0d)
+                            {
+                                float bufferSize = 2f;
+                                float top = roundedRectBackgroundPlaceholderThrough.Top - (_borderPaint.StrokeWidth * .5f);
 
-                            var startingBlendMode = _backgroundPaint.BlendMode;
+                                var startingBlendMode = _backgroundPaint.BlendMode;
 
-                            _backgroundPaint.BlendMode = SKBlendMode.SrcIn;
+                                _backgroundPaint.BlendMode = SKBlendMode.SrcIn;
 
-                            _backgroundPaint.Color =
-                                    _borderPaint.Color.Lerp(
-                                        element.BackgroundColor?.ToSKColor() ?? SKColors.Transparent,
-                                        hasValueAnimationPercentage);
+                                _backgroundPaint.Color =
+                                        _borderPaint.Color.Lerp(
+                                            element.BackgroundColor?.ToSKColor() ?? SKColors.Transparent,
+                                            hasValueAnimationPercentage);
 
-                            canvas.DrawRect(new SKRect(placeholderRectSize.Left - bufferSize, top, placeholderRectSize.Right + (bufferSize * 2f), top + placeholderRectSize.Height), _backgroundPaint);
+                                canvas.DrawRect(new SKRect(placeholderRectSize.Left - bufferSize, top, placeholderRectSize.Right + (bufferSize * 2f), top + placeholderRectSize.Height), _backgroundPaint);
 
-                            _backgroundPaint.BlendMode = startingBlendMode;
+                                _backgroundPaint.BlendMode = startingBlendMode;
+                            }
                         }
                     }
 
