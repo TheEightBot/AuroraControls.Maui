@@ -29,7 +29,14 @@ public partial class CalendarPickerHandler : DatePickerHandler
 
         if (platformView.InputView is UIDatePicker dp)
         {
-            dp.AutoresizingMask = UIViewAutoresizing.None;
+            // Wrap UIDatePicker in a UIView to workaround UpdateMode=Inline sizing issues when within InputView
+            var container = new UIView();
+            container.BackgroundColor = UIColor.Clear;
+            container.AutoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth;
+            container.Frame = new CoreGraphics.CGRect(0, 0, dp.Frame.Width, dp.Frame.Height);
+
+            dp.Center = new CoreGraphics.CGPoint(container.Frame.Width / 2, container.Frame.Height / 2);
+            dp.AutoresizingMask = UIViewAutoresizing.FlexibleMargins;
             dp.LayoutMargins = new UIEdgeInsets(0, 0, SafeAreaInfo.GetSafeArea().Bottom, 0);
 
             dp.PreferredDatePickerStyle = UIDatePickerStyle.Inline;
@@ -37,6 +44,10 @@ public partial class CalendarPickerHandler : DatePickerHandler
 
             // Add ValueChanged event handler to update the Date when user selects from calendar
             dp.ValueChanged += OnDatePickerValueChanged;
+
+            container.AddSubview(dp);
+
+            platformView.InputView = container;
         }
 
         if (platformView.InputAccessoryView is UIToolbar tb)
