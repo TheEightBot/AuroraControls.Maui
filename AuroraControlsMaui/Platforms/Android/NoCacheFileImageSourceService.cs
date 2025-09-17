@@ -124,6 +124,12 @@ internal partial class NoCacheFileImageSourceService
                         {
                             decoder.SetTargetColorSpace(ColorSpace.Get(ColorSpace.Named.Srgb)!);
                             decoder.MemorySizePolicy = ImageDecoderMemoryPolicy.Default;
+
+                            // Determine if we should use hardware or software allocation
+                            decoder.Allocator =
+                                ShouldUseHardwareBitmap(context)
+                                    ? ImageDecoderAllocator.Hardware
+                                    : ImageDecoderAllocator.Hardware;
                         }));
                 return new BitmapDrawable(context.Resources, bitmap);
             }
@@ -137,6 +143,87 @@ internal partial class NoCacheFileImageSourceService
         catch
         {
             return null;
+        }
+    }
+
+    private static bool ShouldUseHardwareBitmap(Context context)
+    {
+        // Only available on API 28+
+        if (Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.P)
+        {
+            return false;
+        }
+
+        try
+        {
+            // Check if hardware acceleration is enabled for the application
+            var activity = context as Android.App.Activity;
+            if (activity?.Window?.Attributes?.Flags.HasFlag(Android.Views.WindowManagerFlags.HardwareAccelerated) == false)
+            {
+                return false;
+            }
+
+            // Check if the device supports hardware bitmaps
+            // Hardware bitmaps require sufficient GPU memory and capabilities
+            var activityManager = context.GetSystemService(Context.ActivityService) as Android.App.ActivityManager;
+
+            // OpenGL ES 2.0
+            if (activityManager?.DeviceConfigurationInfo?.ReqGlEsVersion < 0x20000)
+            {
+                return false;
+            }
+
+            // Check available memory - avoid hardware bitmaps on low memory devices
+            var memoryInfo = new Android.App.ActivityManager.MemoryInfo();
+            activityManager?.GetMemoryInfo(memoryInfo);
+
+            // If available memory is less than 512MB, prefer software bitmaps for stability
+            if (memoryInfo.AvailMem < 512 * 1024 * 1024)
+            {
+                return false;
+            }
+
+            // Additional check: avoid hardware bitmaps if we're in a software rendering context
+            // This is a heuristic based on the current thread and context
+            if (IsLikelySoftwareRenderingContext())
+            {
+                return false;
+            }
+
+            return true;
+        }
+        catch
+        {
+            // If any check fails, default to software bitmap for safety
+            return false;
+        }
+    }
+
+    private static bool IsLikelySoftwareRenderingContext()
+    {
+        try
+        {
+            // Check if we're potentially in a Canvas drawing operation or similar software context
+            // This is a heuristic - if we're on the main UI thread and there are no obvious indicators
+            // of hardware acceleration being actively used, prefer software bitmaps
+            var currentThread = Java.Lang.Thread.CurrentThread();
+            var threadName = currentThread?.Name;
+
+            // If we're on a background thread, it's likely for caching/processing, use software
+            if (threadName != null && (
+                threadName.Contains("Background") ||
+                threadName.Contains("Cache") ||
+                threadName.Contains("Worker") ||
+                !threadName.Contains("main")))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        catch
+        {
+            return true; // Default to software rendering context if unsure
         }
     }
 

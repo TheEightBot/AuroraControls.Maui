@@ -12,6 +12,11 @@ public partial class CardViewLayoutPage : ContentPage
         sampleCard.CornerRadius = e.NewValue;
     }
 
+    private void OnShadowRadiusChanged(object sender, ValueChangedEventArgs e)
+    {
+        sampleCard.ShadowRadius = e.NewValue;
+    }
+
     private void OnElevationChanged(object sender, ValueChangedEventArgs e)
     {
         sampleCard.Elevation = e.NewValue;

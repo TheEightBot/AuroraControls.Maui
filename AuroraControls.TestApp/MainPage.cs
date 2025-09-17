@@ -157,6 +157,13 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new SvgImageButtonTestPage())),
 
+                            new Button { Text = "View SetSvgIcon Extensions Test Page", }
+                                .BindClicked(async () =>
+                                {
+                                    var page = await Task.Run(() => new SetSvgIconExtensionsTestPage());
+                                    await this.Navigation.PushAsync(page);
+                                }),
+
                             new Button { Text = "View GradientCircularButton Test Page", }
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new GradientCircularButtonTestPage())),
