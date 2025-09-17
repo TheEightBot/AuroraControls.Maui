@@ -27,9 +27,6 @@ public class CardViewLayout : Border
                 }
 
                 clv.StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(doubleValue), };
-
-                // RoundedCornersEffect.SetCornerRadius(clv, doubleValue);
-                clv._shadow.Radius = (float)doubleValue;
             });
 
     /// <summary>
@@ -40,6 +37,30 @@ public class CardViewLayout : Border
     {
         get => (double)GetValue(CornerRadiusProperty);
         set => SetValue(CornerRadiusProperty, value);
+    }
+
+    /// <summary>
+    /// The shadow radius property.
+    /// </summary>
+    public static readonly BindableProperty ShadowRadiusProperty =
+        BindableProperty.Create(nameof(ShadowRadius), typeof(double), typeof(CardViewLayout),
+            2.2d,
+            propertyChanged: (bindable, _, newValue) =>
+            {
+                if (bindable is CardViewLayout clv)
+                {
+                    clv._shadow.Radius = (float)(double)newValue;
+                }
+            });
+
+    /// <summary>
+    /// Gets or sets the shadow radius.
+    /// </summary>
+    /// <value>The shadow radius.</value>
+    public double ShadowRadius
+    {
+        get => (double)GetValue(ShadowRadiusProperty);
+        set => SetValue(ShadowRadiusProperty, value);
     }
 
     /// <summary>
@@ -172,7 +193,7 @@ public class CardViewLayout : Border
         this.Shadow = _shadow;
         _shadow.Brush = ShadowColor;
         _shadow.Offset = new Point(0, Elevation);
-        _shadow.Radius = (float)CornerRadius;
+        _shadow.Radius = (float)ShadowRadius; // Use ShadowRadius instead of CornerRadius
 
         base.Content = this.Content;
     }

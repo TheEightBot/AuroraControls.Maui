@@ -20,6 +20,16 @@
                             ValueChanged="OnCornerRadiusChanged" />
                 </StackLayout>
 
+                <!-- Shadow Radius -->
+                <StackLayout>
+                    <Label Text="{Binding Source={x:Reference shadowRadiusSlider}, Path=Value, StringFormat='Shadow Radius: {0:F1}'}" />
+                    <Slider x:Name="shadowRadiusSlider"
+                            Minimum="0"
+                            Maximum="30"
+                            Value="0"
+                            ValueChanged="OnShadowRadiusChanged" />
+                </StackLayout>
+
                 <!-- Elevation -->
                 <StackLayout>
                     <Label Text="{Binding Source={x:Reference elevationSlider}, Path=Value, StringFormat='Elevation: {0:F1}'}" />
@@ -84,6 +94,7 @@
                 <!-- Sample CardViewLayout -->
                 <aurora:CardViewLayout x:Name="sampleCard"
                                        CornerRadius="0"
+                                       ShadowRadius="0"
                                        Elevation="2"
                                        ShadowColor="#576076"
                                        BorderColor="Transparent"
@@ -107,7 +118,7 @@
                                 TextColor="White"
                                 CornerRadius="5"
                                 HorizontalOptions="Center" />
-                        <Label Text="Adjust the settings above to see how they affect this card's appearance."
+                        <Label Text="Adjust the settings above to see how corner radius and shadow radius can be controlled independently."
                                FontSize="12"
                                TextColor="DarkGray"
                                HorizontalTextAlignment="Center" />
