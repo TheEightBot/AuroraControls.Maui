@@ -443,7 +443,7 @@ public enum SegmentedControlStyle
 
 public class Segment : BindableObject, IDisposable
 {
-    private SKSvg _svg;
+    private SKSvg? _svg;
 
     private bool _disposedValue;
 
@@ -482,7 +482,7 @@ public class Segment : BindableObject, IDisposable
         set => SetValue(EmbeddedImageNameProperty, value);
     }
 
-    public SKSvg SVG => _svg;
+    public SKSvg? SVG => _svg;
 
     public static readonly BindableProperty ValueProperty =
         BindableProperty.Create(nameof(Value), typeof(object), typeof(Segment));
@@ -532,6 +532,7 @@ public class Segment : BindableObject, IDisposable
             if (disposing)
             {
                 _svg?.Dispose();
+                _svg = null;
             }
 
             _disposedValue = true;
