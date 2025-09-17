@@ -1,8 +1,33 @@
 namespace AuroraControls;
 
+public enum CalendarPickerUpdateMode
+{
+    WhenDone = 1,
+    Immediately = 2,
+}
+
 [ContentProperty(nameof(Date))]
 public class CalendarPicker : DatePicker
 {
+    public static readonly BindableProperty UpdateModeProperty =
+        BindableProperty.Create(
+            nameof(CalendarPickerUpdateMode),
+            typeof(CalendarPickerUpdateMode),
+            typeof(CalendarPicker),
+            CalendarPickerUpdateMode.WhenDone);
+
+    /// <summary>
+    /// Gets or sets the mode to use for determining when to update the Date:
+    /// 1. Immediately - Update Date when a date is selected.
+    /// 2. WhenDone - Update Date when the 'Done' button is pressed.
+    /// </summary>
+    /// <remarks>Only applies on iOS.</remarks>
+    public CalendarPickerUpdateMode UpdateMode
+    {
+        get => (CalendarPickerUpdateMode)GetValue(UpdateModeProperty);
+        set => SetValue(UpdateModeProperty, value);
+    }
+
     public new event EventHandler<NullableDateChangedEventArgs> DateSelected;
 
     /// <summary>
