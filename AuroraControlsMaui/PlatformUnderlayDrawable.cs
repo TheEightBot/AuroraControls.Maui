@@ -697,24 +697,21 @@ public class PlatformUnderlayDrawable : IDisposable
 
                             canvas.DrawRoundRect(roundedRectBackgroundPlaceholderThrough, cornerRadiusSize, _borderPaint);
 
-                            if (hasValueAnimationPercentage > 0.0d)
-                            {
-                                float bufferSize = 2f;
-                                float top = roundedRectBackgroundPlaceholderThrough.Top - (_borderPaint.StrokeWidth * .5f);
+                            float bufferSize = 2f;
+                            float top = roundedRectBackgroundPlaceholderThrough.Top - (_borderPaint.StrokeWidth * .5f);
 
-                                var startingBlendMode = _backgroundPaint.BlendMode;
+                            var startingBlendMode = _backgroundPaint.BlendMode;
 
-                                _backgroundPaint.BlendMode = SKBlendMode.SrcIn;
+                            _backgroundPaint.BlendMode = SKBlendMode.SrcIn;
 
-                                _backgroundPaint.Color =
-                                        _borderPaint.Color.Lerp(
-                                            element.BackgroundColor?.ToSKColor() ?? SKColors.Transparent,
-                                            hasValueAnimationPercentage);
+                            _backgroundPaint.Color =
+                                    _borderPaint.Color.Lerp(
+                                        element.BackgroundColor?.ToSKColor() ?? SKColors.Transparent,
+                                        hasValueAnimationPercentage);
 
-                                canvas.DrawRect(new SKRect(placeholderRectSize.Left - bufferSize, top, placeholderRectSize.Right + (bufferSize * 2f), top + placeholderRectSize.Height), _backgroundPaint);
+                            canvas.DrawRect(new SKRect(placeholderRectSize.Left - bufferSize, top, placeholderRectSize.Right + (bufferSize * 2f), top + placeholderRectSize.Height), _backgroundPaint);
 
-                                _backgroundPaint.BlendMode = startingBlendMode;
-                            }
+                            _backgroundPaint.BlendMode = startingBlendMode;
                         }
                     }
 

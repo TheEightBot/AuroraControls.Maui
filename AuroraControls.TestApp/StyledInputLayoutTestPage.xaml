@@ -63,7 +63,7 @@
                         InactiveColor="Green"
                         VerticalOptions="Center"
                         BorderStyle="RoundedRectanglePlaceholderThrough">
-                        <Entry Placeholder="VerticalOptions=Center"/>
+                        <Entry Placeholder="VerticalOptions=Center" Text="Center" />
                     </aurora:StyledInputLayout>
                 </Border>
 
