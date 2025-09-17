@@ -129,7 +129,7 @@ internal partial class NoCacheFileImageSourceService
                             decoder.Allocator =
                                 ShouldUseHardwareBitmap(context)
                                     ? ImageDecoderAllocator.Hardware
-                                    : ImageDecoderAllocator.Hardware;
+                                    : ImageDecoderAllocator.Software;
                         }));
                 return new BitmapDrawable(context.Resources, bitmap);
             }
