@@ -266,36 +266,36 @@ public static class ImageSourceExtensions
 
     public static Button SetSvgIcon(this Button imageElement, string svgName, double squareSize = 24d, Color? colorOverride = null) =>
         IconCache
-            .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
+            .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride, hardwareAcceleration: imageElement.SupportsHardwareAcceleration())
             .AsAsyncSourceFor(imageElement);
 
     public static ImageButton SetSvgIcon(this ImageButton imageButton, string svgName, double squareSize = 24d, Color? colorOverride = null)
     {
         IconCache
-            .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
-            .AsAsyncSourceFor(x => imageButton.Source = x);
+            .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride, hardwareAcceleration: imageButton.SupportsHardwareAcceleration())
+            .AsAsyncSourceFor(imageButton);
 
         return imageButton;
     }
 
     public static ToolbarItem SetSvgIcon(this ToolbarItem toolbarItem, string svgName, double squareSize = 24d, Color? colorOverride = null) =>
         IconCache
-            .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
+            .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride, hardwareAcceleration: toolbarItem.SupportsHardwareAcceleration())
             .AsAsyncSourceFor(toolbarItem);
 
     public static MenuItem SetSvgIcon(this MenuItem menuItem, string svgName, double squareSize = 24d, Color? colorOverride = null) =>
         IconCache
-            .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
+            .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride, hardwareAcceleration: menuItem.SupportsHardwareAcceleration())
             .AsAsyncSourceFor(menuItem);
 
     public static Image SetSvgIcon(this Image image, string svgName, double squareSize = 24d, Color? colorOverride = null) =>
         IconCache
-            .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
+            .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride, hardwareAcceleration: image.SupportsHardwareAcceleration())
             .AsAsyncSourceFor(image);
 
     public static Page SetSvgIcon(this Page page, string svgName, double squareSize = 24d, Color? colorOverride = null) =>
         IconCache
-            .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride)
+            .ImageSourceFromSvg(svgName, squareSize, colorOverride: colorOverride, hardwareAcceleration: page.SupportsHardwareAcceleration())
             .AsAsyncSourceFor(page);
 
     public static async Task<SKBitmap?> ToSKBitmapAsync(this ImageSource imageSource)
@@ -330,5 +330,20 @@ public static class ImageSourceExtensions
         {
             return SKBitmap.Decode(stream);
         }
+    }
+
+    private static bool SupportsHardwareAcceleration(this Element view)
+    {
+        bool supportsHardwareAcceleration = true;
+/*
+#if ANDROID
+        supportsHardwareAcceleration =
+            view.Handler?.PlatformView is Android.Views.View
+            {
+                IsHardwareAccelerated: true,
+            };
+#endif
+*/
+        return supportsHardwareAcceleration;
     }
 }

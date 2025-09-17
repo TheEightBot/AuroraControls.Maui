@@ -28,6 +28,10 @@ internal partial class NoCacheFileImageSourceService
             InTempStorage = new byte[32 * 1024], // 32KB buffer for decoding
         };
 
+    // Cache for hardware bitmap capability detection
+    private static readonly object _hardwareBitmapCacheLock = new();
+    private static bool? _cachedHardwareBitmapSupport;
+
     public override async Task<IImageSourceServiceResult?> LoadDrawableAsync(IImageSource imageSource, ImageView imageView,
         CancellationToken cancellationToken = default)
     {
@@ -52,7 +56,7 @@ internal partial class NoCacheFileImageSourceService
                 }
             }
 
-            var pathDrawable = CreateDrawableModern(file, imageView.Context!);
+            var pathDrawable = CreateDrawableModern(file, imageView.Context!, fileImageSource.HardwareAcceleration);
             if (pathDrawable != null)
             {
                 imageView.SetImageDrawable(pathDrawable);
@@ -94,7 +98,7 @@ internal partial class NoCacheFileImageSourceService
                 }
             }
 
-            var pathDrawable = CreateDrawableModern(file, context!);
+            var pathDrawable = CreateDrawableModern(file, context!, fileImageSource.HardwareAcceleration);
             if (pathDrawable != null)
             {
                 return new ImageSourceServiceResult(pathDrawable, () => pathDrawable.Dispose());
@@ -109,7 +113,7 @@ internal partial class NoCacheFileImageSourceService
         }
     }
 
-    private static Drawable? CreateDrawableModern(string file, Context context)
+    private static Drawable? CreateDrawableModern(string file, Context context, bool hardwareAcceleration = true)
     {
         try
         {
@@ -127,7 +131,7 @@ internal partial class NoCacheFileImageSourceService
 
                             // Determine if we should use hardware or software allocation
                             decoder.Allocator =
-                                ShouldUseHardwareBitmap(context)
+                                hardwareAcceleration && ShouldUseHardwareBitmap(context)
                                     ? ImageDecoderAllocator.Hardware
                                     : ImageDecoderAllocator.Software;
                         }));
@@ -154,28 +158,55 @@ internal partial class NoCacheFileImageSourceService
             return false;
         }
 
-        try
+        // Check the cached value first with double-checked locking pattern
+        if (_cachedHardwareBitmapSupport.HasValue && !_cachedHardwareBitmapSupport.Value)
         {
-            // Check if hardware acceleration is enabled for the application
-            var activity = context as Android.App.Activity;
-            if (activity?.Window?.Attributes?.Flags.HasFlag(Android.Views.WindowManagerFlags.HardwareAccelerated) == false)
+            return false;
+        }
+
+        lock (_hardwareBitmapCacheLock)
+        {
+            // Double-check inside the lock to avoid race conditions
+            if (_cachedHardwareBitmapSupport.HasValue && !_cachedHardwareBitmapSupport.Value)
             {
-                return false;
+                return _cachedHardwareBitmapSupport.Value;
             }
 
-            // Check if the device supports hardware bitmaps
-            // Hardware bitmaps require sufficient GPU memory and capabilities
-            var activityManager = context.GetSystemService(Context.ActivityService) as Android.App.ActivityManager;
-
-            // OpenGL ES 2.0
-            if (activityManager?.DeviceConfigurationInfo?.ReqGlEsVersion < 0x20000)
+            if (!_cachedHardwareBitmapSupport.HasValue)
             {
-                return false;
+                try
+                {
+                    // Check if hardware acceleration is enabled for the application
+                    var activity = context as Android.App.Activity;
+                    if (activity?.Window?.Attributes?.Flags.HasFlag(Android.Views.WindowManagerFlags.HardwareAccelerated) == false)
+                    {
+                        _cachedHardwareBitmapSupport = false;
+                        return false;
+                    }
+
+                    // Check if the device supports hardware bitmaps
+                    // Hardware bitmaps require sufficient GPU memory and capabilities
+                    var activityManager = context.GetSystemService(Context.ActivityService) as Android.App.ActivityManager;
+
+                    // OpenGL ES 2.0 requirement
+                    if (activityManager?.DeviceConfigurationInfo?.ReqGlEsVersion < 0x20000)
+                    {
+                        _cachedHardwareBitmapSupport = false;
+                        return false;
+                    }
+                }
+                catch
+                {
+                    // If any check fails, default to software bitmap for safety
+                    return false;
+                }
             }
+
+            var memoryActivityManager = context.GetSystemService(Context.ActivityService) as Android.App.ActivityManager;
 
             // Check available memory - avoid hardware bitmaps on low memory devices
             var memoryInfo = new Android.App.ActivityManager.MemoryInfo();
-            activityManager?.GetMemoryInfo(memoryInfo);
+            memoryActivityManager?.GetMemoryInfo(memoryInfo);
 
             // If available memory is less than 512MB, prefer software bitmaps for stability
             if (memoryInfo.AvailMem < 512 * 1024 * 1024)
@@ -185,17 +216,7 @@ internal partial class NoCacheFileImageSourceService
 
             // Additional check: avoid hardware bitmaps if we're in a software rendering context
             // This is a heuristic based on the current thread and context
-            if (IsLikelySoftwareRenderingContext())
-            {
-                return false;
-            }
-
-            return true;
-        }
-        catch
-        {
-            // If any check fails, default to software bitmap for safety
-            return false;
+            return !IsLikelySoftwareRenderingContext();
         }
     }
 
