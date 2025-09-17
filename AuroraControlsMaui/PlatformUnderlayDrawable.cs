@@ -164,7 +164,7 @@ public class PlatformUnderlayDrawable : IDisposable
     }
 
 #elif ANDROID
-    private SKCanvasView _canvas;
+    private SKCanvasView? _canvas;
 
     private Android.Widget.Button _commandButton;
 
@@ -594,7 +594,7 @@ public class PlatformUnderlayDrawable : IDisposable
             }
 
             double hasValueAnimationPercentage =
-                underlayDrawable.AlwaysShowPlaceholder
+                underlayDrawable.AlwaysShowPlaceholder || isError
                     ? 1d
                     : underlayDrawable.HasValueAnimationPercentage;
 

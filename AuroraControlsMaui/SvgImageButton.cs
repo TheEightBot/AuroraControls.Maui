@@ -18,12 +18,10 @@ public enum SvgImageButtonBackgroundShape
 public class SvgImageButton : AuroraViewBase
 #pragma warning restore CA1001
 {
-    private readonly object _pictureLock = new();
+    private readonly Lock _pictureLock = new();
 
     private SKRect _touchArea;
-    private SKSvg _svg;
-
-    private string _pictureName;
+    private SKSvg? _svg;
 
     private SKPoint _lastTouchLocation;
     private double _animationPercentage = 0d;
@@ -228,7 +226,11 @@ public class SvgImageButton : AuroraViewBase
 
     protected override void Detached()
     {
-        _svg?.Picture?.Dispose();
+        lock (_pictureLock)
+        {
+            _svg?.Picture?.Dispose();
+            _svg = null;
+        }
 
         base.Detached();
     }
@@ -283,8 +285,13 @@ public class SvgImageButton : AuroraViewBase
 
         canvas.Clear();
 
-        if (_svg?.Picture != null)
+        lock (_pictureLock)
         {
+            if (_svg == null)
+            {
+                return;
+            }
+
             float svgWidth = _svg.Picture.CullRect.Width;
             float svgHeight = _svg.Picture.CullRect.Height;
 
@@ -414,12 +421,6 @@ public class SvgImageButton : AuroraViewBase
 
         if (string.IsNullOrEmpty(embeddedImageName))
         {
-            _pictureName = null;
-            return;
-        }
-
-        if (!string.IsNullOrEmpty(_pictureName) && _pictureName.Equals(embeddedImageName))
-        {
             return;
         }
 
@@ -428,8 +429,9 @@ public class SvgImageButton : AuroraViewBase
             using var imageStream = EmbeddedResourceLoader.Load(embeddedImageName);
             _svg = new SKSvg();
             _svg.Load(imageStream);
-            _pictureName = embeddedImageName;
         }
+
+        this.InvalidateSurface();
     }
 
     /// <summary>

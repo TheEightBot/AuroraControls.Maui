@@ -564,7 +564,9 @@ public class Chip : AuroraViewBase
     {
         _backgroundPath?.Dispose();
         _leadingSvg?.Dispose();
+        _leadingSvg = null;
         _trailingSvg?.Dispose();
+        _trailingSvg = null;
         base.Detached();
     }
 

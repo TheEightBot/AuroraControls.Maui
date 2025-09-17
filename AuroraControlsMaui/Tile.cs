@@ -14,7 +14,7 @@ public class Tile : AuroraViewBase
 
     private readonly string _rippleAnimationName, _tapAnimationName;
 
-    private readonly object _pictureLock = new();
+    private readonly Lock _pictureLock = new();
 
     private SKPoint _lastTouchLocation;
     private double _rippleAnimationPercentage, _tapAnimationPercentage;
@@ -24,9 +24,7 @@ public class Tile : AuroraViewBase
     private SKPaint _fontPaint;
     private SKPaint _overlayPaint;
 
-    private SKSvg _svg;
-
-    private string _pictureName;
+    private SKSvg? _svg;
 
     private bool _tapped;
 
@@ -420,6 +418,7 @@ public class Tile : AuroraViewBase
         _fontPaint?.Dispose();
         _overlayPaint?.Dispose();
         _svg?.Dispose();
+        _svg = null;
 
         base.Detached();
     }
@@ -545,48 +544,51 @@ public class Tile : AuroraViewBase
                 }
             }
 
-            if (!string.IsNullOrEmpty(_pictureName))
+            lock (_pictureLock)
             {
-                // TODO: The text measurement here seems not right
-                var contentRect = new SKRect(
-                    rect.Left + (float)(this.ContentPadding.Left * _scale),
-                    rect.Top + (float)(this.ContentPadding.Top * _scale),
-                    rect.Right - (float)(this.ContentPadding.Right * _scale),
-                    rect.Bottom - textBounds.Height - (float)(this.ContentPadding.Bottom * _scale));
-
-                var imageSize = contentRect.AspectFit(_svg.Picture.CullRect.Size);
-
-                float scaleAmount =
-                    this.MaxImageSize == Size.Zero
-                        ? Math.Min(imageSize.Width / _svg.Picture.CullRect.Width, imageSize.Height / _svg.Picture.CullRect.Height)
-                        : 1f;
-
-                var svgScale = SKMatrix.CreateScale(scaleAmount, scaleAmount);
-
-                var translation =
-                    this.MaxImageSize == Size.Zero
-                        ? SKMatrix.CreateTranslation(imageSize.Left, imageSize.Top)
-                        : SKMatrix.CreateTranslation(imageSize.MidX - (_svg.Picture.CullRect.Width / 2f), imageSize.MidY - (_svg.Picture.CullRect.Height / 2f));
-
-                svgScale = svgScale.PostConcat(translation);
-
-                if (this.OverlayColor != Colors.Transparent)
+                if (_svg != null)
                 {
-                    using (new SKAutoCanvasRestore(canvas))
+                    // TODO: The text measurement here seems not right
+                    var contentRect = new SKRect(
+                        rect.Left + (float)(this.ContentPadding.Left * _scale),
+                        rect.Top + (float)(this.ContentPadding.Top * _scale),
+                        rect.Right - (float)(this.ContentPadding.Right * _scale),
+                        rect.Bottom - textBounds.Height - (float)(this.ContentPadding.Bottom * _scale));
+
+                    var imageSize = contentRect.AspectFit(_svg.Picture.CullRect.Size);
+
+                    float scaleAmount =
+                        this.MaxImageSize == Size.Zero
+                            ? Math.Min(imageSize.Width / _svg.Picture.CullRect.Width, imageSize.Height / _svg.Picture.CullRect.Height)
+                            : 1f;
+
+                    var svgScale = SKMatrix.CreateScale(scaleAmount, scaleAmount);
+
+                    var translation =
+                        this.MaxImageSize == Size.Zero
+                            ? SKMatrix.CreateTranslation(imageSize.Left, imageSize.Top)
+                            : SKMatrix.CreateTranslation(imageSize.MidX - (_svg.Picture.CullRect.Width / 2f), imageSize.MidY - (_svg.Picture.CullRect.Height / 2f));
+
+                    svgScale = svgScale.PostConcat(translation);
+
+                    if (this.OverlayColor != Colors.Transparent)
                     {
-                        _overlayPaint.BlendMode = SKBlendMode.SrcATop;
-                        _overlayPaint.IsAntialias = true;
-                        _overlayPaint.Color = this.OverlayColor.ToSKColor();
+                        using (new SKAutoCanvasRestore(canvas))
+                        {
+                            _overlayPaint.BlendMode = SKBlendMode.SrcATop;
+                            _overlayPaint.IsAntialias = true;
+                            _overlayPaint.Color = this.OverlayColor.ToSKColor();
 
-                        canvas.SaveLayer(null);
-                        canvas.Clear();
-                        canvas.DrawPicture(_svg.Picture, ref svgScale);
-                        canvas.DrawPaint(_overlayPaint);
+                            canvas.SaveLayer(null);
+                            canvas.Clear();
+                            canvas.DrawPicture(_svg.Picture, ref svgScale);
+                            canvas.DrawPaint(_overlayPaint);
+                        }
                     }
-                }
-                else
-                {
-                    canvas.DrawPicture(_svg.Picture, ref svgScale);
+                    else
+                    {
+                        canvas.DrawPicture(_svg.Picture, ref svgScale);
+                    }
                 }
             }
         }
@@ -725,23 +727,13 @@ public class Tile : AuroraViewBase
     {
         string embeddedImageName = EmbeddedImageName;
 
-        if (string.IsNullOrEmpty(embeddedImageName))
-        {
-            _pictureName = null;
-            return;
-        }
-
-        if (!string.IsNullOrEmpty(_pictureName) && _pictureName.Equals(embeddedImageName))
-        {
-            return;
-        }
-
         lock (_pictureLock)
         {
             using var imageStream = EmbeddedResourceLoader.Load(embeddedImageName);
             _svg = new SKSvg();
             _svg.Load(imageStream);
-            _pictureName = embeddedImageName;
         }
+
+        this.InvalidateSurface();
     }
 }
