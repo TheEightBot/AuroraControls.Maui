@@ -335,15 +335,19 @@ public static class ImageSourceExtensions
     private static bool SupportsHardwareAcceleration(this Element view)
     {
         bool supportsHardwareAcceleration = true;
-/*
+
 #if ANDROID
         supportsHardwareAcceleration =
             view.Handler?.PlatformView is Android.Views.View
             {
                 IsHardwareAccelerated: true,
+                LayerType: Android.Views.LayerType.Hardware,
             };
+#if DEBUG
+        Console.WriteLine($"Control is hardware accelerated: {supportsHardwareAcceleration}");
 #endif
-*/
+#endif
+
         return supportsHardwareAcceleration;
     }
 }
