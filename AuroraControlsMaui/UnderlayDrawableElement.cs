@@ -36,7 +36,15 @@ public static class UnderlayDrawableElement
         BindableProperty.Create(nameof(IUnderlayDrawable.HasValueAnimationPercentage), typeof(double), typeof(IUnderlayDrawable), 0.0d);
 
     public static readonly BindableProperty IsErrorProperty =
-        BindableProperty.Create(nameof(IUnderlayDrawable.IsError), typeof(bool), typeof(IUnderlayDrawable), false);
+        BindableProperty.Create(nameof(IUnderlayDrawable.IsError), typeof(bool), typeof(IUnderlayDrawable), false,
+            propertyChanged:
+                static (bindable, oldValue, newValue) =>
+                {
+                    if (bindable is IUnderlayDrawable ud && oldValue is bool oldv && newValue is bool newv && !oldv && newv)
+                    {
+                        ud.HasValueAnimationPercentage = 1.0d;
+                    }
+                });
 
     public static readonly BindableProperty ErrorTextProperty =
         BindableProperty.Create(nameof(IUnderlayDrawable.ErrorText), typeof(string), typeof(IUnderlayDrawable));

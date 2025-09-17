@@ -10,13 +10,11 @@ namespace AuroraControls;
 public class SvgImageView : AuroraViewBase
 #pragma warning restore CA1001 // Types that own disposable fields should be disposable
 {
-    private readonly object _pictureLock = new();
+    private readonly Lock _pictureLock = new();
 
     private SKPaint _overlayPaint;
 
-    private SKSvg _svg;
-
-    private string _pictureName;
+    private SKSvg? _svg;
 
     /// <summary>
     /// The name of the embedded image to display.
@@ -105,6 +103,7 @@ public class SvgImageView : AuroraViewBase
     {
         _overlayPaint?.Dispose();
         _svg?.Dispose();
+        _svg = null;
 
         base.Detached();
     }
@@ -129,8 +128,13 @@ public class SvgImageView : AuroraViewBase
 
         canvas.Clear();
 
-        if (!string.IsNullOrEmpty(_pictureName) && _svg?.Picture != null)
+        lock (_pictureLock)
         {
+            if (_svg == null)
+            {
+                return;
+            }
+
             float scaleAmount =
                 this.MaxImageSize == Size.Zero
                     ? Math.Min(displayArea.Width / _svg.Picture.CullRect.Width, displayArea.Height / _svg.Picture.CullRect.Height)
@@ -144,13 +148,13 @@ public class SvgImageView : AuroraViewBase
 
             canvas.DrawPicture(_svg.Picture, ref scale);
 
-            if (OverlayColor != Colors.Transparent && _overlayPaint != null)
+            if (this.OverlayColor != Colors.Transparent && _overlayPaint != null)
             {
                 using (new SKAutoCanvasRestore(canvas))
                 {
                     _overlayPaint.BlendMode = SKBlendMode.SrcIn;
 
-                    _overlayPaint.Color = OverlayColor.ToSKColor();
+                    _overlayPaint.Color = this.OverlayColor.ToSKColor();
                     _overlayPaint.IsAntialias = true;
 
                     canvas.DrawPaint(_overlayPaint);
@@ -166,23 +170,13 @@ public class SvgImageView : AuroraViewBase
     {
         string embeddedImageName = EmbeddedImageName;
 
-        if (string.IsNullOrEmpty(embeddedImageName))
-        {
-            _pictureName = null;
-            return;
-        }
-
-        if (!string.IsNullOrEmpty(_pictureName) && _pictureName.Equals(embeddedImageName))
-        {
-            return;
-        }
-
         lock (_pictureLock)
         {
             using var imageStream = EmbeddedResourceLoader.Load(embeddedImageName);
             _svg = new SKSvg();
             _svg.Load(imageStream);
-            _pictureName = embeddedImageName;
         }
+
+        this.InvalidateSurface();
     }
 }
