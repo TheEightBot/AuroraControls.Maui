@@ -727,6 +727,11 @@ public class Tile : AuroraViewBase
     {
         string embeddedImageName = EmbeddedImageName;
 
+        if (string.IsNullOrEmpty(embeddedImageName))
+        {
+            return;
+        }
+
         lock (_pictureLock)
         {
             using var imageStream = EmbeddedResourceLoader.Load(embeddedImageName);
