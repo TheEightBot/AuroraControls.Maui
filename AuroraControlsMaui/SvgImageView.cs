@@ -170,6 +170,11 @@ public class SvgImageView : AuroraViewBase
     {
         string embeddedImageName = EmbeddedImageName;
 
+        if (string.IsNullOrEmpty(embeddedImageName))
+        {
+            return;
+        }
+
         lock (_pictureLock)
         {
             using var imageStream = EmbeddedResourceLoader.Load(embeddedImageName);
