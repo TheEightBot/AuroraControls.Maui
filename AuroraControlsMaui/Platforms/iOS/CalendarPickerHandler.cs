@@ -4,8 +4,11 @@ using UIKit;
 
 namespace AuroraControls;
 
-public partial class CalendarPickerHandler : DatePickerHandler
+public partial class CalendarPickerHandler : DatePickerHandler, IDisposable
 {
+    private UIBarButtonItem? _clearButton;
+    private UIBarButtonItem? _doneButton;
+
     public static PropertyMapper<CalendarPicker, CalendarPickerHandler> NullableDatePickerPropertyMapper =
         new(ViewMapper)
         {
@@ -52,21 +55,15 @@ public partial class CalendarPickerHandler : DatePickerHandler
 
         if (platformView.InputAccessoryView is UIToolbar tb)
         {
-            var clearButton = new UIBarButtonItem("Clear", UIBarButtonItemStyle.Plain,
-                (_, _) =>
-                {
-                    if (this.VirtualView is not CalendarPicker el)
-                    {
-                        return;
-                    }
+            _clearButton = new UIBarButtonItem();
+            _clearButton.Style = UIBarButtonItemStyle.Plain;
+            _clearButton.Title = "Clear";
+            _clearButton.Clicked += ClearButtonOnClicked;
 
-                    el.Unfocus();
-                    el.Date = null;
-                });
+            _doneButton = new UIBarButtonItem(UIBarButtonSystemItem.Done);
+            _doneButton.Clicked += DoneButtonOnClicked;
 
-            var items = new List<UIBarButtonItem>(tb.Items);
-            items.Insert(0, clearButton);
-            tb.Items = items.ToArray();
+            tb.Items = [_clearButton, new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace), _doneButton];
         }
     }
 
@@ -75,6 +72,16 @@ public partial class CalendarPickerHandler : DatePickerHandler
         if (platformView.InputView is UIDatePicker dp)
         {
             dp.ValueChanged -= OnDatePickerValueChanged;
+        }
+
+        if (_clearButton != null)
+        {
+            _clearButton.Clicked -= ClearButtonOnClicked;
+        }
+
+        if (_doneButton != null)
+        {
+            _doneButton.Clicked -= DoneButtonOnClicked;
         }
 
         base.DisconnectHandler(platformView);
@@ -95,7 +102,35 @@ public partial class CalendarPickerHandler : DatePickerHandler
         }
     }
 
-    public void TryShowEmptyState()
+    private void DoneButtonOnClicked(object? sender, EventArgs e)
+    {
+        if (
+            this.PlatformView?.InputView?.Subviews.FirstOrDefault() is not UIDatePicker datePicker ||
+            this.VirtualView is not CalendarPicker calendarPicker ||
+            calendarPicker.UpdateMode != CalendarPickerUpdateMode.WhenDone)
+        {
+            return;
+        }
+
+        calendarPicker.Date = datePicker.Date.ToDateTime();
+
+        this.TryShowEmptyState();
+
+        this.PlatformView.ResignFirstResponder();
+    }
+
+    private void ClearButtonOnClicked(object? sender, EventArgs e)
+    {
+        if (this.VirtualView is not CalendarPicker el)
+        {
+            return;
+        }
+
+        el.Unfocus();
+        el.Date = null;
+    }
+
+    private void TryShowEmptyState()
     {
         if (this.VirtualView is not CalendarPicker el)
         {
@@ -111,4 +146,23 @@ public partial class CalendarPickerHandler : DatePickerHandler
                         : string.Empty;
             });
     }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposing)
+        {
+            return;
+        }
+
+        _clearButton?.Dispose();
+        _doneButton?.Dispose();
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    ~CalendarPickerHandler() => Dispose(false);
 }
