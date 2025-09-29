@@ -234,7 +234,7 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 Content =
                                     new CalendarPicker()
                                     {
-                                        UpdateMode = CalendarPickerUpdateMode.WhenDone,
+                                        UpdateMode = CalendarPickerUpdateMode.Immediately,
                                     }
                                         .Assign(out _calendarPicker),
                             },
