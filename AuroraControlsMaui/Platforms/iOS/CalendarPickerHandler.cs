@@ -105,16 +105,14 @@ public partial class CalendarPickerHandler : DatePickerHandler, IDisposable
     private void DoneButtonOnClicked(object? sender, EventArgs e)
     {
         if (
-            this.PlatformView?.InputView?.Subviews.FirstOrDefault() is not UIDatePicker datePicker ||
-            this.VirtualView is not CalendarPicker calendarPicker ||
-            calendarPicker.UpdateMode != CalendarPickerUpdateMode.WhenDone)
+            this.PlatformView?.InputView?.Subviews.FirstOrDefault() is UIDatePicker datePicker &&
+            this.VirtualView is CalendarPicker calendarPicker &&
+            calendarPicker.UpdateMode == CalendarPickerUpdateMode.WhenDone)
         {
-            return;
+            calendarPicker.Date = datePicker.Date.ToDateTime();
+
+            this.TryShowEmptyState();
         }
-
-        calendarPicker.Date = datePicker.Date.ToDateTime();
-
-        this.TryShowEmptyState();
 
         this.PlatformView.ResignFirstResponder();
     }
