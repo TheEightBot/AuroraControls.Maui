@@ -30,4 +30,10 @@ public class NumericEntry : Entry
         get => (NumericEntryValueType)GetValue(ValueTypeProperty);
         set => SetValue(ValueTypeProperty, value);
     }
+
+    public NumericEntry()
+    {
+        Keyboard = Keyboard.Numeric;
+        IsTextPredictionEnabled = false;
+    }
 }
