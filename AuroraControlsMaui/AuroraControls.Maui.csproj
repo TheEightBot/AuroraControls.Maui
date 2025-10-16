@@ -17,10 +17,10 @@
         <CreatePackage>false</CreatePackage>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.9" />
-        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.9" />
-        <PackageReference Include="SkiaSharp.HarfBuzz" Version="2.88.9" />
-        <PackageReference Include="Svg.Skia" Version="2.0.0.4" />
+        <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="3.119.1" />
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.1" />
+        <PackageReference Include="SkiaSharp.HarfBuzz" Version="3.119.1" />
+        <PackageReference Include="Svg.Skia" Version="3.2.1" />
         <PackageReference Include="Topten.RichTextKit" Version="0.4.167" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.0" />
     </ItemGroup>
