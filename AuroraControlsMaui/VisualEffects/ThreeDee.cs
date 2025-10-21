@@ -1,5 +1,6 @@
 ﻿namespace AuroraControls.VisualEffects;
 
+/*
 public class ThreeDee : VisualEffect
 {
     /// <summary>
@@ -106,3 +107,4 @@ public class ThreeDee : VisualEffect
         return surface.Snapshot();
     }
 }
+*/
