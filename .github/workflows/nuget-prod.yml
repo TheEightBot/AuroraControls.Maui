@@ -24,10 +24,10 @@ jobs:
                   fetch-depth: 0  # Fetch full history for release notes generation
             - uses: actions/setup-dotnet@v3
               with:
-                  dotnet-version: ${{ env.NuGetDirectory }}
+                  dotnet-version: ${{ env.DotnetVersion }}
 
             - name: Install MAUI Workloads
-              run: dotnet workload install maui --ignore-failed-sources --version ${{ env.NuGetDirectory }}
+              run: dotnet workload install maui --ignore-failed-sources --version ${{ env.DotnetVersion }}
 
             - name: Semver Parse
               id: version
