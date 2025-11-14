@@ -29,8 +29,8 @@ public partial class NumericEntryHandler : EntryHandler, IDisposable
         platformView.ShouldChangeCharacters -= OnShouldChangeCharacters;
         _doneButton.Clicked -= DoneButtonOnClicked;
 
-        PlatformView.InputAccessoryView?.Dispose();
-        PlatformView.InputAccessoryView = null;
+        platformView.InputAccessoryView?.Dispose();
+        platformView.InputAccessoryView = null;
 
         base.DisconnectHandler(platformView);
     }
