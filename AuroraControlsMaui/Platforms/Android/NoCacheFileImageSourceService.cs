@@ -120,20 +120,17 @@ internal partial class NoCacheFileImageSourceService
             if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.P)
             {
                 // Use modern ImageDecoder for Android API 28+
-                var source = ImageDecoder.CreateSource(new Java.IO.File(file));
+                using var source = ImageDecoder.CreateSource(new Java.IO.File(file));
                 var bitmap = ImageDecoder.DecodeBitmap(
                     source,
                     new ImageDecoderOnHeaderDecodedListener(
                         decoder =>
                         {
-                            decoder.SetTargetColorSpace(ColorSpace.Get(ColorSpace.Named.Srgb)!);
                             decoder.MemorySizePolicy = ImageDecoderMemoryPolicy.Default;
 
                             // Determine if we should use hardware or software allocation
-                            decoder.Allocator =
-                                hardwareAcceleration && ShouldUseHardwareBitmap(context)
-                                    ? ImageDecoderAllocator.Hardware
-                                    : ImageDecoderAllocator.Software;
+                            decoder.MutableRequired = true;
+                            decoder.Allocator = ImageDecoderAllocator.Default;
                         }));
                 return new BitmapDrawable(context.Resources, bitmap);
             }
