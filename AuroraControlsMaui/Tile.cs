@@ -548,27 +548,56 @@ public class Tile : AuroraViewBase
             {
                 if (_svg != null)
                 {
-                    // TODO: The text measurement here seems not right
-                    var contentRect = new SKRect(
-                        rect.Left + (float)(this.ContentPadding.Left * _scale),
-                        rect.Top + (float)(this.ContentPadding.Top * _scale),
-                        rect.Right - (float)(this.ContentPadding.Right * _scale),
-                        rect.Bottom - textBounds.Height - (float)(this.ContentPadding.Bottom * _scale));
+                    // Calculate available area for the image
+                    // Start from the tile bounds minus content padding
+                    float availableLeft = rect.Left + (float)(this.ContentPadding.Left * _scale);
+                    float availableTop = rect.Top + (float)(this.ContentPadding.Top * _scale);
+                    float availableRight = rect.Right - (float)(this.ContentPadding.Right * _scale);
+                    float availableBottom = rect.Bottom - (float)(this.ContentPadding.Bottom * _scale);
 
-                    var imageSize = contentRect.AspectFit(_svg.Picture.CullRect.Size);
+                    // If there's text, subtract its height plus padding from the bottom
+                    if (!string.IsNullOrEmpty(this.Text))
+                    {
+                        availableBottom -= textBounds.Height;
+                    }
 
-                    float scaleAmount =
-                        this.MaxImageSize == Size.Zero
-                            ? Math.Min(imageSize.Width / _svg.Picture.CullRect.Width, imageSize.Height / _svg.Picture.CullRect.Height)
-                            : 1f;
+                    var availableRect = new SKRect(availableLeft, availableTop, availableRight, availableBottom);
 
+                    // Get the original SVG dimensions
+                    float svgWidth = _svg.Picture.CullRect.Width;
+                    float svgHeight = _svg.Picture.CullRect.Height;
+
+                    // Calculate the scale factor to fit within available area
+                    float scaleX = availableRect.Width / svgWidth;
+                    float scaleY = availableRect.Height / svgHeight;
+                    float scaleAmount = Math.Min(scaleX, scaleY);
+
+                    // If MaxImageSize is specified, constrain the scaled size to not exceed it
+                    if (this.MaxImageSize != Size.Zero)
+                    {
+                        float maxWidth = (float)(this.MaxImageSize.Width * _scale);
+                        float maxHeight = (float)(this.MaxImageSize.Height * _scale);
+
+                        // Calculate scale needed to fit MaxImageSize
+                        float maxScaleX = maxWidth / svgWidth;
+                        float maxScaleY = maxHeight / svgHeight;
+                        float maxScale = Math.Min(maxScaleX, maxScaleY);
+
+                        // Use the smaller of the two scales to ensure it fits both constraints
+                        scaleAmount = Math.Min(scaleAmount, maxScale);
+                    }
+
+                    // Calculate final scaled dimensions
+                    float scaledWidth = svgWidth * scaleAmount;
+                    float scaledHeight = svgHeight * scaleAmount;
+
+                    // Center the image in the available area
+                    float imageX = availableRect.Left + ((availableRect.Width - scaledWidth) / 2f);
+                    float imageY = availableRect.Top + ((availableRect.Height - scaledHeight) / 2f);
+
+                    // Create transformation matrix
                     var svgScale = SKMatrix.CreateScale(scaleAmount, scaleAmount);
-
-                    var translation =
-                        this.MaxImageSize == Size.Zero
-                            ? SKMatrix.CreateTranslation(imageSize.Left, imageSize.Top)
-                            : SKMatrix.CreateTranslation(imageSize.MidX - (_svg.Picture.CullRect.Width / 2f), imageSize.MidY - (_svg.Picture.CullRect.Height / 2f));
-
+                    var translation = SKMatrix.CreateTranslation(imageX, imageY);
                     svgScale = svgScale.PostConcat(translation);
 
                     if (this.OverlayColor != Colors.Transparent)

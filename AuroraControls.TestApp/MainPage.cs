@@ -178,10 +178,9 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new CutoutOverlayViewTestPage())),
 
-                            new Button { Text = "View SafeArea Effect Test", }
+                            new Button { Text = "View Tile Test Page", }
                                 .BindClicked(async () =>
-                                    await this.Navigation.PushAsync(new SafeAreaTestPage()))
-                                .Assign(out _viewSafeAreaTestButton),
+                                    await this.Navigation.PushAsync(new TileTestPage())),
 
                             new Button
                                 {
