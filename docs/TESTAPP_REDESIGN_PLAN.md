@@ -21,12 +21,12 @@ This document outlines the comprehensive redesign of the AuroraControls.Maui Tes
 - **Adaptive Components** - Responsive to different screen sizes
 
 ### Key Design Decisions
-1. **TabbedPage Navigation** - Primary navigation using standard MAUI TabbedPage (no AppShell)
+1. **AppShell Navigation** - Modern MAUI Shell with TabBar for primary navigation
 2. **Card-Based Layouts** - Controls showcased in elevated cards with shadows
 3. **Property Inspector Panel** - Bottom sheet / expandable panel for live property editing
 4. **Preview + Code Mode** - Toggle between visual preview and usage examples
 5. **Search & Filter** - Quick access to specific controls
-6. **Standard NavigationPage** - Use `Navigation.PushAsync()` for drill-down navigation
+6. **Explicit Route Registration** - All pages registered with `Routing.RegisterRoute()` for reliable navigation
 
 ---
 
@@ -142,15 +142,15 @@ This document outlines the comprehensive redesign of the AuroraControls.Maui Tes
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                      TabbedPage                              │
+│                        AppShell                              │
 ├─────────────────────────────────────────────────────────────┤
 │                                                              │
 │  ┌─────────────────────────────────────────────────────┐    │
-│  │              NavigationPage Content                  │    │
+│  │                  ShellContent                        │    │
 │  │                                                      │    │
 │  │   • Showcase (Home)                                  │    │
 │  │   • Controls Browser                                 │    │
-│  │   • Individual Control Pages (pushed)                │    │
+│  │   • Individual Control Pages (pushed via routes)     │    │
 │  │   • Settings                                         │    │
 │  │                                                      │    │
 │  └─────────────────────────────────────────────────────┘    │
@@ -161,86 +161,224 @@ This document outlines the comprehensive redesign of the AuroraControls.Maui Tes
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Navigation Implementation
+### AppShell Implementation
+
+```xml
+<!-- AppShell.xaml -->
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:pages="clr-namespace:AuroraControls.TestApp.Pages"
+       x:Class="AuroraControls.TestApp.AppShell">
+
+    <!-- IMPORTANT: Shell.FlyoutBehavior must be Disabled for bottom tabs -->
+    <Shell.FlyoutBehavior>Disabled</Shell.FlyoutBehavior>
+
+    <TabBar>
+        <ShellContent 
+            Title="Showcase" 
+            Icon="icon_home.png"
+            Route="showcase"
+            ContentTemplate="{DataTemplate pages:ShowcasePage}" />
+        
+        <ShellContent 
+            Title="Controls" 
+            Icon="icon_controls.png"
+            Route="controls"
+            ContentTemplate="{DataTemplate pages:ControlsListPage}" />
+        
+        <ShellContent 
+            Title="Effects" 
+            Icon="icon_effects.png"
+            Route="effects"
+            ContentTemplate="{DataTemplate pages:EffectsPage}" />
+        
+        <ShellContent 
+            Title="Settings" 
+            Icon="icon_settings.png"
+            Route="settings"
+            ContentTemplate="{DataTemplate pages:SettingsPage}" />
+    </TabBar>
+
+</Shell>
+```
+
+### ⚠️ Critical: Route Registration
+
+**All detail pages MUST be registered in AppShell.xaml.cs constructor:**
 
 ```csharp
-// App.xaml.cs - Main navigation setup
-MainPage = new TabbedPage
+// AppShell.xaml.cs
+public partial class AppShell : Shell
 {
-    Children =
+    public AppShell()
     {
-        new NavigationPage(new ShowcasePage()) { Title = "Showcase", IconImageSource = "home.png" },
-        new NavigationPage(new ControlsListPage()) { Title = "Controls", IconImageSource = "controls.png" },
-        new NavigationPage(new EffectsPage()) { Title = "Effects", IconImageSource = "effects.png" },
-        new NavigationPage(new SettingsPage()) { Title = "Settings", IconImageSource = "settings.png" },
+        InitializeComponent();
+        
+        // ═══════════════════════════════════════════════════════════════
+        // ROUTE REGISTRATION - Required for Shell.GoToAsync() navigation
+        // ═══════════════════════════════════════════════════════════════
+        
+        // Button Controls
+        Routing.RegisterRoute("gradientpillbutton", typeof(GradientPillButtonDemoPage));
+        Routing.RegisterRoute("gradientcircularbutton", typeof(GradientCircularButtonDemoPage));
+        Routing.RegisterRoute("cupertinobutton", typeof(CupertinoButtonDemoPage));
+        Routing.RegisterRoute("tile", typeof(TileDemoPage));
+        Routing.RegisterRoute("svgimagebutton", typeof(SvgImageButtonDemoPage));
+        
+        // Input Controls
+        Routing.RegisterRoute("styledinputlayout", typeof(StyledInputLayoutDemoPage));
+        Routing.RegisterRoute("numericentry", typeof(NumericEntryDemoPage));
+        Routing.RegisterRoute("togglebox", typeof(ToggleBoxDemoPage));
+        Routing.RegisterRoute("cupertinotoggleswitch", typeof(CupertinoToggleSwitchDemoPage));
+        Routing.RegisterRoute("segmentedcontrol", typeof(SegmentedControlDemoPage));
+        
+        // Calendar Controls
+        Routing.RegisterRoute("calendarview", typeof(CalendarViewDemoPage));
+        Routing.RegisterRoute("calendarpicker", typeof(CalendarPickerDemoPage));
+        
+        // Chip Controls
+        Routing.RegisterRoute("chipgroup", typeof(ChipGroupDemoPage));
+        
+        // Image Controls
+        Routing.RegisterRoute("svgimageview", typeof(SvgImageViewDemoPage));
+        Routing.RegisterRoute("touchdraw", typeof(TouchDrawDemoPage));
+        Routing.RegisterRoute("signaturepad", typeof(SignaturePadDemoPage));
+        Routing.RegisterRoute("cutoutoverlay", typeof(CutoutOverlayDemoPage));
+        
+        // Progress Controls
+        Routing.RegisterRoute("gauges", typeof(GaugesDemoPage));
+        Routing.RegisterRoute("stepindicator", typeof(StepIndicatorDemoPage));
+        Routing.RegisterRoute("loadingindicators", typeof(LoadingIndicatorsDemoPage));
+        
+        // Animation Controls
+        Routing.RegisterRoute("confetti", typeof(ConfettiDemoPage));
+        Routing.RegisterRoute("visualeffects", typeof(VisualEffectsDemoPage));
+        
+        // Layout Controls
+        Routing.RegisterRoute("wraplayout", typeof(WrapLayoutDemoPage));
+        Routing.RegisterRoute("cardviewlayout", typeof(CardViewLayoutDemoPage));
+        
+        // Effects
+        Routing.RegisterRoute("imageprocessing", typeof(ImageProcessingDemoPage));
+        Routing.RegisterRoute("platformeffects", typeof(PlatformEffectsDemoPage));
     }
-};
+}
+```
 
-// Navigation to detail pages uses standard push navigation
-await Navigation.PushAsync(new GradientPillButtonDemoPage());
+### Navigation Patterns
+
+```csharp
+// ═══════════════════════════════════════════════════════════════
+// NAVIGATION BEST PRACTICES FOR SHELL
+// ═══════════════════════════════════════════════════════════════
+
+// ✅ CORRECT: Navigate to registered route (relative)
+await Shell.Current.GoToAsync("gradientpillbutton");
+
+// ✅ CORRECT: Navigate with absolute path 
+await Shell.Current.GoToAsync("//controls/gradientpillbutton");
+
+// ✅ CORRECT: Navigate back
+await Shell.Current.GoToAsync("..");
+
+// ✅ CORRECT: Pass parameters via query string
+await Shell.Current.GoToAsync($"gradientpillbutton?preset=vibrant");
+
+// ✅ CORRECT: Pass complex objects via dictionary
+var navigationParameter = new Dictionary<string, object>
+{
+    { "ControlInfo", selectedControl }
+};
+await Shell.Current.GoToAsync("gradientpillbutton", navigationParameter);
+
+// ❌ WRONG: Using Navigation.PushAsync with Shell (may cause issues)
+// await Navigation.PushAsync(new SomePage());
+
+// ❌ WRONG: Unregistered routes will throw exceptions
+// await Shell.Current.GoToAsync("unregisteredpage");
+```
+
+### Receiving Navigation Parameters
+
+```csharp
+// Demo page must implement IQueryAttributable for parameters
+[QueryProperty(nameof(Preset), "preset")]
+public partial class GradientPillButtonDemoPage : ContentPage, IQueryAttributable
+{
+    public string Preset { get; set; }
+    
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (query.TryGetValue("ControlInfo", out var controlInfo))
+        {
+            // Handle complex object parameter
+        }
+    }
+}
 ```
 
 ### Page Hierarchy
 
 ```
-📱 TabbedPage (MainTabbedPage)
-├── 🏠 NavigationPage → ShowcasePage (Tab 1 - Default)
-│   └── Featured controls with animated demos
-│   └── → Push to any control demo page
+📱 AppShell
+├── 🏠 TabBar → ShellContent (Route: "showcase")
+│   └── ShowcasePage
+│       └── → GoToAsync("gradientpillbutton") etc.
 │
-├── 🎨 NavigationPage → ControlsListPage (Tab 2)
-│   ├── 🔘 Buttons & Actions (category row → push to list)
-│   │   ├── → GradientPillButtonDemoPage
-│   │   ├── → GradientCircularButtonDemoPage
-│   │   ├── → CupertinoButtonDemoPage
-│   │   ├── → TileDemoPage
-│   │   └── → SvgImageButtonDemoPage
-│   │
-│   ├── 📝 Input Controls
-│   │   ├── → StyledInputLayoutDemoPage
-│   │   ├── → NumericEntryDemoPage
-│   │   ├── → ToggleBoxDemoPage
-│   │   ├── → CupertinoToggleSwitchDemoPage
-│   │   └── → SegmentedControlDemoPage
-│   │
-│   ├── 📅 Date & Calendar
-│   │   ├── → CalendarViewDemoPage
-│   │   └── → CalendarPickerDemoPage
-│   │
-│   ├── 🏷️ Chips & Tags
-│   │   └── → ChipGroupDemoPage
-│   │
-│   ├── 🖼️ Images & Graphics
-│   │   ├── → SvgImageViewDemoPage
-│   │   ├── → TouchDrawLettersImageDemoPage
-│   │   ├── → SignaturePadDemoPage
-│   │   └── → CutoutOverlayViewDemoPage
-│   │
-│   ├── 📊 Gauges & Progress
-│   │   ├── → LinearGaugeDemoPage
-│   │   ├── → CircularGaugeDemoPage
-│   │   ├── → CircularFillGaugeDemoPage
-│   │   └── → StepIndicatorDemoPage
-│   │
-│   ├── ⏳ Loading Indicators
-│   │   └── → LoadingIndicatorsDemoPage (All 5 in one)
-│   │
-│   ├── 🎉 Animations & Effects
-│   │   ├── → ConfettiViewDemoPage
-│   │   └── → VisualEffectsDemoPage
-│   │
-│   └── 📐 Layout Controls
-│       ├── → WrapLayoutDemoPage
-│       └── → CardViewLayoutDemoPage
+├── 🎨 TabBar → ShellContent (Route: "controls")
+│   └── ControlsListPage
+│       ├── 🔘 Buttons & Actions
+│       │   ├── → GoToAsync("gradientpillbutton")
+│       │   ├── → GoToAsync("gradientcircularbutton")
+│       │   ├── → GoToAsync("cupertinobutton")
+│       │   ├── → GoToAsync("tile")
+│       │   └── → GoToAsync("svgimagebutton")
+│       │
+│       ├── 📝 Input Controls
+│       │   ├── → GoToAsync("styledinputlayout")
+│       │   ├── → GoToAsync("numericentry")
+│       │   ├── → GoToAsync("togglebox")
+│       │   ├── → GoToAsync("cupertinotoggleswitch")
+│       │   └── → GoToAsync("segmentedcontrol")
+│       │
+│       ├── 📅 Date & Calendar
+│       │   ├── → GoToAsync("calendarview")
+│       │   └── → GoToAsync("calendarpicker")
+│       │
+│       ├── 🏷️ Chips & Tags
+│       │   └── → GoToAsync("chipgroup")
+│       │
+│       ├── 🖼️ Images & Graphics
+│       │   ├── → GoToAsync("svgimageview")
+│       │   ├── → GoToAsync("touchdraw")
+│       │   ├── → GoToAsync("signaturepad")
+│       │   └── → GoToAsync("cutoutoverlay")
+│       │
+│       ├── 📊 Gauges & Progress
+│       │   ├── → GoToAsync("gauges")
+│       │   └── → GoToAsync("stepindicator")
+│       │
+│       ├── ⏳ Loading Indicators
+│       │   └── → GoToAsync("loadingindicators")
+│       │
+│       ├── 🎉 Animations & Effects
+│       │   ├── → GoToAsync("confetti")
+│       │   └── → GoToAsync("visualeffects")
+│       │
+│       └── 📐 Layout Controls
+│           ├── → GoToAsync("wraplayout")
+│           └── → GoToAsync("cardviewlayout")
 │
-├── ⚡ NavigationPage → EffectsPage (Tab 3)
-│   ├── → Image Processing Effects
-│   └── → Platform Effects
+├── ⚡ TabBar → ShellContent (Route: "effects")
+│   └── EffectsPage
+│       ├── → GoToAsync("imageprocessing")
+│       └── → GoToAsync("platformeffects")
 │
-└── ⚙️ NavigationPage → SettingsPage (Tab 4)
-    ├── Theme Toggle (Light/Dark)
-    ├── Accent Color Picker
-    └── App Info
+└── ⚙️ TabBar → ShellContent (Route: "settings")
+    └── SettingsPage
+        ├── Theme Toggle (Light/Dark)
+        ├── Accent Color Picker
+        └── App Info
 ```
 
 ---
@@ -424,7 +562,7 @@ The Showcase page serves as the app's hero landing page:
 - [ ] **1.3** Create base classes for demo pages
   - [ ] `ControlDemoPageBase` - Common functionality
   - [ ] `PropertyEditorPanel` - Reusable property editing UI
-- [ ] **1.4** Implement TabbedPage with NavigationPage tabs
+- [ ] **1.4** Implement AppShell with TabBar and route registration
 - [ ] **1.5** Create theme service (light/dark mode)
 
 ### Phase 2: Core Infrastructure Components
@@ -506,8 +644,8 @@ The Showcase page serves as the app's hero landing page:
 AuroraControls.TestApp/
 ├── App.xaml
 ├── App.xaml.cs
-├── MainTabbedPage.xaml              ← TabbedPage (replaces AppShell)
-├── MainTabbedPage.xaml.cs
+├── AppShell.xaml                    ← Shell with TabBar navigation
+├── AppShell.xaml.cs                 ← Route registration here!
 ├── MauiProgram.cs
 │
 ├── Themes/
@@ -538,12 +676,12 @@ AuroraControls.TestApp/
 │   ├── Base/
 │   │   └── ControlDemoPageBase.cs
 │   │
-│   ├── ShowcasePage.xaml
-│   ├── ControlsListPage.xaml
-│   ├── EffectsPage.xaml
-│   ├── SettingsPage.xaml
+│   ├── ShowcasePage.xaml            ← Route: "showcase" (in TabBar)
+│   ├── ControlsListPage.xaml        ← Route: "controls" (in TabBar)
+│   ├── EffectsPage.xaml             ← Route: "effects" (in TabBar)
+│   ├── SettingsPage.xaml            ← Route: "settings" (in TabBar)
 │   │
-│   ├── Buttons/
+│   ├── Buttons/                     ← All routes registered in AppShell.xaml.cs
 │   │   ├── GradientPillButtonDemoPage.xaml
 │   │   ├── GradientCircularButtonDemoPage.xaml
 │   │   ├── CupertinoButtonDemoPage.xaml
@@ -601,6 +739,10 @@ AuroraControls.TestApp/
 │
 ├── Resources/
 │   ├── Images/
+│   │   ├── icon_home.png            ← Tab icons
+│   │   ├── icon_controls.png
+│   │   ├── icon_effects.png
+│   │   └── icon_settings.png
 │   ├── Fonts/
 │   └── Raw/
 │
@@ -672,11 +814,36 @@ To begin implementation:
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
-| 2025-12-05 | Use TabbedPage + NavigationPage | Standard MAUI navigation, more flexible than Shell |
+| 2025-12-05 | Use AppShell with TabBar | Modern MAUI pattern, better integration with platform navigation |
+| 2025-12-05 | Register ALL routes in AppShell constructor | Shell.GoToAsync() requires explicit route registration |
+| 2025-12-05 | Use relative routes for navigation | Simpler than absolute paths, works within Shell context |
 | 2025-12-05 | Bottom sheet for properties | Maximizes preview space, follows M3 patterns |
 | 2025-12-05 | Group loading indicators | Similar controls, reduces navigation depth |
 | 2025-12-05 | Dark mode first | Matches premium app trends, easier on eyes |
-| 2025-12-05 | Navigation.PushAsync for details | Standard drill-down navigation pattern |
+| 2025-12-05 | Avoid Navigation.PushAsync | Use Shell.Current.GoToAsync() for consistent Shell navigation |
+
+---
+
+## ⚠️ Shell Navigation Gotchas
+
+### Common Issues and Solutions
+
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| `RouteNotFoundException` | Route not registered | Add `Routing.RegisterRoute()` in AppShell constructor |
+| Back button doesn't work | Using wrong navigation | Use `Shell.Current.GoToAsync("..")` instead of `Navigation.PopAsync()` |
+| Tab bar disappears | Navigating with absolute path | Use relative routes or ensure path includes tab |
+| Page appears twice | Mixing Shell and NavigationPage | Stick to Shell navigation only |
+| Parameters not received | Missing `IQueryAttributable` | Implement interface on target page |
+
+### Route Naming Convention
+
+```
+✅ Use lowercase, no spaces: "gradientpillbutton"
+✅ Use simple names: "togglebox"
+❌ Avoid slashes in route names: "buttons/gradientpill"
+❌ Avoid special characters: "gradient-pill-button"
+```
 
 ---
 
