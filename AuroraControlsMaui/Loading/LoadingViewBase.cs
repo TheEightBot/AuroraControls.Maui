@@ -30,15 +30,139 @@ public class LoadingViewBase : AuroraViewBase
     }
 
     /// <summary>
+    /// The is running property. Similar to ActivityIndicator's IsRunning.
+    /// </summary>
+    public static readonly BindableProperty IsRunningProperty =
+        BindableProperty.Create(
+            nameof(IsRunning),
+            typeof(bool),
+            typeof(LoadingViewBase),
+            default(bool),
+            BindingMode.TwoWay,
+            propertyChanged: OnIsRunningChanged);
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the loading indicator is running (animating).
+    /// </summary>
+    /// <value><c>true</c> if the indicator is running; otherwise, <c>false</c>.</value>
+    public bool IsRunning
+    {
+        get => (bool)GetValue(IsRunningProperty);
+        set => SetValue(IsRunningProperty, value);
+    }
+
+    /// <summary>
+    /// The color property. Similar to ActivityIndicator's Color.
+    /// </summary>
+    public static readonly BindableProperty ColorProperty =
+        BindableProperty.Create(
+            nameof(Color),
+            typeof(Color),
+            typeof(LoadingViewBase),
+            Colors.Gray,
+            propertyChanged: IAuroraView.PropertyChangedInvalidateSurface);
+
+    /// <summary>
+    /// Gets or sets the color of the loading indicator.
+    /// </summary>
+    /// <value>The color of the indicator. Default is Gray.</value>
+    public Color Color
+    {
+        get => (Color)GetValue(ColorProperty);
+        set => SetValue(ColorProperty, value);
+    }
+
+    /// <summary>
+    /// The animation rate property. Time in milliseconds between frames.
+    /// </summary>
+    public static readonly BindableProperty AnimationRateProperty =
+        BindableProperty.Create(
+            nameof(AnimationRate),
+            typeof(uint),
+            typeof(LoadingViewBase),
+            16u);
+
+    /// <summary>
+    /// Gets or sets the animation rate (time in milliseconds between frames).
+    /// </summary>
+    /// <value>The animation rate. Default is 16ms.</value>
+    public uint AnimationRate
+    {
+        get => (uint)GetValue(AnimationRateProperty);
+        set => SetValue(AnimationRateProperty, value);
+    }
+
+    /// <summary>
+    /// The animation length property. Number of milliseconds over which to interpolate the animation.
+    /// </summary>
+    public static readonly BindableProperty AnimationLengthProperty =
+        BindableProperty.Create(
+            nameof(AnimationLength),
+            typeof(uint),
+            typeof(LoadingViewBase),
+            1600u);
+
+    /// <summary>
+    /// Gets or sets the animation length (number of milliseconds for one animation cycle).
+    /// </summary>
+    /// <value>The animation length. Default is 1600ms.</value>
+    public uint AnimationLength
+    {
+        get => (uint)GetValue(AnimationLengthProperty);
+        set => SetValue(AnimationLengthProperty, value);
+    }
+
+    /// <summary>
+    /// The animation easing property.
+    /// </summary>
+    public static readonly BindableProperty AnimationEasingProperty =
+        BindableProperty.Create(
+            nameof(AnimationEasing),
+            typeof(Easing),
+            typeof(LoadingViewBase),
+            null);
+
+    /// <summary>
+    /// Gets or sets the animation easing function.
+    /// </summary>
+    /// <value>The easing function. Default is null (linear).</value>
+    public Easing? AnimationEasing
+    {
+        get => (Easing?)GetValue(AnimationEasingProperty);
+        set => SetValue(AnimationEasingProperty, value);
+    }
+
+    /// <summary>
     /// The animating property.
     /// </summary>
+    [Obsolete("Use IsRunning instead. This property will be removed in a future version.")]
     public static readonly BindableProperty AnimatingProperty =
         BindableProperty.Create(nameof(Animating), typeof(bool), typeof(LoadingViewBase), default(bool), BindingMode.OneWayToSource);
 
+    /// <summary>
+    /// Gets a value indicating whether the loading indicator is currently animating.
+    /// </summary>
+    /// <value><c>true</c> if animating; otherwise, <c>false</c>.</value>
+    [Obsolete("Use IsRunning instead. This property will be removed in a future version.")]
     public bool Animating
     {
         get => (bool)GetValue(AnimatingProperty);
         private set => SetValue(AnimatingProperty, value);
+    }
+
+    private static void OnIsRunningChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        if (bindable is LoadingViewBase loadingView && newValue is bool isRunning)
+        {
+            if (isRunning)
+            {
+                loadingView.StartAnimation();
+            }
+            else
+            {
+                loadingView.StopAnimation();
+            }
+        }
     }
 
     public LoadingViewBase() => _animationName = $"{this.GetType().Name}_{Guid.NewGuid().ToString()}";
@@ -63,34 +187,60 @@ public class LoadingViewBase : AuroraViewBase
     }
 
     /// <summary>
-    /// Starts the step animation.
+    /// Starts the animation. Sets IsRunning to true.
     /// </summary>
-    /// <param name="rate">The time, in milliseconds, between frames.</param>
-    /// <param name="length">The number of milliseconds over which to interpolate the animation.</param>
-    /// <param name="easing">The easing function to use to transision in, out, or in and out of the animation.</param>
-    public void Start(uint rate = 16, uint length = 1600, Easing easing = null)
+    public void Start()
     {
-        Stop();
+        IsRunning = true;
+    }
 
+    /// <summary>
+    /// Stops the animation. Sets IsRunning to false.
+    /// </summary>
+    public void Stop()
+    {
+        IsRunning = false;
+    }
+
+    /// <summary>
+    /// Called when IsRunning is set to true. Starts the internal animation.
+    /// </summary>
+    protected virtual void StartAnimation()
+    {
+        StopAnimation();
+
+#pragma warning disable CS0618 // Type or member is obsolete
         Animating = true;
-        CreateAnimationNextStep(rate, length, easing);
+#pragma warning restore CS0618
+
+        StartAnimationValues();
+        CreateAnimationNextStep();
+    }
+
+    /// <summary>
+    /// Called when IsRunning is set to false. Stops the internal animation.
+    /// </summary>
+    protected virtual void StopAnimation()
+    {
+#pragma warning disable CS0618 // Type or member is obsolete
+        Animating = false;
+#pragma warning restore CS0618
+
+        this.AbortAnimation(_animationName);
     }
 
     /// <summary>
     /// Creates the animation for the next step.
     /// </summary>
-    /// <param name="rate">Rate.</param>
-    /// <param name="length">Length.</param>
-    /// <param name="easing">Easing.</param>
-    private void CreateAnimationNextStep(uint rate = 16, uint length = 1600, Easing easing = null)
+    private void CreateAnimationNextStep()
     {
         var primaryAnimation = new Animation(x => this.AnimatingPercentage = x);
 
         primaryAnimation
-            .Commit(this, _animationName, rate, length, easing,
+            .Commit(this, _animationName, AnimationRate, AnimationLength, AnimationEasing,
             repeat: () =>
             {
-                if (!Animating)
+                if (!IsRunning)
                 {
                     return false;
                 }
@@ -99,14 +249,5 @@ public class LoadingViewBase : AuroraViewBase
                 UpdateAnimationValues();
                 return true;
             });
-    }
-
-    /// <summary>
-    /// Stops the step animation.
-    /// </summary>
-    public void Stop()
-    {
-        Animating = false;
-        this.AbortAnimation(_animationName);
     }
 }
