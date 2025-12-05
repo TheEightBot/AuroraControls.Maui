@@ -791,17 +791,70 @@ confettiView.Colors = new List<Color>
 
 ### Loading Indicators
 
+Loading indicators in Aurora Controls are designed to be XAML-compatible and work similarly to MAUI's `ActivityIndicator`. All loading indicators inherit from `LoadingViewBase` and share a common set of properties.
+
+#### Common Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `IsRunning` | `bool` | `false` | Controls whether the indicator is animating. Two-way bindable. |
+| `Color` | `Color` | `Gray` | The color of the loading indicator. |
+| `AnimationRate` | `uint` | `16` | Time in milliseconds between animation frames (~60fps). |
+| `AnimationLength` | `uint` | `1600` | Duration in milliseconds for one complete animation cycle. |
+| `AnimationEasing` | `Easing` | `null` | Easing function for the animation (null = linear). |
+
+#### Basic Usage
+
+```xml
+<!-- Simple usage - similar to ActivityIndicator -->
+<aurora:CupertinoActivityIndicator 
+    IsRunning="{Binding IsBusy}" 
+    Color="Blue" />
+
+<!-- With custom animation settings -->
+<aurora:MaterialCircular 
+    IsRunning="True"
+    Color="#4A90E2"
+    AnimationRate="20"
+    AnimationLength="2000"
+    AnimationEasing="{x:Static Easing.CubicInOut}" />
+```
+
+#### Code-Behind Usage
+
+```csharp
+// Start/Stop using the IsRunning property
+loadingIndicator.IsRunning = true;  // Start animation
+loadingIndicator.IsRunning = false; // Stop animation
+
+// Or use the convenience methods
+loadingIndicator.Start();
+loadingIndicator.Stop();
+```
+
 #### CupertinoActivityIndicator
 
 [Sample Video](images/CupertinoActivityIndicator.m4v)
 
 iOS-style spinning activity indicator.
 
+```xml
+<aurora:CupertinoActivityIndicator 
+    IsRunning="{Binding IsBusy}" 
+    Color="{StaticResource Primary}" />
+```
+
 #### MaterialCircular
 
 [Sample Video](images/MaterialCircular.m4v)
 
 Material Design circular progress indicator with smooth animations.
+
+```xml
+<aurora:MaterialCircular 
+    IsRunning="{Binding IsLoading}" 
+    Color="#2196F3" />
+```
 
 #### Nofriendo
 
