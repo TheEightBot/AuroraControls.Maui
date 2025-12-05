@@ -23,9 +23,9 @@ public partial class AppShell : Shell
         // BUTTON CONTROLS
         // ═══════════════════════════════════════════════════════════════════════
         Routing.RegisterRoute("gradientpillbutton", typeof(Pages.Buttons.GradientPillButtonDemoPage));
+        Routing.RegisterRoute("gradientcircularbutton", typeof(Pages.Buttons.GradientCircularButtonDemoPage));
 
         // TODO: Register more routes as demo pages are created
-        // Routing.RegisterRoute("gradientcircularbutton", typeof(Pages.Buttons.GradientCircularButtonDemoPage));
         // Routing.RegisterRoute("cupertinobutton", typeof(Pages.Buttons.CupertinoButtonDemoPage));
         // Routing.RegisterRoute("tile", typeof(Pages.Buttons.TileDemoPage));
         // Routing.RegisterRoute("svgimagebutton", typeof(Pages.Buttons.SvgImageButtonDemoPage));

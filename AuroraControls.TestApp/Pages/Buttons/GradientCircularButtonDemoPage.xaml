@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:aurora="clr-namespace:AuroraControls;assembly=AuroraControls"
+    x:Class="AuroraControls.TestApp.Pages.Buttons.GradientCircularButtonDemoPage"
+    Title="Gradient Circular Button">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="16">
+
+            <!-- Live Preview Card -->
+            <Frame BackgroundColor="{StaticResource SurfaceColor}" 
+                   CornerRadius="16" 
+                   Padding="24"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Live Preview" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimaryColor}"/>
+                    
+                    <Grid HeightRequest="200" 
+                          BackgroundColor="{StaticResource SurfaceVariantColor}">
+                        <aurora:GradientCircularButton 
+                            x:Name="PreviewButton"
+                            WidthRequest="80"
+                            HeightRequest="80"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            Text="+"
+                            FontSize="32"
+                            FontColor="White"
+                            ButtonBackgroundColor="{StaticResource AuroraPurple}"
+                            BorderWidth="0"
+                            BorderColor="White"
+                            ShadowColor="#55000000"
+                            Ripples="True"
+                            GradientAngle="135"
+                            Clicked="OnButtonClicked"/>
+                    </Grid>
+                    
+                    <Label x:Name="ClickFeedback"
+                           Text="Tap the button to see events"
+                           FontSize="12"
+                           TextColor="{StaticResource TextSecondaryColor}"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Preset Styles -->
+            <Frame BackgroundColor="{StaticResource SurfaceColor}" 
+                   CornerRadius="16" 
+                   Padding="24"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Preset Styles" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimaryColor}"/>
+                    
+                    <FlexLayout Wrap="Wrap" 
+                                JustifyContent="SpaceEvenly"
+                                AlignItems="Center">
+                        <Button Text="Default" 
+                                Margin="4"
+                                Clicked="OnPresetDefault"
+                                Style="{StaticResource OutlineButtonStyle}"/>
+                        <Button Text="Gradient" 
+                                Margin="4"
+                                Clicked="OnPresetGradient"
+                                Style="{StaticResource OutlineButtonStyle}"/>
+                        <Button Text="Bordered" 
+                                Margin="4"
+                                Clicked="OnPresetBordered"
+                                Style="{StaticResource OutlineButtonStyle}"/>
+                        <Button Text="Minimal" 
+                                Margin="4"
+                                Clicked="OnPresetMinimal"
+                                Style="{StaticResource OutlineButtonStyle}"/>
+                    </FlexLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Size & Dimensions -->
+            <Frame BackgroundColor="{StaticResource SurfaceColor}" 
+                   CornerRadius="16" 
+                   Padding="24"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Size &amp; Dimensions" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimaryColor}"/>
+                    
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                        <Label Text="Size" VerticalOptions="Center" Grid.Row="0"/>
+                        <Label x:Name="SizeLabel" Text="80" Grid.Column="1" Grid.Row="0" VerticalOptions="Center"/>
+                    </Grid>
+                    <Slider x:Name="SizeSlider" 
+                            Minimum="40" 
+                            Maximum="160" 
+                            Value="80"
+                            ValueChanged="OnSizeChanged"/>
+                    
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                        <Label Text="Border Width" VerticalOptions="Center" Grid.Row="0"/>
+                        <Label x:Name="BorderWidthLabel" Text="0" Grid.Column="1" Grid.Row="0" VerticalOptions="Center"/>
+                    </Grid>
+                    <Slider x:Name="BorderWidthSlider" 
+                            Minimum="0" 
+                            Maximum="10" 
+                            Value="0"
+                            ValueChanged="OnBorderWidthChanged"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Colors -->
+            <Frame BackgroundColor="{StaticResource SurfaceColor}" 
+                   CornerRadius="16" 
+                   Padding="24"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Colors" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimaryColor}"/>
+                    
+                    <Label Text="Background Color" FontSize="14"/>
+                    <FlexLayout Wrap="Wrap" JustifyContent="Start">
+                        <Button BackgroundColor="{StaticResource AuroraPurple}" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnBackgroundPurple"/>
+                        <Button BackgroundColor="{StaticResource AuroraPink}" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnBackgroundPink"/>
+                        <Button BackgroundColor="{StaticResource AuroraBlue}" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnBackgroundBlue"/>
+                        <Button BackgroundColor="{StaticResource AuroraTeal}" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnBackgroundTeal"/>
+                        <Button BackgroundColor="#EF4444" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnBackgroundRed"/>
+                        <Button BackgroundColor="#F59E0B" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnBackgroundOrange"/>
+                    </FlexLayout>
+                    
+                    <Label Text="Font Color" FontSize="14"/>
+                    <FlexLayout Wrap="Wrap" JustifyContent="Start">
+                        <Button BackgroundColor="White" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                BorderWidth="1" BorderColor="#E5E7EB"
+                                Margin="4" Clicked="OnFontColorWhite"/>
+                        <Button BackgroundColor="Black" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnFontColorBlack"/>
+                        <Button BackgroundColor="{StaticResource AuroraPurple}" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnFontColorPurple"/>
+                    </FlexLayout>
+                    
+                    <Label Text="Border Color" FontSize="14"/>
+                    <FlexLayout Wrap="Wrap" JustifyContent="Start">
+                        <Button BackgroundColor="White" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                BorderWidth="1" BorderColor="#E5E7EB"
+                                Margin="4" Clicked="OnBorderColorWhite"/>
+                        <Button BackgroundColor="{StaticResource AuroraPurple}" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnBorderColorPurple"/>
+                        <Button BackgroundColor="{StaticResource AuroraPink}" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnBorderColorPink"/>
+                    </FlexLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Typography -->
+            <Frame BackgroundColor="{StaticResource SurfaceColor}" 
+                   CornerRadius="16" 
+                   Padding="24"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Typography" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimaryColor}"/>
+                    
+                    <Label Text="Button Text" FontSize="14"/>
+                    <Entry x:Name="TextEntry" 
+                           Text="+"
+                           TextChanged="OnTextChanged"
+                           Placeholder="Enter button text"/>
+                    
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+                        <Label Text="Font Size" VerticalOptions="Center"/>
+                        <Label x:Name="FontSizeLabel" Text="32" Grid.Column="1" VerticalOptions="Center"/>
+                    </Grid>
+                    <Slider x:Name="FontSizeSlider" 
+                            Minimum="12" 
+                            Maximum="64" 
+                            Value="32"
+                            ValueChanged="OnFontSizeChanged"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Gradient Settings -->
+            <Frame BackgroundColor="{StaticResource SurfaceColor}" 
+                   CornerRadius="16" 
+                   Padding="24"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Gradient Settings" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimaryColor}"/>
+                    
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+                        <Label Text="Gradient Angle" VerticalOptions="Center"/>
+                        <Label x:Name="GradientAngleLabel" Text="135°" Grid.Column="1" VerticalOptions="Center"/>
+                    </Grid>
+                    <Slider x:Name="GradientAngleSlider" 
+                            Minimum="0" 
+                            Maximum="360" 
+                            Value="135"
+                            ValueChanged="OnGradientAngleChanged"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Behavior -->
+            <Frame BackgroundColor="{StaticResource SurfaceColor}" 
+                   CornerRadius="16" 
+                   Padding="24"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Behavior" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimaryColor}"/>
+                    
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Enable Ripples" VerticalOptions="Center"/>
+                        <Switch x:Name="RipplesSwitch" 
+                                IsToggled="True"
+                                Toggled="OnRipplesToggled"
+                                Grid.Column="1"/>
+                    </Grid>
+                    
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Is Enabled" VerticalOptions="Center"/>
+                        <Switch x:Name="EnabledSwitch" 
+                                IsToggled="True"
+                                Toggled="OnEnabledToggled"
+                                Grid.Column="1"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Code Example -->
+            <Frame BackgroundColor="{StaticResource SurfaceColor}" 
+                   CornerRadius="16" 
+                   Padding="24"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Code Example" 
+                               FontSize="16" 
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource TextPrimaryColor}"/>
+                        <Button Text="Copy" 
+                                Grid.Column="1"
+                                Clicked="OnCopyCode"
+                                Style="{StaticResource OutlineButtonStyle}"/>
+                    </Grid>
+                    
+                    <Frame BackgroundColor="{StaticResource SurfaceVariantColor}" 
+                           CornerRadius="8" 
+                           Padding="16">
+                        <Label x:Name="CodeLabel"
+                               FontFamily="Courier New"
+                               FontSize="12"
+                               TextColor="{StaticResource TextPrimaryColor}">
+                            <Label.Text>&lt;aurora:GradientCircularButton
+    WidthRequest="80"
+    HeightRequest="80"
+    Text="+"
+    FontSize="32"
+    FontColor="White"
+    ButtonBackgroundColor="#7C3AED"
+    GradientAngle="135"
+    Ripples="True"
+    Clicked="OnClicked"/&gt;</Label.Text>
+                        </Label>
+                    </Frame>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Bottom Spacing -->
+            <BoxView HeightRequest="32"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
