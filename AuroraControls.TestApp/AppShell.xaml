@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:pages="clr-namespace:AuroraControls.TestApp.Pages"
+       x:Class="AuroraControls.TestApp.AppShell"
+       FlyoutBehavior="Disabled"
+       BackgroundColor="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SHELL STYLES
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Shell.Resources>
+        <ResourceDictionary>
+            <!-- Tab Bar Styling -->
+            <Style x:Key="BaseStyle" TargetType="Element">
+                <Setter Property="Shell.BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}" />
+                <Setter Property="Shell.ForegroundColor" Value="{StaticResource AuroraPurple}" />
+                <Setter Property="Shell.TitleColor" Value="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}" />
+                <Setter Property="Shell.DisabledColor" Value="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}" />
+                <Setter Property="Shell.UnselectedColor" Value="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}" />
+                <Setter Property="Shell.TabBarBackgroundColor" Value="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}" />
+                <Setter Property="Shell.TabBarForegroundColor" Value="{StaticResource AuroraPurple}" />
+                <Setter Property="Shell.TabBarUnselectedColor" Value="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}" />
+                <Setter Property="Shell.TabBarTitleColor" Value="{StaticResource AuroraPurple}" />
+            </Style>
+            
+            <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
+            <Style TargetType="ShellContent" BasedOn="{StaticResource BaseStyle}" />
+        </ResourceDictionary>
+    </Shell.Resources>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         TAB BAR NAVIGATION
+         4 Main Tabs: Showcase, Controls, Effects, Settings
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <TabBar>
+        <!-- Tab 1: Showcase (Home) -->
+        <ShellContent 
+            Title="Showcase" 
+            Icon="icon_home.png"
+            Route="showcase"
+            ContentTemplate="{DataTemplate pages:ShowcasePage}" />
+        
+        <!-- Tab 2: Controls Browser -->
+        <ShellContent 
+            Title="Controls" 
+            Icon="icon_controls.png"
+            Route="controls"
+            ContentTemplate="{DataTemplate pages:ControlsListPage}" />
+        
+        <!-- Tab 3: Effects -->
+        <ShellContent 
+            Title="Effects" 
+            Icon="icon_effects.png"
+            Route="effects"
+            ContentTemplate="{DataTemplate pages:EffectsPage}" />
+        
+        <!-- Tab 4: Settings -->
+        <ShellContent 
+            Title="Settings" 
+            Icon="icon_settings.png"
+            Route="settings"
+            ContentTemplate="{DataTemplate pages:SettingsPage}" />
+    </TabBar>
+
+</Shell>

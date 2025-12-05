@@ -6,6 +6,10 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <!-- Aurora Design System -->
+                <ResourceDictionary Source="Themes/AuroraColors.xaml" />
+                <ResourceDictionary Source="Themes/AuroraStyles.xaml" />
+                <!-- Original MAUI Resources (for fallback) -->
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>

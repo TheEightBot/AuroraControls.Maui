@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AuroraControls.TestApp.Pages.EffectsPage"
+             Title="Effects"
+             Style="{StaticResource DemoPageStyle}"
+             BackgroundColor="{StaticResource SurfaceDim}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="12">
+
+            <!-- Header -->
+            <Label Text="Platform Effects &amp; Processing"
+                   Style="{StaticResource TitleLarge}"
+                   Margin="0,0,0,8" />
+
+            <Label Text="Enhance your app with image processing and platform-specific effects"
+                   Style="{StaticResource BodyMedium}"
+                   Opacity="0.7"
+                   Margin="0,0,0,12" />
+
+            <!-- Image Processing -->
+            <Border Style="{StaticResource CardStyle}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnImageProcessingTapped" />
+                </Border.GestureRecognizers>
+                <Grid Padding="16"
+                      ColumnDefinitions="Auto,*,Auto"
+                      ColumnSpacing="12">
+
+                    <Border Grid.Column="0"
+                            BackgroundColor="{StaticResource AuroraPurple}"
+                            StrokeShape="RoundRectangle 12"
+                            Stroke="Transparent"
+                            HeightRequest="56"
+                            WidthRequest="56">
+                        <Label Text="🎨" FontSize="28" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+
+                    <VerticalStackLayout Grid.Column="1"
+                                        VerticalOptions="Center"
+                                        Spacing="4">
+                        <Label Text="Image Processing" Style="{StaticResource TitleMedium}" />
+                        <Label Text="Blur, saturation, brightness, contrast &amp; more"
+                               Style="{StaticResource BodySmall}"
+                               Opacity="0.6" />
+                    </VerticalStackLayout>
+
+                    <Label Grid.Column="2"
+                           Text="›"
+                           FontSize="28"
+                           VerticalOptions="Center"
+                           Opacity="0.4" />
+                </Grid>
+            </Border>
+
+            <!-- Platform Effects -->
+            <Border Style="{StaticResource CardStyle}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnPlatformEffectsTapped" />
+                </Border.GestureRecognizers>
+                <Grid Padding="16"
+                      ColumnDefinitions="Auto,*,Auto"
+                      ColumnSpacing="12">
+
+                    <Border Grid.Column="0"
+                            BackgroundColor="{StaticResource AuroraPink}"
+                            StrokeShape="RoundRectangle 12"
+                            Stroke="Transparent"
+                            HeightRequest="56"
+                            WidthRequest="56">
+                        <Label Text="📱" FontSize="28" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+
+                    <VerticalStackLayout Grid.Column="1"
+                                        VerticalOptions="Center"
+                                        Spacing="4">
+                        <Label Text="Platform Effects" Style="{StaticResource TitleMedium}" />
+                        <Label Text="Safe area, keyboard effects &amp; more"
+                               Style="{StaticResource BodySmall}"
+                               Opacity="0.6" />
+                    </VerticalStackLayout>
+
+                    <Label Grid.Column="2"
+                           Text="›"
+                           FontSize="28"
+                           VerticalOptions="Center"
+                           Opacity="0.4" />
+                </Grid>
+            </Border>
+
+            <!-- Effects List Section -->
+            <Label Text="Available Effects"
+                   Style="{StaticResource TitleMedium}"
+                   Margin="0,16,0,8" />
+
+            <!-- Safe Area Effect -->
+            <Border Style="{StaticResource CardStyle}" Padding="12">
+                <HorizontalStackLayout Spacing="12">
+                    <Label Text="📐" FontSize="20" VerticalOptions="Center" />
+                    <VerticalStackLayout VerticalOptions="Center" Spacing="2">
+                        <Label Text="Safe Area Effect" Style="{StaticResource TitleSmall}" />
+                        <Label Text="Respect device safe areas" Style="{StaticResource BodySmall}" Opacity="0.6" />
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- Keyboard Return Key Effect -->
+            <Border Style="{StaticResource CardStyle}" Padding="12">
+                <HorizontalStackLayout Spacing="12">
+                    <Label Text="⌨️" FontSize="20" VerticalOptions="Center" />
+                    <VerticalStackLayout VerticalOptions="Center" Spacing="2">
+                        <Label Text="Keyboard Return Key" Style="{StaticResource TitleSmall}" />
+                        <Label Text="Customize return key type" Style="{StaticResource BodySmall}" Opacity="0.6" />
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- Keyboard Done Button Effect -->
+            <Border Style="{StaticResource CardStyle}" Padding="12">
+                <HorizontalStackLayout Spacing="12">
+                    <Label Text="✅" FontSize="20" VerticalOptions="Center" />
+                    <VerticalStackLayout VerticalOptions="Center" Spacing="2">
+                        <Label Text="Keyboard Done Button" Style="{StaticResource TitleSmall}" />
+                        <Label Text="Show done button on keyboard" Style="{StaticResource BodySmall}" Opacity="0.6" />
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- List View Hide Empty Cells Effect -->
+            <Border Style="{StaticResource CardStyle}" Padding="12">
+                <HorizontalStackLayout Spacing="12">
+                    <Label Text="📋" FontSize="20" VerticalOptions="Center" />
+                    <VerticalStackLayout VerticalOptions="Center" Spacing="2">
+                        <Label Text="Hide Empty Cells" Style="{StaticResource TitleSmall}" />
+                        <Label Text="Remove empty ListView cells" Style="{StaticResource BodySmall}" Opacity="0.6" />
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

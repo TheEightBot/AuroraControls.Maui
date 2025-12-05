@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         AURORA CONTROLS DESIGN SYSTEM - STYLES
+         Premium Modern Mobile Design (2025)
+         ═══════════════════════════════════════════════════════════════════════ -->
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SPACING SYSTEM
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <x:Double x:Key="SpacingXS">4</x:Double>
+    <x:Double x:Key="SpacingS">8</x:Double>
+    <x:Double x:Key="SpacingM">16</x:Double>
+    <x:Double x:Key="SpacingL">24</x:Double>
+    <x:Double x:Key="SpacingXL">32</x:Double>
+    <x:Double x:Key="SpacingXXL">48</x:Double>
+
+    <Thickness x:Key="PagePadding">16</Thickness>
+    <Thickness x:Key="CardPadding">16</Thickness>
+    <Thickness x:Key="SectionPadding">16,24</Thickness>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         COMPONENT TOKENS
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <x:Double x:Key="CardCornerRadius">16</x:Double>
+    <x:Double x:Key="ButtonCornerRadius">12</x:Double>
+    <x:Double x:Key="InputCornerRadius">8</x:Double>
+    <x:Double x:Key="BottomSheetCornerRadius">24</x:Double>
+    <x:Double x:Key="ChipCornerRadius">20</x:Double>
+
+    <x:Double x:Key="CardElevation">8</x:Double>
+    <x:Double x:Key="NavigationBarHeight">80</x:Double>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         TYPOGRAPHY - Font Sizes
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <x:Double x:Key="FontSizeDisplay">28</x:Double>
+    <x:Double x:Key="FontSizeHeadline">24</x:Double>
+    <x:Double x:Key="FontSizeTitle">20</x:Double>
+    <x:Double x:Key="FontSizeSubtitle">18</x:Double>
+    <x:Double x:Key="FontSizeBodyLarge">16</x:Double>
+    <x:Double x:Key="FontSizeBody">14</x:Double>
+    <x:Double x:Key="FontSizeLabel">12</x:Double>
+    <x:Double x:Key="FontSizeCaption">11</x:Double>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         LABEL STYLES
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Style x:Key="DisplayLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeDisplay}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+    </Style>
+
+    <Style x:Key="HeadlineLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeHeadline}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+    </Style>
+
+    <Style x:Key="TitleLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeTitle}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+    </Style>
+
+    <Style x:Key="SubtitleLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSubtitle}" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+    </Style>
+
+    <Style x:Key="BodyLargeLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBodyLarge}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+    </Style>
+
+    <Style x:Key="BodyLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+    </Style>
+
+    <Style x:Key="LabelStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeLabel}" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+    </Style>
+
+    <Style x:Key="CaptionLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeCaption}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}" />
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         CARD STYLES
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Style x:Key="CardFrame" TargetType="Frame">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}" />
+        <Setter Property="CornerRadius" Value="{StaticResource CardCornerRadius}" />
+        <Setter Property="Padding" Value="{StaticResource CardPadding}" />
+        <Setter Property="HasShadow" Value="True" />
+        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}" />
+    </Style>
+
+    <Style x:Key="CardBorder" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="Padding" Value="{StaticResource CardPadding}" />
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="16" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="#20000000" Offset="0,4" Radius="8" Opacity="0.15" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ElevatedCardBorder" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurfaceContainer}}" />
+        <Setter Property="Stroke" Value="Transparent" />
+        <Setter Property="Padding" Value="{StaticResource CardPadding}" />
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="16" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="#30000000" Offset="0,6" Radius="12" Opacity="0.2" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         BUTTON STYLES
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Style x:Key="PrimaryButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource AuroraPurple}" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Padding" Value="24,14" />
+        <Setter Property="MinimumHeightRequest" Value="48" />
+    </Style>
+
+    <Style x:Key="SecondaryButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource AuroraPurple}" />
+        <Setter Property="BorderColor" Value="{StaticResource AuroraPurple}" />
+        <Setter Property="BorderWidth" Value="2" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Padding" Value="24,14" />
+        <Setter Property="MinimumHeightRequest" Value="48" />
+    </Style>
+
+    <Style x:Key="TertiaryButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightSurfaceVariant}, Dark={StaticResource DarkSurfaceVariant}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Padding" Value="24,14" />
+        <Setter Property="MinimumHeightRequest" Value="48" />
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         PAGE STYLES
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Style x:Key="BasePage" TargetType="ContentPage">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}" />
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         COLLECTION VIEW STYLES
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Style x:Key="CategoryListStyle" TargetType="CollectionView">
+        <Setter Property="SelectionMode" Value="Single" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SEPARATOR STYLES
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Style x:Key="SeparatorLine" TargetType="BoxView">
+        <Setter Property="HeightRequest" Value="1" />
+        <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}" />
+    </Style>
+
+</ResourceDictionary>

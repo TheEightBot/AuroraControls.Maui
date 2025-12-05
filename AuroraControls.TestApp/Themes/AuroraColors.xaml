@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         AURORA CONTROLS DESIGN SYSTEM - COLOR TOKENS
+         Based on M3 Expressive Design Language (2025)
+         ═══════════════════════════════════════════════════════════════════════ -->
+
+    <!-- Primary Brand Colors -->
+    <Color x:Key="AuroraPurple">#7C3AED</Color>
+    <Color x:Key="AuroraPink">#EC4899</Color>
+    <Color x:Key="AuroraBlue">#3B82F6</Color>
+    <Color x:Key="AuroraTeal">#14B8A6</Color>
+    
+    <!-- Primary Color Variants -->
+    <Color x:Key="AuroraPurpleLight">#A78BFA</Color>
+    <Color x:Key="AuroraPurpleDark">#5B21B6</Color>
+    <Color x:Key="AuroraPinkLight">#F472B6</Color>
+    <Color x:Key="AuroraPinkDark">#BE185D</Color>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         LIGHT THEME SURFACES
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Color x:Key="LightBackground">#FAFAFA</Color>
+    <Color x:Key="LightSurface">#FFFFFF</Color>
+    <Color x:Key="LightSurfaceVariant">#F3F4F6</Color>
+    <Color x:Key="LightSurfaceContainer">#F9FAFB</Color>
+    <Color x:Key="LightSurfaceContainerHigh">#F3F4F6</Color>
+    <Color x:Key="LightSurfaceContainerHighest">#E5E7EB</Color>
+    <Color x:Key="LightOutline">#E5E7EB</Color>
+    <Color x:Key="LightOutlineVariant">#D1D5DB</Color>
+
+    <!-- Light Theme Text Colors -->
+    <Color x:Key="LightOnBackground">#111827</Color>
+    <Color x:Key="LightOnSurface">#111827</Color>
+    <Color x:Key="LightOnSurfaceVariant">#4B5563</Color>
+    <Color x:Key="LightOnPrimary">#FFFFFF</Color>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         DARK THEME SURFACES
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Color x:Key="DarkBackground">#0F0F0F</Color>
+    <Color x:Key="DarkSurface">#1A1A1A</Color>
+    <Color x:Key="DarkSurfaceVariant">#262626</Color>
+    <Color x:Key="DarkSurfaceContainer">#1F1F1F</Color>
+    <Color x:Key="DarkSurfaceContainerHigh">#2A2A2A</Color>
+    <Color x:Key="DarkSurfaceContainerHighest">#353535</Color>
+    <Color x:Key="DarkOutline">#404040</Color>
+    <Color x:Key="DarkOutlineVariant">#525252</Color>
+
+    <!-- Dark Theme Text Colors -->
+    <Color x:Key="DarkOnBackground">#F9FAFB</Color>
+    <Color x:Key="DarkOnSurface">#F9FAFB</Color>
+    <Color x:Key="DarkOnSurfaceVariant">#9CA3AF</Color>
+    <Color x:Key="DarkOnPrimary">#FFFFFF</Color>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         SEMANTIC COLORS
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Color x:Key="Success">#22C55E</Color>
+    <Color x:Key="SuccessLight">#4ADE80</Color>
+    <Color x:Key="SuccessDark">#16A34A</Color>
+    
+    <Color x:Key="Warning">#F59E0B</Color>
+    <Color x:Key="WarningLight">#FBBF24</Color>
+    <Color x:Key="WarningDark">#D97706</Color>
+    
+    <Color x:Key="Error">#EF4444</Color>
+    <Color x:Key="ErrorLight">#F87171</Color>
+    <Color x:Key="ErrorDark">#DC2626</Color>
+    
+    <Color x:Key="Info">#3B82F6</Color>
+    <Color x:Key="InfoLight">#60A5FA</Color>
+    <Color x:Key="InfoDark">#2563EB</Color>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         GRADIENT DEFINITIONS
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <LinearGradientBrush x:Key="AuroraGradient" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="{StaticResource AuroraPurple}" Offset="0.0" />
+        <GradientStop Color="{StaticResource AuroraPink}" Offset="1.0" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="AuroraGradientHorizontal" StartPoint="0,0.5" EndPoint="1,0.5">
+        <GradientStop Color="{StaticResource AuroraPurple}" Offset="0.0" />
+        <GradientStop Color="{StaticResource AuroraPink}" Offset="1.0" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="AuroraGradientVertical" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="{StaticResource AuroraPurple}" Offset="0.0" />
+        <GradientStop Color="{StaticResource AuroraTeal}" Offset="1.0" />
+    </LinearGradientBrush>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         COLOR BRUSHES
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <SolidColorBrush x:Key="AuroraPurpleBrush" Color="{StaticResource AuroraPurple}"/>
+    <SolidColorBrush x:Key="AuroraPinkBrush" Color="{StaticResource AuroraPink}"/>
+    <SolidColorBrush x:Key="AuroraBlueBrush" Color="{StaticResource AuroraBlue}"/>
+    <SolidColorBrush x:Key="AuroraTealBrush" Color="{StaticResource AuroraTeal}"/>
+
+</ResourceDictionary>

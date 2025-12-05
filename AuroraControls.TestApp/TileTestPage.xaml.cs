@@ -8,14 +8,6 @@ public partial class TileTestPage : ContentPage
 
         // Set initial values
         ImagePicker.SelectedIndex = 0;
-
-        // Initialize ContentPadding to match slider defaults
-        TestTile.ContentPadding = new Thickness(
-            PaddingLeftSlider.Value,
-            PaddingTopSlider.Value,
-            PaddingRightSlider.Value,
-            PaddingBottomSlider.Value);
-
         UpdateInfoLabel();
     }
 
