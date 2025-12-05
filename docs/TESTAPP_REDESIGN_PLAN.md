@@ -21,11 +21,12 @@ This document outlines the comprehensive redesign of the AuroraControls.Maui Tes
 - **Adaptive Components** - Responsive to different screen sizes
 
 ### Key Design Decisions
-1. **Bottom Navigation** - Primary navigation using a modern navigation bar (3-5 destinations)
+1. **TabbedPage Navigation** - Primary navigation using standard MAUI TabbedPage (no AppShell)
 2. **Card-Based Layouts** - Controls showcased in elevated cards with shadows
 3. **Property Inspector Panel** - Bottom sheet / expandable panel for live property editing
 4. **Preview + Code Mode** - Toggle between visual preview and usage examples
 5. **Search & Filter** - Quick access to specific controls
+6. **Standard NavigationPage** - Use `Navigation.PushAsync()` for drill-down navigation
 
 ---
 
@@ -141,81 +142,102 @@ This document outlines the comprehensive redesign of the AuroraControls.Maui Tes
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        App Shell                             │
+│                      TabbedPage                              │
 ├─────────────────────────────────────────────────────────────┤
 │                                                              │
 │  ┌─────────────────────────────────────────────────────┐    │
-│  │                    Content Area                      │    │
+│  │              NavigationPage Content                  │    │
 │  │                                                      │    │
 │  │   • Showcase (Home)                                  │    │
 │  │   • Controls Browser                                 │    │
-│  │   • Individual Control Pages                         │    │
+│  │   • Individual Control Pages (pushed)                │    │
 │  │   • Settings                                         │    │
 │  │                                                      │    │
 │  └─────────────────────────────────────────────────────┘    │
 │                                                              │
 ├─────────────────────────────────────────────────────────────┤
 │  🏠 Showcase  │  🎨 Controls  │  ⚡ Effects  │  ⚙️ Settings  │
+│  (Tab 1)      │  (Tab 2)      │  (Tab 3)     │  (Tab 4)      │
 └─────────────────────────────────────────────────────────────┘
+```
+
+### Navigation Implementation
+
+```csharp
+// App.xaml.cs - Main navigation setup
+MainPage = new TabbedPage
+{
+    Children =
+    {
+        new NavigationPage(new ShowcasePage()) { Title = "Showcase", IconImageSource = "home.png" },
+        new NavigationPage(new ControlsListPage()) { Title = "Controls", IconImageSource = "controls.png" },
+        new NavigationPage(new EffectsPage()) { Title = "Effects", IconImageSource = "effects.png" },
+        new NavigationPage(new SettingsPage()) { Title = "Settings", IconImageSource = "settings.png" },
+    }
+};
+
+// Navigation to detail pages uses standard push navigation
+await Navigation.PushAsync(new GradientPillButtonDemoPage());
 ```
 
 ### Page Hierarchy
 
 ```
-📱 AppShell
-├── 🏠 ShowcasePage (Tab 1 - Default)
+📱 TabbedPage (MainTabbedPage)
+├── 🏠 NavigationPage → ShowcasePage (Tab 1 - Default)
 │   └── Featured controls with animated demos
+│   └── → Push to any control demo page
 │
-├── 🎨 ControlsPage (Tab 2)
-│   ├── 🔘 Buttons & Actions
-│   │   ├── GradientPillButtonPage
-│   │   ├── GradientCircularButtonPage
-│   │   ├── CupertinoButtonPage
-│   │   ├── TilePage
-│   │   └── SvgImageButtonPage
+├── 🎨 NavigationPage → ControlsListPage (Tab 2)
+│   ├── 🔘 Buttons & Actions (category row → push to list)
+│   │   ├── → GradientPillButtonDemoPage
+│   │   ├── → GradientCircularButtonDemoPage
+│   │   ├── → CupertinoButtonDemoPage
+│   │   ├── → TileDemoPage
+│   │   └── → SvgImageButtonDemoPage
 │   │
 │   ├── 📝 Input Controls
-│   │   ├── StyledInputLayoutPage
-│   │   ├── NumericEntryPage
-│   │   ├── ToggleBoxPage
-│   │   ├── CupertinoToggleSwitchPage
-│   │   └── SegmentedControlPage
+│   │   ├── → StyledInputLayoutDemoPage
+│   │   ├── → NumericEntryDemoPage
+│   │   ├── → ToggleBoxDemoPage
+│   │   ├── → CupertinoToggleSwitchDemoPage
+│   │   └── → SegmentedControlDemoPage
 │   │
 │   ├── 📅 Date & Calendar
-│   │   ├── CalendarViewPage
-│   │   └── CalendarPickerPage
+│   │   ├── → CalendarViewDemoPage
+│   │   └── → CalendarPickerDemoPage
 │   │
 │   ├── 🏷️ Chips & Tags
-│   │   └── ChipGroupPage
+│   │   └── → ChipGroupDemoPage
 │   │
 │   ├── 🖼️ Images & Graphics
-│   │   ├── SvgImageViewPage
-│   │   ├── TouchDrawLettersImagePage
-│   │   ├── SignaturePadPage
-│   │   └── CutoutOverlayViewPage
+│   │   ├── → SvgImageViewDemoPage
+│   │   ├── → TouchDrawLettersImageDemoPage
+│   │   ├── → SignaturePadDemoPage
+│   │   └── → CutoutOverlayViewDemoPage
 │   │
 │   ├── 📊 Gauges & Progress
-│   │   ├── LinearGaugePage
-│   │   ├── CircularGaugePage
-│   │   ├── CircularFillGaugePage
-│   │   └── StepIndicatorPage
+│   │   ├── → LinearGaugeDemoPage
+│   │   ├── → CircularGaugeDemoPage
+│   │   ├── → CircularFillGaugeDemoPage
+│   │   └── → StepIndicatorDemoPage
 │   │
 │   ├── ⏳ Loading Indicators
-│   │   └── LoadingIndicatorsPage (All 5 in one)
+│   │   └── → LoadingIndicatorsDemoPage (All 5 in one)
 │   │
 │   ├── 🎉 Animations & Effects
-│   │   ├── ConfettiViewPage
-│   │   └── VisualEffectsPage
+│   │   ├── → ConfettiViewDemoPage
+│   │   └── → VisualEffectsDemoPage
 │   │
 │   └── 📐 Layout Controls
-│       ├── WrapLayoutPage
-│       └── CardViewLayoutPage
+│       ├── → WrapLayoutDemoPage
+│       └── → CardViewLayoutDemoPage
 │
-├── ⚡ EffectsPage (Tab 3)
-│   ├── Image Processing Effects
-│   └── Platform Effects
+├── ⚡ NavigationPage → EffectsPage (Tab 3)
+│   ├── → Image Processing Effects
+│   └── → Platform Effects
 │
-└── ⚙️ SettingsPage (Tab 4)
+└── ⚙️ NavigationPage → SettingsPage (Tab 4)
     ├── Theme Toggle (Light/Dark)
     ├── Accent Color Picker
     └── App Info
@@ -402,7 +424,7 @@ The Showcase page serves as the app's hero landing page:
 - [ ] **1.3** Create base classes for demo pages
   - [ ] `ControlDemoPageBase` - Common functionality
   - [ ] `PropertyEditorPanel` - Reusable property editing UI
-- [ ] **1.4** Implement Shell with bottom navigation
+- [ ] **1.4** Implement TabbedPage with NavigationPage tabs
 - [ ] **1.5** Create theme service (light/dark mode)
 
 ### Phase 2: Core Infrastructure Components
@@ -484,8 +506,8 @@ The Showcase page serves as the app's hero landing page:
 AuroraControls.TestApp/
 ├── App.xaml
 ├── App.xaml.cs
-├── AppShell.xaml
-├── AppShell.xaml.cs
+├── MainTabbedPage.xaml              ← TabbedPage (replaces AppShell)
+├── MainTabbedPage.xaml.cs
 ├── MauiProgram.cs
 │
 ├── Themes/
@@ -522,48 +544,48 @@ AuroraControls.TestApp/
 │   ├── SettingsPage.xaml
 │   │
 │   ├── Buttons/
-│   │   ├── GradientPillButtonPage.xaml
-│   │   ├── GradientCircularButtonPage.xaml
-│   │   ├── CupertinoButtonPage.xaml
-│   │   ├── TilePage.xaml
-│   │   └── SvgImageButtonPage.xaml
+│   │   ├── GradientPillButtonDemoPage.xaml
+│   │   ├── GradientCircularButtonDemoPage.xaml
+│   │   ├── CupertinoButtonDemoPage.xaml
+│   │   ├── TileDemoPage.xaml
+│   │   └── SvgImageButtonDemoPage.xaml
 │   │
 │   ├── Inputs/
-│   │   ├── StyledInputLayoutPage.xaml
-│   │   ├── NumericEntryPage.xaml
-│   │   ├── ToggleBoxPage.xaml
-│   │   ├── CupertinoToggleSwitchPage.xaml
-│   │   └── SegmentedControlPage.xaml
+│   │   ├── StyledInputLayoutDemoPage.xaml
+│   │   ├── NumericEntryDemoPage.xaml
+│   │   ├── ToggleBoxDemoPage.xaml
+│   │   ├── CupertinoToggleSwitchDemoPage.xaml
+│   │   └── SegmentedControlDemoPage.xaml
 │   │
 │   ├── Calendar/
-│   │   ├── CalendarViewPage.xaml
-│   │   └── CalendarPickerPage.xaml
+│   │   ├── CalendarViewDemoPage.xaml
+│   │   └── CalendarPickerDemoPage.xaml
 │   │
 │   ├── Chips/
-│   │   └── ChipGroupPage.xaml
+│   │   └── ChipGroupDemoPage.xaml
 │   │
 │   ├── Images/
-│   │   ├── SvgImageViewPage.xaml
-│   │   ├── TouchDrawPage.xaml
-│   │   ├── SignaturePadPage.xaml
-│   │   └── CutoutOverlayPage.xaml
+│   │   ├── SvgImageViewDemoPage.xaml
+│   │   ├── TouchDrawDemoPage.xaml
+│   │   ├── SignaturePadDemoPage.xaml
+│   │   └── CutoutOverlayDemoPage.xaml
 │   │
 │   ├── Progress/
-│   │   ├── GaugesPage.xaml
-│   │   ├── StepIndicatorPage.xaml
-│   │   └── LoadingIndicatorsPage.xaml
+│   │   ├── GaugesDemoPage.xaml
+│   │   ├── StepIndicatorDemoPage.xaml
+│   │   └── LoadingIndicatorsDemoPage.xaml
 │   │
 │   ├── Animations/
-│   │   ├── ConfettiPage.xaml
-│   │   └── VisualEffectsPage.xaml
+│   │   ├── ConfettiDemoPage.xaml
+│   │   └── VisualEffectsDemoPage.xaml
 │   │
 │   ├── Layouts/
-│   │   ├── WrapLayoutPage.xaml
-│   │   └── CardViewLayoutPage.xaml
+│   │   ├── WrapLayoutDemoPage.xaml
+│   │   └── CardViewLayoutDemoPage.xaml
 │   │
 │   └── Effects/
-│       ├── ImageProcessingPage.xaml
-│       └── PlatformEffectsPage.xaml
+│       ├── ImageProcessingDemoPage.xaml
+│       └── PlatformEffectsDemoPage.xaml
 │
 ├── ViewModels/
 │   ├── Base/
@@ -650,10 +672,11 @@ To begin implementation:
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
-| 2025-12-05 | Use Shell for navigation | Provides modern tabbed navigation with minimal boilerplate |
+| 2025-12-05 | Use TabbedPage + NavigationPage | Standard MAUI navigation, more flexible than Shell |
 | 2025-12-05 | Bottom sheet for properties | Maximizes preview space, follows M3 patterns |
 | 2025-12-05 | Group loading indicators | Similar controls, reduces navigation depth |
 | 2025-12-05 | Dark mode first | Matches premium app trends, easier on eyes |
+| 2025-12-05 | Navigation.PushAsync for details | Standard drill-down navigation pattern |
 
 ---
 
