@@ -563,7 +563,7 @@ The Showcase page serves as the app's hero landing page:
   - [x] `ControlDemoPageBase` - Common functionality
   - [x] `PropertyEditorFactory` - Reusable property editing UI
 - [x] **1.4** Implement AppShell with TabBar and route registration
-- [ ] **1.5** Create theme service (light/dark mode)
+- [x] **1.5** Create theme service (light/dark mode)
 
 ### Phase 2: Core Infrastructure Components
 - [ ] **2.1** Create `ColorPickerControl` for property editing
@@ -581,6 +581,7 @@ The Showcase page serves as the app's hero landing page:
 
 ### Phase 4: Button & Action Controls 🚧
 - [x] **4.1** Create `GradientPillButtonDemoPage`
+- [x] **4.2** Create `GradientCircularButtonDemoPage`
 - [ ] **4.2** Refactor `GradientCircularButtonTestPage`
 - [ ] **4.3** Refactor `CupertinoButtonTestPage`
 - [ ] **4.4** Refactor `TileTestPage`

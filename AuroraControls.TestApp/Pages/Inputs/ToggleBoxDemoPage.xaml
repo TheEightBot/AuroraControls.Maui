@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:aurora="clr-namespace:AuroraControls;assembly=AuroraControls"
+    x:Class="AuroraControls.TestApp.Pages.Inputs.ToggleBoxDemoPage"
+    Title="Toggle Box">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="16">
+
+            <!-- Live Preview Card -->
+            <Frame BackgroundColor="{StaticResource SurfaceColor}" 
+                   CornerRadius="16" 
+                   Padding="24"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Live Preview" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimaryColor}"/>
+                    
+                    <Grid HeightRequest="120" 
+                          BackgroundColor="{StaticResource SurfaceVariantColor}">
+                        <aurora:ToggleBox 
+                            x:Name="PreviewToggle"
+                            WidthRequest="48"
+                            HeightRequest="48"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            IsToggled="True"
+                            Shape="RoundedSquare"
+                            CheckType="Check"
+                            BorderColor="{StaticResource AuroraPurple}"
+                            ToggledBackgroundColor="{StaticResource AuroraPurple}"
+                            CheckColor="White"
+                            BackgroundColor="Transparent"
+                            BorderWidth="3"
+                            Toggled="OnToggleChanged"/>
+                    </Grid>
+                    
+                    <Label x:Name="ToggleStatus"
+                           Text="Toggle is: ON"
+                           FontSize="12"
+                           TextColor="{StaticResource TextSecondaryColor}"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Preset Styles -->
+            <Frame BackgroundColor="{StaticResource SurfaceColor}" 
+                   CornerRadius="16" 
+                   Padding="24"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Preset Styles" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimaryColor}"/>
+                    
+                    <FlexLayout Wrap="Wrap" 
+                                JustifyContent="SpaceEvenly"
+                                AlignItems="Center">
+                        <Button Text="Checkbox" 
+                                Margin="4"
+                                Clicked="OnPresetCheckbox"
+                                Style="{StaticResource OutlineButtonStyle}"/>
+                        <Button Text="Radio" 
+                                Margin="4"
+                                Clicked="OnPresetRadio"
+                                Style="{StaticResource OutlineButtonStyle}"/>
+                        <Button Text="Square" 
+                                Margin="4"
+                                Clicked="OnPresetSquare"
+                                Style="{StaticResource OutlineButtonStyle}"/>
+                        <Button Text="Filled" 
+                                Margin="4"
+                                Clicked="OnPresetFilled"
+                                Style="{StaticResource OutlineButtonStyle}"/>
+                    </FlexLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Shape & Check Type -->
+            <Frame BackgroundColor="{StaticResource SurfaceColor}" 
+                   CornerRadius="16" 
+                   Padding="24"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Shape &amp; Check Type" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimaryColor}"/>
+                    
+                    <Label Text="Shape" FontSize="14"/>
+                    <Picker x:Name="ShapePicker"
+                            SelectedIndexChanged="OnShapeChanged">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Square</x:String>
+                                <x:String>Circular</x:String>
+                                <x:String>RoundedSquare</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                    
+                    <Label Text="Check Type" FontSize="14"/>
+                    <Picker x:Name="CheckTypePicker"
+                            SelectedIndexChanged="OnCheckTypeChanged">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Cross</x:String>
+                                <x:String>Check</x:String>
+                                <x:String>RoundedCheck</x:String>
+                                <x:String>Circular</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Size & Border -->
+            <Frame BackgroundColor="{StaticResource SurfaceColor}" 
+                   CornerRadius="16" 
+                   Padding="24"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Size &amp; Border" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimaryColor}"/>
+                    
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Size" VerticalOptions="Center"/>
+                        <Label x:Name="SizeLabel" Text="48" Grid.Column="1" VerticalOptions="Center"/>
+                    </Grid>
+                    <Slider x:Name="SizeSlider" 
+                            Minimum="24" 
+                            Maximum="80" 
+                            Value="48"
+                            ValueChanged="OnSizeChanged"/>
+                    
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Border Width" VerticalOptions="Center"/>
+                        <Label x:Name="BorderWidthLabel" Text="3" Grid.Column="1" VerticalOptions="Center"/>
+                    </Grid>
+                    <Slider x:Name="BorderWidthSlider" 
+                            Minimum="0" 
+                            Maximum="10" 
+                            Value="3"
+                            ValueChanged="OnBorderWidthChanged"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Colors -->
+            <Frame BackgroundColor="{StaticResource SurfaceColor}" 
+                   CornerRadius="16" 
+                   Padding="24"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Colors" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimaryColor}"/>
+                    
+                    <Label Text="Toggled Background" FontSize="14"/>
+                    <FlexLayout Wrap="Wrap" JustifyContent="Start">
+                        <Button BackgroundColor="{StaticResource AuroraPurple}" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnToggledBgPurple"/>
+                        <Button BackgroundColor="{StaticResource AuroraPink}" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnToggledBgPink"/>
+                        <Button BackgroundColor="{StaticResource AuroraBlue}" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnToggledBgBlue"/>
+                        <Button BackgroundColor="{StaticResource AuroraTeal}" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnToggledBgTeal"/>
+                        <Button BackgroundColor="#22C55E" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnToggledBgGreen"/>
+                    </FlexLayout>
+                    
+                    <Label Text="Check Color" FontSize="14"/>
+                    <FlexLayout Wrap="Wrap" JustifyContent="Start">
+                        <Button BackgroundColor="White" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                BorderWidth="1" BorderColor="#E5E7EB"
+                                Margin="4" Clicked="OnCheckColorWhite"/>
+                        <Button BackgroundColor="Black" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnCheckColorBlack"/>
+                        <Button BackgroundColor="{StaticResource AuroraPurple}" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnCheckColorPurple"/>
+                    </FlexLayout>
+                    
+                    <Label Text="Border Color" FontSize="14"/>
+                    <FlexLayout Wrap="Wrap" JustifyContent="Start">
+                        <Button BackgroundColor="{StaticResource AuroraPurple}" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnBorderColorPurple"/>
+                        <Button BackgroundColor="#6B7280" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnBorderColorGray"/>
+                        <Button BackgroundColor="{StaticResource AuroraBlue}" 
+                                WidthRequest="44" HeightRequest="44" CornerRadius="22"
+                                Margin="4" Clicked="OnBorderColorBlue"/>
+                    </FlexLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Behavior -->
+            <Frame BackgroundColor="{StaticResource SurfaceColor}" 
+                   CornerRadius="16" 
+                   Padding="24"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Behavior" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimaryColor}"/>
+                    
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Is Toggled" VerticalOptions="Center"/>
+                        <Switch x:Name="ToggledSwitch" 
+                                IsToggled="True"
+                                Toggled="OnIsToggledChanged"
+                                Grid.Column="1"/>
+                    </Grid>
+                    
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Is Enabled" VerticalOptions="Center"/>
+                        <Switch x:Name="EnabledSwitch" 
+                                IsToggled="True"
+                                Toggled="OnEnabledToggled"
+                                Grid.Column="1"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Code Example -->
+            <Frame BackgroundColor="{StaticResource SurfaceColor}" 
+                   CornerRadius="16" 
+                   Padding="24"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Code Example" 
+                               FontSize="16" 
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource TextPrimaryColor}"/>
+                        <Button Text="Copy" 
+                                Grid.Column="1"
+                                Clicked="OnCopyCode"
+                                Style="{StaticResource OutlineButtonStyle}"/>
+                    </Grid>
+                    
+                    <Frame BackgroundColor="{StaticResource SurfaceVariantColor}" 
+                           CornerRadius="8" 
+                           Padding="16">
+                        <Label x:Name="CodeLabel"
+                               FontFamily="Courier New"
+                               FontSize="12"
+                               TextColor="{StaticResource TextPrimaryColor}"/>
+                    </Frame>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Bottom Spacing -->
+            <BoxView HeightRequest="32"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
