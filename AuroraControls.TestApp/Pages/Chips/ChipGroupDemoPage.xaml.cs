@@ -219,9 +219,9 @@ public partial class ChipGroupDemoPage : ContentPage, INotifyPropertyChanged
         UpdateSelectionLabel();
     }
 
-    private void OnSpacingChanged(object sender, double e)
+    private void OnSpacingChanged(object? sender, ValueChangedEventArgs e)
     {
-        PreviewChipGroup.Spacing = e;
+        PreviewChipGroup.Spacing = e.NewValue;
     }
 
     private void OnScrollableChanged(object sender, bool e)
@@ -237,9 +237,9 @@ public partial class ChipGroupDemoPage : ContentPage, INotifyPropertyChanged
         }
     }
 
-    private void OnMaxRowsChanged(object sender, double e)
+    private void OnMaxRowsChanged(object? sender, ValueChangedEventArgs e)
     {
-        PreviewChipGroup.MaxRowsBeforeOverflow = (int)e;
+        PreviewChipGroup.MaxRowsBeforeOverflow = (int)e.NewValue;
         UpdateOverflowStatus();
     }
 
@@ -266,11 +266,11 @@ public partial class ChipGroupDemoPage : ContentPage, INotifyPropertyChanged
         }
     }
 
-    private void OnCornerRadiusChanged(object sender, double e)
+    private void OnCornerRadiusChanged(object? sender, ValueChangedEventArgs e)
     {
         foreach (var chip in PreviewChipGroup.Chips)
         {
-            chip.CornerRadius = e;
+            chip.CornerRadius = e.NewValue;
         }
     }
 

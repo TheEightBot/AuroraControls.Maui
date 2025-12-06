@@ -88,9 +88,9 @@ public partial class StepIndicatorDemoPage : ContentPage
         }
     }
 
-    private void OnNumberOfStepsChanged(object sender, double value)
+    private void OnNumberOfStepsChanged(object? sender, ValueChangedEventArgs e)
     {
-        var steps = (int)value;
+        var steps = (int)e.NewValue;
         StepIndicatorPreview.NumberOfSteps = steps;
 
         // Adjust current step if needed
@@ -104,15 +104,15 @@ public partial class StepIndicatorDemoPage : ContentPage
         UpdateStepLabel();
     }
 
-    private void OnCurrentStepChanged(object sender, double value)
+    private void OnCurrentStepChanged(object? sender, ValueChangedEventArgs e)
     {
-        StepIndicatorPreview.CurrentStep = (int)value;
+        StepIndicatorPreview.CurrentStep = (int)e.NewValue;
         UpdateStepLabel();
     }
 
-    private void OnLineWidthChanged(object sender, double value)
+    private void OnLineWidthChanged(object? sender, ValueChangedEventArgs e)
     {
-        StepIndicatorPreview.LineWidth = value;
+        StepIndicatorPreview.LineWidth = e.NewValue;
     }
 
     private void OnShapeSelected(object sender, EventArgs e)
