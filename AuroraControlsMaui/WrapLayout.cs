@@ -94,12 +94,21 @@ public class WrapLayout : Layout
     {
         if (bindable is WrapLayout layout)
         {
-            layout.InvalidateMeasureNonVirtual(InvalidationTrigger.HorizontalOptionsChanged);
+            // Invalidate measure to force complete re-layout
+            layout.InvalidateMeasure();
+
+            // Request a new layout pass through the handler
+            (layout as IView)?.InvalidateArrange();
 
             #if ANDROID
             if (layout.Handler?.PlatformView is Android.Views.View platformView)
             {
                 platformView.RequestLayout();
+            }
+            #elif IOS || MACCATALYST
+            if (layout.Handler?.PlatformView is UIKit.UIView platformView)
+            {
+                platformView.SetNeedsLayout();
             }
             #endif
         }

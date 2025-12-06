@@ -269,33 +269,28 @@ public partial class WrapLayoutTestPage : ContentPage
             _demoWrapLayout.Orientation = _orientationPicker.SelectedIndex == 0
                 ? StackOrientation.Horizontal
                 : StackOrientation.Vertical;
-            _demoWrapLayout.InvalidateMeasure();
         };
 
         _horizontalSpacingSlider.ValueChanged += (s, e) =>
         {
             _demoWrapLayout.HorizontalSpacing = e.NewValue;
             _horizontalSpacingLabel.Text = $"Horizontal Spacing: {e.NewValue:F0}";
-            _demoWrapLayout.InvalidateMeasure();
         };
 
         _verticalSpacingSlider.ValueChanged += (s, e) =>
         {
             _demoWrapLayout.VerticalSpacing = e.NewValue;
             _verticalSpacingLabel.Text = $"Vertical Spacing: {e.NewValue:F0}";
-            _demoWrapLayout.InvalidateMeasure();
         };
 
         _horizontalOptionsPicker.SelectedIndexChanged += (s, e) =>
         {
             _demoWrapLayout.HorizontalOptions = GetLayoutOptions(_horizontalOptionsPicker.SelectedIndex);
-            _demoWrapLayout.InvalidateMeasure();
         };
 
         _verticalOptionsPicker.SelectedIndexChanged += (s, e) =>
         {
             _demoWrapLayout.VerticalOptions = GetLayoutOptions(_verticalOptionsPicker.SelectedIndex);
-            _demoWrapLayout.InvalidateMeasure();
         };
 
         _addItemButton.Clicked += (s, e) =>
