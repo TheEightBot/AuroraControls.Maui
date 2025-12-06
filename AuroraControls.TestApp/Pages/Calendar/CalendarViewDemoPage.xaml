@@ -6,16 +6,16 @@
              xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
              x:Class="AuroraControls.TestApp.Pages.Calendar.CalendarViewDemoPage"
              Title="Calendar View"
-             BackgroundColor="#0F0F0F">
+             BackgroundColor="{AppThemeBinding Light={StaticResource Light.PageBackground}, Dark={StaticResource Dark.PageBackground}}">
 
     <Grid RowDefinitions="Auto,*">
         <!-- Header -->
         <Border Grid.Row="0"
-                BackgroundColor="#1A1A1A"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
                 StrokeThickness="0"
                 Padding="20,16">
             <Grid ColumnDefinitions="Auto,*,Auto">
-                <Border BackgroundColor="#7C3AED"
+                <Border BackgroundColor="{StaticResource Accent.Primary}"
                         StrokeThickness="0"
                         HeightRequest="40"
                         WidthRequest="40"
@@ -33,16 +33,16 @@
                     <Label Text="Calendar View"
                            FontSize="20"
                            FontAttributes="Bold"
-                           TextColor="White"/>
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"/>
                     <Label Text="Full-featured calendar control"
                            FontSize="13"
-                           TextColor="#9CA3AF"/>
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
                 </VerticalStackLayout>
 
                 <HorizontalStackLayout Grid.Column="2" Spacing="8">
                     <Button Text="Add Event"
                             BackgroundColor="#22C55E"
-                            TextColor="White"
+                            TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                             FontSize="12"
                             HeightRequest="36"
                             Padding="12,0"
@@ -57,9 +57,9 @@
             <VerticalStackLayout Spacing="16" Padding="20">
 
                 <!-- Live Preview Card -->
-                <Border BackgroundColor="#1A1A1A"
+                <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
                         StrokeThickness="1"
-                        Stroke="#2A2A2A"
+                        Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
                         Padding="20">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="16"/>
@@ -68,26 +68,26 @@
                         <Label Text="LIVE PREVIEW"
                                FontSize="11"
                                FontAttributes="Bold"
-                               TextColor="#6B7280"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
                                CharacterSpacing="1"/>
 
                         <!-- Calendar Control -->
-                        <Border BackgroundColor="#262626"
+                        <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
                                 StrokeThickness="1"
-                                Stroke="#3A3A3A"
+                                Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
                                 Padding="16"
                                 HeightRequest="350">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="12"/>
                             </Border.StrokeShape>
                             <aurora:CalendarView x:Name="PreviewCalendar"
-                                                 HeaderTextColor="#FFFFFF"
+                                                 HeaderTextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                                  SeparatorColor="#404040"
                                                  DateColor="#9CA3AF"
                                                  DateTextColor="#E5E7EB"
                                                  SelectedDateColor="#7C3AED"
-                                                 SelectedDateTextColor="#FFFFFF"
-                                                 DateBackgroundColor="#262626"
+                                                 SelectedDateTextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                                 DateBackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
                                                  AvailableDateColor="#E5E7EB"
                                                  UnavailableDateColor="#4B5563"
                                                  SelectionType="Single"
@@ -97,7 +97,7 @@
                         </Border>
 
                         <!-- Selected Date Display -->
-                        <Border BackgroundColor="#262626"
+                        <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
                                 StrokeThickness="0"
                                 Padding="12">
                             <Border.StrokeShape>
@@ -105,12 +105,12 @@
                             </Border.StrokeShape>
                             <HorizontalStackLayout Spacing="8">
                                 <Label Text="Selected:"
-                                       TextColor="#9CA3AF"
+                                       TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
                                        FontSize="14"
                                        VerticalOptions="Center"/>
                                 <Label x:Name="SelectedDatesLabel"
                                        Text="No date selected"
-                                       TextColor="#7C3AED"
+                                       TextColor="{StaticResource Accent.Primary}"
                                        FontSize="14"
                                        FontAttributes="Bold"
                                        VerticalOptions="Center"/>
@@ -128,7 +128,7 @@
                 <controls:ExpandableSection Title="📆 Navigation" IsExpanded="True">
                     <VerticalStackLayout Spacing="12" Padding="0,8">
                         <!-- Month/Year Display -->
-                        <Border BackgroundColor="#262626"
+                        <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
                                 StrokeThickness="0"
                                 Padding="16">
                             <Border.StrokeShape>
@@ -136,8 +136,8 @@
                             </Border.StrokeShape>
                             <Grid ColumnDefinitions="Auto,*,Auto">
                                 <Button Text="◀"
-                                        BackgroundColor="#3A3A3A"
-                                        TextColor="White"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource Light.SliderTrack}, Dark={StaticResource Dark.SliderTrack}}"
+                                        TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                         FontSize="16"
                                         HeightRequest="40"
                                         WidthRequest="40"
@@ -146,15 +146,15 @@
                                 <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="2">
                                     <Label x:Name="CurrentMonthYearLabel"
                                            Text="December 2025"
-                                           TextColor="White"
+                                           TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                            FontSize="18"
                                            FontAttributes="Bold"
                                            HorizontalOptions="Center"/>
                                 </VerticalStackLayout>
                                 <Button Text="▶"
                                         Grid.Column="2"
-                                        BackgroundColor="#3A3A3A"
-                                        TextColor="White"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource Light.SliderTrack}, Dark={StaticResource Dark.SliderTrack}}"
+                                        TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                         FontSize="16"
                                         HeightRequest="40"
                                         WidthRequest="40"
@@ -164,8 +164,8 @@
                         </Border>
 
                         <Button Text="Go to Today"
-                                BackgroundColor="#7C3AED"
-                                TextColor="White"
+                                BackgroundColor="{StaticResource Accent.Primary}"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                 FontSize="14"
                                 HeightRequest="44"
                                 CornerRadius="8"
@@ -177,13 +177,13 @@
                 <controls:ExpandableSection Title="✅ Selection Mode" IsExpanded="True">
                     <VerticalStackLayout Spacing="12" Padding="0,8">
                         <Label Text="Selection Type"
-                               TextColor="#9CA3AF"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
                                FontSize="13"/>
                         <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
                             <Button x:Name="SingleSelectionBtn"
                                     Text="Single"
-                                    BackgroundColor="#7C3AED"
-                                    TextColor="White"
+                                    BackgroundColor="{StaticResource Accent.Primary}"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                     FontSize="13"
                                     HeightRequest="40"
                                     CornerRadius="8"
@@ -191,8 +191,8 @@
                             <Button x:Name="SpanSelectionBtn"
                                     Grid.Column="1"
                                     Text="Span"
-                                    BackgroundColor="#3A3A3A"
-                                    TextColor="White"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.SliderTrack}, Dark={StaticResource Dark.SliderTrack}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                     FontSize="13"
                                     HeightRequest="40"
                                     CornerRadius="8"
@@ -200,8 +200,8 @@
                             <Button x:Name="MultipleSelectionBtn"
                                     Grid.Column="2"
                                     Text="Multiple"
-                                    BackgroundColor="#3A3A3A"
-                                    TextColor="White"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.SliderTrack}, Dark={StaticResource Dark.SliderTrack}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                     FontSize="13"
                                     HeightRequest="40"
                                     CornerRadius="8"
@@ -210,7 +210,7 @@
 
                         <Button Text="Clear Selection"
                                 BackgroundColor="#EF4444"
-                                TextColor="White"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                 FontSize="14"
                                 HeightRequest="40"
                                 CornerRadius="8"
@@ -222,13 +222,13 @@
                 <controls:ExpandableSection Title="🎨 Display Options">
                     <VerticalStackLayout Spacing="12" Padding="0,8">
                         <Label Text="Day of Week Display"
-                               TextColor="#9CA3AF"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
                                FontSize="13"/>
                         <Picker x:Name="DayOfWeekPicker"
                                 Title="Select format"
-                                TextColor="White"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                 TitleColor="#6B7280"
-                                BackgroundColor="#262626"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
                                 SelectedIndexChanged="OnDayOfWeekDisplayChanged">
                             <Picker.ItemsSource>
                                 <x:Array Type="{x:Type x:String}">
@@ -241,14 +241,14 @@
                         </Picker>
 
                         <Label Text="Day Number Position"
-                               TextColor="#9CA3AF"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
                                FontSize="13"
                                Margin="0,8,0,0"/>
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
                             <Button x:Name="CenteredBtn"
                                     Text="Centered"
-                                    BackgroundColor="#7C3AED"
-                                    TextColor="White"
+                                    BackgroundColor="{StaticResource Accent.Primary}"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                     FontSize="13"
                                     HeightRequest="40"
                                     CornerRadius="8"
@@ -256,8 +256,8 @@
                             <Button x:Name="UpperRightBtn"
                                     Grid.Column="1"
                                     Text="Upper Right"
-                                    BackgroundColor="#3A3A3A"
-                                    TextColor="White"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.SliderTrack}, Dark={StaticResource Dark.SliderTrack}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                     FontSize="13"
                                     HeightRequest="40"
                                     CornerRadius="8"
@@ -303,7 +303,7 @@
                                               Label="Enable Maximum Date"
                                               ValueChanged="OnMaxDateToggleChanged"/>
                         <Label Text="When enabled, dates outside the range will be unavailable"
-                               TextColor="#6B7280"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
                                FontSize="12"
                                FontAttributes="Italic"/>
                     </VerticalStackLayout>
@@ -314,12 +314,12 @@
                     <VerticalStackLayout Spacing="12" Padding="0,8">
                         <Label x:Name="EventCountLabel"
                                Text="No events"
-                               TextColor="#9CA3AF"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
                                FontSize="14"/>
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
                             <Button Text="Add Sample Events"
                                     BackgroundColor="#22C55E"
-                                    TextColor="White"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                     FontSize="13"
                                     HeightRequest="40"
                                     CornerRadius="8"
@@ -327,7 +327,7 @@
                             <Button Text="Clear Events"
                                     Grid.Column="1"
                                     BackgroundColor="#EF4444"
-                                    TextColor="White"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                     FontSize="13"
                                     HeightRequest="40"
                                     CornerRadius="8"

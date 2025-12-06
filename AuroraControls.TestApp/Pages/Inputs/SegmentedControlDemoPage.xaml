@@ -7,27 +7,27 @@
     xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
     x:Class="AuroraControls.TestApp.Pages.Inputs.SegmentedControlDemoPage"
     Title="Segmented Control"
-    BackgroundColor="#0F0F0F">
+    BackgroundColor="{AppThemeBinding Light={StaticResource Light.PageBackground}, Dark={StaticResource Dark.PageBackground}}">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
 
             <!-- Live Preview Card -->
-            <Border BackgroundColor="#1A1A1A"
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
                     StrokeShape="RoundRectangle 16"
-                    Stroke="#2A2A2A"
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
                     StrokeThickness="1"
                     Padding="20">
                 <VerticalStackLayout Spacing="16">
                     <Label Text="LIVE PREVIEW"
                            FontSize="11"
                            FontAttributes="Bold"
-                           TextColor="#6B7280"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
                            CharacterSpacing="1.5"/>
 
-                    <Border BackgroundColor="#262626"
+                    <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
                             StrokeShape="RoundRectangle 12"
-                            Stroke="#3A3A3A"
+                            Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
                             StrokeThickness="1"
                             HeightRequest="100"
                             Padding="20">
@@ -55,7 +55,7 @@
                     <Label x:Name="SelectionLabel"
                            Text="Selected: First"
                            FontSize="12"
-                           TextColor="#9CA3AF"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
                            HorizontalOptions="Center"/>
                 </VerticalStackLayout>
             </Border>
@@ -66,10 +66,10 @@
             <!-- Style Section -->
             <controls:ExpandableSection Title="Style" IsExpanded="True">
                 <VerticalStackLayout Spacing="12">
-                    <Label Text="Control Style" FontSize="12" TextColor="#9CA3AF"/>
-                    <Border BackgroundColor="#262626"
+                    <Label Text="Control Style" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
+                    <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
                             StrokeShape="RoundRectangle 8"
-                            Stroke="#3A3A3A"
+                            Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
                             StrokeThickness="1"
                             Padding="4">
                         <Picker x:Name="StylePicker"
@@ -140,27 +140,27 @@
             </controls:ExpandableSection>
 
             <!-- Examples Section -->
-            <Border BackgroundColor="#1A1A1A"
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
                     StrokeShape="RoundRectangle 16"
-                    Stroke="#2A2A2A"
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
                     StrokeThickness="1"
                     Padding="20">
                 <VerticalStackLayout Spacing="16">
                     <Label Text="STYLE EXAMPLES"
                            FontSize="11"
                            FontAttributes="Bold"
-                           TextColor="#6B7280"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
                            CharacterSpacing="1.5"/>
 
                     <!-- Cupertino Style -->
                     <VerticalStackLayout Spacing="8">
-                        <Label Text="Cupertino" FontSize="12" TextColor="#9CA3AF"/>
+                        <Label Text="Cupertino" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
                         <aurora:SegmentedControl
                             HeightRequest="32"
                             SegmentControlStyle="Cupertino"
                             ControlForegroundColor="#7C3AED"
-                            ControlBackgroundColor="#262626"
-                            ForegroundTextColor="White"
+                            ControlBackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                            ForegroundTextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                             SelectedIndex="0">
                             <aurora:Segment Text="Day" Value="day"/>
                             <aurora:Segment Text="Week" Value="week"/>
@@ -170,13 +170,13 @@
 
                     <!-- Filled Style -->
                     <VerticalStackLayout Spacing="8">
-                        <Label Text="Filled" FontSize="12" TextColor="#9CA3AF"/>
+                        <Label Text="Filled" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
                         <aurora:SegmentedControl
                             HeightRequest="32"
                             SegmentControlStyle="Filled"
                             ControlForegroundColor="#22C55E"
-                            ControlBackgroundColor="#262626"
-                            ForegroundTextColor="White"
+                            ControlBackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                            ForegroundTextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                             SelectedIndex="1">
                             <aurora:Segment Text="Small" Value="sm"/>
                             <aurora:Segment Text="Medium" Value="md"/>
@@ -186,13 +186,13 @@
 
                     <!-- Rectangular Style -->
                     <VerticalStackLayout Spacing="8">
-                        <Label Text="Rectangular" FontSize="12" TextColor="#9CA3AF"/>
+                        <Label Text="Rectangular" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
                         <aurora:SegmentedControl
                             HeightRequest="32"
                             SegmentControlStyle="Rectangular"
                             ControlForegroundColor="#3B82F6"
-                            ControlBackgroundColor="#262626"
-                            ForegroundTextColor="White"
+                            ControlBackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                            ForegroundTextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                             SelectedIndex="0">
                             <aurora:Segment Text="List" Value="list"/>
                             <aurora:Segment Text="Grid" Value="grid"/>
@@ -202,14 +202,14 @@
 
                     <!-- Underline Style -->
                     <VerticalStackLayout Spacing="8">
-                        <Label Text="Underline" FontSize="12" TextColor="#9CA3AF"/>
+                        <Label Text="Underline" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
                         <aurora:SegmentedControl
                             HeightRequest="32"
                             SegmentControlStyle="Underline"
                             ControlForegroundColor="#EC4899"
                             ControlBackgroundColor="Transparent"
                             ForegroundTextColor="#EC4899"
-                            BackgroundTextColor="#6B7280"
+                            BackgroundTextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
                             SelectedIndex="2">
                             <aurora:Segment Text="All" Value="all"/>
                             <aurora:Segment Text="Active" Value="active"/>
@@ -219,13 +219,13 @@
 
                     <!-- Pill Style -->
                     <VerticalStackLayout Spacing="8">
-                        <Label Text="Pill" FontSize="12" TextColor="#9CA3AF"/>
+                        <Label Text="Pill" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
                         <aurora:SegmentedControl
                             HeightRequest="32"
                             SegmentControlStyle="Pill"
                             ControlForegroundColor="#14B8A6"
-                            ControlBackgroundColor="#262626"
-                            ForegroundTextColor="White"
+                            ControlBackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                            ForegroundTextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                             CornerRadius="16"
                             SelectedIndex="1">
                             <aurora:Segment Text="1" Value="1"/>

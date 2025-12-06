@@ -6,12 +6,12 @@
              xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
              x:Class="AuroraControls.TestApp.Pages.Calendar.CalendarPickerDemoPage"
              Title="Calendar Picker"
-             BackgroundColor="#0F0F0F">
+             BackgroundColor="{AppThemeBinding Light={StaticResource Light.PageBackground}, Dark={StaticResource Dark.PageBackground}}">
 
     <Grid RowDefinitions="Auto,*">
         <!-- Header -->
         <Border Grid.Row="0"
-                BackgroundColor="#1A1A1A"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
                 StrokeThickness="0"
                 Padding="20,16">
             <Grid ColumnDefinitions="Auto,*">
@@ -33,10 +33,10 @@
                     <Label Text="Calendar Picker"
                            FontSize="20"
                            FontAttributes="Bold"
-                           TextColor="White"/>
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"/>
                     <Label Text="Nullable date picker with update modes"
                            FontSize="13"
-                           TextColor="#9CA3AF"/>
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
                 </VerticalStackLayout>
             </Grid>
         </Border>
@@ -46,9 +46,9 @@
             <VerticalStackLayout Spacing="16" Padding="20">
 
                 <!-- Live Preview Card -->
-                <Border BackgroundColor="#1A1A1A"
+                <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
                         StrokeThickness="1"
-                        Stroke="#2A2A2A"
+                        Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
                         Padding="20">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="16"/>
@@ -57,26 +57,26 @@
                         <Label Text="LIVE PREVIEW"
                                FontSize="11"
                                FontAttributes="Bold"
-                               TextColor="#6B7280"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
                                CharacterSpacing="1"/>
 
                         <!-- CalendarPicker Control -->
-                        <Border BackgroundColor="#262626"
+                        <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
                                 StrokeThickness="1"
-                                Stroke="#3A3A3A"
+                                Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
                                 Padding="20">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="12"/>
                             </Border.StrokeShape>
                             <VerticalStackLayout Spacing="16" HorizontalOptions="Center">
                                 <Label Text="Select a Date"
-                                       TextColor="#9CA3AF"
+                                       TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
                                        FontSize="14"
                                        HorizontalOptions="Center"/>
 
                                 <aurora:CalendarPicker x:Name="PreviewPicker"
-                                                       TextColor="White"
-                                                       BackgroundColor="#3A3A3A"
+                                                       TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                                       BackgroundColor="{AppThemeBinding Light={StaticResource Light.SliderTrack}, Dark={StaticResource Dark.SliderTrack}}"
                                                        HeightRequest="44"
                                                        WidthRequest="200"
                                                        HorizontalOptions="Center"
@@ -84,7 +84,7 @@
                                                        DateSelected="OnDateSelected"/>
 
                                 <!-- Selected Date Display -->
-                                <Border BackgroundColor="#1A1A1A"
+                                <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
                                         StrokeThickness="0"
                                         Padding="16,12">
                                     <Border.StrokeShape>
@@ -92,7 +92,7 @@
                                     </Border.StrokeShape>
                                     <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
                                         <Label Text="Selected Date:"
-                                               TextColor="#6B7280"
+                                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
                                                FontSize="12"
                                                HorizontalOptions="Center"/>
                                         <Label x:Name="SelectedDateLabel"
@@ -117,13 +117,13 @@
                 <controls:ExpandableSection Title="⚙️ Update Mode" IsExpanded="True">
                     <VerticalStackLayout Spacing="12" Padding="0,8">
                         <Label Text="When to update the bound Date value (iOS only)"
-                               TextColor="#9CA3AF"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
                                FontSize="13"/>
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
                             <Button x:Name="WhenDoneBtn"
                                     Text="When Done"
                                     BackgroundColor="#3B82F6"
-                                    TextColor="White"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                     FontSize="13"
                                     HeightRequest="44"
                                     CornerRadius="8"
@@ -131,15 +131,15 @@
                             <Button x:Name="ImmediatelyBtn"
                                     Grid.Column="1"
                                     Text="Immediately"
-                                    BackgroundColor="#3A3A3A"
-                                    TextColor="White"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.SliderTrack}, Dark={StaticResource Dark.SliderTrack}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                     FontSize="13"
                                     HeightRequest="44"
                                     CornerRadius="8"
                                     Clicked="OnUpdateModeChanged"/>
                         </Grid>
                         <Label Text="'When Done' waits for user confirmation. 'Immediately' updates on every scroll."
-                               TextColor="#6B7280"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
                                FontSize="12"
                                FontAttributes="Italic"/>
                     </VerticalStackLayout>
@@ -156,7 +156,7 @@
                                               ValueChanged="OnMaxDateToggleChanged"/>
 
                         <!-- Current Constraints Display -->
-                        <Border BackgroundColor="#262626"
+                        <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
                                 StrokeThickness="0"
                                 Padding="12">
                             <Border.StrokeShape>
@@ -164,22 +164,22 @@
                             </Border.StrokeShape>
                             <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" RowSpacing="8" ColumnSpacing="12">
                                 <Label Text="Min Date:"
-                                       TextColor="#6B7280"
+                                       TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
                                        FontSize="13"/>
                                 <Label x:Name="MinDateLabel"
                                        Grid.Column="1"
                                        Text="Not set"
-                                       TextColor="#9CA3AF"
+                                       TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
                                        FontSize="13"/>
                                 <Label Grid.Row="1"
                                        Text="Max Date:"
-                                       TextColor="#6B7280"
+                                       TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
                                        FontSize="13"/>
                                 <Label x:Name="MaxDateLabel"
                                        Grid.Row="1"
                                        Grid.Column="1"
                                        Text="Not set"
-                                       TextColor="#9CA3AF"
+                                       TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
                                        FontSize="13"/>
                             </Grid>
                         </Border>
@@ -191,28 +191,28 @@
                     <VerticalStackLayout Spacing="12" Padding="0,8">
                         <Button Text="Set to Today"
                                 BackgroundColor="#22C55E"
-                                TextColor="White"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                 FontSize="14"
                                 HeightRequest="44"
                                 CornerRadius="8"
                                 Clicked="OnSetTodayClicked"/>
                         <Button Text="Set to Tomorrow"
                                 BackgroundColor="#3B82F6"
-                                TextColor="White"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                 FontSize="14"
                                 HeightRequest="44"
                                 CornerRadius="8"
                                 Clicked="OnSetTomorrowClicked"/>
                         <Button Text="Set to Next Week"
                                 BackgroundColor="#8B5CF6"
-                                TextColor="White"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                 FontSize="14"
                                 HeightRequest="44"
                                 CornerRadius="8"
                                 Clicked="OnSetNextWeekClicked"/>
                         <Button Text="Clear Date (Set Null)"
                                 BackgroundColor="#EF4444"
-                                TextColor="White"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                 FontSize="14"
                                 HeightRequest="44"
                                 CornerRadius="8"
@@ -224,32 +224,32 @@
                 <controls:ExpandableSection Title="ℹ️ About CalendarPicker">
                     <VerticalStackLayout Spacing="8" Padding="0,8">
                         <Label Text="Key Features:"
-                               TextColor="White"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                FontSize="14"
                                FontAttributes="Bold"/>
                         <Label Text="• Nullable DateTime support (can be null)"
-                               TextColor="#9CA3AF"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
                                FontSize="13"/>
                         <Label Text="• Two update modes for iOS"
-                               TextColor="#9CA3AF"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
                                FontSize="13"/>
                         <Label Text="• Extends standard DatePicker"
-                               TextColor="#9CA3AF"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
                                FontSize="13"/>
                         <Label Text="• Supports Min/Max date constraints"
-                               TextColor="#9CA3AF"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
                                FontSize="13"/>
 
                         <Label Text="Update Modes (iOS):"
-                               TextColor="White"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                FontSize="14"
                                FontAttributes="Bold"
                                Margin="0,12,0,0"/>
                         <Label Text="WhenDone: Date updates only when user taps 'Done'"
-                               TextColor="#9CA3AF"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
                                FontSize="13"/>
                         <Label Text="Immediately: Date updates as user scrolls the picker"
-                               TextColor="#9CA3AF"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
                                FontSize="13"/>
                     </VerticalStackLayout>
                 </controls:ExpandableSection>

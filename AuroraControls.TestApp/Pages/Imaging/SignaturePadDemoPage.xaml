@@ -6,7 +6,7 @@
              xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
              x:Class="AuroraControls.TestApp.Pages.Imaging.SignaturePadDemoPage"
              Title="Signature Pad"
-             BackgroundColor="#0F0F0F">
+             BackgroundColor="{AppThemeBinding Light={StaticResource Light.PageBackground}, Dark={StaticResource Dark.PageBackground}}">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -35,8 +35,8 @@
     <Grid RowDefinitions="Auto,*">
         <!-- Header -->
         <Border Grid.Row="0" 
-                BackgroundColor="#1A1A1A" 
-                Stroke="#2A2A2A"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" 
+                Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
                 StrokeThickness="0,0,0,1"
                 Padding="20,16">
             <Grid ColumnDefinitions="*,Auto">
@@ -44,15 +44,15 @@
                     <Label Text="Signature Pad" 
                            FontSize="24" 
                            FontAttributes="Bold" 
-                           TextColor="White"/>
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"/>
                     <Label Text="Smooth bezier curve signature capture" 
                            FontSize="14" 
-                           TextColor="#9CA3AF"/>
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
                 </VerticalStackLayout>
                 <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
                     <Button Text="📋" 
-                            BackgroundColor="#262626"
-                            TextColor="White"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                            TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                             WidthRequest="44"
                             HeightRequest="44"
                             CornerRadius="8"
@@ -74,7 +74,7 @@
                             <HorizontalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
                                 <Label x:Name="SignedStatusLabel" 
                                        Text="Not signed" 
-                                       TextColor="#9CA3AF" 
+                                       TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" 
                                        FontSize="12"/>
                                 <Label x:Name="SignedIndicator" 
                                        Text="○" 
@@ -85,7 +85,7 @@
                         
                         <Border BackgroundColor="White" 
                                 StrokeShape="RoundRectangle 8"
-                                Stroke="#3A3A3A"
+                                Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
                                 HeightRequest="200">
                             <aurora:SignaturePad x:Name="SignaturePadControl"
                                                 PenColor="Black"
@@ -98,7 +98,7 @@
                         </Border>
 
                         <Label Text="Draw your signature above • Double-tap to clear" 
-                               TextColor="#6B7280" 
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
                                FontSize="11" 
                                HorizontalOptions="Center"/>
 
@@ -106,19 +106,19 @@
                         <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
                             <Button Text="Clear"
                                     BackgroundColor="#EF4444"
-                                    TextColor="White"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                     CornerRadius="8"
                                     Clicked="OnClearClicked"/>
                             <Button Grid.Column="1"
                                     Text="Export PNG"
                                     BackgroundColor="#22C55E"
-                                    TextColor="White"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                     CornerRadius="8"
                                     Clicked="OnExportPngClicked"/>
                             <Button Grid.Column="2"
                                     Text="Bitmap Info"
                                     BackgroundColor="#3B82F6"
-                                    TextColor="White"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                     CornerRadius="8"
                                     Clicked="OnExportSvgClicked"/>
                         </Grid>

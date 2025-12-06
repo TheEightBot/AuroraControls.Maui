@@ -7,7 +7,9 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
-        UserAppTheme = AppTheme.Dark;
+
+        // Load saved theme preference or default to dark
+        LoadSavedTheme();
     }
 
     protected override Window CreateWindow(IActivationState? activationState)
@@ -16,44 +18,21 @@ public partial class App : Application
         var tabbedPage = new TabbedPage
         {
             Title = "Aurora Controls",
-            BarBackgroundColor = Color.FromArgb("#1A1A1A"),
-            BarTextColor = Colors.White,
             SelectedTabColor = Color.FromArgb("#7C3AED"),
             UnselectedTabColor = Color.FromArgb("#9CA3AF"),
         };
 
+        // Apply theme-aware colors to the tab bar
+        UpdateTabbedPageColors(tabbedPage);
+
+        // Subscribe to theme changes to update tab bar colors
+        RequestedThemeChanged += (s, e) => UpdateTabbedPageColors(tabbedPage);
+
         // Wrap each page in NavigationPage for navigation support
-        var showcaseNav = new NavigationPage(new ShowcasePage())
-        {
-            Title = "Showcase",
-            IconImageSource = "icon_home.svg",
-            BarBackgroundColor = Color.FromArgb("#1A1A1A"),
-            BarTextColor = Colors.White,
-        };
-
-        var controlsNav = new NavigationPage(new ControlsListPage())
-        {
-            Title = "Controls",
-            IconImageSource = "icon_controls.svg",
-            BarBackgroundColor = Color.FromArgb("#1A1A1A"),
-            BarTextColor = Colors.White,
-        };
-
-        var effectsNav = new NavigationPage(new EffectsPage())
-        {
-            Title = "Effects",
-            IconImageSource = "icon_effects.svg",
-            BarBackgroundColor = Color.FromArgb("#1A1A1A"),
-            BarTextColor = Colors.White,
-        };
-
-        var settingsNav = new NavigationPage(new SettingsPage())
-        {
-            Title = "Settings",
-            IconImageSource = "icon_settings.svg",
-            BarBackgroundColor = Color.FromArgb("#1A1A1A"),
-            BarTextColor = Colors.White,
-        };
+        var showcaseNav = CreateNavigationPage(new ShowcasePage(), "Showcase", "icon_home.svg");
+        var controlsNav = CreateNavigationPage(new ControlsListPage(), "Controls", "icon_controls.svg");
+        var effectsNav = CreateNavigationPage(new EffectsPage(), "Effects", "icon_effects.svg");
+        var settingsNav = CreateNavigationPage(new SettingsPage(), "Settings", "icon_settings.svg");
 
         tabbedPage.Children.Add(showcaseNav);
         tabbedPage.Children.Add(controlsNav);
@@ -61,5 +40,63 @@ public partial class App : Application
         tabbedPage.Children.Add(settingsNav);
 
         return new Window(tabbedPage);
+    }
+
+    private NavigationPage CreateNavigationPage(Page page, string title, string icon)
+    {
+        var navPage = new NavigationPage(page)
+        {
+            Title = title,
+            IconImageSource = icon,
+        };
+
+        UpdateNavigationPageColors(navPage);
+
+        // Subscribe to theme changes
+        RequestedThemeChanged += (s, e) => UpdateNavigationPageColors(navPage);
+
+        return navPage;
+    }
+
+    private void UpdateTabbedPageColors(TabbedPage tabbedPage)
+    {
+        var isDark = UserAppTheme == AppTheme.Dark ||
+                     (UserAppTheme == AppTheme.Unspecified && RequestedTheme == AppTheme.Dark);
+
+        tabbedPage.BarBackgroundColor = isDark
+            ? Color.FromArgb("#1A1A1A")
+            : Color.FromArgb("#FFFFFF");
+
+        tabbedPage.BarTextColor = isDark
+            ? Colors.White
+            : Color.FromArgb("#111827");
+    }
+
+    private void UpdateNavigationPageColors(NavigationPage navPage)
+    {
+        var isDark = UserAppTheme == AppTheme.Dark ||
+                     (UserAppTheme == AppTheme.Unspecified && RequestedTheme == AppTheme.Dark);
+
+        navPage.BarBackgroundColor = isDark
+            ? Color.FromArgb("#1A1A1A")
+            : Color.FromArgb("#FFFFFF");
+
+        navPage.BarTextColor = isDark
+            ? Colors.White
+            : Color.FromArgb("#111827");
+    }
+
+    private void LoadSavedTheme()
+    {
+        var savedTheme = Preferences.Default.Get("app_theme", (int)AppTheme.Dark);
+
+        if (savedTheme != (int)AppTheme.Unspecified)
+        {
+            UserAppTheme = (AppTheme)savedTheme;
+        }
+        else
+        {
+            UserAppTheme = AppTheme.Dark;
+        }
     }
 }

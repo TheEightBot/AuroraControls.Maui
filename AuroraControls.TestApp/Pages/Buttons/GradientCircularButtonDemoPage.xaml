@@ -289,7 +289,7 @@
     Text="+"
     FontSize="32"
     FontColor="White"
-    ButtonBackgroundColor="#7C3AED"
+    ButtonBackgroundColor="{StaticResource Accent.Primary}"
     GradientAngle="135"
     Ripples="True"
     Clicked="OnClicked"/&gt;</Label.Text>

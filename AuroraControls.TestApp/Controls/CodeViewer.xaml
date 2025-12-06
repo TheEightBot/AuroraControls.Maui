@@ -35,7 +35,7 @@
                     <Label Text="{Binding Language, Source={x:Reference this}}"
                            FontSize="11"
                            FontAttributes="Bold"
-                           TextColor="White"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                            VerticalOptions="Center" />
                 </Border>
             </Grid>
@@ -75,7 +75,7 @@
                             Padding="16,10"
                             CornerRadius="8"
                             BackgroundColor="{StaticResource AuroraPurple}"
-                            TextColor="White"
+                            TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                             Clicked="OnCopyClicked" />
                 </Grid>
             </Border>

@@ -9,6 +9,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+                <ResourceDictionary Source="Themes/DynamicColors.xaml" />
                 <ResourceDictionary Source="Themes/AuroraColors.xaml" />
                 <ResourceDictionary Source="Themes/AuroraStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>

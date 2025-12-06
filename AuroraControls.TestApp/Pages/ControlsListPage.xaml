@@ -4,7 +4,7 @@
              x:Class="AuroraControls.TestApp.Pages.ControlsListPage"
              x:Name="this"
              Title="Controls"
-             BackgroundColor="#0F0F0F">
+             BackgroundColor="{AppThemeBinding Light={StaticResource Light.PageBackground}, Dark={StaticResource Dark.PageBackground}}">
 
     <Grid RowDefinitions="Auto,*">
         
@@ -12,14 +12,14 @@
         <VerticalStackLayout Grid.Row="0" Padding="20,20,20,0" Spacing="12">
             
             <Label Text="All Controls"
-                   TextColor="White"
+                   TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                    FontSize="28"
                    FontAttributes="Bold" />
             
             <!-- Search Bar -->
-            <Border BackgroundColor="#1A1A1A" 
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" 
                     StrokeShape="RoundRectangle 12" 
-                    Stroke="#2A2A2A" 
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}" 
                     Padding="12,8">
                 <Grid ColumnDefinitions="Auto,*,Auto">
                     <Label Grid.Column="0" 
@@ -30,15 +30,15 @@
                     <Entry Grid.Column="1"
                            x:Name="SearchEntry"
                            Placeholder="Search controls..."
-                           PlaceholderColor="#6B7280"
-                           TextColor="White"
+                           PlaceholderColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                            BackgroundColor="Transparent"
                            TextChanged="OnSearchTextChanged" />
                     <Label Grid.Column="2"
                            x:Name="ClearButton"
                            Text="✕"
                            FontSize="14"
-                           TextColor="#6B7280"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
                            VerticalOptions="Center"
                            IsVisible="False">
                         <Label.GestureRecognizers>
@@ -51,7 +51,7 @@
             <!-- Results count -->
             <Label x:Name="ResultsLabel"
                    Text=""
-                   TextColor="#6B7280"
+                   TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
                    FontSize="12"
                    IsVisible="False" />
         </VerticalStackLayout>
@@ -65,19 +65,31 @@
                         Margin="20,12,20,0">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Border BackgroundColor="#1A1A1A" 
+                    <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" 
                             StrokeShape="RoundRectangle 12" 
-                            Stroke="#2A2A2A" 
+                            Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}" 
                             Padding="16"
                             Margin="0,0,0,8">
                         <Grid ColumnDefinitions="4,*,Auto">
                             <BoxView Color="{Binding AccentColor}" CornerRadius="2" WidthRequest="4" />
                             <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
-                                <Label Text="{Binding Name}" TextColor="White" FontSize="16" FontAttributes="Bold" />
-                                <Label Text="{Binding Description}" TextColor="#6B7280" FontSize="12" />
-                                <Label Text="{Binding Category}" TextColor="#9CA3AF" FontSize="10" Margin="0,4,0,0" />
+                                <Label Text="{Binding Name}" 
+                                       TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold" />
+                                <Label Text="{Binding Description}" 
+                                       TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
+                                       FontSize="12" />
+                                <Label Text="{Binding Category}" 
+                                       TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" 
+                                       FontSize="10" 
+                                       Margin="0,4,0,0" />
                             </VerticalStackLayout>
-                            <Label Grid.Column="2" Text="→" TextColor="#6B7280" FontSize="18" VerticalOptions="Center" />
+                            <Label Grid.Column="2" 
+                                   Text="→" 
+                                   TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
+                                   FontSize="18" 
+                                   VerticalOptions="Center" />
                         </Grid>
                     </Border>
                 </DataTemplate>
@@ -86,8 +98,16 @@
             <CollectionView.EmptyView>
                 <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Padding="40">
                     <Label Text="🔍" FontSize="48" HorizontalOptions="Center" />
-                    <Label Text="No controls found" TextColor="White" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,12,0,4" />
-                    <Label Text="Try a different search term" TextColor="#6B7280" FontSize="14" HorizontalOptions="Center" />
+                    <Label Text="No controls found" 
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" 
+                           FontSize="18" 
+                           FontAttributes="Bold" 
+                           HorizontalOptions="Center" 
+                           Margin="0,12,0,4" />
+                    <Label Text="Try a different search term" 
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
+                           FontSize="14" 
+                           HorizontalOptions="Center" />
                 </VerticalStackLayout>
             </CollectionView.EmptyView>
             

@@ -347,4 +347,138 @@
         <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}" />
     </Style>
 
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         THEME-AWARE LABEL STYLES
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Style x:Key="PageTitleLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="28" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" />
+    </Style>
+
+    <Style x:Key="SectionTitleLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" />
+        <Setter Property="Margin" Value="0,0,0,8" />
+    </Style>
+
+    <Style x:Key="BodyTextLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" />
+    </Style>
+
+    <Style x:Key="DescriptionLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" />
+        <Setter Property="Margin" Value="0,0,0,12" />
+    </Style>
+
+    <Style x:Key="MutedTextLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" />
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         THEME-AWARE CONTAINER STYLES
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Style x:Key="ThemedPage" TargetType="ContentPage">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Light.PageBackground}, Dark={StaticResource Dark.PageBackground}}" />
+    </Style>
+
+    <Style x:Key="ThemedCard" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="Padding" Value="16" />
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="12" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ThemedCardElevated" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="Padding" Value="16" />
+        <Setter Property="Margin" Value="0,0,0,12" />
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="12" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="{AppThemeBinding Light=#30000000, Dark=#20000000}" Offset="0,4" Radius="8" Opacity="0.15" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ThemedHeader" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}" />
+        <Setter Property="StrokeThickness" Value="0,0,0,1" />
+        <Setter Property="Padding" Value="20,16" />
+    </Style>
+
+    <Style x:Key="ThemedNestedCard" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Light.SurfaceContainer}, Dark={StaticResource Dark.SurfaceVariant}}" />
+        <Setter Property="Stroke" Value="Transparent" />
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="8" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         THEME-AWARE INPUT STYLES
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Style x:Key="ThemedEntry" TargetType="Entry">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" />
+        <Setter Property="PlaceholderColor" Value="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" />
+    </Style>
+
+    <Style x:Key="ThemedSearchBox" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}" />
+        <Setter Property="Padding" Value="12,8" />
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="12" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         THEME-AWARE BUTTON STYLES
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Style x:Key="ThemedSecondaryButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Light.ButtonSecondary}, Dark={StaticResource Dark.ButtonSecondary}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Light.ButtonSecondaryText}, Dark={StaticResource Dark.ButtonSecondaryText}}" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="16,12" />
+        <Setter Property="MinimumHeightRequest" Value="44" />
+    </Style>
+
+    <Style x:Key="ThemedIconButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" />
+        <Setter Property="WidthRequest" Value="44" />
+        <Setter Property="HeightRequest" Value="44" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="0" />
+    </Style>
+
 </ResourceDictionary>

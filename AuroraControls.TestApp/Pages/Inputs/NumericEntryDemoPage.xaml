@@ -7,27 +7,27 @@
     xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
     x:Class="AuroraControls.TestApp.Pages.Inputs.NumericEntryDemoPage"
     Title="Numeric Entry"
-    BackgroundColor="#0F0F0F">
+    BackgroundColor="{AppThemeBinding Light={StaticResource Light.PageBackground}, Dark={StaticResource Dark.PageBackground}}">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
 
             <!-- Live Preview Card -->
-            <Border BackgroundColor="#1A1A1A"
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
                     StrokeShape="RoundRectangle 16"
-                    Stroke="#2A2A2A"
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
                     StrokeThickness="1"
                     Padding="20">
                 <VerticalStackLayout Spacing="16">
                     <Label Text="LIVE PREVIEW"
                            FontSize="11"
                            FontAttributes="Bold"
-                           TextColor="#6B7280"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
                            CharacterSpacing="1.5"/>
 
-                    <Border BackgroundColor="#262626"
+                    <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
                             StrokeShape="RoundRectangle 12"
-                            Stroke="#3A3A3A"
+                            Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
                             StrokeThickness="1"
                             HeightRequest="120"
                             Padding="20">
@@ -39,14 +39,14 @@
                             Placeholder="Enter number"
                             PlaceholderColor="#6B7280"
                             TextColor="#F9FAFB"
-                            BackgroundColor="#1A1A1A"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
                             ValueType="{Binding SelectedValueType}"/>
                     </Border>
 
                     <Label x:Name="ValueLabel"
                            Text="Value Type: Double"
                            FontSize="12"
-                           TextColor="#9CA3AF"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
                            HorizontalOptions="Center"/>
                 </VerticalStackLayout>
             </Border>
@@ -57,10 +57,10 @@
             <!-- Value Type Section -->
             <controls:ExpandableSection Title="Value Type" IsExpanded="True">
                 <VerticalStackLayout Spacing="12">
-                    <Label Text="Numeric Type" FontSize="12" TextColor="#9CA3AF"/>
-                    <Border BackgroundColor="#262626"
+                    <Label Text="Numeric Type" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
+                    <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
                             StrokeShape="RoundRectangle 8"
-                            Stroke="#3A3A3A"
+                            Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
                             StrokeThickness="1"
                             Padding="4">
                         <Picker x:Name="ValueTypePicker"
@@ -100,10 +100,10 @@
             <!-- Text Section -->
             <controls:ExpandableSection Title="Text">
                 <VerticalStackLayout Spacing="12">
-                    <Label Text="Placeholder" FontSize="12" TextColor="#9CA3AF"/>
-                    <Border BackgroundColor="#262626"
+                    <Label Text="Placeholder" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
+                    <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
                             StrokeShape="RoundRectangle 8"
-                            Stroke="#3A3A3A"
+                            Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
                             StrokeThickness="1"
                             Padding="8">
                         <Entry x:Name="PlaceholderEntry"
@@ -116,61 +116,61 @@
             </controls:ExpandableSection>
 
             <!-- Examples Section -->
-            <Border BackgroundColor="#1A1A1A"
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
                     StrokeShape="RoundRectangle 16"
-                    Stroke="#2A2A2A"
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
                     StrokeThickness="1"
                     Padding="20">
                 <VerticalStackLayout Spacing="16">
                     <Label Text="EXAMPLES"
                            FontSize="11"
                            FontAttributes="Bold"
-                           TextColor="#6B7280"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
                            CharacterSpacing="1.5"/>
 
                     <!-- Value Type Examples -->
                     <Label Text="Value Types" FontSize="14" TextColor="#F9FAFB" FontAttributes="Bold"/>
 
                     <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="12" ColumnSpacing="12">
-                        <Label Text="Double:" TextColor="#9CA3AF" VerticalOptions="Center"/>
+                        <Label Text="Double:" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" VerticalOptions="Center"/>
                         <aurora:NumericEntry Grid.Column="1"
                                             ValueType="Double"
                                             Placeholder="3.14159"
                                             PlaceholderColor="#6B7280"
                                             TextColor="#F9FAFB"
-                                            BackgroundColor="#262626"/>
+                                            BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"/>
 
-                        <Label Text="Decimal:" TextColor="#9CA3AF" Grid.Row="1" VerticalOptions="Center"/>
+                        <Label Text="Decimal:" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" Grid.Row="1" VerticalOptions="Center"/>
                         <aurora:NumericEntry Grid.Column="1" Grid.Row="1"
                                             ValueType="Decimal"
                                             Placeholder="1234.56"
                                             PlaceholderColor="#6B7280"
                                             TextColor="#F9FAFB"
-                                            BackgroundColor="#262626"/>
+                                            BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"/>
 
-                        <Label Text="Float:" TextColor="#9CA3AF" Grid.Row="2" VerticalOptions="Center"/>
+                        <Label Text="Float:" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" Grid.Row="2" VerticalOptions="Center"/>
                         <aurora:NumericEntry Grid.Column="1" Grid.Row="2"
                                             ValueType="Float"
                                             Placeholder="2.71828"
                                             PlaceholderColor="#6B7280"
                                             TextColor="#F9FAFB"
-                                            BackgroundColor="#262626"/>
+                                            BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"/>
 
-                        <Label Text="Int:" TextColor="#9CA3AF" Grid.Row="3" VerticalOptions="Center"/>
+                        <Label Text="Int:" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" Grid.Row="3" VerticalOptions="Center"/>
                         <aurora:NumericEntry Grid.Column="1" Grid.Row="3"
                                             ValueType="Int"
                                             Placeholder="42"
                                             PlaceholderColor="#6B7280"
                                             TextColor="#F9FAFB"
-                                            BackgroundColor="#262626"/>
+                                            BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"/>
 
-                        <Label Text="Long:" TextColor="#9CA3AF" Grid.Row="4" VerticalOptions="Center"/>
+                        <Label Text="Long:" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" Grid.Row="4" VerticalOptions="Center"/>
                         <aurora:NumericEntry Grid.Column="1" Grid.Row="4"
                                             ValueType="Long"
                                             Placeholder="9223372036854"
                                             PlaceholderColor="#6B7280"
                                             TextColor="#F9FAFB"
-                                            BackgroundColor="#262626"/>
+                                            BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"/>
                     </Grid>
                 </VerticalStackLayout>
             </Border>

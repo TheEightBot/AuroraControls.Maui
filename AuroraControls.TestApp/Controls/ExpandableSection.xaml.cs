@@ -113,6 +113,7 @@ public partial class ExpandableSection : ContentView
 
     private void OnHeaderTapped(object? sender, TappedEventArgs e)
     {
+        AnimationExtensions.TriggerHaptic();
         IsExpanded = !IsExpanded;
     }
 

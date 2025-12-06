@@ -6,7 +6,7 @@
              xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
              x:Class="AuroraControls.TestApp.Pages.Gauges.StepIndicatorDemoPage"
              Title="Step Indicator"
-             BackgroundColor="#0F0F0F">
+             BackgroundColor="{AppThemeBinding Light={StaticResource Light.PageBackground}, Dark={StaticResource Dark.PageBackground}}">
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="SectionHeader" TargetType="Label">
@@ -34,7 +34,7 @@
                 <Label Text="Step Indicator" 
                        FontSize="28" 
                        FontAttributes="Bold" 
-                       TextColor="#FFFFFF"/>
+                       TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"/>
                 <Label Text="Progress through multi-step workflows with customizable shapes and colors" 
                        FontSize="14" 
                        TextColor="#808080"/>
@@ -50,10 +50,10 @@
                                           NumberOfSteps="5"
                                           CurrentStep="2"
                                           HeightRequest="80"
-                                          LineColor="#3A3A3A"
+                                          LineColor="{AppThemeBinding Light={StaticResource Light.SliderTrack}, Dark={StaticResource Dark.SliderTrack}}"
                                           LineWidth="3"
                                           HighlightColor="#00D4AA"
-                                          InactiveColor="#2A2A2A"
+                                          InactiveColor="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
                                           FontColor="#FFFFFF"
                                           Shape="Circle"
                                           DisplayStepNumber="True"
@@ -64,15 +64,15 @@
                     <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="12" Margin="0,8,0,0">
                         <Button x:Name="PrevStepButton"
                                 Text="◀ Previous"
-                                BackgroundColor="#2A2A2A"
-                                TextColor="#FFFFFF"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                 Clicked="OnPrevStepClicked"
                                 HeightRequest="44"
                                 CornerRadius="8"/>
                         <Label x:Name="StepLabel"
                                Text="Step 3 of 5"
                                FontSize="14"
-                               TextColor="#FFFFFF"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                VerticalOptions="Center"
                                HorizontalOptions="Center"
                                Grid.Column="1"/>
@@ -134,8 +134,8 @@
                         <Button x:Name="SquareShapeBtn"
                                 Text="■ Square"
                                 Clicked="OnShapeSelected"
-                                BackgroundColor="#2A2A2A"
-                                TextColor="#FFFFFF"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                 HeightRequest="36"
                                 Margin="0,0,8,8"
                                 Padding="12,0"
@@ -143,8 +143,8 @@
                         <Button x:Name="RoundedSquareShapeBtn"
                                 Text="▢ Rounded"
                                 Clicked="OnShapeSelected"
-                                BackgroundColor="#2A2A2A"
-                                TextColor="#FFFFFF"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                 HeightRequest="36"
                                 Margin="0,0,8,8"
                                 Padding="12,0"
@@ -152,8 +152,8 @@
                         <Button x:Name="DiamondShapeBtn"
                                 Text="◆ Diamond"
                                 Clicked="OnShapeSelected"
-                                BackgroundColor="#2A2A2A"
-                                TextColor="#FFFFFF"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                 HeightRequest="36"
                                 Margin="0,0,8,8"
                                 Padding="12,0"
@@ -161,8 +161,8 @@
                         <Button x:Name="HexagonShapeBtn"
                                 Text="⬡ Hexagon"
                                 Clicked="OnShapeSelected"
-                                BackgroundColor="#2A2A2A"
-                                TextColor="#FFFFFF"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                 HeightRequest="36"
                                 Margin="0,0,8,8"
                                 Padding="12,0"
@@ -170,8 +170,8 @@
                         <Button x:Name="StarShapeBtn"
                                 Text="★ Star"
                                 Clicked="OnShapeSelected"
-                                BackgroundColor="#2A2A2A"
-                                TextColor="#FFFFFF"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                 HeightRequest="36"
                                 Margin="0,0,8,8"
                                 Padding="12,0"
@@ -179,8 +179,8 @@
                         <Button x:Name="TriangleShapeBtn"
                                 Text="▲ Triangle"
                                 Clicked="OnShapeSelected"
-                                BackgroundColor="#2A2A2A"
-                                TextColor="#FFFFFF"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                 HeightRequest="36"
                                 Margin="0,0,8,8"
                                 Padding="12,0"
@@ -188,8 +188,8 @@
                         <Button x:Name="PentagonShapeBtn"
                                 Text="⬠ Pentagon"
                                 Clicked="OnShapeSelected"
-                                BackgroundColor="#2A2A2A"
-                                TextColor="#FFFFFF"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
                                 HeightRequest="36"
                                 Margin="0,0,8,8"
                                 Padding="12,0"
@@ -208,12 +208,12 @@
 
                     <editors:ColorPickerEditor x:Name="InactiveColorPicker"
                                                Label="Inactive Color"
-                                               SelectedColor="#2A2A2A"
+                                               SelectedColor="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
                                                ColorChanged="OnInactiveColorChanged"/>
 
                     <editors:ColorPickerEditor x:Name="LineColorPicker"
                                                Label="Line Color"
-                                               SelectedColor="#3A3A3A"
+                                               SelectedColor="{AppThemeBinding Light={StaticResource Light.SliderTrack}, Dark={StaticResource Dark.SliderTrack}}"
                                                ColorChanged="OnLineColorChanged"/>
 
                     <editors:ColorPickerEditor x:Name="FontColorPicker"
