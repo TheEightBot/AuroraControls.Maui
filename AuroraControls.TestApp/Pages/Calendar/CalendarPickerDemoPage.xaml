@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             xmlns:controls="clr-namespace:AuroraControls.TestApp.Controls"
+             xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
+             x:Class="AuroraControls.TestApp.Pages.Calendar.CalendarPickerDemoPage"
+             Title="Calendar Picker"
+             BackgroundColor="#0F0F0F">
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <Border Grid.Row="0"
+                BackgroundColor="#1A1A1A"
+                StrokeThickness="0"
+                Padding="20,16">
+            <Grid ColumnDefinitions="Auto,*">
+                <Border BackgroundColor="#3B82F6"
+                        StrokeThickness="0"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        Padding="8">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12"/>
+                    </Border.StrokeShape>
+                    <Label Text="📆"
+                           FontSize="20"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                </Border>
+
+                <VerticalStackLayout Grid.Column="1" Spacing="2" Margin="16,0,0,0">
+                    <Label Text="Calendar Picker"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="White"/>
+                    <Label Text="Nullable date picker with update modes"
+                           FontSize="13"
+                           TextColor="#9CA3AF"/>
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+
+        <!-- Main Content -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="16" Padding="20">
+
+                <!-- Live Preview Card -->
+                <Border BackgroundColor="#1A1A1A"
+                        StrokeThickness="1"
+                        Stroke="#2A2A2A"
+                        Padding="20">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16"/>
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="LIVE PREVIEW"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#6B7280"
+                               CharacterSpacing="1"/>
+
+                        <!-- CalendarPicker Control -->
+                        <Border BackgroundColor="#262626"
+                                StrokeThickness="1"
+                                Stroke="#3A3A3A"
+                                Padding="20">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12"/>
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Spacing="16" HorizontalOptions="Center">
+                                <Label Text="Select a Date"
+                                       TextColor="#9CA3AF"
+                                       FontSize="14"
+                                       HorizontalOptions="Center"/>
+
+                                <aurora:CalendarPicker x:Name="PreviewPicker"
+                                                       TextColor="White"
+                                                       BackgroundColor="#3A3A3A"
+                                                       HeightRequest="44"
+                                                       WidthRequest="200"
+                                                       HorizontalOptions="Center"
+                                                       UpdateMode="WhenDone"
+                                                       DateSelected="OnDateSelected"/>
+
+                                <!-- Selected Date Display -->
+                                <Border BackgroundColor="#1A1A1A"
+                                        StrokeThickness="0"
+                                        Padding="16,12">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="8"/>
+                                    </Border.StrokeShape>
+                                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                                        <Label Text="Selected Date:"
+                                               TextColor="#6B7280"
+                                               FontSize="12"
+                                               HorizontalOptions="Center"/>
+                                        <Label x:Name="SelectedDateLabel"
+                                               Text="No date selected"
+                                               TextColor="#3B82F6"
+                                               FontSize="18"
+                                               FontAttributes="Bold"
+                                               HorizontalOptions="Center"/>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </VerticalStackLayout>
+                        </Border>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Presets -->
+                <controls:PresetSelector x:Name="PresetSelector"
+                                         Label="Quick Actions"
+                                         PresetChanged="OnPresetSelected"/>
+
+                <!-- Update Mode -->
+                <controls:ExpandableSection Title="⚙️ Update Mode" IsExpanded="True">
+                    <VerticalStackLayout Spacing="12" Padding="0,8">
+                        <Label Text="When to update the bound Date value (iOS only)"
+                               TextColor="#9CA3AF"
+                               FontSize="13"/>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <Button x:Name="WhenDoneBtn"
+                                    Text="When Done"
+                                    BackgroundColor="#3B82F6"
+                                    TextColor="White"
+                                    FontSize="13"
+                                    HeightRequest="44"
+                                    CornerRadius="8"
+                                    Clicked="OnUpdateModeChanged"/>
+                            <Button x:Name="ImmediatelyBtn"
+                                    Grid.Column="1"
+                                    Text="Immediately"
+                                    BackgroundColor="#3A3A3A"
+                                    TextColor="White"
+                                    FontSize="13"
+                                    HeightRequest="44"
+                                    CornerRadius="8"
+                                    Clicked="OnUpdateModeChanged"/>
+                        </Grid>
+                        <Label Text="'When Done' waits for user confirmation. 'Immediately' updates on every scroll."
+                               TextColor="#6B7280"
+                               FontSize="12"
+                               FontAttributes="Italic"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Date Constraints -->
+                <controls:ExpandableSection Title="📅 Date Constraints" IsExpanded="True">
+                    <VerticalStackLayout Spacing="12" Padding="0,8">
+                        <editors:ToggleEditor x:Name="EnableMinDateToggle"
+                                              Label="Enable Minimum Date (Today)"
+                                              ValueChanged="OnMinDateToggleChanged"/>
+                        <editors:ToggleEditor x:Name="EnableMaxDateToggle"
+                                              Label="Enable Maximum Date (+30 days)"
+                                              ValueChanged="OnMaxDateToggleChanged"/>
+
+                        <!-- Current Constraints Display -->
+                        <Border BackgroundColor="#262626"
+                                StrokeThickness="0"
+                                Padding="12">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8"/>
+                            </Border.StrokeShape>
+                            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*" RowSpacing="8" ColumnSpacing="12">
+                                <Label Text="Min Date:"
+                                       TextColor="#6B7280"
+                                       FontSize="13"/>
+                                <Label x:Name="MinDateLabel"
+                                       Grid.Column="1"
+                                       Text="Not set"
+                                       TextColor="#9CA3AF"
+                                       FontSize="13"/>
+                                <Label Grid.Row="1"
+                                       Text="Max Date:"
+                                       TextColor="#6B7280"
+                                       FontSize="13"/>
+                                <Label x:Name="MaxDateLabel"
+                                       Grid.Row="1"
+                                       Grid.Column="1"
+                                       Text="Not set"
+                                       TextColor="#9CA3AF"
+                                       FontSize="13"/>
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Actions -->
+                <controls:ExpandableSection Title="🎯 Actions" IsExpanded="True">
+                    <VerticalStackLayout Spacing="12" Padding="0,8">
+                        <Button Text="Set to Today"
+                                BackgroundColor="#22C55E"
+                                TextColor="White"
+                                FontSize="14"
+                                HeightRequest="44"
+                                CornerRadius="8"
+                                Clicked="OnSetTodayClicked"/>
+                        <Button Text="Set to Tomorrow"
+                                BackgroundColor="#3B82F6"
+                                TextColor="White"
+                                FontSize="14"
+                                HeightRequest="44"
+                                CornerRadius="8"
+                                Clicked="OnSetTomorrowClicked"/>
+                        <Button Text="Set to Next Week"
+                                BackgroundColor="#8B5CF6"
+                                TextColor="White"
+                                FontSize="14"
+                                HeightRequest="44"
+                                CornerRadius="8"
+                                Clicked="OnSetNextWeekClicked"/>
+                        <Button Text="Clear Date (Set Null)"
+                                BackgroundColor="#EF4444"
+                                TextColor="White"
+                                FontSize="14"
+                                HeightRequest="44"
+                                CornerRadius="8"
+                                Clicked="OnClearDateClicked"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Nullable Feature Info -->
+                <controls:ExpandableSection Title="ℹ️ About CalendarPicker">
+                    <VerticalStackLayout Spacing="8" Padding="0,8">
+                        <Label Text="Key Features:"
+                               TextColor="White"
+                               FontSize="14"
+                               FontAttributes="Bold"/>
+                        <Label Text="• Nullable DateTime support (can be null)"
+                               TextColor="#9CA3AF"
+                               FontSize="13"/>
+                        <Label Text="• Two update modes for iOS"
+                               TextColor="#9CA3AF"
+                               FontSize="13"/>
+                        <Label Text="• Extends standard DatePicker"
+                               TextColor="#9CA3AF"
+                               FontSize="13"/>
+                        <Label Text="• Supports Min/Max date constraints"
+                               TextColor="#9CA3AF"
+                               FontSize="13"/>
+
+                        <Label Text="Update Modes (iOS):"
+                               TextColor="White"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               Margin="0,12,0,0"/>
+                        <Label Text="WhenDone: Date updates only when user taps 'Done'"
+                               TextColor="#9CA3AF"
+                               FontSize="13"/>
+                        <Label Text="Immediately: Date updates as user scrolls the picker"
+                               TextColor="#9CA3AF"
+                               FontSize="13"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Bottom spacing -->
+                <BoxView HeightRequest="40" Color="Transparent"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

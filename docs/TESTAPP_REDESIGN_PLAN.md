@@ -639,9 +639,9 @@ The Showcase page serves as the app's hero landing page:
 - [x] **5.4** Create `CupertinoToggleSwitchDemoPage`
 - [x] **5.5** Create `SegmentedControlDemoPage`
 
-### Phase 6: Calendar & Date Controls
-- [ ] **6.1** Refactor `CalendarViewPage`
-- [ ] **6.2** Create `CalendarPickerDemoPage`
+### Phase 6: Calendar & Date Controls ✅
+- [x] **6.1** Refactor `CalendarViewPage`
+- [x] **6.2** Create `CalendarPickerDemoPage`
 
 ### Phase 7: Chips & Tags
 - [ ] **7.1** Refactor `ChipGroupPage`
@@ -828,8 +828,8 @@ feat(testapp): [Phase 4.1] Create GradientPillButton demo page
 | 2 | Core Infrastructure Components | ✅ Complete | 7/7 |
 | 3 | Showcase & Navigation | ✅ Complete | 5/5 |
 | 4 | Button & Action Controls | ✅ Complete | 5/5 |
-| 5 | Input Controls | 🟡 In Progress | 0/5 |
-| 6 | Calendar & Date Controls | ⬜ Not Started | 0/2 |
+| 5 | Input Controls | ✅ Complete | 5/5 |
+| 6 | Calendar & Date Controls | ✅ Complete | 2/2 |
 | 7 | Chips & Tags | ⬜ Not Started | 0/1 |
 | 8 | Image & Graphics Controls | ⬜ Not Started | 0/4 |
 | 9 | Gauges & Progress | ⬜ Not Started | 0/2 |
@@ -840,7 +840,7 @@ feat(testapp): [Phase 4.1] Create GradientPillButton demo page
 | 14 | Platform Effects | ⬜ Not Started | 0/3 |
 | 15 | Polish & Final Touches | ⬜ Not Started | 0/5 |
 
-**Overall Progress: 22/50 tasks (44%)**
+**Overall Progress: 29/50 tasks (58%)**
 
 ---
 

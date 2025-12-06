@@ -47,7 +47,8 @@ public partial class ControlsListPage : ContentPage
         new ControlItem("Segmented Control", "Multi-style segments", "📝 Input Controls", Color.FromArgb("#7C3AED"), typeof(Inputs.SegmentedControlDemoPage)),
 
         // Calendar
-        new ControlItem("Calendar View", "Full calendar control", "📅 Calendar & Date", Color.FromArgb("#3B82F6"), typeof(CalendarViewPage)),
+        new ControlItem("Calendar View", "Full calendar control", "📅 Calendar & Date", Color.FromArgb("#3B82F6"), typeof(Calendar.CalendarViewDemoPage)),
+        new ControlItem("Calendar Picker", "Nullable date picker", "📅 Calendar & Date", Color.FromArgb("#7C3AED"), typeof(Calendar.CalendarPickerDemoPage)),
 
         // Animations
         new ControlItem("Confetti View", "Celebration animations", "🎉 Animations", Color.FromArgb("#22C55E"), typeof(ConfettiViewTestPage)),
