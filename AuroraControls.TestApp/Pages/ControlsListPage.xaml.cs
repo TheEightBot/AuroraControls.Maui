@@ -52,10 +52,10 @@ public partial class ControlsListPage : ContentPage
 
         // Animations
         new ControlItem("Confetti View", "Celebration animations", "🎉 Animations", Color.FromArgb("#22C55E"), typeof(ConfettiViewTestPage)),
-        new ControlItem("Cutout Overlay", "Spotlight overlay effects", "🎉 Animations", Color.FromArgb("#EC4899"), typeof(CutoutOverlayViewTestPage)),
 
         // Images & Graphics
         new ControlItem("SVG Image View", "Vector graphics display", "🖼️ Images & Graphics", Color.FromArgb("#F59E0B"), typeof(Imaging.SvgImageViewDemoPage)),
+        new ControlItem("Cutout Overlay", "Spotlight overlay effects", "🖼️ Images & Graphics", Color.FromArgb("#EC4899"), typeof(Imaging.CutoutOverlayDemoPage)),
         new ControlItem("Signature Pad", "Capture signatures", "🖼️ Images & Graphics", Color.FromArgb("#EF4444"), typeof(Imaging.SignaturePadDemoPage)),
         new ControlItem("Touch Draw Letters", "Draw letter input", "🖼️ Images & Graphics", Color.FromArgb("#14B8A6"), typeof(Imaging.TouchDrawLettersDemoPage)),
         new ControlItem("Grid Image", "Grid image display", "🖼️ Images & Graphics", Color.FromArgb("#7C3AED"), typeof(GridImagePage)),
