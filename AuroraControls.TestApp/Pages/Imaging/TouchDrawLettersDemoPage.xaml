@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             xmlns:controls="clr-namespace:AuroraControls.TestApp.Controls"
+             xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
+             x:Class="AuroraControls.TestApp.Pages.Imaging.TouchDrawLettersDemoPage"
+             Title="Touch Draw Letters"
+             BackgroundColor="#0F0F0F">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="SectionTitle" TargetType="Label">
+                <Setter Property="TextColor" Value="#FFFFFF"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="Margin" Value="0,0,0,8"/>
+            </Style>
+            <Style x:Key="DescriptionText" TargetType="Label">
+                <Setter Property="TextColor" Value="#9CA3AF"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="Margin" Value="0,0,0,12"/>
+            </Style>
+            <Style x:Key="Card" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="#1A1A1A"/>
+                <Setter Property="Stroke" Value="#2A2A2A"/>
+                <Setter Property="StrokeThickness" Value="1"/>
+                <Setter Property="Padding" Value="16"/>
+                <Setter Property="Margin" Value="0,0,0,12"/>
+                <Setter Property="StrokeShape" Value="RoundRectangle 12"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <Border Grid.Row="0" 
+                BackgroundColor="#1A1A1A" 
+                Stroke="#2A2A2A"
+                StrokeThickness="0,0,0,1"
+                Padding="20,16">
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout>
+                    <Label Text="Touch Draw Letters" 
+                           FontSize="24" 
+                           FontAttributes="Bold" 
+                           TextColor="White"/>
+                    <Label Text="Draw labeled points on images interactively" 
+                           FontSize="14" 
+                           TextColor="#9CA3AF"/>
+                </VerticalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                    <Button Text="📋" 
+                            BackgroundColor="#262626"
+                            TextColor="White"
+                            WidthRequest="44"
+                            HeightRequest="44"
+                            CornerRadius="8"
+                            Clicked="OnCopyCodeClicked"
+                            ToolTipProperties.Text="Copy XAML"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+        <!-- Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="0">
+
+                <!-- Live Preview -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="Interactive Canvas" Style="{StaticResource SectionTitle}"/>
+                        <Label Text="Tap anywhere on the image to add labeled letters" Style="{StaticResource DescriptionText}"/>
+                        
+                        <Border BackgroundColor="#262626" 
+                                StrokeShape="RoundRectangle 8"
+                                Stroke="#3A3A3A"
+                                HeightRequest="300">
+                            <aurora:TouchDrawLettersImage x:Name="PreviewControl"
+                                                         Source="https://picsum.photos/400/300"
+                                                         DrawItemForegroundColor="White"
+                                                         DrawItemBackgroundColor="#3B82F6"
+                                                         BorderSize="2"
+                                                         FontSize="18"
+                                                         HorizontalOptions="Fill"
+                                                         VerticalOptions="Fill"/>
+                        </Border>
+
+                        <!-- Action Buttons -->
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                            <Button Text="Add Letter"
+                                    BackgroundColor="#3B82F6"
+                                    TextColor="White"
+                                    CornerRadius="8"
+                                    Clicked="OnAddLetterClicked"/>
+                            <Button Grid.Column="1"
+                                    Text="Clear All"
+                                    BackgroundColor="#EF4444"
+                                    TextColor="White"
+                                    CornerRadius="8"
+                                    Clicked="OnClearAllClicked"/>
+                            <Button Grid.Column="2"
+                                    Text="Export"
+                                    BackgroundColor="#22C55E"
+                                    TextColor="White"
+                                    CornerRadius="8"
+                                    Clicked="OnExportClicked"/>
+                        </Grid>
+
+                        <!-- Info Label -->
+                        <Label x:Name="InfoLabel" 
+                               Text="0 letters on canvas" 
+                               TextColor="#6B7280" 
+                               FontSize="12"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Preset Selector -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Quick Presets" Style="{StaticResource SectionTitle}"/>
+                        <controls:PresetSelector x:Name="PresetControl" PresetChanged="OnPresetChanged"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Colors -->
+                <controls:ExpandableSection Title="Letter Colors" Icon="🎨" IsExpanded="True">
+                    <VerticalStackLayout Spacing="12">
+                        <editors:ColorPickerEditor x:Name="ForegroundColorPicker"
+                                                  Label="Foreground Color"
+                                                  SelectedColor="{Binding Source={x:Reference PreviewControl}, Path=DrawItemForegroundColor, Mode=TwoWay}"/>
+                        
+                        <editors:ColorPickerEditor x:Name="BackgroundColorPicker"
+                                                  Label="Background Color"
+                                                  SelectedColor="{Binding Source={x:Reference PreviewControl}, Path=DrawItemBackgroundColor, Mode=TwoWay}"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Styling -->
+                <controls:ExpandableSection Title="Letter Styling" Icon="✏️">
+                    <VerticalStackLayout Spacing="12">
+                        <editors:SliderEditor x:Name="FontSizeSlider"
+                                             Label="Font Size"
+                                             Minimum="10"
+                                             Maximum="40"
+                                             Value="{Binding Source={x:Reference PreviewControl}, Path=FontSize, Mode=TwoWay}"
+                                             Step="1"/>
+                        
+                        <editors:SliderEditor x:Name="BorderSizeSlider"
+                                             Label="Border Size"
+                                             Minimum="0"
+                                             Maximum="10"
+                                             Value="{Binding Source={x:Reference PreviewControl}, Path=BorderSize, Mode=TwoWay}"
+                                             Step="0.5"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Image Source -->
+                <controls:ExpandableSection Title="Image Source" Icon="🖼️">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Change the background image" Style="{StaticResource DescriptionText}"/>
+                        
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="8" RowSpacing="8">
+                            <Button Text="Random Photo"
+                                    BackgroundColor="#262626"
+                                    TextColor="White"
+                                    CornerRadius="8"
+                                    Clicked="OnRandomPhotoClicked"/>
+                            <Button Grid.Column="1"
+                                    Text="Nature"
+                                    BackgroundColor="#262626"
+                                    TextColor="White"
+                                    CornerRadius="8"
+                                    Clicked="OnNaturePhotoClicked"/>
+                            <Button Grid.Row="1"
+                                    Text="Architecture"
+                                    BackgroundColor="#262626"
+                                    TextColor="White"
+                                    CornerRadius="8"
+                                    Clicked="OnArchitecturePhotoClicked"/>
+                            <Button Grid.Row="1" Grid.Column="1"
+                                    Text="Tech"
+                                    BackgroundColor="#262626"
+                                    TextColor="White"
+                                    CornerRadius="8"
+                                    Clicked="OnTechPhotoClicked"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Letters List -->
+                <controls:ExpandableSection Title="Added Letters" Icon="📝">
+                    <VerticalStackLayout Spacing="8">
+                        <Label x:Name="LettersListLabel" 
+                               Text="No letters added yet" 
+                               TextColor="#9CA3AF" 
+                               FontSize="13"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Bottom Padding -->
+                <BoxView HeightRequest="40"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
