@@ -643,8 +643,8 @@ The Showcase page serves as the app's hero landing page:
 - [x] **6.1** Refactor `CalendarViewPage`
 - [x] **6.2** Create `CalendarPickerDemoPage`
 
-### Phase 7: Chips & Tags
-- [ ] **7.1** Refactor `ChipGroupPage`
+### Phase 7: Chips & Tags ✅
+- [x] **7.1** Refactor `ChipGroupPage`
 
 ### Phase 8: Image & Graphics Controls
 - [ ] **8.1** Refactor `SvgImageViewTestPage`

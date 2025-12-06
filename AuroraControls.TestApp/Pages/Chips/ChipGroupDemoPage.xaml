@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             xmlns:controls="clr-namespace:AuroraControls.TestApp.Controls"
+             xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
+             x:Class="AuroraControls.TestApp.Pages.Chips.ChipGroupDemoPage"
+             Title="Chip Group"
+             BackgroundColor="#0F0F0F">
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <Border Grid.Row="0"
+                BackgroundColor="#1A1A1A"
+                StrokeThickness="0"
+                Padding="20,16">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Border BackgroundColor="#8B5CF6"
+                        StrokeThickness="0"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        Padding="8">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12"/>
+                    </Border.StrokeShape>
+                    <Label Text="🏷️"
+                           FontSize="20"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                </Border>
+
+                <VerticalStackLayout Grid.Column="1" Spacing="2" Margin="16,0,0,0">
+                    <Label Text="Chip Group"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="White"/>
+                    <Label Text="Tag-style chip selection"
+                           FontSize="13"
+                           TextColor="#9CA3AF"/>
+                </VerticalStackLayout>
+
+                <Button Grid.Column="2"
+                        Text="Add Chip"
+                        BackgroundColor="#22C55E"
+                        TextColor="White"
+                        FontSize="12"
+                        HeightRequest="36"
+                        Padding="12,0"
+                        CornerRadius="8"
+                        Clicked="OnAddChipClicked"/>
+            </Grid>
+        </Border>
+
+        <!-- Main Content -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="16" Padding="20">
+
+                <!-- Live Preview Card -->
+                <Border BackgroundColor="#1A1A1A"
+                        StrokeThickness="1"
+                        Stroke="#2A2A2A"
+                        Padding="20">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16"/>
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="LIVE PREVIEW"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#6B7280"
+                               CharacterSpacing="1"/>
+
+                        <!-- ChipGroup Control -->
+                        <Border BackgroundColor="#262626"
+                                StrokeThickness="1"
+                                Stroke="#3A3A3A"
+                                Padding="16"
+                                MinimumHeightRequest="100">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12"/>
+                            </Border.StrokeShape>
+                            <aurora:ChipGroup x:Name="PreviewChipGroup"
+                                              Spacing="8"
+                                              ChipTapped="OnChipTapped">
+                                <aurora:Chip Text="Swift"
+                                             Value="swift"
+                                             BackgroundColor="#3A3A3A"
+                                             ToggledBackgroundColor="#8B5CF6"
+                                             TextColor="#E5E7EB"
+                                             ToggledFontColor="White"
+                                             CornerRadius="16"/>
+                                <aurora:Chip Text="Kotlin"
+                                             Value="kotlin"
+                                             BackgroundColor="#3A3A3A"
+                                             ToggledBackgroundColor="#8B5CF6"
+                                             TextColor="#E5E7EB"
+                                             ToggledFontColor="White"
+                                             CornerRadius="16"/>
+                                <aurora:Chip Text=".NET MAUI"
+                                             Value="maui"
+                                             BackgroundColor="#3A3A3A"
+                                             ToggledBackgroundColor="#8B5CF6"
+                                             TextColor="#E5E7EB"
+                                             ToggledFontColor="White"
+                                             CornerRadius="16"/>
+                                <aurora:Chip Text="Flutter"
+                                             Value="flutter"
+                                             BackgroundColor="#3A3A3A"
+                                             ToggledBackgroundColor="#8B5CF6"
+                                             TextColor="#E5E7EB"
+                                             ToggledFontColor="White"
+                                             CornerRadius="16"/>
+                                <aurora:Chip Text="React Native"
+                                             Value="react"
+                                             BackgroundColor="#3A3A3A"
+                                             ToggledBackgroundColor="#8B5CF6"
+                                             TextColor="#E5E7EB"
+                                             ToggledFontColor="White"
+                                             CornerRadius="16"/>
+                            </aurora:ChipGroup>
+                        </Border>
+
+                        <!-- Selection Display -->
+                        <Border BackgroundColor="#262626"
+                                StrokeThickness="0"
+                                Padding="12">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8"/>
+                            </Border.StrokeShape>
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="Selected:"
+                                       TextColor="#9CA3AF"
+                                       FontSize="14"
+                                       VerticalOptions="Center"/>
+                                <Label x:Name="SelectedChipsLabel"
+                                       Text="None"
+                                       TextColor="#8B5CF6"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </Border>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Presets -->
+                <controls:PresetSelector x:Name="PresetSelector"
+                                         Label="Style Presets"
+                                         PresetChanged="OnPresetSelected"/>
+
+                <!-- Selection Mode -->
+                <controls:ExpandableSection Title="✅ Selection Mode" IsExpanded="True">
+                    <VerticalStackLayout Spacing="12" Padding="0,8">
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <Button x:Name="MultiSelectBtn"
+                                    Text="Multi-Select"
+                                    BackgroundColor="#8B5CF6"
+                                    TextColor="White"
+                                    FontSize="13"
+                                    HeightRequest="44"
+                                    CornerRadius="8"
+                                    Clicked="OnSelectionModeChanged"/>
+                            <Button x:Name="SingleSelectBtn"
+                                    Grid.Column="1"
+                                    Text="Single-Select"
+                                    BackgroundColor="#3A3A3A"
+                                    TextColor="White"
+                                    FontSize="13"
+                                    HeightRequest="44"
+                                    CornerRadius="8"
+                                    Clicked="OnSelectionModeChanged"/>
+                        </Grid>
+
+                        <editors:ToggleEditor x:Name="ChipSelectionDetectionToggle"
+                                              Label="Chip Selection Detection"
+                                              Value="True"
+                                              ValueChanged="OnChipSelectionDetectionChanged"/>
+
+                        <Button Text="Clear All Selections"
+                                BackgroundColor="#EF4444"
+                                TextColor="White"
+                                FontSize="14"
+                                HeightRequest="44"
+                                CornerRadius="8"
+                                Clicked="OnClearSelectionsClicked"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Layout Settings -->
+                <controls:ExpandableSection Title="📐 Layout" IsExpanded="True">
+                    <VerticalStackLayout Spacing="12" Padding="0,8">
+                        <editors:SliderEditor x:Name="SpacingSlider"
+                                              Label="Spacing"
+                                              Minimum="0"
+                                              Maximum="24"
+                                              Value="8"
+                                              ValueChanged="OnSpacingChanged"/>
+
+                        <editors:ToggleEditor x:Name="ScrollableToggle"
+                                              Label="Scrollable (Horizontal)"
+                                              ValueChanged="OnScrollableChanged"/>
+
+                        <editors:SliderEditor x:Name="MaxRowsSlider"
+                                              Label="Max Rows Before Overflow (-1 = unlimited)"
+                                              Minimum="-1"
+                                              Maximum="5"
+                                              Value="-1"
+                                              ValueChanged="OnMaxRowsChanged"/>
+
+                        <!-- Overflow Status -->
+                        <Border BackgroundColor="#262626"
+                                StrokeThickness="0"
+                                Padding="12">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8"/>
+                            </Border.StrokeShape>
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="Overflow:"
+                                       TextColor="#9CA3AF"
+                                       FontSize="14"
+                                       VerticalOptions="Center"/>
+                                <Label x:Name="OverflowLabel"
+                                       Text="No"
+                                       TextColor="#22C55E"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </Border>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Individual Chip Settings -->
+                <controls:ExpandableSection Title="🎨 Chip Appearance">
+                    <VerticalStackLayout Spacing="12" Padding="0,8">
+                        <editors:ColorPickerEditor x:Name="ChipBackgroundPicker"
+                                                   Label="Chip Background"
+                                                   ColorChanged="OnChipColorChanged"/>
+                        <editors:ColorPickerEditor x:Name="ChipToggledBackgroundPicker"
+                                                   Label="Toggled Background"
+                                                   ColorChanged="OnChipColorChanged"/>
+                        <editors:ColorPickerEditor x:Name="ChipTextColorPicker"
+                                                   Label="Text Color"
+                                                   ColorChanged="OnChipColorChanged"/>
+                        <editors:ColorPickerEditor x:Name="ChipToggledTextColorPicker"
+                                                   Label="Toggled Text Color"
+                                                   ColorChanged="OnChipColorChanged"/>
+                        <editors:SliderEditor x:Name="CornerRadiusSlider"
+                                              Label="Corner Radius"
+                                              Minimum="0"
+                                              Maximum="24"
+                                              Value="16"
+                                              ValueChanged="OnCornerRadiusChanged"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Chip Features -->
+                <controls:ExpandableSection Title="⚙️ Chip Features">
+                    <VerticalStackLayout Spacing="12" Padding="0,8">
+                        <editors:ToggleEditor x:Name="RemovableToggle"
+                                              Label="Removable Chips"
+                                              ValueChanged="OnRemovableChanged"/>
+
+                        <Label Text="Chip Shape"
+                               TextColor="#9CA3AF"
+                               FontSize="13"/>
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                            <Button x:Name="StandardShapeBtn"
+                                    Text="Standard"
+                                    BackgroundColor="#8B5CF6"
+                                    TextColor="White"
+                                    FontSize="12"
+                                    HeightRequest="40"
+                                    CornerRadius="8"
+                                    Clicked="OnShapeChanged"/>
+                            <Button x:Name="RectangleShapeBtn"
+                                    Grid.Column="1"
+                                    Text="Rectangle"
+                                    BackgroundColor="#3A3A3A"
+                                    TextColor="White"
+                                    FontSize="12"
+                                    HeightRequest="40"
+                                    CornerRadius="8"
+                                    Clicked="OnShapeChanged"/>
+                            <Button x:Name="RoundedShapeBtn"
+                                    Grid.Column="2"
+                                    Text="Rounded"
+                                    BackgroundColor="#3A3A3A"
+                                    TextColor="White"
+                                    FontSize="12"
+                                    HeightRequest="40"
+                                    CornerRadius="8"
+                                    Clicked="OnShapeChanged"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Scroll Controls -->
+                <controls:ExpandableSection Title="📜 Scroll Controls" IsExpanded="False">
+                    <VerticalStackLayout Spacing="12" Padding="0,8">
+                        <Label Text="Only available when Scrollable is enabled"
+                               TextColor="#6B7280"
+                               FontSize="12"
+                               FontAttributes="Italic"/>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <Button Text="Scroll to Start"
+                                    BackgroundColor="#3B82F6"
+                                    TextColor="White"
+                                    FontSize="13"
+                                    HeightRequest="44"
+                                    CornerRadius="8"
+                                    Clicked="OnScrollToStartClicked"/>
+                            <Button Grid.Column="1"
+                                    Text="Scroll to End"
+                                    BackgroundColor="#3B82F6"
+                                    TextColor="White"
+                                    FontSize="13"
+                                    HeightRequest="44"
+                                    CornerRadius="8"
+                                    Clicked="OnScrollToEndClicked"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Bottom spacing -->
+                <BoxView HeightRequest="40" Color="Transparent"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
