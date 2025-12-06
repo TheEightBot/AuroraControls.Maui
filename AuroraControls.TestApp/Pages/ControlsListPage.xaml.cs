@@ -31,8 +31,7 @@ public partial class ControlsListPage : ContentPage
     private static List<ControlItem> CreateControlsList() => new()
     {
         // Buttons
-        new ControlItem("Gradient Pill Button", "Beautiful gradient buttons", "🔘 Buttons", Color.FromArgb("#7C3AED"), typeof(GradientCircularButtonTestPage)),
-        new ControlItem("Gradient Circular Button", "Circular action buttons", "🔘 Buttons", Color.FromArgb("#EC4899"), typeof(GradientCircularButtonTestPage)),
+        new ControlItem("Gradient Circular Button", "Circular action buttons", "🔘 Buttons", Color.FromArgb("#7C3AED"), typeof(GradientCircularButtonTestPage)),
         new ControlItem("Cupertino Button", "iOS-style buttons", "🔘 Buttons", Color.FromArgb("#3B82F6"), typeof(CupertinoButtonTestPage)),
         new ControlItem("Tile", "Interactive tile buttons", "🔘 Buttons", Color.FromArgb("#14B8A6"), typeof(TileTestPage)),
         new ControlItem("SVG Image Button", "SVG-based buttons", "🔘 Buttons", Color.FromArgb("#8B5CF6"), typeof(SvgImageButtonTestPage)),
@@ -41,7 +40,6 @@ public partial class ControlsListPage : ContentPage
         new ControlItem("Toggle Box", "Animated toggle switches", "📝 Input Controls", Color.FromArgb("#22C55E"), typeof(ToggleBoxTestPage)),
         new ControlItem("Styled Input Layout", "Material-style inputs", "📝 Input Controls", Color.FromArgb("#F59E0B"), typeof(StyledInputLayoutTestPage)),
         new ControlItem("Chip Group", "Tag-style chip selection", "📝 Input Controls", Color.FromArgb("#8B5CF6"), typeof(Chips.ChipGroupDemoPage)),
-        new ControlItem("Step Indicator", "Multi-step progress", "📝 Input Controls", Color.FromArgb("#3B82F6"), typeof(StepIndicatorTestPage)),
         new ControlItem("Numeric Entry", "Numeric value input", "📝 Input Controls", Color.FromArgb("#EC4899"), typeof(Inputs.NumericEntryDemoPage)),
         new ControlItem("Cupertino Toggle Switch", "iOS-style toggle", "📝 Input Controls", Color.FromArgb("#14B8A6"), typeof(Inputs.CupertinoToggleSwitchDemoPage)),
         new ControlItem("Segmented Control", "Multi-style segments", "📝 Input Controls", Color.FromArgb("#7C3AED"), typeof(Inputs.SegmentedControlDemoPage)),
