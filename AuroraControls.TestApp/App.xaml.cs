@@ -29,10 +29,10 @@ public partial class App : Application
         RequestedThemeChanged += (s, e) => UpdateTabbedPageColors(tabbedPage);
 
         // Wrap each page in NavigationPage for navigation support
-        var showcaseNav = CreateNavigationPage(new ShowcasePage(), "Showcase", "icon_home.svg");
-        var controlsNav = CreateNavigationPage(new ControlsListPage(), "Controls", "icon_controls.svg");
-        var effectsNav = CreateNavigationPage(new EffectsPage(), "Effects", "icon_effects.svg");
-        var settingsNav = CreateNavigationPage(new SettingsPage(), "Settings", "icon_settings.svg");
+        var showcaseNav = CreateNavigationPage(new ShowcasePage(), "Home", "icon_home.png");
+        var controlsNav = CreateNavigationPage(new ControlsListPage(), "Controls", "icon_controls.png");
+        var effectsNav = CreateNavigationPage(new EffectsPage(), "Effects", "icon_effects.png");
+        var settingsNav = CreateNavigationPage(new SettingsPage(), "Settings", "icon_settings.png");
 
         tabbedPage.Children.Add(showcaseNav);
         tabbedPage.Children.Add(controlsNav);
