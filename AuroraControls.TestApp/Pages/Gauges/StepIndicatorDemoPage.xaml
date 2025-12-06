@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             xmlns:controls="clr-namespace:AuroraControls.TestApp.Controls"
+             xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
+             x:Class="AuroraControls.TestApp.Pages.Gauges.StepIndicatorDemoPage"
+             Title="Step Indicator"
+             BackgroundColor="#0F0F0F">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="SectionHeader" TargetType="Label">
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="TextColor" Value="#FFFFFF"/>
+                <Setter Property="Margin" Value="0,0,0,8"/>
+            </Style>
+            <Style x:Key="ControlCard" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="#1A1A1A"/>
+                <Setter Property="Stroke" Value="#2A2A2A"/>
+                <Setter Property="StrokeThickness" Value="1"/>
+                <Setter Property="StrokeShape" Value="RoundRectangle 12"/>
+                <Setter Property="Padding" Value="16"/>
+                <Setter Property="Margin" Value="0,0,0,12"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+            
+            <!-- Page Header -->
+            <VerticalStackLayout Spacing="4" Margin="0,0,0,16">
+                <Label Text="Step Indicator" 
+                       FontSize="28" 
+                       FontAttributes="Bold" 
+                       TextColor="#FFFFFF"/>
+                <Label Text="Progress through multi-step workflows with customizable shapes and colors" 
+                       FontSize="14" 
+                       TextColor="#808080"/>
+            </VerticalStackLayout>
+
+            <!-- Preview Card -->
+            <Border Style="{StaticResource ControlCard}">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="PREVIEW" Style="{StaticResource SectionHeader}" TextColor="#808080"/>
+                    
+                    <!-- Step Indicator Preview -->
+                    <aurora:StepIndicator x:Name="StepIndicatorPreview"
+                                          NumberOfSteps="5"
+                                          CurrentStep="2"
+                                          HeightRequest="80"
+                                          LineColor="#3A3A3A"
+                                          LineWidth="3"
+                                          HighlightColor="#00D4AA"
+                                          InactiveColor="#2A2A2A"
+                                          FontColor="#FFFFFF"
+                                          Shape="Circle"
+                                          DisplayStepNumber="True"
+                                          DrawConnectingLine="True"
+                                          SwitchOnStepTap="True"/>
+
+                    <!-- Quick Step Navigation -->
+                    <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="12" Margin="0,8,0,0">
+                        <Button x:Name="PrevStepButton"
+                                Text="◀ Previous"
+                                BackgroundColor="#2A2A2A"
+                                TextColor="#FFFFFF"
+                                Clicked="OnPrevStepClicked"
+                                HeightRequest="44"
+                                CornerRadius="8"/>
+                        <Label x:Name="StepLabel"
+                               Text="Step 3 of 5"
+                               FontSize="14"
+                               TextColor="#FFFFFF"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"
+                               Grid.Column="1"/>
+                        <Button x:Name="NextStepButton"
+                                Text="Next ▶"
+                                BackgroundColor="#00D4AA"
+                                TextColor="#0F0F0F"
+                                Clicked="OnNextStepClicked"
+                                HeightRequest="44"
+                                CornerRadius="8"
+                                Grid.Column="2"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Step Configuration -->
+            <controls:ExpandableSection Title="Step Configuration" Icon="⚙️" IsExpanded="True">
+                <VerticalStackLayout Spacing="12" Padding="0,8,0,0">
+                    <editors:SliderEditor x:Name="NumberOfStepsSlider"
+                                          Label="Number of Steps"
+                                          Minimum="2"
+                                          Maximum="10"
+                                          Value="5"
+                                          Step="1"
+                                          ValueChanged="OnNumberOfStepsChanged"/>
+                    
+                    <editors:SliderEditor x:Name="CurrentStepSlider"
+                                          Label="Current Step"
+                                          Minimum="0"
+                                          Maximum="4"
+                                          Value="2"
+                                          Step="1"
+                                          ValueChanged="OnCurrentStepChanged"/>
+
+                    <editors:SliderEditor x:Name="LineWidthSlider"
+                                          Label="Line Width"
+                                          Minimum="1"
+                                          Maximum="8"
+                                          Value="3"
+                                          Step="0.5"
+                                          ValueChanged="OnLineWidthChanged"/>
+                </VerticalStackLayout>
+            </controls:ExpandableSection>
+
+            <!-- Shape Selection -->
+            <controls:ExpandableSection Title="Shape" Icon="⬡" IsExpanded="True">
+                <VerticalStackLayout Spacing="12" Padding="0,8,0,0">
+                    <Label Text="Step Shape" FontSize="12" TextColor="#808080"/>
+                    <FlexLayout Wrap="Wrap" JustifyContent="Start" AlignItems="Start">
+                        <Button x:Name="CircleShapeBtn"
+                                Text="● Circle"
+                                Clicked="OnShapeSelected"
+                                BackgroundColor="#00D4AA"
+                                TextColor="#0F0F0F"
+                                HeightRequest="36"
+                                Margin="0,0,8,8"
+                                Padding="12,0"
+                                CornerRadius="8"/>
+                        <Button x:Name="SquareShapeBtn"
+                                Text="■ Square"
+                                Clicked="OnShapeSelected"
+                                BackgroundColor="#2A2A2A"
+                                TextColor="#FFFFFF"
+                                HeightRequest="36"
+                                Margin="0,0,8,8"
+                                Padding="12,0"
+                                CornerRadius="8"/>
+                        <Button x:Name="RoundedSquareShapeBtn"
+                                Text="▢ Rounded"
+                                Clicked="OnShapeSelected"
+                                BackgroundColor="#2A2A2A"
+                                TextColor="#FFFFFF"
+                                HeightRequest="36"
+                                Margin="0,0,8,8"
+                                Padding="12,0"
+                                CornerRadius="8"/>
+                        <Button x:Name="DiamondShapeBtn"
+                                Text="◆ Diamond"
+                                Clicked="OnShapeSelected"
+                                BackgroundColor="#2A2A2A"
+                                TextColor="#FFFFFF"
+                                HeightRequest="36"
+                                Margin="0,0,8,8"
+                                Padding="12,0"
+                                CornerRadius="8"/>
+                        <Button x:Name="HexagonShapeBtn"
+                                Text="⬡ Hexagon"
+                                Clicked="OnShapeSelected"
+                                BackgroundColor="#2A2A2A"
+                                TextColor="#FFFFFF"
+                                HeightRequest="36"
+                                Margin="0,0,8,8"
+                                Padding="12,0"
+                                CornerRadius="8"/>
+                        <Button x:Name="StarShapeBtn"
+                                Text="★ Star"
+                                Clicked="OnShapeSelected"
+                                BackgroundColor="#2A2A2A"
+                                TextColor="#FFFFFF"
+                                HeightRequest="36"
+                                Margin="0,0,8,8"
+                                Padding="12,0"
+                                CornerRadius="8"/>
+                        <Button x:Name="TriangleShapeBtn"
+                                Text="▲ Triangle"
+                                Clicked="OnShapeSelected"
+                                BackgroundColor="#2A2A2A"
+                                TextColor="#FFFFFF"
+                                HeightRequest="36"
+                                Margin="0,0,8,8"
+                                Padding="12,0"
+                                CornerRadius="8"/>
+                        <Button x:Name="PentagonShapeBtn"
+                                Text="⬠ Pentagon"
+                                Clicked="OnShapeSelected"
+                                BackgroundColor="#2A2A2A"
+                                TextColor="#FFFFFF"
+                                HeightRequest="36"
+                                Margin="0,0,8,8"
+                                Padding="12,0"
+                                CornerRadius="8"/>
+                    </FlexLayout>
+                </VerticalStackLayout>
+            </controls:ExpandableSection>
+
+            <!-- Colors -->
+            <controls:ExpandableSection Title="Colors" Icon="🎨" IsExpanded="False">
+                <VerticalStackLayout Spacing="12" Padding="0,8,0,0">
+                    <editors:ColorPickerEditor x:Name="HighlightColorPicker"
+                                               Label="Highlight Color (Current Step)"
+                                               SelectedColor="#00D4AA"
+                                               ColorChanged="OnHighlightColorChanged"/>
+
+                    <editors:ColorPickerEditor x:Name="InactiveColorPicker"
+                                               Label="Inactive Color"
+                                               SelectedColor="#2A2A2A"
+                                               ColorChanged="OnInactiveColorChanged"/>
+
+                    <editors:ColorPickerEditor x:Name="LineColorPicker"
+                                               Label="Line Color"
+                                               SelectedColor="#3A3A3A"
+                                               ColorChanged="OnLineColorChanged"/>
+
+                    <editors:ColorPickerEditor x:Name="FontColorPicker"
+                                               Label="Font Color"
+                                               SelectedColor="#FFFFFF"
+                                               ColorChanged="OnFontColorChanged"/>
+                </VerticalStackLayout>
+            </controls:ExpandableSection>
+
+            <!-- Display Options -->
+            <controls:ExpandableSection Title="Display Options" Icon="👁️" IsExpanded="False">
+                <VerticalStackLayout Spacing="12" Padding="0,8,0,0">
+                    <editors:ToggleEditor x:Name="DisplayStepNumberToggle"
+                                          Label="Display Step Number"
+                                          Value="True"
+                                          ValueChanged="OnDisplayStepNumberChanged"/>
+
+                    <editors:ToggleEditor x:Name="DrawConnectingLineToggle"
+                                          Label="Draw Connecting Line"
+                                          Value="True"
+                                          ValueChanged="OnDrawConnectingLineChanged"/>
+
+                    <editors:ToggleEditor x:Name="SwitchOnStepTapToggle"
+                                          Label="Switch On Step Tap"
+                                          Value="True"
+                                          ValueChanged="OnSwitchOnStepTapChanged"/>
+                </VerticalStackLayout>
+            </controls:ExpandableSection>
+
+            <!-- Presets -->
+            <controls:ExpandableSection Title="Presets" Icon="📋" IsExpanded="False">
+                <controls:PresetSelector x:Name="PresetSelector" PresetChanged="OnPresetSelected"/>
+            </controls:ExpandableSection>
+
+            <!-- Bottom spacing -->
+            <BoxView HeightRequest="40" Color="Transparent"/>
+            
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

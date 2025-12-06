@@ -61,6 +61,7 @@ public partial class ControlsListPage : ContentPage
 
         // Gauges & Progress
         new ControlItem("Gauges & Progress", "Progress indicators and loaders", "📊 Gauges & Progress", Color.FromArgb("#8B5CF6"), typeof(Gauges.GaugesDemoPage)),
+        new ControlItem("Step Indicator", "Multi-step workflow progress", "📊 Gauges & Progress", Color.FromArgb("#A855F7"), typeof(Gauges.StepIndicatorDemoPage)),
 
         // Layouts
         new ControlItem("Wrap Layout", "Flowing wrap layout", "📐 Layouts", Color.FromArgb("#3B82F6"), typeof(WrapLayoutTestPage)),
