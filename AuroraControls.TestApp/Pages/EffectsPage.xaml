@@ -3,141 +3,92 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AuroraControls.TestApp.Pages.EffectsPage"
              Title="Effects"
-             Style="{StaticResource DemoPageStyle}"
-             BackgroundColor="{StaticResource SurfaceDim}">
+             BackgroundColor="#0F0F0F">
 
     <ScrollView>
-        <VerticalStackLayout Padding="16" Spacing="12">
+        <VerticalStackLayout Padding="20" Spacing="12">
 
             <!-- Header -->
-            <Label Text="Platform Effects &amp; Processing"
-                   Style="{StaticResource TitleLarge}"
-                   Margin="0,0,0,8" />
+            <Label Text="Visual Effects"
+                   TextColor="White"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   Margin="0,10,0,20" />
 
-            <Label Text="Enhance your app with image processing and platform-specific effects"
-                   Style="{StaticResource BodyMedium}"
-                   Opacity="0.7"
-                   Margin="0,0,0,12" />
+            <!-- Image Processing Section -->
+            <Label Text="🖼️ Image Processing"
+                   TextColor="#3B82F6"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   Margin="0,8,0,4" />
 
-            <!-- Image Processing -->
-            <Border Style="{StaticResource CardStyle}">
+            <Border x:Name="ImageProcessingCard" BackgroundColor="#1A1A1A" StrokeShape="RoundRectangle 12" Stroke="#2A2A2A" Padding="16">
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="OnImageProcessingTapped" />
                 </Border.GestureRecognizers>
-                <Grid Padding="16"
-                      ColumnDefinitions="Auto,*,Auto"
-                      ColumnSpacing="12">
-
-                    <Border Grid.Column="0"
-                            BackgroundColor="{StaticResource AuroraPurple}"
-                            StrokeShape="RoundRectangle 12"
-                            Stroke="Transparent"
-                            HeightRequest="56"
-                            WidthRequest="56">
-                        <Label Text="🎨" FontSize="28" HorizontalOptions="Center" VerticalOptions="Center" />
-                    </Border>
-
-                    <VerticalStackLayout Grid.Column="1"
-                                        VerticalOptions="Center"
-                                        Spacing="4">
-                        <Label Text="Image Processing" Style="{StaticResource TitleMedium}" />
-                        <Label Text="Blur, saturation, brightness, contrast &amp; more"
-                               Style="{StaticResource BodySmall}"
-                               Opacity="0.6" />
+                <Grid ColumnDefinitions="4,*,Auto">
+                    <BoxView Color="#3B82F6" CornerRadius="2" WidthRequest="4" />
+                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                        <Label Text="Image Processing" TextColor="White" FontSize="16" FontAttributes="Bold" />
+                        <Label Text="Blur, grayscale, sepia, and more" TextColor="#6B7280" FontSize="12" />
                     </VerticalStackLayout>
-
-                    <Label Grid.Column="2"
-                           Text="›"
-                           FontSize="28"
-                           VerticalOptions="Center"
-                           Opacity="0.4" />
+                    <Label Grid.Column="2" Text="→" TextColor="#6B7280" FontSize="18" VerticalOptions="Center" />
                 </Grid>
             </Border>
 
-            <!-- Platform Effects -->
-            <Border Style="{StaticResource CardStyle}">
+            <!-- Platform Effects Section -->
+            <Label Text="📱 Platform Effects"
+                   TextColor="#EC4899"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   Margin="0,16,0,4" />
+
+            <Border x:Name="KeyboardEffectCard" BackgroundColor="#1A1A1A" StrokeShape="RoundRectangle 12" Stroke="#2A2A2A" Padding="16">
                 <Border.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnPlatformEffectsTapped" />
+                    <TapGestureRecognizer Tapped="OnKeyboardEffectTapped" />
                 </Border.GestureRecognizers>
-                <Grid Padding="16"
-                      ColumnDefinitions="Auto,*,Auto"
-                      ColumnSpacing="12">
-
-                    <Border Grid.Column="0"
-                            BackgroundColor="{StaticResource AuroraPink}"
-                            StrokeShape="RoundRectangle 12"
-                            Stroke="Transparent"
-                            HeightRequest="56"
-                            WidthRequest="56">
-                        <Label Text="📱" FontSize="28" HorizontalOptions="Center" VerticalOptions="Center" />
-                    </Border>
-
-                    <VerticalStackLayout Grid.Column="1"
-                                        VerticalOptions="Center"
-                                        Spacing="4">
-                        <Label Text="Platform Effects" Style="{StaticResource TitleMedium}" />
-                        <Label Text="Safe area, keyboard effects &amp; more"
-                               Style="{StaticResource BodySmall}"
-                               Opacity="0.6" />
+                <Grid ColumnDefinitions="4,*,Auto">
+                    <BoxView Color="#EC4899" CornerRadius="2" WidthRequest="4" />
+                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                        <Label Text="Keyboard Return Key" TextColor="White" FontSize="16" FontAttributes="Bold" />
+                        <Label Text="Customize keyboard return button" TextColor="#6B7280" FontSize="12" />
                     </VerticalStackLayout>
-
-                    <Label Grid.Column="2"
-                           Text="›"
-                           FontSize="28"
-                           VerticalOptions="Center"
-                           Opacity="0.4" />
+                    <Label Grid.Column="2" Text="→" TextColor="#6B7280" FontSize="18" VerticalOptions="Center" />
                 </Grid>
             </Border>
 
-            <!-- Effects List Section -->
-            <Label Text="Available Effects"
-                   Style="{StaticResource TitleMedium}"
-                   Margin="0,16,0,8" />
-
-            <!-- Safe Area Effect -->
-            <Border Style="{StaticResource CardStyle}" Padding="12">
-                <HorizontalStackLayout Spacing="12">
-                    <Label Text="📐" FontSize="20" VerticalOptions="Center" />
-                    <VerticalStackLayout VerticalOptions="Center" Spacing="2">
-                        <Label Text="Safe Area Effect" Style="{StaticResource TitleSmall}" />
-                        <Label Text="Respect device safe areas" Style="{StaticResource BodySmall}" Opacity="0.6" />
+            <Border x:Name="DoneButtonCard" BackgroundColor="#1A1A1A" StrokeShape="RoundRectangle 12" Stroke="#2A2A2A" Padding="16">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnDoneButtonTapped" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="4,*,Auto">
+                    <BoxView Color="#14B8A6" CornerRadius="2" WidthRequest="4" />
+                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                        <Label Text="Keyboard Done Button" TextColor="White" FontSize="16" FontAttributes="Bold" />
+                        <Label Text="Add done button to keyboard" TextColor="#6B7280" FontSize="12" />
                     </VerticalStackLayout>
-                </HorizontalStackLayout>
+                    <Label Grid.Column="2" Text="→" TextColor="#6B7280" FontSize="18" VerticalOptions="Center" />
+                </Grid>
             </Border>
 
-            <!-- Keyboard Return Key Effect -->
-            <Border Style="{StaticResource CardStyle}" Padding="12">
-                <HorizontalStackLayout Spacing="12">
-                    <Label Text="⌨️" FontSize="20" VerticalOptions="Center" />
-                    <VerticalStackLayout VerticalOptions="Center" Spacing="2">
-                        <Label Text="Keyboard Return Key" Style="{StaticResource TitleSmall}" />
-                        <Label Text="Customize return key type" Style="{StaticResource BodySmall}" Opacity="0.6" />
+            <Border x:Name="SafeAreaCard" BackgroundColor="#1A1A1A" StrokeShape="RoundRectangle 12" Stroke="#2A2A2A" Padding="16">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnSafeAreaTapped" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="4,*,Auto">
+                    <BoxView Color="#F59E0B" CornerRadius="2" WidthRequest="4" />
+                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                        <Label Text="Safe Area Effect" TextColor="White" FontSize="16" FontAttributes="Bold" />
+                        <Label Text="Respect device safe areas" TextColor="#6B7280" FontSize="12" />
                     </VerticalStackLayout>
-                </HorizontalStackLayout>
+                    <Label Grid.Column="2" Text="→" TextColor="#6B7280" FontSize="18" VerticalOptions="Center" />
+                </Grid>
             </Border>
 
-            <!-- Keyboard Done Button Effect -->
-            <Border Style="{StaticResource CardStyle}" Padding="12">
-                <HorizontalStackLayout Spacing="12">
-                    <Label Text="✅" FontSize="20" VerticalOptions="Center" />
-                    <VerticalStackLayout VerticalOptions="Center" Spacing="2">
-                        <Label Text="Keyboard Done Button" Style="{StaticResource TitleSmall}" />
-                        <Label Text="Show done button on keyboard" Style="{StaticResource BodySmall}" Opacity="0.6" />
-                    </VerticalStackLayout>
-                </HorizontalStackLayout>
-            </Border>
-
-            <!-- List View Hide Empty Cells Effect -->
-            <Border Style="{StaticResource CardStyle}" Padding="12">
-                <HorizontalStackLayout Spacing="12">
-                    <Label Text="📋" FontSize="20" VerticalOptions="Center" />
-                    <VerticalStackLayout VerticalOptions="Center" Spacing="2">
-                        <Label Text="Hide Empty Cells" Style="{StaticResource TitleSmall}" />
-                        <Label Text="Remove empty ListView cells" Style="{StaticResource BodySmall}" Opacity="0.6" />
-                    </VerticalStackLayout>
-                </HorizontalStackLayout>
-            </Border>
+            <!-- Bottom spacing -->
+            <BoxView HeightRequest="20" Color="Transparent" />
 
         </VerticalStackLayout>
     </ScrollView>
+
 </ContentPage>

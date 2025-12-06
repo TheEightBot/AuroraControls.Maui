@@ -1,8 +1,5 @@
 namespace AuroraControls.TestApp.Pages;
 
-/// <summary>
-/// Showcase page displaying featured controls and library highlights.
-/// </summary>
 public partial class ShowcasePage : ContentPage
 {
     public ShowcasePage()
@@ -10,50 +7,24 @@ public partial class ShowcasePage : ContentPage
         InitializeComponent();
     }
 
-    private async void OnGradientButtonsTapped(object sender, TappedEventArgs e)
+    private async void OnExploreClicked(object? sender, EventArgs e)
     {
-        await NavigateToRoute("gradientpillbutton");
+        // Navigate to GradientCircularButtonTestPage (GradientPillButton doesn't have a test page yet)
+        await Navigation.PushAsync(new GradientCircularButtonTestPage());
     }
 
-    private async void OnCalendarTapped(object sender, TappedEventArgs e)
+    private async void OnToggleBoxTapped(object? sender, TappedEventArgs e)
     {
-        await ShowComingSoon("Calendar View");
+        await Navigation.PushAsync(new ToggleBoxTestPage());
     }
 
-    private async void OnInputsTapped(object sender, TappedEventArgs e)
+    private async void OnCalendarTapped(object? sender, TappedEventArgs e)
     {
-        await ShowComingSoon("Styled Input Layout");
+        await Navigation.PushAsync(new CalendarViewPage());
     }
 
-    private async void OnChipsTapped(object sender, TappedEventArgs e)
+    private async void OnConfettiTapped(object? sender, TappedEventArgs e)
     {
-        await ShowComingSoon("Chip Group");
-    }
-
-    private async void OnProgressTapped(object sender, TappedEventArgs e)
-    {
-        await ShowComingSoon("Gauges");
-    }
-
-    private async void OnAnimationsTapped(object sender, TappedEventArgs e)
-    {
-        await ShowComingSoon("Confetti");
-    }
-
-    private async Task NavigateToRoute(string route)
-    {
-        try
-        {
-            await Shell.Current.GoToAsync(route);
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Navigation Error", $"Could not navigate to {route}: {ex.Message}", "OK");
-        }
-    }
-
-    private async Task ShowComingSoon(string controlName)
-    {
-        await DisplayAlert("Coming Soon", $"The {controlName} demo page is coming in a future update.", "OK");
+        await Navigation.PushAsync(new ConfettiViewTestPage());
     }
 }

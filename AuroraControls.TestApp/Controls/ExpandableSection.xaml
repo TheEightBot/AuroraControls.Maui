@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AuroraControls.TestApp.Controls.ExpandableSection"
+             x:Name="this">
+    
+    <Border Padding="0"
+            StrokeShape="RoundRectangle 12"
+            Stroke="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}"
+            StrokeThickness="1"
+            BackgroundColor="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}">
+        
+        <VerticalStackLayout Spacing="0">
+            
+            <!-- Header (Always visible) -->
+            <Grid Padding="16,14"
+                  ColumnDefinitions="Auto,*,Auto"
+                  ColumnSpacing="12">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnHeaderTapped" />
+                </Grid.GestureRecognizers>
+                
+                <!-- Icon -->
+                <Label Grid.Column="0"
+                       Text="{Binding Icon, Source={x:Reference this}}"
+                       FontSize="18"
+                       VerticalOptions="Center"
+                       IsVisible="{Binding Icon, Source={x:Reference this}, Converter={StaticResource StringNotEmptyConverter}}" />
+                
+                <!-- Title -->
+                <Label Grid.Column="1"
+                       Text="{Binding Title, Source={x:Reference this}}"
+                       FontSize="15"
+                       FontAttributes="Bold"
+                       VerticalOptions="Center"
+                       TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}" />
+                
+                <!-- Expand/Collapse Indicator -->
+                <Label Grid.Column="2"
+                       x:Name="ExpandIndicator"
+                       Text="▸"
+                       FontSize="14"
+                       VerticalOptions="Center"
+                       TextColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}" />
+            </Grid>
+            
+            <!-- Separator -->
+            <BoxView x:Name="Separator"
+                     HeightRequest="1"
+                     Color="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}"
+                     IsVisible="{Binding IsExpanded, Source={x:Reference this}}" />
+            
+            <!-- Expandable Content Area -->
+            <ContentView x:Name="ContentArea"
+                         Content="{Binding SectionContent, Source={x:Reference this}}"
+                         Padding="16,12"
+                         IsVisible="{Binding IsExpanded, Source={x:Reference this}}" />
+            
+        </VerticalStackLayout>
+        
+    </Border>
+    
+</ContentView>

@@ -38,17 +38,129 @@
     <!-- ═══════════════════════════════════════════════════════════════════════
          TYPOGRAPHY - Font Sizes
          ═══════════════════════════════════════════════════════════════════════ -->
+    <x:Double x:Key="FontSizeDisplayLarge">32</x:Double>
+    <x:Double x:Key="FontSizeDisplayMedium">28</x:Double>
+    <x:Double x:Key="FontSizeDisplaySmall">24</x:Double>
+    <x:Double x:Key="FontSizeHeadlineLarge">28</x:Double>
+    <x:Double x:Key="FontSizeHeadlineMedium">24</x:Double>
+    <x:Double x:Key="FontSizeHeadlineSmall">20</x:Double>
+    <x:Double x:Key="FontSizeTitleLarge">20</x:Double>
+    <x:Double x:Key="FontSizeTitleMedium">16</x:Double>
+    <x:Double x:Key="FontSizeTitleSmall">14</x:Double>
+    <x:Double x:Key="FontSizeBodyLarge">16</x:Double>
+    <x:Double x:Key="FontSizeBodyMedium">14</x:Double>
+    <x:Double x:Key="FontSizeBodySmall">12</x:Double>
+    <x:Double x:Key="FontSizeLabelLarge">14</x:Double>
+    <x:Double x:Key="FontSizeLabelMedium">12</x:Double>
+    <x:Double x:Key="FontSizeLabelSmall">11</x:Double>
+    
+    <!-- Legacy Font Sizes (for backwards compatibility) -->
     <x:Double x:Key="FontSizeDisplay">28</x:Double>
     <x:Double x:Key="FontSizeHeadline">24</x:Double>
     <x:Double x:Key="FontSizeTitle">20</x:Double>
     <x:Double x:Key="FontSizeSubtitle">18</x:Double>
-    <x:Double x:Key="FontSizeBodyLarge">16</x:Double>
     <x:Double x:Key="FontSizeBody">14</x:Double>
     <x:Double x:Key="FontSizeLabel">12</x:Double>
     <x:Double x:Key="FontSizeCaption">11</x:Double>
 
     <!-- ═══════════════════════════════════════════════════════════════════════
-         LABEL STYLES
+         M3 TYPOGRAPHY STYLES - Display
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Style x:Key="DisplayLarge" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeDisplayLarge}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+    </Style>
+    
+    <Style x:Key="DisplayMedium" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeDisplayMedium}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+    </Style>
+    
+    <Style x:Key="DisplaySmall" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeDisplaySmall}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         M3 TYPOGRAPHY STYLES - Headline
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Style x:Key="HeadlineLarge" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeHeadlineLarge}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+    </Style>
+    
+    <Style x:Key="HeadlineMedium" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeHeadlineMedium}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+    </Style>
+    
+    <Style x:Key="HeadlineSmall" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeHeadlineSmall}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         M3 TYPOGRAPHY STYLES - Title
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Style x:Key="TitleLarge" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeTitleLarge}" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+    </Style>
+    
+    <Style x:Key="TitleMedium" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeTitleMedium}" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+    </Style>
+    
+    <Style x:Key="TitleSmall" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeTitleSmall}" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         M3 TYPOGRAPHY STYLES - Body
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Style x:Key="BodyLarge" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBodyLarge}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+    </Style>
+    
+    <Style x:Key="BodyMedium" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBodyMedium}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+    </Style>
+    
+    <Style x:Key="BodySmall" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBodySmall}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         M3 TYPOGRAPHY STYLES - Label
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Style x:Key="LabelLarge" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeLabelLarge}" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+    </Style>
+    
+    <Style x:Key="LabelMedium" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeLabelMedium}" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+    </Style>
+    
+    <Style x:Key="LabelSmall" TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeLabelSmall}" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         LEGACY LABEL STYLES (for backwards compatibility)
          ═══════════════════════════════════════════════════════════════════════ -->
     <Style x:Key="DisplayLabel" TargetType="Label">
         <Setter Property="FontSize" Value="{StaticResource FontSizeDisplay}" />
@@ -178,6 +290,45 @@
          ═══════════════════════════════════════════════════════════════════════ -->
     <Style x:Key="BasePage" TargetType="ContentPage">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}" />
+    </Style>
+
+    <Style x:Key="DemoPageStyle" TargetType="ContentPage">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}" />
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         CARD STYLE (Border-based)
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Style x:Key="CardStyle" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="Padding" Value="{StaticResource CardPadding}" />
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="16" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="#20000000" Offset="0,4" Radius="8" Opacity="0.15" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         OUTLINE BUTTON STYLE
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <Style x:Key="OutlineButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource AuroraPurple}" />
+        <Setter Property="BorderColor" Value="{StaticResource AuroraPurple}" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeLabel}" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="12,8" />
+        <Setter Property="MinimumHeightRequest" Value="36" />
     </Style>
 
     <!-- ═══════════════════════════════════════════════════════════════════════

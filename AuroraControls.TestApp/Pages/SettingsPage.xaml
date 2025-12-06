@@ -3,165 +3,87 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AuroraControls.TestApp.Pages.SettingsPage"
              Title="Settings"
-             Style="{StaticResource DemoPageStyle}"
-             BackgroundColor="{StaticResource SurfaceDim}">
+             BackgroundColor="#0F0F0F">
 
     <ScrollView>
-        <VerticalStackLayout Padding="16" Spacing="12">
+        <VerticalStackLayout Padding="20" Spacing="16">
+
+            <!-- Header -->
+            <Label Text="Settings"
+                   TextColor="White"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   Margin="0,10,0,20" />
 
             <!-- Appearance Section -->
             <Label Text="Appearance"
-                   Style="{StaticResource TitleMedium}"
-                   TextColor="{StaticResource AuroraPurple}"
+                   TextColor="#7C3AED"
+                   FontSize="16"
+                   FontAttributes="Bold"
                    Margin="0,0,0,8" />
 
-            <Border Style="{StaticResource CardStyle}">
-                <VerticalStackLayout Spacing="0">
-
-                    <!-- Theme Toggle -->
-                    <Grid Padding="12"
-                          ColumnDefinitions="Auto,*,Auto">
-                        <Label Grid.Column="0" Text="🌙" FontSize="20" VerticalOptions="Center" />
-                        <VerticalStackLayout Grid.Column="1" Margin="12,0,0,0" VerticalOptions="Center">
-                            <Label Text="Dark Mode" Style="{StaticResource TitleSmall}" />
-                            <Label Text="Use dark color scheme" Style="{StaticResource BodySmall}" Opacity="0.6" />
-                        </VerticalStackLayout>
-                        <Switch Grid.Column="2"
-                                x:Name="DarkModeSwitch"
-                                IsToggled="True"
-                                Toggled="OnDarkModeToggled"
-                                VerticalOptions="Center" />
-                    </Grid>
-
-                    <BoxView HeightRequest="1" Color="{StaticResource SurfaceContainer}" />
-
-                    <!-- Accent Color -->
-                    <Grid Padding="12"
-                          ColumnDefinitions="Auto,*,Auto">
-                        <Label Grid.Column="0" Text="🎨" FontSize="20" VerticalOptions="Center" />
-                        <VerticalStackLayout Grid.Column="1" Margin="12,0,0,0" VerticalOptions="Center">
-                            <Label Text="Accent Color" Style="{StaticResource TitleSmall}" />
-                            <Label Text="Aurora Purple" Style="{StaticResource BodySmall}" Opacity="0.6" />
-                        </VerticalStackLayout>
-                        <Border Grid.Column="2"
-                                BackgroundColor="{StaticResource AuroraPurple}"
-                                StrokeShape="RoundRectangle 4"
-                                Stroke="Transparent"
-                                HeightRequest="24"
-                                WidthRequest="24"
-                                VerticalOptions="Center" />
-                    </Grid>
-
-                </VerticalStackLayout>
-            </Border>
-
-            <!-- Developer Section -->
-            <Label Text="Developer"
-                   Style="{StaticResource TitleMedium}"
-                   TextColor="{StaticResource AuroraPurple}"
-                   Margin="0,16,0,8" />
-
-            <Border Style="{StaticResource CardStyle}">
-                <VerticalStackLayout Spacing="0">
-
-                    <!-- Show Performance Overlay -->
-                    <Grid Padding="12"
-                          ColumnDefinitions="Auto,*,Auto">
-                        <Label Grid.Column="0" Text="📊" FontSize="20" VerticalOptions="Center" />
-                        <VerticalStackLayout Grid.Column="1" Margin="12,0,0,0" VerticalOptions="Center">
-                            <Label Text="Performance Overlay" Style="{StaticResource TitleSmall}" />
-                            <Label Text="Show FPS and render time" Style="{StaticResource BodySmall}" Opacity="0.6" />
-                        </VerticalStackLayout>
-                        <Switch Grid.Column="2"
-                                x:Name="PerformanceSwitch"
-                                IsToggled="False"
-                                VerticalOptions="Center" />
-                    </Grid>
-
-                    <BoxView HeightRequest="1" Color="{StaticResource SurfaceContainer}" />
-
-                    <!-- Debug Borders -->
-                    <Grid Padding="12"
-                          ColumnDefinitions="Auto,*,Auto">
-                        <Label Grid.Column="0" Text="🔲" FontSize="20" VerticalOptions="Center" />
-                        <VerticalStackLayout Grid.Column="1" Margin="12,0,0,0" VerticalOptions="Center">
-                            <Label Text="Debug Borders" Style="{StaticResource TitleSmall}" />
-                            <Label Text="Show control boundaries" Style="{StaticResource BodySmall}" Opacity="0.6" />
-                        </VerticalStackLayout>
-                        <Switch Grid.Column="2"
-                                x:Name="DebugBordersSwitch"
-                                IsToggled="False"
-                                VerticalOptions="Center" />
-                    </Grid>
-
-                </VerticalStackLayout>
+            <Border BackgroundColor="#1A1A1A" StrokeShape="RoundRectangle 12" Stroke="#2A2A2A" Padding="16">
+                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+                    <VerticalStackLayout VerticalOptions="Center">
+                        <Label Text="Dark Mode" TextColor="White" FontSize="16" />
+                        <Label Text="Use dark theme" TextColor="#6B7280" FontSize="12" />
+                    </VerticalStackLayout>
+                    <Switch Grid.Column="1" 
+                            x:Name="DarkModeSwitch"
+                            IsToggled="True"
+                            OnColor="#7C3AED"
+                            ThumbColor="White"
+                            Toggled="OnDarkModeToggled" />
+                </Grid>
             </Border>
 
             <!-- About Section -->
             <Label Text="About"
-                   Style="{StaticResource TitleMedium}"
-                   TextColor="{StaticResource AuroraPurple}"
+                   TextColor="#EC4899"
+                   FontSize="16"
+                   FontAttributes="Bold"
                    Margin="0,16,0,8" />
 
-            <Border Style="{StaticResource CardStyle}" Padding="16">
+            <Border BackgroundColor="#1A1A1A" StrokeShape="RoundRectangle 12" Stroke="#2A2A2A" Padding="16">
                 <VerticalStackLayout Spacing="12">
-                    <Label Text="🌌 Aurora Controls"
-                           Style="{StaticResource TitleLarge}"
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Version" TextColor="White" FontSize="16" />
+                        <Label Grid.Column="1" Text="1.0.0" TextColor="#6B7280" FontSize="16" />
+                    </Grid>
+                    <BoxView HeightRequest="1" Color="#2A2A2A" />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Framework" TextColor="White" FontSize="16" />
+                        <Label Grid.Column="1" Text=".NET MAUI 9" TextColor="#6B7280" FontSize="16" />
+                    </Grid>
+                    <BoxView HeightRequest="1" Color="#2A2A2A" />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="SkiaSharp" TextColor="White" FontSize="16" />
+                        <Label Grid.Column="1" Text="3.x" TextColor="#6B7280" FontSize="16" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Credits -->
+            <Border BackgroundColor="#1A1A1A" StrokeShape="RoundRectangle 12" Stroke="#2A2A2A" Padding="20" Margin="0,16,0,0">
+                <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                    <Label Text="Aurora Controls"
+                           TextColor="White"
+                           FontSize="20"
+                           FontAttributes="Bold"
                            HorizontalTextAlignment="Center" />
-
-                    <Label Text="Premium .NET MAUI controls powered by SkiaSharp"
-                           Style="{StaticResource BodyMedium}"
+                    <Label Text="Beautiful MAUI Controls"
+                           TextColor="#9CA3AF"
+                           FontSize="14"
+                           HorizontalTextAlignment="Center" />
+                    <Label Text="© 2025 TheEightBot"
+                           TextColor="#4B5563"
+                           FontSize="12"
                            HorizontalTextAlignment="Center"
-                           Opacity="0.7" />
-
-                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="8">
-                        <Label Grid.Row="0" Grid.Column="0" Text="Version" Style="{StaticResource LabelSmall}" Opacity="0.6" />
-                        <Label Grid.Row="0" Grid.Column="1" Text="2.0.0" Style="{StaticResource BodySmall}" HorizontalTextAlignment="End" />
-
-                        <Label Grid.Row="1" Grid.Column="0" Text="Framework" Style="{StaticResource LabelSmall}" Opacity="0.6" />
-                        <Label Grid.Row="1" Grid.Column="1" Text=".NET MAUI" Style="{StaticResource BodySmall}" HorizontalTextAlignment="End" />
-                    </Grid>
+                           Margin="0,8,0,0" />
                 </VerticalStackLayout>
             </Border>
-
-            <!-- Links Section -->
-            <Border Style="{StaticResource CardStyle}">
-                <VerticalStackLayout Spacing="0">
-
-                    <!-- GitHub -->
-                    <Grid Padding="12"
-                          ColumnDefinitions="Auto,*,Auto">
-                        <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnGitHubTapped" />
-                        </Grid.GestureRecognizers>
-                        <Label Grid.Column="0" Text="📦" FontSize="20" VerticalOptions="Center" />
-                        <Label Grid.Column="1" Text="View on GitHub" Style="{StaticResource TitleSmall}" Margin="12,0,0,0" VerticalOptions="Center" />
-                        <Label Grid.Column="2" Text="›" FontSize="24" VerticalOptions="Center" Opacity="0.4" />
-                    </Grid>
-
-                    <BoxView HeightRequest="1" Color="{StaticResource SurfaceContainer}" />
-
-                    <!-- Documentation -->
-                    <Grid Padding="12"
-                          ColumnDefinitions="Auto,*,Auto">
-                        <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnDocsTapped" />
-                        </Grid.GestureRecognizers>
-                        <Label Grid.Column="0" Text="📚" FontSize="20" VerticalOptions="Center" />
-                        <Label Grid.Column="1" Text="Documentation" Style="{StaticResource TitleSmall}" Margin="12,0,0,0" VerticalOptions="Center" />
-                        <Label Grid.Column="2" Text="›" FontSize="24" VerticalOptions="Center" Opacity="0.4" />
-                    </Grid>
-
-                </VerticalStackLayout>
-            </Border>
-
-            <!-- Footer -->
-            <Label Text="Made with ❤️ for .NET MAUI"
-                   Style="{StaticResource BodySmall}"
-                   HorizontalTextAlignment="Center"
-                   Opacity="0.4"
-                   Margin="0,16,0,0" />
 
         </VerticalStackLayout>
     </ScrollView>
+
 </ContentPage>

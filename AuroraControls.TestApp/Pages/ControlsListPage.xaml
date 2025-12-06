@@ -1,100 +1,213 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:pages="clr-namespace:AuroraControls.TestApp.Pages"
              x:Class="AuroraControls.TestApp.Pages.ControlsListPage"
              Title="Controls"
-             Style="{StaticResource DemoPageStyle}"
-             BackgroundColor="{StaticResource SurfaceDim}">
+             BackgroundColor="#0F0F0F">
 
-    <CollectionView x:Name="ControlsCollection"
-                    SelectionMode="Single"
-                    SelectionChanged="OnControlSelected">
-        <CollectionView.ItemsSource>
-            <x:Array Type="{x:Type x:String}">
-                <!-- Placeholder - will be replaced with proper model -->
-            </x:Array>
-        </CollectionView.ItemsSource>
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
 
-        <CollectionView.Header>
-            <VerticalStackLayout Padding="16" Spacing="12">
-                <!-- Search Bar -->
-                <Border Style="{StaticResource CardStyle}" Padding="8">
-                    <SearchBar x:Name="SearchBar"
-                               Placeholder="Search controls..."
-                               TextChanged="OnSearchTextChanged"
-                               BackgroundColor="Transparent" />
-                </Border>
-            </VerticalStackLayout>
-        </CollectionView.Header>
+            <!-- Header -->
+            <Label Text="All Controls"
+                   TextColor="White"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   Margin="0,10,0,20" />
 
-        <CollectionView.GroupHeaderTemplate>
-            <DataTemplate x:DataType="pages:ControlGroup">
-                <VerticalStackLayout Padding="16,12">
-                    <Label Text="{Binding Name}"
-                           Style="{StaticResource TitleMedium}"
-                           TextColor="{StaticResource AuroraPurple}" />
-                </VerticalStackLayout>
-            </DataTemplate>
-        </CollectionView.GroupHeaderTemplate>
+            <!-- Buttons Section -->
+            <Label Text="🔘 Buttons &amp; Actions"
+                   TextColor="#7C3AED"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   Margin="0,8,0,4" />
 
-        <CollectionView.ItemTemplate>
-            <DataTemplate x:DataType="pages:ControlItem">
-                <Border Style="{StaticResource CardStyle}"
-                        Margin="16,0,16,8">
-                    <Grid Padding="12"
-                          ColumnDefinitions="Auto,*,Auto"
-                          ColumnSpacing="12">
+            <Border x:Name="GradientPillButtonCard" BackgroundColor="#1A1A1A" StrokeShape="RoundRectangle 12" Stroke="#2A2A2A" Padding="16">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnGradientPillButtonTapped" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="4,*,Auto">
+                    <BoxView Color="#7C3AED" CornerRadius="2" WidthRequest="4" />
+                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                        <Label Text="Gradient Pill Button" TextColor="White" FontSize="16" FontAttributes="Bold" />
+                        <Label Text="Beautiful gradient buttons" TextColor="#6B7280" FontSize="12" />
+                    </VerticalStackLayout>
+                    <Label Grid.Column="2" Text="→" TextColor="#6B7280" FontSize="18" VerticalOptions="Center" />
+                </Grid>
+            </Border>
 
-                        <!-- Icon -->
-                        <Border Grid.Column="0"
-                                BackgroundColor="{StaticResource SurfaceContainer}"
-                                StrokeShape="RoundRectangle 8"
-                                Stroke="Transparent"
-                                HeightRequest="44"
-                                WidthRequest="44">
-                            <Label Text="{Binding Icon}"
-                                   FontSize="20"
-                                   HorizontalOptions="Center"
-                                   VerticalOptions="Center" />
-                        </Border>
+            <Border x:Name="GradientCircularButtonCard" BackgroundColor="#1A1A1A" StrokeShape="RoundRectangle 12" Stroke="#2A2A2A" Padding="16">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnGradientCircularButtonTapped" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="4,*,Auto">
+                    <BoxView Color="#EC4899" CornerRadius="2" WidthRequest="4" />
+                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                        <Label Text="Gradient Circular Button" TextColor="White" FontSize="16" FontAttributes="Bold" />
+                        <Label Text="Circular action buttons" TextColor="#6B7280" FontSize="12" />
+                    </VerticalStackLayout>
+                    <Label Grid.Column="2" Text="→" TextColor="#6B7280" FontSize="18" VerticalOptions="Center" />
+                </Grid>
+            </Border>
 
-                        <!-- Title & Description -->
-                        <VerticalStackLayout Grid.Column="1"
-                                            VerticalOptions="Center"
-                                            Spacing="4">
-                            <Label Text="{Binding Name}"
-                                   Style="{StaticResource TitleSmall}" />
-                            <Label Text="{Binding Description}"
-                                   Style="{StaticResource BodySmall}"
-                                   Opacity="0.6"
-                                   LineBreakMode="TailTruncation" />
-                        </VerticalStackLayout>
+            <Border x:Name="CupertinoButtonCard" BackgroundColor="#1A1A1A" StrokeShape="RoundRectangle 12" Stroke="#2A2A2A" Padding="16">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnCupertinoButtonTapped" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="4,*,Auto">
+                    <BoxView Color="#3B82F6" CornerRadius="2" WidthRequest="4" />
+                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                        <Label Text="Cupertino Button" TextColor="White" FontSize="16" FontAttributes="Bold" />
+                        <Label Text="iOS-style buttons" TextColor="#6B7280" FontSize="12" />
+                    </VerticalStackLayout>
+                    <Label Grid.Column="2" Text="→" TextColor="#6B7280" FontSize="18" VerticalOptions="Center" />
+                </Grid>
+            </Border>
 
-                        <!-- Chevron -->
-                        <Label Grid.Column="2"
-                               Text="›"
-                               FontSize="24"
-                               VerticalOptions="Center"
-                               Opacity="0.4" />
-                    </Grid>
-                </Border>
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
+            <Border x:Name="TileCard" BackgroundColor="#1A1A1A" StrokeShape="RoundRectangle 12" Stroke="#2A2A2A" Padding="16">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnTileTapped" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="4,*,Auto">
+                    <BoxView Color="#14B8A6" CornerRadius="2" WidthRequest="4" />
+                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                        <Label Text="Tile" TextColor="White" FontSize="16" FontAttributes="Bold" />
+                        <Label Text="Interactive tile buttons" TextColor="#6B7280" FontSize="12" />
+                    </VerticalStackLayout>
+                    <Label Grid.Column="2" Text="→" TextColor="#6B7280" FontSize="18" VerticalOptions="Center" />
+                </Grid>
+            </Border>
 
-        <CollectionView.EmptyView>
-            <VerticalStackLayout VerticalOptions="Center"
-                                HorizontalOptions="Center"
-                                Spacing="12">
-                <Label Text="🔍" FontSize="48" HorizontalTextAlignment="Center" />
-                <Label Text="No controls found"
-                       Style="{StaticResource TitleMedium}"
-                       HorizontalTextAlignment="Center" />
-                <Label Text="Try a different search term"
-                       Style="{StaticResource BodyMedium}"
-                       HorizontalTextAlignment="Center"
-                       Opacity="0.6" />
-            </VerticalStackLayout>
-        </CollectionView.EmptyView>
-    </CollectionView>
+            <!-- Input Section -->
+            <Label Text="📝 Input Controls"
+                   TextColor="#EC4899"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   Margin="0,16,0,4" />
+
+            <Border x:Name="ToggleBoxCard" BackgroundColor="#1A1A1A" StrokeShape="RoundRectangle 12" Stroke="#2A2A2A" Padding="16">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnToggleBoxTapped" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="4,*,Auto">
+                    <BoxView Color="#22C55E" CornerRadius="2" WidthRequest="4" />
+                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                        <Label Text="Toggle Box" TextColor="White" FontSize="16" FontAttributes="Bold" />
+                        <Label Text="Animated toggle switches" TextColor="#6B7280" FontSize="12" />
+                    </VerticalStackLayout>
+                    <Label Grid.Column="2" Text="→" TextColor="#6B7280" FontSize="18" VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <Border x:Name="StyledInputCard" BackgroundColor="#1A1A1A" StrokeShape="RoundRectangle 12" Stroke="#2A2A2A" Padding="16">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnStyledInputTapped" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="4,*,Auto">
+                    <BoxView Color="#F59E0B" CornerRadius="2" WidthRequest="4" />
+                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                        <Label Text="Styled Input Layout" TextColor="White" FontSize="16" FontAttributes="Bold" />
+                        <Label Text="Material-style inputs" TextColor="#6B7280" FontSize="12" />
+                    </VerticalStackLayout>
+                    <Label Grid.Column="2" Text="→" TextColor="#6B7280" FontSize="18" VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <Border x:Name="ChipGroupCard" BackgroundColor="#1A1A1A" StrokeShape="RoundRectangle 12" Stroke="#2A2A2A" Padding="16">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnChipGroupTapped" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="4,*,Auto">
+                    <BoxView Color="#8B5CF6" CornerRadius="2" WidthRequest="4" />
+                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                        <Label Text="Chip Group" TextColor="White" FontSize="16" FontAttributes="Bold" />
+                        <Label Text="Tag-style chip selection" TextColor="#6B7280" FontSize="12" />
+                    </VerticalStackLayout>
+                    <Label Grid.Column="2" Text="→" TextColor="#6B7280" FontSize="18" VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <!-- Calendar Section -->
+            <Label Text="📅 Calendar &amp; Date"
+                   TextColor="#3B82F6"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   Margin="0,16,0,4" />
+
+            <Border x:Name="CalendarCard" BackgroundColor="#1A1A1A" StrokeShape="RoundRectangle 12" Stroke="#2A2A2A" Padding="16">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnCalendarTapped" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="4,*,Auto">
+                    <BoxView Color="#3B82F6" CornerRadius="2" WidthRequest="4" />
+                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                        <Label Text="Calendar View" TextColor="White" FontSize="16" FontAttributes="Bold" />
+                        <Label Text="Full calendar control" TextColor="#6B7280" FontSize="12" />
+                    </VerticalStackLayout>
+                    <Label Grid.Column="2" Text="→" TextColor="#6B7280" FontSize="18" VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <!-- Animation Section -->
+            <Label Text="🎉 Animations"
+                   TextColor="#22C55E"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   Margin="0,16,0,4" />
+
+            <Border x:Name="ConfettiCard" BackgroundColor="#1A1A1A" StrokeShape="RoundRectangle 12" Stroke="#2A2A2A" Padding="16">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnConfettiTapped" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="4,*,Auto">
+                    <BoxView Color="#22C55E" CornerRadius="2" WidthRequest="4" />
+                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                        <Label Text="Confetti View" TextColor="White" FontSize="16" FontAttributes="Bold" />
+                        <Label Text="Celebration animations" TextColor="#6B7280" FontSize="12" />
+                    </VerticalStackLayout>
+                    <Label Grid.Column="2" Text="→" TextColor="#6B7280" FontSize="18" VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <!-- Images Section -->
+            <Label Text="🖼️ Images &amp; Graphics"
+                   TextColor="#F59E0B"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   Margin="0,16,0,4" />
+
+            <Border x:Name="SvgImageCard" BackgroundColor="#1A1A1A" StrokeShape="RoundRectangle 12" Stroke="#2A2A2A" Padding="16">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnSvgImageTapped" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="4,*,Auto">
+                    <BoxView Color="#F59E0B" CornerRadius="2" WidthRequest="4" />
+                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                        <Label Text="SVG Image View" TextColor="White" FontSize="16" FontAttributes="Bold" />
+                        <Label Text="Vector graphics display" TextColor="#6B7280" FontSize="12" />
+                    </VerticalStackLayout>
+                    <Label Grid.Column="2" Text="→" TextColor="#6B7280" FontSize="18" VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <Border x:Name="SignatureCard" BackgroundColor="#1A1A1A" StrokeShape="RoundRectangle 12" Stroke="#2A2A2A" Padding="16">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnSignatureTapped" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="4,*,Auto">
+                    <BoxView Color="#EF4444" CornerRadius="2" WidthRequest="4" />
+                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                        <Label Text="Signature Pad" TextColor="White" FontSize="16" FontAttributes="Bold" />
+                        <Label Text="Capture signatures" TextColor="#6B7280" FontSize="12" />
+                    </VerticalStackLayout>
+                    <Label Grid.Column="2" Text="→" TextColor="#6B7280" FontSize="18" VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <!-- Bottom spacing -->
+            <BoxView HeightRequest="20" Color="Transparent" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
 </ContentPage>

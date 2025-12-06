@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AuroraControls.TestApp.Controls.PropertyEditors.ToggleEditor"
+             x:Name="this">
+    
+    <Grid ColumnDefinitions="*,Auto" 
+          ColumnSpacing="12"
+          Padding="0,12">
+        
+        <!-- Label -->
+        <VerticalStackLayout Grid.Column="0"
+                             VerticalOptions="Center"
+                             Spacing="2">
+            <Label Text="{Binding Label, Source={x:Reference this}}"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}" />
+            <Label Text="{Binding Description, Source={x:Reference this}}"
+                   FontSize="12"
+                   TextColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}"
+                   IsVisible="{Binding Description, Source={x:Reference this}, Converter={StaticResource StringNotEmptyConverter}}" />
+        </VerticalStackLayout>
+        
+        <!-- Toggle Switch -->
+        <Switch Grid.Column="1"
+                IsToggled="{Binding Value, Source={x:Reference this}, Mode=TwoWay}"
+                OnColor="{StaticResource AuroraPurple}"
+                ThumbColor="{AppThemeBinding Light=White, Dark=#F9FAFB}"
+                VerticalOptions="Center" />
+        
+    </Grid>
+    
+</ContentView>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AuroraControls.TestApp.Controls.CodeViewer"
+             x:Name="this"
+             BackgroundColor="{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}">
+    
+    <Border Padding="0"
+            StrokeShape="RoundRectangle 16"
+            Stroke="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}"
+            StrokeThickness="1"
+            BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0D1117}">
+        
+        <Grid RowDefinitions="Auto,*,Auto">
+            
+            <!-- Header -->
+            <Grid Grid.Row="0"
+                  Padding="16,12"
+                  ColumnDefinitions="*,Auto"
+                  BackgroundColor="{AppThemeBinding Light=#F1F5F9, Dark=#161B22}">
+                
+                <Label Grid.Column="0"
+                       Text="{Binding Title, Source={x:Reference this}}"
+                       FontSize="14"
+                       FontAttributes="Bold"
+                       VerticalOptions="Center"
+                       TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}" />
+                
+                <!-- Language Badge -->
+                <Border Grid.Column="1"
+                        Padding="10,4"
+                        StrokeShape="RoundRectangle 6"
+                        Stroke="Transparent"
+                        BackgroundColor="{StaticResource AuroraPurple}">
+                    <Label Text="{Binding Language, Source={x:Reference this}}"
+                           FontSize="11"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           VerticalOptions="Center" />
+                </Border>
+            </Grid>
+            
+            <!-- Code Content -->
+            <ScrollView Grid.Row="1"
+                        Orientation="Both"
+                        HorizontalScrollBarVisibility="Default"
+                        VerticalScrollBarVisibility="Default">
+                <Border Padding="16"
+                        BackgroundColor="Transparent">
+                    <Label x:Name="CodeLabel"
+                           Text="{Binding Code, Source={x:Reference this}}"
+                           FontFamily="JetBrainsMono"
+                           FontSize="13"
+                           LineHeight="1.5"
+                           TextColor="{AppThemeBinding Light=#1F2937, Dark=#E6EDF3}" />
+                </Border>
+            </ScrollView>
+            
+            <!-- Footer with Copy Button -->
+            <Border Grid.Row="2"
+                    Padding="12"
+                    BackgroundColor="{AppThemeBinding Light=#F1F5F9, Dark=#161B22}">
+                <Grid ColumnDefinitions="*,Auto">
+                    
+                    <Label Grid.Column="0"
+                           x:Name="CopyStatusLabel"
+                           Text=""
+                           FontSize="12"
+                           VerticalOptions="Center"
+                           TextColor="{StaticResource Success}" />
+                    
+                    <Button Grid.Column="1"
+                            Text="📋 Copy Code"
+                            FontSize="13"
+                            Padding="16,10"
+                            CornerRadius="8"
+                            BackgroundColor="{StaticResource AuroraPurple}"
+                            TextColor="White"
+                            Clicked="OnCopyClicked" />
+                </Grid>
+            </Border>
+            
+        </Grid>
+        
+    </Border>
+    
+</ContentView>

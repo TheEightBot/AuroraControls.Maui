@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AuroraControls.TestApp.Controls.PropertyEditors.ColorPickerEditor"
+             x:Name="this">
+    
+    <Grid ColumnDefinitions="Auto,*,Auto" 
+          ColumnSpacing="12"
+          Padding="0,8">
+        
+        <!-- Color Preview Swatch -->
+        <Border Grid.Column="0"
+                WidthRequest="40"
+                HeightRequest="40"
+                StrokeShape="RoundRectangle 8"
+                Stroke="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}"
+                StrokeThickness="1">
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnSwatchTapped" />
+            </Border.GestureRecognizers>
+            <BoxView x:Name="ColorSwatch"
+                     Color="{Binding SelectedColor, Source={x:Reference this}}"
+                     CornerRadius="7" />
+        </Border>
+        
+        <!-- Property Label and Hex Value -->
+        <VerticalStackLayout Grid.Column="1"
+                             VerticalOptions="Center"
+                             Spacing="2">
+            <Label Text="{Binding Label, Source={x:Reference this}}"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}" />
+            <Entry x:Name="HexEntry"
+                   Text="{Binding HexValue, Source={x:Reference this}, Mode=TwoWay}"
+                   Placeholder="#RRGGBB"
+                   FontSize="12"
+                   FontFamily="JetBrainsMono"
+                   TextColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}"
+                   BackgroundColor="Transparent"
+                   Completed="OnHexEntryCompleted"
+                   MaxLength="9" />
+        </VerticalStackLayout>
+        
+        <!-- Preset Colors -->
+        <HorizontalStackLayout Grid.Column="2"
+                               Spacing="4"
+                               VerticalOptions="Center">
+            <Border WidthRequest="24" HeightRequest="24" StrokeShape="RoundRectangle 4" Stroke="Transparent">
+                <BoxView BackgroundColor="{StaticResource AuroraPurple}" CornerRadius="3">
+                    <BoxView.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SelectPresetCommand, Source={x:Reference this}}" 
+                                              CommandParameter="{StaticResource AuroraPurple}" />
+                    </BoxView.GestureRecognizers>
+                </BoxView>
+            </Border>
+            <Border WidthRequest="24" HeightRequest="24" StrokeShape="RoundRectangle 4" Stroke="Transparent">
+                <BoxView BackgroundColor="{StaticResource AuroraPink}" CornerRadius="3">
+                    <BoxView.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SelectPresetCommand, Source={x:Reference this}}" 
+                                              CommandParameter="{StaticResource AuroraPink}" />
+                    </BoxView.GestureRecognizers>
+                </BoxView>
+            </Border>
+            <Border WidthRequest="24" HeightRequest="24" StrokeShape="RoundRectangle 4" Stroke="Transparent">
+                <BoxView BackgroundColor="{StaticResource AuroraBlue}" CornerRadius="3">
+                    <BoxView.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SelectPresetCommand, Source={x:Reference this}}" 
+                                              CommandParameter="{StaticResource AuroraBlue}" />
+                    </BoxView.GestureRecognizers>
+                </BoxView>
+            </Border>
+            <Border WidthRequest="24" HeightRequest="24" StrokeShape="RoundRectangle 4" Stroke="Transparent">
+                <BoxView BackgroundColor="{StaticResource AuroraTeal}" CornerRadius="3">
+                    <BoxView.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SelectPresetCommand, Source={x:Reference this}}" 
+                                              CommandParameter="{StaticResource AuroraTeal}" />
+                    </BoxView.GestureRecognizers>
+                </BoxView>
+            </Border>
+        </HorizontalStackLayout>
+        
+    </Grid>
+    
+</ContentView>

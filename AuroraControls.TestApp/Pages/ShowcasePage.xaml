@@ -2,151 +2,140 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AuroraControls.TestApp.Pages.ShowcasePage"
-             Title="Aurora Controls"
-             Style="{StaticResource DemoPageStyle}"
-             BackgroundColor="{StaticResource SurfaceDim}">
+             Title="Showcase"
+             BackgroundColor="#0F0F0F">
 
     <ScrollView>
-        <VerticalStackLayout Padding="16" Spacing="12">
+        <VerticalStackLayout Padding="20" Spacing="20">
 
-            <!-- Hero Section -->
-            <Border Style="{StaticResource CardStyle}"
-                    Padding="24"
-                    Margin="0,0,0,12">
-                <VerticalStackLayout Spacing="12">
-                    <Label Text="🌌 Aurora Controls"
-                           Style="{StaticResource DisplayLarge}"
-                           HorizontalTextAlignment="Center" />
-                    <Label Text="A beautiful collection of premium .NET MAUI controls powered by SkiaSharp"
-                           Style="{StaticResource BodyLarge}"
-                           HorizontalTextAlignment="Center"
-                           Opacity="0.7" />
-                    <Label Text="v2.0 • SkiaSharp • M3 Expressive"
-                           Style="{StaticResource LabelMedium}"
-                           HorizontalTextAlignment="Center"
-                           Opacity="0.5" />
+            <!-- Header -->
+            <VerticalStackLayout Spacing="8" Margin="0,20,0,10">
+                <Label Text="Aurora Controls"
+                       TextColor="White"
+                       FontSize="32"
+                       FontAttributes="Bold"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Beautiful MAUI Controls"
+                       TextColor="#9CA3AF"
+                       FontSize="16"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+            <!-- Featured Control Card -->
+            <Border BackgroundColor="#1A1A1A"
+                    StrokeShape="RoundRectangle 16"
+                    Stroke="#2A2A2A"
+                    Padding="20">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="🎨 Featured Control"
+                           TextColor="#7C3AED"
+                           FontSize="14"
+                           FontAttributes="Bold" />
+
+                    <Border BackgroundColor="#262626"
+                            StrokeShape="RoundRectangle 12"
+                            Stroke="Transparent"
+                            HeightRequest="120"
+                            Padding="20">
+                        <Label Text="Gradient Pill Button"
+                               TextColor="White"
+                               FontSize="20"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center" />
+                    </Border>
+
+                    <Label Text="Create beautiful gradient buttons with customizable colors, shadows, and animations."
+                           TextColor="#9CA3AF"
+                           FontSize="14"
+                           LineBreakMode="WordWrap" />
+
+                    <Button Text="Explore →"
+                            BackgroundColor="#7C3AED"
+                            TextColor="White"
+                            CornerRadius="8"
+                            HeightRequest="44"
+                            Clicked="OnExploreClicked" />
                 </VerticalStackLayout>
             </Border>
 
-            <!-- Featured Controls Section -->
-            <Label Text="✨ Featured Controls"
-                   Style="{StaticResource TitleLarge}"
-                   Margin="0,12,0,8" />
+            <!-- Popular Controls -->
+            <Label Text="Popular Controls"
+                   TextColor="White"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   Margin="0,10,0,0" />
 
-            <!-- Featured Control Cards Grid -->
-            <Grid ColumnDefinitions="*,*"
-                  RowDefinitions="Auto,Auto,Auto"
-                  ColumnSpacing="12"
-                  RowSpacing="12">
-
-                <!-- Gradient Buttons -->
-                <Border Style="{StaticResource CardStyle}"
-                        Grid.Row="0" Grid.Column="0">
+            <HorizontalStackLayout Spacing="12">
+                <Border BackgroundColor="#1A1A1A"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="#2A2A2A"
+                        WidthRequest="100"
+                        HeightRequest="100"
+                        Padding="12">
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnGradientButtonsTapped" />
+                        <TapGestureRecognizer Tapped="OnToggleBoxTapped" />
                     </Border.GestureRecognizers>
-                    <VerticalStackLayout Padding="12" Spacing="8">
-                        <Label Text="🔘" FontSize="32" HorizontalTextAlignment="Center" />
-                        <Label Text="Gradient Buttons" Style="{StaticResource TitleMedium}" HorizontalTextAlignment="Center" />
-                        <Label Text="Pill &amp; Circular" Style="{StaticResource BodySmall}" HorizontalTextAlignment="Center" Opacity="0.6" />
+                    <VerticalStackLayout VerticalOptions="Center" Spacing="8">
+                        <Label Text="✓"
+                               TextColor="#22C55E"
+                               FontSize="24"
+                               HorizontalTextAlignment="Center" />
+                        <Label Text="ToggleBox"
+                               TextColor="White"
+                               FontSize="12"
+                               HorizontalTextAlignment="Center" />
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- Calendar -->
-                <Border Style="{StaticResource CardStyle}"
-                        Grid.Row="0" Grid.Column="1">
+                <Border BackgroundColor="#1A1A1A"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="#2A2A2A"
+                        WidthRequest="100"
+                        HeightRequest="100"
+                        Padding="12">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnCalendarTapped" />
                     </Border.GestureRecognizers>
-                    <VerticalStackLayout Padding="12" Spacing="8">
-                        <Label Text="📅" FontSize="32" HorizontalTextAlignment="Center" />
-                        <Label Text="Calendar" Style="{StaticResource TitleMedium}" HorizontalTextAlignment="Center" />
-                        <Label Text="View &amp; Picker" Style="{StaticResource BodySmall}" HorizontalTextAlignment="Center" Opacity="0.6" />
+                    <VerticalStackLayout VerticalOptions="Center" Spacing="8">
+                        <Label Text="📅"
+                               FontSize="24"
+                               HorizontalTextAlignment="Center" />
+                        <Label Text="Calendar"
+                               TextColor="White"
+                               FontSize="12"
+                               HorizontalTextAlignment="Center" />
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- Inputs -->
-                <Border Style="{StaticResource CardStyle}"
-                        Grid.Row="1" Grid.Column="0">
+                <Border BackgroundColor="#1A1A1A"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="#2A2A2A"
+                        WidthRequest="100"
+                        HeightRequest="100"
+                        Padding="12">
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnInputsTapped" />
+                        <TapGestureRecognizer Tapped="OnConfettiTapped" />
                     </Border.GestureRecognizers>
-                    <VerticalStackLayout Padding="12" Spacing="8">
-                        <Label Text="📝" FontSize="32" HorizontalTextAlignment="Center" />
-                        <Label Text="Styled Inputs" Style="{StaticResource TitleMedium}" HorizontalTextAlignment="Center" />
-                        <Label Text="Floating Labels" Style="{StaticResource BodySmall}" HorizontalTextAlignment="Center" Opacity="0.6" />
+                    <VerticalStackLayout VerticalOptions="Center" Spacing="8">
+                        <Label Text="🎉"
+                               FontSize="24"
+                               HorizontalTextAlignment="Center" />
+                        <Label Text="Confetti"
+                               TextColor="White"
+                               FontSize="12"
+                               HorizontalTextAlignment="Center" />
                     </VerticalStackLayout>
                 </Border>
-
-                <!-- Chips -->
-                <Border Style="{StaticResource CardStyle}"
-                        Grid.Row="1" Grid.Column="1">
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnChipsTapped" />
-                    </Border.GestureRecognizers>
-                    <VerticalStackLayout Padding="12" Spacing="8">
-                        <Label Text="🏷️" FontSize="32" HorizontalTextAlignment="Center" />
-                        <Label Text="Chip Group" Style="{StaticResource TitleMedium}" HorizontalTextAlignment="Center" />
-                        <Label Text="Selection Chips" Style="{StaticResource BodySmall}" HorizontalTextAlignment="Center" Opacity="0.6" />
-                    </VerticalStackLayout>
-                </Border>
-
-                <!-- Progress -->
-                <Border Style="{StaticResource CardStyle}"
-                        Grid.Row="2" Grid.Column="0">
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnProgressTapped" />
-                    </Border.GestureRecognizers>
-                    <VerticalStackLayout Padding="12" Spacing="8">
-                        <Label Text="📊" FontSize="32" HorizontalTextAlignment="Center" />
-                        <Label Text="Gauges" Style="{StaticResource TitleMedium}" HorizontalTextAlignment="Center" />
-                        <Label Text="Arc &amp; Radial" Style="{StaticResource BodySmall}" HorizontalTextAlignment="Center" Opacity="0.6" />
-                    </VerticalStackLayout>
-                </Border>
-
-                <!-- Animations -->
-                <Border Style="{StaticResource CardStyle}"
-                        Grid.Row="2" Grid.Column="1">
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnAnimationsTapped" />
-                    </Border.GestureRecognizers>
-                    <VerticalStackLayout Padding="12" Spacing="8">
-                        <Label Text="🎉" FontSize="32" HorizontalTextAlignment="Center" />
-                        <Label Text="Confetti" Style="{StaticResource TitleMedium}" HorizontalTextAlignment="Center" />
-                        <Label Text="Celebrations" Style="{StaticResource BodySmall}" HorizontalTextAlignment="Center" Opacity="0.6" />
-                    </VerticalStackLayout>
-                </Border>
-            </Grid>
-
-            <!-- Quick Stats Section -->
-            <Label Text="📈 Library Stats"
-                   Style="{StaticResource TitleLarge}"
-                   Margin="0,16,0,8" />
-
-            <Border Style="{StaticResource CardStyle}" Padding="16">
-                <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto">
-                    <VerticalStackLayout Grid.Column="0" Spacing="4">
-                        <Label Text="35+" Style="{StaticResource DisplayMedium}" HorizontalTextAlignment="Center" TextColor="{StaticResource AuroraPurple}" />
-                        <Label Text="Controls" Style="{StaticResource LabelSmall}" HorizontalTextAlignment="Center" Opacity="0.6" />
-                    </VerticalStackLayout>
-                    <VerticalStackLayout Grid.Column="1" Spacing="4">
-                        <Label Text="10+" Style="{StaticResource DisplayMedium}" HorizontalTextAlignment="Center" TextColor="{StaticResource AuroraPink}" />
-                        <Label Text="Effects" Style="{StaticResource LabelSmall}" HorizontalTextAlignment="Center" Opacity="0.6" />
-                    </VerticalStackLayout>
-                    <VerticalStackLayout Grid.Column="2" Spacing="4">
-                        <Label Text="100%" Style="{StaticResource DisplayMedium}" HorizontalTextAlignment="Center" TextColor="{StaticResource AuroraTeal}" />
-                        <Label Text="SkiaSharp" Style="{StaticResource LabelSmall}" HorizontalTextAlignment="Center" Opacity="0.6" />
-                    </VerticalStackLayout>
-                </Grid>
-            </Border>
+            </HorizontalStackLayout>
 
             <!-- Version Info -->
-            <Label Text="Built with ❤️ using .NET MAUI &amp; SkiaSharp"
-                   Style="{StaticResource BodySmall}"
+            <Label Text="Version 1.0 • .NET MAUI 9"
+                   TextColor="#4B5563"
+                   FontSize="12"
                    HorizontalTextAlignment="Center"
-                   Opacity="0.4"
-                   Margin="0,16,0,0" />
+                   Margin="0,20,0,0" />
 
         </VerticalStackLayout>
     </ScrollView>
+
 </ContentPage>

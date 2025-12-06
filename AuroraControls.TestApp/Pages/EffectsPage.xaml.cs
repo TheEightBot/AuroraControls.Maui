@@ -1,8 +1,5 @@
 namespace AuroraControls.TestApp.Pages;
 
-/// <summary>
-/// Effects page displaying image processing and platform effects.
-/// </summary>
 public partial class EffectsPage : ContentPage
 {
     public EffectsPage()
@@ -10,13 +7,23 @@ public partial class EffectsPage : ContentPage
         InitializeComponent();
     }
 
-    private async void OnImageProcessingTapped(object sender, TappedEventArgs e)
+    private async void OnImageProcessingTapped(object? sender, TappedEventArgs e)
     {
-        await DisplayAlert("Coming Soon", "The Image Processing demo page is coming in a future update.", "OK");
+        await Navigation.PushAsync(new ImageProcessing());
     }
 
-    private async void OnPlatformEffectsTapped(object sender, TappedEventArgs e)
+    private async void OnKeyboardEffectTapped(object? sender, TappedEventArgs e)
     {
-        await DisplayAlert("Coming Soon", "The Platform Effects demo page is coming in a future update.", "OK");
+        await Navigation.PushAsync(new KeyboardReturnKeyTypeEffectTestPage());
+    }
+
+    private async void OnDoneButtonTapped(object? sender, TappedEventArgs e)
+    {
+        await Navigation.PushAsync(new ShowKeyboardDoneButtonEffectTestPage());
+    }
+
+    private async void OnSafeAreaTapped(object? sender, TappedEventArgs e)
+    {
+        await Navigation.PushAsync(new SafeAreaTestPage());
     }
 }

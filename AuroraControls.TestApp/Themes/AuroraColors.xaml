@@ -95,6 +95,32 @@
     </LinearGradientBrush>
 
     <!-- ═══════════════════════════════════════════════════════════════════════
+         THEME-AWARE COLOR ALIASES
+         These are simple color values that can be used with StaticResource
+         For theme-aware behavior, use AppThemeBinding with Light/Dark variants
+         ═══════════════════════════════════════════════════════════════════════ -->
+    
+    <!-- Surface Colors - these are static aliases for common use -->
+    <Color x:Key="SurfaceColor">#FFFFFF</Color>
+    <Color x:Key="SurfaceDim">#F5F5F5</Color>
+    <Color x:Key="SurfaceContainer">#E8E8E8</Color>
+    <Color x:Key="OnSurface">#1F1F1F</Color>
+    <Color x:Key="OnSurfaceVariant">#6B6B6B</Color>
+    
+    <!-- Background Colors -->
+    <Color x:Key="BackgroundColor">#FAFAFA</Color>
+    <Color x:Key="OnBackground">#1F1F1F</Color>
+    
+    <!-- Outline Colors -->
+    <Color x:Key="OutlineColor">#E0E0E0</Color>
+    <Color x:Key="OutlineVariant">#CACACA</Color>
+    
+    <!-- Text Colors -->
+    <Color x:Key="TextPrimaryColor">#1F1F1F</Color>
+    <Color x:Key="TextSecondaryColor">#6B6B6B</Color>
+    <Color x:Key="TextTertiaryColor">#9CA3AF</Color>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
          COLOR BRUSHES
          ═══════════════════════════════════════════════════════════════════════ -->
     <SolidColorBrush x:Key="AuroraPurpleBrush" Color="{StaticResource AuroraPurple}"/>

@@ -21,12 +21,56 @@ This document outlines the comprehensive redesign of the AuroraControls.Maui Tes
 - **Adaptive Components** - Responsive to different screen sizes
 
 ### Key Design Decisions
-1. **AppShell Navigation** - Modern MAUI Shell with TabBar for primary navigation
+1. **~~AppShell Navigation~~** → **TabbedPage Navigation** - Shell is incompatible with AuroraControls (see critical note below)
 2. **Card-Based Layouts** - Controls showcased in elevated cards with shadows
 3. **Property Inspector Panel** - Bottom sheet / expandable panel for live property editing
 4. **Preview + Code Mode** - Toggle between visual preview and usage examples
 5. **Search & Filter** - Quick access to specific controls
-6. **Explicit Route Registration** - All pages registered with `Routing.RegisterRoute()` for reliable navigation
+6. **NavigationPage Wrappers** - Each tab wrapped in NavigationPage for push/pop navigation
+
+---
+
+## 🚨 CRITICAL: Shell Incompatibility
+
+> **Discovery Date:** December 5, 2025  
+> **Issue:** Shell causes app to hang indefinitely on splash screen  
+> **Root Cause:** Unknown incompatibility between MAUI Shell and AuroraControls library  
+> **Solution:** Use TabbedPage with NavigationPage wrappers instead
+
+### What We Tried:
+- Simple Shell with TabBar → App hangs on splash
+- Shell with minimal content → App hangs on splash
+- Programmatic Shell creation → App hangs on splash
+- Removing UseAuroraControls → Shell STILL hangs (not an AuroraControls issue)
+- TabbedPage with NavigationPage → ✅ WORKS
+
+### Current Architecture:
+```csharp
+// App.xaml.cs - Working Implementation
+var tabbedPage = new TabbedPage
+{
+    Children =
+    {
+        new NavigationPage(new ShowcasePage()) { Title = "Showcase" },
+        new NavigationPage(new ControlsListPage()) { Title = "Controls" },
+        new NavigationPage(new EffectsPage()) { Title = "Effects" },
+        new NavigationPage(new SettingsPage()) { Title = "Settings" }
+    }
+};
+return new Window(tabbedPage);
+```
+
+### Navigation Pattern (Use Instead of Shell.GoToAsync):
+```csharp
+// ✅ CORRECT: Use Navigation.PushAsync
+await Navigation.PushAsync(new GradientCircularButtonTestPage());
+
+// ✅ CORRECT: Navigate back
+await Navigation.PopAsync();
+
+// ❌ WRONG: Shell navigation (causes hangs)
+// await Shell.Current.GoToAsync("someroute");
+```
 
 ---
 
@@ -562,15 +606,17 @@ The Showcase page serves as the app's hero landing page:
 - [x] **1.3** Create base classes for demo pages
   - [x] `ControlDemoPageBase` - Common functionality
   - [x] `PropertyEditorFactory` - Reusable property editing UI
-- [x] **1.4** Implement AppShell with TabBar and route registration
+- [x] **1.4** ~~Implement AppShell with TabBar~~ → Implement TabbedPage (Shell incompatible)
 - [x] **1.5** Create theme service (light/dark mode)
 
-### Phase 2: Core Infrastructure Components
-- [ ] **2.1** Create `ColorPickerControl` for property editing
-- [ ] **2.2** Create `SliderWithValue` for numeric properties
-- [ ] **2.3** Create `ExpandableSection` for property groups
-- [ ] **2.4** Create `PresetSelector` for quick configurations
-- [ ] **2.5** Create `CodeViewerPopup` for code examples
+### Phase 2: Core Infrastructure Components ✅
+- [x] **2.1** Create `ColorPickerEditor` for property editing
+- [x] **2.2** Create `SliderEditor` for numeric properties
+- [x] **2.3** Create `ExpandableSection` for property groups
+- [x] **2.4** Create `PresetSelector` for quick configurations
+- [x] **2.5** Create `CodeViewer` for code examples
+- [x] **2.6** Create `ToggleEditor` for boolean properties
+- [x] **2.7** Create `ValueConverters` (StringNotEmpty, InverseBool, etc.)
 
 ### Phase 3: Showcase & Navigation ✅
 - [x] **3.1** Implement `ShowcasePage` with featured controls
@@ -779,10 +825,10 @@ feat(testapp): [Phase 4.1] Create GradientPillButton demo page
 
 | Phase | Name | Status | Progress |
 |-------|------|--------|----------|
-| 1 | Foundation & Infrastructure | ⬜ Not Started | 0/5 |
-| 2 | Core Infrastructure Components | ⬜ Not Started | 0/5 |
-| 3 | Showcase & Navigation | ⬜ Not Started | 0/5 |
-| 4 | Button & Action Controls | ⬜ Not Started | 0/5 |
+| 1 | Foundation & Infrastructure | ✅ Complete | 5/5 |
+| 2 | Core Infrastructure Components | ✅ Complete | 7/7 |
+| 3 | Showcase & Navigation | 🟡 In Progress | 4/5 |
+| 4 | Button & Action Controls | 🟡 In Progress | 2/5 |
 | 5 | Input Controls | ⬜ Not Started | 0/5 |
 | 6 | Calendar & Date Controls | ⬜ Not Started | 0/2 |
 | 7 | Chips & Tags | ⬜ Not Started | 0/1 |
@@ -795,7 +841,7 @@ feat(testapp): [Phase 4.1] Create GradientPillButton demo page
 | 14 | Platform Effects | ⬜ Not Started | 0/3 |
 | 15 | Polish & Final Touches | ⬜ Not Started | 0/5 |
 
-**Overall Progress: 0/48 tasks (0%)**
+**Overall Progress: 18/50 tasks (36%)**
 
 ---
 
