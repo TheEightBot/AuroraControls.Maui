@@ -44,39 +44,39 @@
         
         <!-- Preset Colors -->
         <HorizontalStackLayout Grid.Column="2"
-                               Spacing="4"
+                               Spacing="6"
                                VerticalOptions="Center">
-            <Border WidthRequest="24" HeightRequest="24" StrokeShape="RoundRectangle 4" Stroke="Transparent">
-                <BoxView BackgroundColor="{StaticResource AuroraPurple}" CornerRadius="3">
-                    <BoxView.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding SelectPresetCommand, Source={x:Reference this}}" 
-                                              CommandParameter="{StaticResource AuroraPurple}" />
-                    </BoxView.GestureRecognizers>
-                </BoxView>
+            <Border WidthRequest="28" HeightRequest="28" StrokeShape="RoundRectangle 6" 
+                    Stroke="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}"
+                    StrokeThickness="1"
+                    BackgroundColor="#7C3AED">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnPurplePresetTapped" />
+                </Border.GestureRecognizers>
             </Border>
-            <Border WidthRequest="24" HeightRequest="24" StrokeShape="RoundRectangle 4" Stroke="Transparent">
-                <BoxView BackgroundColor="{StaticResource AuroraPink}" CornerRadius="3">
-                    <BoxView.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding SelectPresetCommand, Source={x:Reference this}}" 
-                                              CommandParameter="{StaticResource AuroraPink}" />
-                    </BoxView.GestureRecognizers>
-                </BoxView>
+            <Border WidthRequest="28" HeightRequest="28" StrokeShape="RoundRectangle 6" 
+                    Stroke="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}"
+                    StrokeThickness="1"
+                    BackgroundColor="#EC4899">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnPinkPresetTapped" />
+                </Border.GestureRecognizers>
             </Border>
-            <Border WidthRequest="24" HeightRequest="24" StrokeShape="RoundRectangle 4" Stroke="Transparent">
-                <BoxView BackgroundColor="{StaticResource AuroraBlue}" CornerRadius="3">
-                    <BoxView.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding SelectPresetCommand, Source={x:Reference this}}" 
-                                              CommandParameter="{StaticResource AuroraBlue}" />
-                    </BoxView.GestureRecognizers>
-                </BoxView>
+            <Border WidthRequest="28" HeightRequest="28" StrokeShape="RoundRectangle 6" 
+                    Stroke="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}"
+                    StrokeThickness="1"
+                    BackgroundColor="#3B82F6">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBluePresetTapped" />
+                </Border.GestureRecognizers>
             </Border>
-            <Border WidthRequest="24" HeightRequest="24" StrokeShape="RoundRectangle 4" Stroke="Transparent">
-                <BoxView BackgroundColor="{StaticResource AuroraTeal}" CornerRadius="3">
-                    <BoxView.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding SelectPresetCommand, Source={x:Reference this}}" 
-                                              CommandParameter="{StaticResource AuroraTeal}" />
-                    </BoxView.GestureRecognizers>
-                </BoxView>
+            <Border WidthRequest="28" HeightRequest="28" StrokeShape="RoundRectangle 6" 
+                    Stroke="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}"
+                    StrokeThickness="1"
+                    BackgroundColor="#14B8A6">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnTealPresetTapped" />
+                </Border.GestureRecognizers>
             </Border>
         </HorizontalStackLayout>
         

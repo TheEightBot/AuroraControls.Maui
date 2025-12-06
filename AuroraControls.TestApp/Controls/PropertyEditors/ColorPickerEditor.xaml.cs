@@ -124,6 +124,26 @@ public partial class ColorPickerEditor : ContentView
         SelectedColor = color;
     }
 
+    private void OnPurplePresetTapped(object? sender, TappedEventArgs e)
+    {
+        SelectedColor = Color.FromArgb("#7C3AED");
+    }
+
+    private void OnPinkPresetTapped(object? sender, TappedEventArgs e)
+    {
+        SelectedColor = Color.FromArgb("#EC4899");
+    }
+
+    private void OnBluePresetTapped(object? sender, TappedEventArgs e)
+    {
+        SelectedColor = Color.FromArgb("#3B82F6");
+    }
+
+    private void OnTealPresetTapped(object? sender, TappedEventArgs e)
+    {
+        SelectedColor = Color.FromArgb("#14B8A6");
+    }
+
     private void OnSwatchTapped(object? sender, TappedEventArgs e)
     {
         // TODO: Could show a full color picker popup here
