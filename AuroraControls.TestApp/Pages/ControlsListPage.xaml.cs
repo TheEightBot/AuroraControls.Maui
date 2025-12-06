@@ -66,6 +66,13 @@ public partial class ControlsListPage : ContentPage
         // Layouts
         new ControlItem("Wrap Layout", "Flowing wrap layout", "📐 Layouts", Color.FromArgb("#3B82F6"), typeof(WrapLayoutTestPage)),
         new ControlItem("Card View Layout", "Card-based layouts", "📐 Layouts", Color.FromArgb("#EC4899"), typeof(CardViewLayoutPage)),
+
+        // Effects
+        new ControlItem("Image Processing", "Real-time image filters", "⚡ Effects", Color.FromArgb("#F59E0B"), typeof(ImageProcessing)),
+        new ControlItem("Keyboard Return Key", "Custom keyboard return", "⚡ Effects", Color.FromArgb("#3B82F6"), typeof(KeyboardReturnKeyTypeEffectTestPage)),
+        new ControlItem("Keyboard Done Button", "Done button for keyboards", "⚡ Effects", Color.FromArgb("#22C55E"), typeof(ShowKeyboardDoneButtonEffectTestPage)),
+        new ControlItem("Safe Area", "Safe area handling", "⚡ Effects", Color.FromArgb("#EC4899"), typeof(SafeAreaTestPage)),
+        new ControlItem("ListView Empty Cells", "Hide empty list cells", "⚡ Effects", Color.FromArgb("#8B5CF6"), typeof(ListViewHideEmptyCellsEffectTestPage)),
     };
 
     private void OnSearchTextChanged(object? sender, TextChangedEventArgs e)
