@@ -1,158 +1,225 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:auroraControls="http://auroracontrols.maui/controls"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
+             xmlns:controls="clr-namespace:AuroraControls.TestApp.Controls"
              x:Class="AuroraControls.TestApp.TileTestPage"
-             Title="Tile Test Page">
+             Title="Tile"
+             BackgroundColor="#0F0F0F">
+    
     <ScrollView>
-        <VerticalStackLayout Padding="16" Spacing="16">
-
-            <!-- Tile Control -->
-            <auroraControls:Tile x:Name="TestTile"
-                                 EmbeddedImageName="triforce.svg"
-                                 Text="Tile Test"
-                                 ButtonBackgroundColor="#2196F3"
-                                 FontColor="White"
-                                 HeightRequest="200"
-                                 WidthRequest="200"
-                                 HorizontalOptions="Center"
-                                 CornerRadius="12"
-                                 ShadowBlurRadius="10"
-                                 ShadowColor="#80000000" />
-
-            <!-- Controls Section -->
-            <Border StrokeThickness="1"
-                    Stroke="#CCCCCC"
-                    Padding="16"
-                    BackgroundColor="#F5F5F5">
-                <VerticalStackLayout Spacing="12">
-
-                    <Label Text="Image Settings" FontSize="18" FontAttributes="Bold" />
-
-                    <!-- MaxImageSize Width -->
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="{Binding Source={x:Reference MaxImageWidthSlider}, Path=Value, StringFormat='Max Image Width: {0:F0}'}" />
-                        <Slider x:Name="MaxImageWidthSlider"
-                                Minimum="0"
-                                Maximum="150"
-                                Value="0"
-                                ValueChanged="OnMaxImageSizeChanged" />
-                    </VerticalStackLayout>
-
-                    <!-- MaxImageSize Height -->
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="{Binding Source={x:Reference MaxImageHeightSlider}, Path=Value, StringFormat='Max Image Height: {0:F0}'}" />
-                        <Slider x:Name="MaxImageHeightSlider"
-                                Minimum="0"
-                                Maximum="150"
-                                Value="0"
-                                ValueChanged="OnMaxImageSizeChanged" />
-                    </VerticalStackLayout>
-
-                    <Label Text="Content Padding" FontSize="18" FontAttributes="Bold" Margin="0,12,0,0" />
-
-                    <!-- Content Padding Left -->
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="{Binding Source={x:Reference PaddingLeftSlider}, Path=Value, StringFormat='Padding Left: {0:F0}'}" />
-                        <Slider x:Name="PaddingLeftSlider"
-                                Minimum="0"
-                                Maximum="40"
-                                Value="8"
-                                ValueChanged="OnContentPaddingChanged" />
-                    </VerticalStackLayout>
-
-                    <!-- Content Padding Top -->
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="{Binding Source={x:Reference PaddingTopSlider}, Path=Value, StringFormat='Padding Top: {0:F0}'}" />
-                        <Slider x:Name="PaddingTopSlider"
-                                Minimum="0"
-                                Maximum="40"
-                                Value="8"
-                                ValueChanged="OnContentPaddingChanged" />
-                    </VerticalStackLayout>
-
-                    <!-- Content Padding Right -->
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="{Binding Source={x:Reference PaddingRightSlider}, Path=Value, StringFormat='Padding Right: {0:F0}'}" />
-                        <Slider x:Name="PaddingRightSlider"
-                                Minimum="0"
-                                Maximum="40"
-                                Value="8"
-                                ValueChanged="OnContentPaddingChanged" />
-                    </VerticalStackLayout>
-
-                    <!-- Content Padding Bottom -->
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="{Binding Source={x:Reference PaddingBottomSlider}, Path=Value, StringFormat='Padding Bottom: {0:F0}'}" />
-                        <Slider x:Name="PaddingBottomSlider"
-                                Minimum="0"
-                                Maximum="40"
-                                Value="8"
-                                ValueChanged="OnContentPaddingChanged" />
-                    </VerticalStackLayout>
-
-                    <Label Text="Tile Settings" FontSize="18" FontAttributes="Bold" Margin="0,12,0,0" />
-
-                    <!-- Tile Width -->
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="{Binding Source={x:Reference TileWidthSlider}, Path=Value, StringFormat='Tile Width: {0:F0}'}" />
-                        <Slider x:Name="TileWidthSlider"
-                                Minimum="100"
-                                Maximum="400"
-                                Value="200"
-                                ValueChanged="OnTileSizeChanged" />
-                    </VerticalStackLayout>
-
-                    <!-- Tile Height -->
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="{Binding Source={x:Reference TileHeightSlider}, Path=Value, StringFormat='Tile Height: {0:F0}'}" />
-                        <Slider x:Name="TileHeightSlider"
-                                Minimum="100"
-                                Maximum="400"
-                                Value="200"
-                                ValueChanged="OnTileSizeChanged" />
-                    </VerticalStackLayout>
-
-                    <!-- Text Toggle -->
-                    <HorizontalStackLayout Spacing="8">
-                        <Label Text="Show Text" VerticalOptions="Center" />
-                        <Switch x:Name="TextToggle" IsToggled="True" Toggled="OnTextToggled" />
-                    </HorizontalStackLayout>
-
-                    <!-- Image Selection -->
-                    <VerticalStackLayout Spacing="4">
-                        <Label Text="Select Image" />
-                        <Picker x:Name="ImagePicker" SelectedIndexChanged="OnImageChanged">
-                            <Picker.Items>
-                                <x:String>triforce.svg</x:String>
-                                <x:String>splatoon.svg</x:String>
-                                <x:String>dollar_sign.svg</x:String>
-                                <x:String>more.svg</x:String>
-                            </Picker.Items>
-                        </Picker>
-                    </VerticalStackLayout>
-
-                    <!-- Reset Button -->
-                    <Button Text="Reset to Defaults"
-                            BackgroundColor="#FF5722"
-                            TextColor="White"
-                            Clicked="OnResetClicked"
-                            Margin="0,12,0,0" />
-
+        <VerticalStackLayout Padding="20" Spacing="16">
+            
+            <!-- Header -->
+            <Label Text="Tile"
+                   TextColor="White"
+                   FontSize="28"
+                   FontAttributes="Bold" />
+            <Label Text="Button-style tiles with embedded images and text"
+                   TextColor="#6B7280"
+                   FontSize="14"
+                   Margin="0,-8,0,8" />
+            
+            <!-- Live Preview -->
+            <Border BackgroundColor="#1A1A1A" 
+                    StrokeShape="RoundRectangle 16" 
+                    Stroke="#2A2A2A" 
+                    Padding="24"
+                    HeightRequest="280">
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="12">
+                    <aurora:Tile x:Name="PreviewTile"
+                                 EmbeddedImageName="{Binding SelectedImage}"
+                                 Text="{Binding TileText}"
+                                 ButtonBackgroundColor="{Binding TileBackgroundColor}"
+                                 FontColor="{Binding TileFontColor}"
+                                 HeightRequest="{Binding TileHeight}"
+                                 WidthRequest="{Binding TileWidth}"
+                                 CornerRadius="{Binding CornerRadius}"
+                                 ShadowBlurRadius="{Binding ShadowBlurRadius}"
+                                 ShadowColor="{Binding ShadowColor}"
+                                 HorizontalOptions="Center" />
+                    <Label Text="Tap to interact"
+                           TextColor="#6B7280"
+                           FontSize="12"
+                           HorizontalOptions="Center" />
                 </VerticalStackLayout>
             </Border>
-
-            <!-- Info Labels -->
-            <VerticalStackLayout Spacing="8" Padding="8" BackgroundColor="#E3F2FD">
-                <Label Text="Testing Instructions:" FontAttributes="Bold" />
-                <Label Text="• Adjust Max Image Size to constrain the icon size" />
-                <Label Text="• When MaxImageSize is 0, the image scales to fit available space" />
-                <Label Text="• Content Padding controls space around the image" />
-                <Label Text="• Padding is maintained from edges and text" />
-                <Label x:Name="InfoLabel" TextColor="#1976D2" FontSize="12" />
-            </VerticalStackLayout>
-
+            
+            <!-- Presets -->
+            <controls:PresetSelector x:Name="PresetSelector"
+                                     Label="Quick Presets"
+                                     ShowLabel="True" />
+            
+            <!-- Properties Section -->
+            <controls:ExpandableSection Title="Image Settings" Icon="🖼️" IsExpanded="True">
+                <controls:ExpandableSection.SectionContent>
+                    <VerticalStackLayout Spacing="8">
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <Label Text="Image" TextColor="White" VerticalOptions="Center" />
+                            <Picker x:Name="ImagePicker"
+                                    TextColor="White"
+                                    BackgroundColor="#2A2A2A"
+                                    SelectedIndexChanged="OnImageChanged">
+                                <Picker.Items>
+                                    <x:String>triforce.svg</x:String>
+                                    <x:String>splatoon.svg</x:String>
+                                    <x:String>dollar_sign.svg</x:String>
+                                    <x:String>more.svg</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Grid>
+                        <editors:SliderEditor Label="Max Image Width"
+                                              Value="{Binding MaxImageWidth}"
+                                              Minimum="0"
+                                              Maximum="150"
+                                              Unit="px" />
+                        <editors:SliderEditor Label="Max Image Height"
+                                              Value="{Binding MaxImageHeight}"
+                                              Minimum="0"
+                                              Maximum="150"
+                                              Unit="px" />
+                    </VerticalStackLayout>
+                </controls:ExpandableSection.SectionContent>
+            </controls:ExpandableSection>
+            
+            <controls:ExpandableSection Title="Text &amp; Content" Icon="📝" IsExpanded="False">
+                <controls:ExpandableSection.SectionContent>
+                    <VerticalStackLayout Spacing="8">
+                        <editors:ToggleEditor Label="Show Text"
+                                              Value="{Binding ShowText}" />
+                        <Grid ColumnDefinitions="*,2*" ColumnSpacing="12">
+                            <Label Text="Tile Text" TextColor="White" VerticalOptions="Center" />
+                            <Entry Text="{Binding TileText}" 
+                                   TextColor="White" 
+                                   BackgroundColor="#2A2A2A" 
+                                   PlaceholderColor="#6B7280" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection.SectionContent>
+            </controls:ExpandableSection>
+            
+            <controls:ExpandableSection Title="Colors" Icon="🎨" IsExpanded="False">
+                <controls:ExpandableSection.SectionContent>
+                    <VerticalStackLayout Spacing="8">
+                        <editors:ColorPickerEditor Label="Background Color"
+                                                   SelectedColor="{Binding TileBackgroundColor}" />
+                        <editors:ColorPickerEditor Label="Font Color"
+                                                   SelectedColor="{Binding TileFontColor}" />
+                        <editors:ColorPickerEditor Label="Shadow Color"
+                                                   SelectedColor="{Binding ShadowColor}" />
+                    </VerticalStackLayout>
+                </controls:ExpandableSection.SectionContent>
+            </controls:ExpandableSection>
+            
+            <controls:ExpandableSection Title="Size &amp; Shape" Icon="📐" IsExpanded="False">
+                <controls:ExpandableSection.SectionContent>
+                    <VerticalStackLayout Spacing="8">
+                        <editors:SliderEditor Label="Tile Width"
+                                              Value="{Binding TileWidth}"
+                                              Minimum="100"
+                                              Maximum="400"
+                                              Unit="px" />
+                        <editors:SliderEditor Label="Tile Height"
+                                              Value="{Binding TileHeight}"
+                                              Minimum="100"
+                                              Maximum="400"
+                                              Unit="px" />
+                        <editors:SliderEditor Label="Corner Radius"
+                                              Value="{Binding CornerRadius}"
+                                              Minimum="0"
+                                              Maximum="50"
+                                              Unit="px" />
+                    </VerticalStackLayout>
+                </controls:ExpandableSection.SectionContent>
+            </controls:ExpandableSection>
+            
+            <controls:ExpandableSection Title="Content Padding" Icon="⬜" IsExpanded="False">
+                <controls:ExpandableSection.SectionContent>
+                    <VerticalStackLayout Spacing="8">
+                        <editors:SliderEditor Label="Padding Left"
+                                              Value="{Binding PaddingLeft}"
+                                              Minimum="0"
+                                              Maximum="40"
+                                              Unit="px" />
+                        <editors:SliderEditor Label="Padding Top"
+                                              Value="{Binding PaddingTop}"
+                                              Minimum="0"
+                                              Maximum="40"
+                                              Unit="px" />
+                        <editors:SliderEditor Label="Padding Right"
+                                              Value="{Binding PaddingRight}"
+                                              Minimum="0"
+                                              Maximum="40"
+                                              Unit="px" />
+                        <editors:SliderEditor Label="Padding Bottom"
+                                              Value="{Binding PaddingBottom}"
+                                              Minimum="0"
+                                              Maximum="40"
+                                              Unit="px" />
+                    </VerticalStackLayout>
+                </controls:ExpandableSection.SectionContent>
+            </controls:ExpandableSection>
+            
+            <controls:ExpandableSection Title="Shadow" Icon="💫" IsExpanded="False">
+                <controls:ExpandableSection.SectionContent>
+                    <VerticalStackLayout Spacing="8">
+                        <editors:SliderEditor Label="Shadow Blur Radius"
+                                              Value="{Binding ShadowBlurRadius}"
+                                              Minimum="0"
+                                              Maximum="30"
+                                              Unit="px" />
+                    </VerticalStackLayout>
+                </controls:ExpandableSection.SectionContent>
+            </controls:ExpandableSection>
+            
+            <!-- Examples Section -->
+            <Label Text="Examples"
+                   TextColor="#7C3AED"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   Margin="0,16,0,8" />
+            
+            <FlexLayout Wrap="Wrap" JustifyContent="SpaceEvenly" AlignItems="Center">
+                <VerticalStackLayout Margin="8">
+                    <aurora:Tile EmbeddedImageName="triforce.svg"
+                                 Text="Game"
+                                 ButtonBackgroundColor="#2196F3"
+                                 FontColor="White"
+                                 HeightRequest="100"
+                                 WidthRequest="100"
+                                 CornerRadius="12" />
+                    <Label Text="Default" TextColor="#6B7280" FontSize="11" HorizontalOptions="Center" Margin="0,4,0,0" />
+                </VerticalStackLayout>
+                
+                <VerticalStackLayout Margin="8">
+                    <aurora:Tile EmbeddedImageName="dollar_sign.svg"
+                                 Text="Pay"
+                                 ButtonBackgroundColor="#22C55E"
+                                 FontColor="White"
+                                 HeightRequest="100"
+                                 WidthRequest="100"
+                                 CornerRadius="24" />
+                    <Label Text="Rounded" TextColor="#6B7280" FontSize="11" HorizontalOptions="Center" Margin="0,4,0,0" />
+                </VerticalStackLayout>
+                
+                <VerticalStackLayout Margin="8">
+                    <aurora:Tile EmbeddedImageName="more.svg"
+                                 ButtonBackgroundColor="#7C3AED"
+                                 FontColor="White"
+                                 HeightRequest="100"
+                                 WidthRequest="100"
+                                 CornerRadius="50"
+                                 ShadowBlurRadius="15"
+                                 ShadowColor="#7C3AED" />
+                    <Label Text="Glow Circle" TextColor="#6B7280" FontSize="11" HorizontalOptions="Center" Margin="0,4,0,0" />
+                </VerticalStackLayout>
+            </FlexLayout>
+            
+            <!-- Bottom spacing -->
+            <BoxView HeightRequest="40" Color="Transparent" />
+            
         </VerticalStackLayout>
     </ScrollView>
+    
 </ContentPage>
-

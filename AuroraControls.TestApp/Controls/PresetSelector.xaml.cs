@@ -143,6 +143,9 @@ public partial class PresetSelector : ContentView
     private void OnPresetSelected(PresetItem preset)
     {
         SelectedPreset = preset;
+
+        // Call the preset's OnSelected action if defined
+        preset.OnSelected?.Invoke();
     }
 
     private void UpdateSelection(PresetItem selectedPreset)
@@ -191,6 +194,11 @@ public class PresetItem : BindableObject
     /// Gets or sets additional data associated with the preset.
     /// </summary>
     public object? Data { get; set; }
+
+    /// <summary>
+    /// Gets or sets the action to execute when this preset is selected.
+    /// </summary>
+    public Action? OnSelected { get; set; }
 }
 
 /// <summary>
