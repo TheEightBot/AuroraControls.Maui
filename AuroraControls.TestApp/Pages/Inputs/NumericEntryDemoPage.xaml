@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:aurora="http://auroracontrols.maui/controls"
+    xmlns:controls="clr-namespace:AuroraControls.TestApp.Controls"
+    xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
+    x:Class="AuroraControls.TestApp.Pages.Inputs.NumericEntryDemoPage"
+    Title="Numeric Entry"
+    BackgroundColor="#0F0F0F">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Live Preview Card -->
+            <Border BackgroundColor="#1A1A1A"
+                    StrokeShape="RoundRectangle 16"
+                    Stroke="#2A2A2A"
+                    StrokeThickness="1"
+                    Padding="20">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="LIVE PREVIEW"
+                           FontSize="11"
+                           FontAttributes="Bold"
+                           TextColor="#6B7280"
+                           CharacterSpacing="1.5"/>
+
+                    <Border BackgroundColor="#262626"
+                            StrokeShape="RoundRectangle 12"
+                            Stroke="#3A3A3A"
+                            StrokeThickness="1"
+                            HeightRequest="120"
+                            Padding="20">
+                        <aurora:NumericEntry
+                            x:Name="PreviewNumericEntry"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            WidthRequest="200"
+                            Placeholder="Enter number"
+                            PlaceholderColor="#6B7280"
+                            TextColor="#F9FAFB"
+                            BackgroundColor="#1A1A1A"
+                            ValueType="{Binding SelectedValueType}"/>
+                    </Border>
+
+                    <Label x:Name="ValueLabel"
+                           Text="Value Type: Double"
+                           FontSize="12"
+                           TextColor="#9CA3AF"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Preset Selector -->
+            <controls:PresetSelector x:Name="PresetSelector"/>
+
+            <!-- Value Type Section -->
+            <controls:ExpandableSection Title="Value Type" IsExpanded="True">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Numeric Type" FontSize="12" TextColor="#9CA3AF"/>
+                    <Border BackgroundColor="#262626"
+                            StrokeShape="RoundRectangle 8"
+                            Stroke="#3A3A3A"
+                            StrokeThickness="1"
+                            Padding="4">
+                        <Picker x:Name="ValueTypePicker"
+                                TextColor="#F9FAFB"
+                                SelectedIndexChanged="OnValueTypeChanged">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Double</x:String>
+                                    <x:String>Decimal</x:String>
+                                    <x:String>Float</x:String>
+                                    <x:String>Int</x:String>
+                                    <x:String>Long</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </Border>
+                </VerticalStackLayout>
+            </controls:ExpandableSection>
+
+            <!-- Appearance Section -->
+            <controls:ExpandableSection Title="Appearance">
+                <VerticalStackLayout Spacing="12">
+                    <editors:ColorPickerEditor
+                        x:Name="TextColorPicker"
+                        Label="Text Color"/>
+
+                    <editors:ColorPickerEditor
+                        x:Name="PlaceholderColorPicker"
+                        Label="Placeholder Color"/>
+
+                    <editors:ColorPickerEditor
+                        x:Name="BackgroundColorPicker"
+                        Label="Background Color"/>
+                </VerticalStackLayout>
+            </controls:ExpandableSection>
+
+            <!-- Text Section -->
+            <controls:ExpandableSection Title="Text">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Placeholder" FontSize="12" TextColor="#9CA3AF"/>
+                    <Border BackgroundColor="#262626"
+                            StrokeShape="RoundRectangle 8"
+                            Stroke="#3A3A3A"
+                            StrokeThickness="1"
+                            Padding="8">
+                        <Entry x:Name="PlaceholderEntry"
+                               Text="Enter number"
+                               TextColor="#F9FAFB"
+                               PlaceholderColor="#6B7280"
+                               TextChanged="OnPlaceholderChanged"/>
+                    </Border>
+                </VerticalStackLayout>
+            </controls:ExpandableSection>
+
+            <!-- Examples Section -->
+            <Border BackgroundColor="#1A1A1A"
+                    StrokeShape="RoundRectangle 16"
+                    Stroke="#2A2A2A"
+                    StrokeThickness="1"
+                    Padding="20">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="EXAMPLES"
+                           FontSize="11"
+                           FontAttributes="Bold"
+                           TextColor="#6B7280"
+                           CharacterSpacing="1.5"/>
+
+                    <!-- Value Type Examples -->
+                    <Label Text="Value Types" FontSize="14" TextColor="#F9FAFB" FontAttributes="Bold"/>
+
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="12" ColumnSpacing="12">
+                        <Label Text="Double:" TextColor="#9CA3AF" VerticalOptions="Center"/>
+                        <aurora:NumericEntry Grid.Column="1"
+                                            ValueType="Double"
+                                            Placeholder="3.14159"
+                                            PlaceholderColor="#6B7280"
+                                            TextColor="#F9FAFB"
+                                            BackgroundColor="#262626"/>
+
+                        <Label Text="Decimal:" TextColor="#9CA3AF" Grid.Row="1" VerticalOptions="Center"/>
+                        <aurora:NumericEntry Grid.Column="1" Grid.Row="1"
+                                            ValueType="Decimal"
+                                            Placeholder="1234.56"
+                                            PlaceholderColor="#6B7280"
+                                            TextColor="#F9FAFB"
+                                            BackgroundColor="#262626"/>
+
+                        <Label Text="Float:" TextColor="#9CA3AF" Grid.Row="2" VerticalOptions="Center"/>
+                        <aurora:NumericEntry Grid.Column="1" Grid.Row="2"
+                                            ValueType="Float"
+                                            Placeholder="2.71828"
+                                            PlaceholderColor="#6B7280"
+                                            TextColor="#F9FAFB"
+                                            BackgroundColor="#262626"/>
+
+                        <Label Text="Int:" TextColor="#9CA3AF" Grid.Row="3" VerticalOptions="Center"/>
+                        <aurora:NumericEntry Grid.Column="1" Grid.Row="3"
+                                            ValueType="Int"
+                                            Placeholder="42"
+                                            PlaceholderColor="#6B7280"
+                                            TextColor="#F9FAFB"
+                                            BackgroundColor="#262626"/>
+
+                        <Label Text="Long:" TextColor="#9CA3AF" Grid.Row="4" VerticalOptions="Center"/>
+                        <aurora:NumericEntry Grid.Column="1" Grid.Row="4"
+                                            ValueType="Long"
+                                            Placeholder="9223372036854"
+                                            PlaceholderColor="#6B7280"
+                                            TextColor="#F9FAFB"
+                                            BackgroundColor="#262626"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Bottom Spacing -->
+            <BoxView HeightRequest="40"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

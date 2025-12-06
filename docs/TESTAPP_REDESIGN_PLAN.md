@@ -632,12 +632,12 @@ The Showcase page serves as the app's hero landing page:
 - [x] **4.4** Refactor `TileTestPage`
 - [x] **4.5** Refactor `SvgImageButtonTestPage`
 
-### Phase 5: Input Controls 🚧
+### Phase 5: Input Controls ✅
 - [x] **5.1** Refactor `StyledInputLayoutTestPage`
-- [ ] **5.2** Create `NumericEntryDemoPage`
+- [x] **5.2** Create `NumericEntryDemoPage`
 - [x] **5.3** Refactor `ToggleBoxTestPage`
-- [ ] **5.4** Create `CupertinoToggleSwitchDemoPage`
-- [ ] **5.5** Create `SegmentedControlDemoPage`
+- [x] **5.4** Create `CupertinoToggleSwitchDemoPage`
+- [x] **5.5** Create `SegmentedControlDemoPage`
 
 ### Phase 6: Calendar & Date Controls
 - [ ] **6.1** Refactor `CalendarViewPage`

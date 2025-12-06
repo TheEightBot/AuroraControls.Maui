@@ -42,6 +42,9 @@ public partial class ControlsListPage : ContentPage
         new ControlItem("Styled Input Layout", "Material-style inputs", "📝 Input Controls", Color.FromArgb("#F59E0B"), typeof(StyledInputLayoutTestPage)),
         new ControlItem("Chip Group", "Tag-style chip selection", "📝 Input Controls", Color.FromArgb("#8B5CF6"), typeof(ChipGroupPage)),
         new ControlItem("Step Indicator", "Multi-step progress", "📝 Input Controls", Color.FromArgb("#3B82F6"), typeof(StepIndicatorTestPage)),
+        new ControlItem("Numeric Entry", "Numeric value input", "📝 Input Controls", Color.FromArgb("#EC4899"), typeof(Inputs.NumericEntryDemoPage)),
+        new ControlItem("Cupertino Toggle Switch", "iOS-style toggle", "📝 Input Controls", Color.FromArgb("#14B8A6"), typeof(Inputs.CupertinoToggleSwitchDemoPage)),
+        new ControlItem("Segmented Control", "Multi-style segments", "📝 Input Controls", Color.FromArgb("#7C3AED"), typeof(Inputs.SegmentedControlDemoPage)),
 
         // Calendar
         new ControlItem("Calendar View", "Full calendar control", "📅 Calendar & Date", Color.FromArgb("#3B82F6"), typeof(CalendarViewPage)),
