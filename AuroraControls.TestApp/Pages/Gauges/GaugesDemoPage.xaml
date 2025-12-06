@@ -126,7 +126,7 @@
                         
                         <editors:ColorPickerEditor x:Name="CircularBackgroundColorPicker"
                                                    Label="Background Color"
-                                                   SelectedColor="{AppThemeBinding Light={StaticResource Light.SliderTrack}, Dark={StaticResource Dark.SliderTrack}}"
+                                                   SelectedColor="#3A3A3A"
                                                    ColorChanged="OnCircularBackgroundColorChanged"/>
                     </VerticalStackLayout>
                 </controls:ExpandableSection>
