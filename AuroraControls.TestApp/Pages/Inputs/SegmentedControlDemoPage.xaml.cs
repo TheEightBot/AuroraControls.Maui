@@ -92,9 +92,9 @@ public partial class SegmentedControlDemoPage : ContentPage, INotifyPropertyChan
     private void SetupEditors()
     {
         // Dimension sliders
-        CornerRadiusSlider.ValueChanged += (s, e) => CornerRadius = (int)e;
-        BorderSizeSlider.ValueChanged += (s, e) => BorderSize = e;
-        FontSizeSlider.ValueChanged += (s, e) => FontSize = e;
+        CornerRadiusSlider.ValueChanged += (s, e) => CornerRadius = (int)e.NewValue;
+        BorderSizeSlider.ValueChanged += (s, e) => BorderSize = e.NewValue;
+        FontSizeSlider.ValueChanged += (s, e) => FontSize = e.NewValue;
 
         // Color pickers
         ForegroundColorPicker.SelectedColor = _foregroundColorValue;

@@ -116,7 +116,7 @@ public partial class SliderEditor : ContentView
     /// <summary>
     /// Event raised when the value changes.
     /// </summary>
-    public event EventHandler<double>? ValueChanged;
+    public event EventHandler<ValueChangedEventArgs>? ValueChanged;
 
     /// <summary>
     /// Gets or sets the label text.
@@ -201,13 +201,13 @@ public partial class SliderEditor : ContentView
 
     private static void OnValueChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        if (bindable is SliderEditor editor && newValue is double value)
+        if (bindable is SliderEditor editor && newValue is double newDoubleValue && oldValue is double oldDoubleValue)
         {
             // Apply step rounding
             if (editor.Step > 0)
             {
-                var steppedValue = Math.Round(value / editor.Step) * editor.Step;
-                if (Math.Abs(steppedValue - value) > 0.0001)
+                var steppedValue = Math.Round(newDoubleValue / editor.Step) * editor.Step;
+                if (Math.Abs(steppedValue - newDoubleValue) > 0.0001)
                 {
                     editor.Value = steppedValue;
                     return;
@@ -215,8 +215,8 @@ public partial class SliderEditor : ContentView
             }
 
             editor.UpdateDisplayValue();
-            editor.ValueChanged?.Invoke(editor, value);
-            editor.ValueChangedCommand?.Execute(value);
+            editor.ValueChanged?.Invoke(editor, new ValueChangedEventArgs(oldDoubleValue, newDoubleValue));
+            editor.ValueChangedCommand?.Execute(newDoubleValue);
         }
     }
 

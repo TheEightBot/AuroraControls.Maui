@@ -93,12 +93,12 @@ public partial class CupertinoToggleSwitchDemoPage : ContentPage, INotifyPropert
         IsEnabledEditor.ValueChanged += (s, e) => PreviewToggle.IsEnabled = e;
 
         // Size sliders
-        WidthSlider.ValueChanged += (s, e) => ToggleWidth = e;
-        HeightSlider.ValueChanged += (s, e) => ToggleHeight = e;
-        BorderWidthSlider.ValueChanged += (s, e) => BorderWidth = e;
+        WidthSlider.ValueChanged += (s, e) => ToggleWidth = e.NewValue;
+        HeightSlider.ValueChanged += (s, e) => ToggleHeight = e.NewValue;
+        BorderWidthSlider.ValueChanged += (s, e) => BorderWidth = e.NewValue;
 
         // Animation slider
-        AnimationDurationSlider.ValueChanged += (s, e) => PreviewToggle.ToggleAnimationDuration = (uint)e;
+        AnimationDurationSlider.ValueChanged += (s, e) => PreviewToggle.ToggleAnimationDuration = (uint)e.NewValue;
 
         // Color pickers
         ThumbColorPicker.SelectedColor = _thumbColorValue;

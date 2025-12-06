@@ -126,16 +126,16 @@ public partial class ToggleBoxTestPage : ContentPage, INotifyPropertyChanged
     private void SetupEditors()
     {
         // Size slider
-        SizeSlider.ValueChanged += (s, e) => Size = e;
+        SizeSlider.ValueChanged += (s, e) => Size = e.NewValue;
 
         // Border width slider
-        BorderWidthSlider.ValueChanged += (s, e) => BorderWidth = (int)e;
+        BorderWidthSlider.ValueChanged += (s, e) => BorderWidth = (int)e.NewValue;
 
         // Mark width slider
-        MarkWidthSlider.ValueChanged += (s, e) => MarkWidth = (int)e;
+        MarkWidthSlider.ValueChanged += (s, e) => MarkWidth = (int)e.NewValue;
 
         // Corner radius slider
-        CornerRadiusSlider.ValueChanged += (s, e) => CornerRadius = e;
+        CornerRadiusSlider.ValueChanged += (s, e) => CornerRadius = e.NewValue;
 
         // Color pickers
         BorderColorPicker.SelectedColor = _borderColorValue;
