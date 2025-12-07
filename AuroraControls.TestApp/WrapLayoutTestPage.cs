@@ -96,32 +96,32 @@ public partial class WrapLayoutTestPage : ContentPage
                                     },
                                 },
 
-                                // Horizontal Options
+                                // Horizontal Child Alignment (applies in vertical mode)
                                 new HorizontalStackLayout
                                 {
                                     Spacing = 10,
                                     Children =
                                     {
-                                        new Label { Text = "H-Alignment:", WidthRequest = 120, VerticalOptions = LayoutOptions.Center },
+                                        new Label { Text = "Child H-Align:", WidthRequest = 120, VerticalOptions = LayoutOptions.Center },
                                         new Picker
                                         {
-                                            ItemsSource = new[] { "Start", "Center", "End", "Fill", "StartAndExpand", "CenterAndExpand", "EndAndExpand", "FillAndExpand" },
+                                            ItemsSource = new[] { "Start", "Center", "End", "Fill" },
                                             SelectedIndex = 0,
                                             WidthRequest = 150,
                                         }.Assign(out _horizontalOptionsPicker),
                                     },
                                 },
 
-                                // Vertical Options
+                                // Vertical Child Alignment (applies in horizontal mode)
                                 new HorizontalStackLayout
                                 {
                                     Spacing = 10,
                                     Children =
                                     {
-                                        new Label { Text = "V-Alignment:", WidthRequest = 120, VerticalOptions = LayoutOptions.Center },
+                                        new Label { Text = "Child V-Align:", WidthRequest = 120, VerticalOptions = LayoutOptions.Center },
                                         new Picker
                                         {
-                                            ItemsSource = new[] { "Start", "Center", "End", "Fill", "StartAndExpand", "CenterAndExpand", "EndAndExpand", "FillAndExpand" },
+                                            ItemsSource = new[] { "Start", "Center", "End", "Fill" },
                                             SelectedIndex = 0,
                                             WidthRequest = 150,
                                         }.Assign(out _verticalOptionsPicker),
@@ -285,12 +285,12 @@ public partial class WrapLayoutTestPage : ContentPage
 
         _horizontalOptionsPicker.SelectedIndexChanged += (s, e) =>
         {
-            _demoWrapLayout.HorizontalOptions = GetLayoutOptions(_horizontalOptionsPicker.SelectedIndex);
+            _demoWrapLayout.ChildHorizontalAlignment = GetLayoutOptions(_horizontalOptionsPicker.SelectedIndex);
         };
 
         _verticalOptionsPicker.SelectedIndexChanged += (s, e) =>
         {
-            _demoWrapLayout.VerticalOptions = GetLayoutOptions(_verticalOptionsPicker.SelectedIndex);
+            _demoWrapLayout.ChildVerticalAlignment = GetLayoutOptions(_verticalOptionsPicker.SelectedIndex);
         };
 
         _addItemButton.Clicked += (s, e) =>
@@ -322,10 +322,6 @@ public partial class WrapLayoutTestPage : ContentPage
             1 => LayoutOptions.Center,
             2 => LayoutOptions.End,
             3 => LayoutOptions.Fill,
-            4 => LayoutOptions.StartAndExpand,
-            5 => LayoutOptions.CenterAndExpand,
-            6 => LayoutOptions.EndAndExpand,
-            7 => LayoutOptions.FillAndExpand,
             _ => LayoutOptions.Start,
         };
     }
