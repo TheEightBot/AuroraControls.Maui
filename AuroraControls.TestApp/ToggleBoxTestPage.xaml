@@ -1,236 +1,310 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:aurora="http://auroracontrols.maui/controls"
-             x:Class="AuroraControls.TestApp.ToggleBoxTestPage"
-             Title="ToggleBox Test Page">
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:aurora="http://auroracontrols.maui/controls"
+    xmlns:controls="clr-namespace:AuroraControls.TestApp.Controls"
+    xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
+    x:Class="AuroraControls.TestApp.ToggleBoxTestPage"
+    Title="ToggleBox"
+    BackgroundColor="#0F0F0F">
+    
     <ScrollView>
-        <VerticalStackLayout Spacing="10" Padding="20">
-            <Label Text="ToggleBox Basic Configurations"
-                   FontSize="Title"
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center" />
-
-            <!-- Basic shape variations -->
-            <Frame BorderColor="Gray" Padding="10" Margin="0,10,0,0">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Shape Variations" FontSize="Subtitle" FontAttributes="Bold"/>
-                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="10" RowDefinitions="Auto, Auto">
-                        <VerticalStackLayout HorizontalOptions="Center">
+        <VerticalStackLayout Padding="20" Spacing="20">
+            
+            <!-- Live Preview Card -->
+            <Border BackgroundColor="#1A1A1A" 
+                    StrokeShape="RoundRectangle 16"
+                    Stroke="#2A2A2A"
+                    StrokeThickness="1"
+                    Padding="20">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="LIVE PREVIEW" 
+                           FontSize="11" 
+                           FontAttributes="Bold"
+                           TextColor="#6B7280"
+                           CharacterSpacing="1.5"/>
+                    
+                    <Border BackgroundColor="#262626"
+                            StrokeShape="RoundRectangle 12"
+                            Stroke="#3A3A3A"
+                            StrokeThickness="1"
+                            HeightRequest="150"
+                            Padding="20">
+                        <Grid>
+                            <aurora:ToggleBox 
+                                x:Name="PreviewToggleBox"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                WidthRequest="{Binding Size}"
+                                HeightRequest="{Binding Size}"
+                                Shape="{Binding SelectedShape}"
+                                CheckType="{Binding SelectedCheckType}"
+                                IsToggled="{Binding IsToggled, Mode=TwoWay}"
+                                BorderColor="{Binding BorderColorValue}"
+                                CheckColor="{Binding CheckColorValue}"
+                                ToggledBackgroundColor="{Binding ToggledBgColorValue}"
+                                BorderWidth="{Binding BorderWidth}"
+                                MarkWidth="{Binding MarkWidth}"
+                                CornerRadius="{Binding CornerRadius}"/>
+                        </Grid>
+                    </Border>
+                    
+                    <Label x:Name="ToggleStatusLabel"
+                           Text="OFF"
+                           FontSize="12"
+                           TextColor="#9CA3AF"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+            
+            <!-- Preset Selector -->
+            <controls:PresetSelector x:Name="PresetSelector"/>
+            
+            <!-- Shape & Check Type Section -->
+            <controls:ExpandableSection Title="Shape &amp; Type" IsExpanded="True">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Shape" FontSize="12" TextColor="#9CA3AF"/>
+                    <Border BackgroundColor="#262626"
+                            StrokeShape="RoundRectangle 8"
+                            Stroke="#3A3A3A"
+                            StrokeThickness="1"
+                            Padding="4">
+                        <Picker x:Name="ShapePicker"
+                                TextColor="#F9FAFB"
+                                SelectedIndexChanged="OnShapeChanged">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Square</x:String>
+                                    <x:String>RoundedSquare</x:String>
+                                    <x:String>Circular</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </Border>
+                    
+                    <Label Text="Check Type" FontSize="12" TextColor="#9CA3AF" Margin="0,8,0,0"/>
+                    <Border BackgroundColor="#262626"
+                            StrokeShape="RoundRectangle 8"
+                            Stroke="#3A3A3A"
+                            StrokeThickness="1"
+                            Padding="4">
+                        <Picker x:Name="CheckTypePicker"
+                                TextColor="#F9FAFB"
+                                SelectedIndexChanged="OnCheckTypeChanged">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Check</x:String>
+                                    <x:String>RoundedCheck</x:String>
+                                    <x:String>Cross</x:String>
+                                    <x:String>Circular</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </Border>
+                </VerticalStackLayout>
+            </controls:ExpandableSection>
+            
+            <!-- Size & Border Section -->
+            <controls:ExpandableSection Title="Size &amp; Border">
+                <VerticalStackLayout Spacing="12">
+                    <editors:SliderEditor 
+                        x:Name="SizeSlider"
+                        Label="Size"
+                        Minimum="24"
+                        Maximum="80"
+                        Value="48"
+                        Unit="px"/>
+                        
+                    <editors:SliderEditor 
+                        x:Name="BorderWidthSlider"
+                        Label="Border Width"
+                        Minimum="1"
+                        Maximum="10"
+                        Value="3"
+                        Unit="px"/>
+                        
+                    <editors:SliderEditor 
+                        x:Name="MarkWidthSlider"
+                        Label="Mark Width"
+                        Minimum="1"
+                        Maximum="10"
+                        Value="3"
+                        Unit="px"/>
+                        
+                    <editors:SliderEditor 
+                        x:Name="CornerRadiusSlider"
+                        Label="Corner Radius"
+                        Minimum="0"
+                        Maximum="20"
+                        Value="8"
+                        Unit="px"/>
+                </VerticalStackLayout>
+            </controls:ExpandableSection>
+            
+            <!-- Colors Section -->
+            <controls:ExpandableSection Title="Colors">
+                <VerticalStackLayout Spacing="12">
+                    <editors:ColorPickerEditor 
+                        x:Name="BorderColorPicker"
+                        Label="Border Color"/>
+                        
+                    <editors:ColorPickerEditor 
+                        x:Name="CheckColorPicker"
+                        Label="Check Color"/>
+                        
+                    <editors:ColorPickerEditor 
+                        x:Name="ToggledBgColorPicker"
+                        Label="Toggled Background"/>
+                        
+                    <editors:ColorPickerEditor 
+                        x:Name="UntoggledBgColorPicker"
+                        Label="Untoggled Background"/>
+                </VerticalStackLayout>
+            </controls:ExpandableSection>
+            
+            <!-- State Section -->
+            <controls:ExpandableSection Title="State">
+                <VerticalStackLayout Spacing="12">
+                    <editors:ToggleEditor 
+                        x:Name="IsToggledToggle"
+                        Label="Is Toggled"
+                        Value="True"/>
+                        
+                    <editors:ToggleEditor 
+                        x:Name="IsEnabledToggle"
+                        Label="Is Enabled"
+                        Value="True"/>
+                </VerticalStackLayout>
+            </controls:ExpandableSection>
+            
+            <!-- Examples Section -->
+            <Border BackgroundColor="#1A1A1A" 
+                    StrokeShape="RoundRectangle 16"
+                    Stroke="#2A2A2A"
+                    StrokeThickness="1"
+                    Padding="20">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="EXAMPLES" 
+                           FontSize="11" 
+                           FontAttributes="Bold"
+                           TextColor="#6B7280"
+                           CharacterSpacing="1.5"/>
+                    
+                    <!-- Shape Variations -->
+                    <Label Text="Shape Variations" FontSize="14" TextColor="#F9FAFB" FontAttributes="Bold"/>
+                    <FlexLayout Wrap="Wrap" JustifyContent="SpaceEvenly" AlignItems="Center">
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
                             <aurora:ToggleBox Shape="Square"
-                                           BorderColor="DarkBlue"
-                                           CheckColor="DarkBlue"
-                                           IsToggled="true"/>
-                            <Label Text="Square" HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
-                            <aurora:ToggleBox Shape="RoundedSquare"
-                                           BorderColor="DarkGreen"
-                                           CheckColor="DarkGreen"
-                                           IsToggled="true"/>
-                            <Label Text="Rounded Square" HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2">
-                            <aurora:ToggleBox Shape="Circular"
-                                           BorderColor="DarkRed"
-                                           CheckColor="DarkRed"
-                                           IsToggled="true"/>
-                            <Label Text="Circular" HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-                    </Grid>
-                </VerticalStackLayout>
-            </Frame>
-
-            <!-- Check type variations -->
-            <Frame BorderColor="Gray" Padding="10">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Check Type Variations" FontSize="Subtitle" FontAttributes="Bold"/>
-                    <Grid ColumnDefinitions="*, *, *, *" ColumnSpacing="10">
-                        <VerticalStackLayout HorizontalOptions="Center">
-                            <aurora:ToggleBox CheckType="Check"
-                                           BorderColor="DarkBlue"
-                                           CheckColor="DarkBlue"
-                                           IsToggled="true"/>
-                            <Label Text="Check" HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
-                            <aurora:ToggleBox CheckType="RoundedCheck"
-                                           BorderColor="DarkGreen"
-                                           CheckColor="DarkGreen"
-                                           IsToggled="true"/>
-                            <Label Text="Rounded Check" HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2">
-                            <aurora:ToggleBox CheckType="Cross"
-                                           BorderColor="DarkRed"
-                                           CheckColor="DarkRed"
-                                           IsToggled="true"/>
-                            <Label Text="Cross" HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="3">
-                            <aurora:ToggleBox CheckType="Circular"
-                                           BorderColor="Purple"
-                                           CheckColor="Purple"
-                                           IsToggled="true"/>
-                            <Label Text="Circular" HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-                    </Grid>
-                </VerticalStackLayout>
-            </Frame>
-
-            <!-- Size variations -->
-            <Frame BorderColor="Gray" Padding="10">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Size Variations" FontSize="Subtitle" FontAttributes="Bold"/>
-                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="10">
-                        <VerticalStackLayout HorizontalOptions="Center">
-                            <aurora:ToggleBox BorderWidth="2"
-                                           MarkWidth="2"
-                                           BorderColor="DarkBlue"
-                                           CheckColor="DarkBlue"
-                                           IsToggled="true"
-                                           HeightRequest="14"
-                                           WidthRequest="14"/>
-                            <Label Text="Small" HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
-                            <aurora:ToggleBox BorderWidth="4"
-                                           MarkWidth="4"
-                                           BorderColor="DarkGreen"
-                                           CheckColor="DarkGreen"
-                                           IsToggled="true"
+                                           WidthRequest="36"
                                            HeightRequest="36"
-                                           WidthRequest="36"/>
-                            <Label Text="Medium" HorizontalOptions="Center" />
+                                           BorderColor="#7C3AED"
+                                           CheckColor="#7C3AED"
+                                           IsToggled="True"/>
+                            <Label Text="Square" FontSize="10" TextColor="#9CA3AF" HorizontalOptions="Center"/>
                         </VerticalStackLayout>
-
-                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2">
-                            <aurora:ToggleBox BorderWidth="6"
-                                           MarkWidth="6"
-                                           BorderColor="DarkRed"
-                                           CheckColor="DarkRed"
-                                           IsToggled="true"
-                                           HeightRequest="48"
-                                           WidthRequest="48"/>
-                            <Label Text="Large" HorizontalOptions="Center" />
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:ToggleBox Shape="RoundedSquare"
+                                           WidthRequest="36"
+                                           HeightRequest="36"
+                                           BorderColor="#EC4899"
+                                           CheckColor="#EC4899"
+                                           IsToggled="True"/>
+                            <Label Text="Rounded" FontSize="10" TextColor="#9CA3AF" HorizontalOptions="Center"/>
                         </VerticalStackLayout>
-                    </Grid>
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:ToggleBox Shape="Circular"
+                                           WidthRequest="36"
+                                           HeightRequest="36"
+                                           BorderColor="#3B82F6"
+                                           CheckColor="#3B82F6"
+                                           IsToggled="True"/>
+                            <Label Text="Circular" FontSize="10" TextColor="#9CA3AF" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </FlexLayout>
+                    
+                    <!-- Check Type Variations -->
+                    <Label Text="Check Type Variations" FontSize="14" TextColor="#F9FAFB" FontAttributes="Bold" Margin="0,12,0,0"/>
+                    <FlexLayout Wrap="Wrap" JustifyContent="SpaceEvenly" AlignItems="Center">
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:ToggleBox CheckType="Check"
+                                           WidthRequest="36"
+                                           HeightRequest="36"
+                                           BorderColor="#22C55E"
+                                           CheckColor="#22C55E"
+                                           IsToggled="True"/>
+                            <Label Text="Check" FontSize="10" TextColor="#9CA3AF" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:ToggleBox CheckType="RoundedCheck"
+                                           WidthRequest="36"
+                                           HeightRequest="36"
+                                           BorderColor="#14B8A6"
+                                           CheckColor="#14B8A6"
+                                           IsToggled="True"/>
+                            <Label Text="Rounded" FontSize="10" TextColor="#9CA3AF" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:ToggleBox CheckType="Cross"
+                                           WidthRequest="36"
+                                           HeightRequest="36"
+                                           BorderColor="#EF4444"
+                                           CheckColor="#EF4444"
+                                           IsToggled="True"/>
+                            <Label Text="Cross" FontSize="10" TextColor="#9CA3AF" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:ToggleBox CheckType="Circular"
+                                           WidthRequest="36"
+                                           HeightRequest="36"
+                                           BorderColor="#F59E0B"
+                                           CheckColor="#F59E0B"
+                                           IsToggled="True"/>
+                            <Label Text="Circular" FontSize="10" TextColor="#9CA3AF" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </FlexLayout>
+                    
+                    <!-- Filled Style Variations -->
+                    <Label Text="Filled Styles" FontSize="14" TextColor="#F9FAFB" FontAttributes="Bold" Margin="0,12,0,0"/>
+                    <FlexLayout Wrap="Wrap" JustifyContent="SpaceEvenly" AlignItems="Center">
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:ToggleBox Shape="RoundedSquare"
+                                           WidthRequest="36"
+                                           HeightRequest="36"
+                                           BorderColor="#7C3AED"
+                                           ToggledBackgroundColor="#7C3AED"
+                                           CheckColor="White"
+                                           IsToggled="True"/>
+                            <Label Text="Purple" FontSize="10" TextColor="#9CA3AF" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:ToggleBox Shape="RoundedSquare"
+                                           WidthRequest="36"
+                                           HeightRequest="36"
+                                           BorderColor="#22C55E"
+                                           ToggledBackgroundColor="#22C55E"
+                                           CheckColor="White"
+                                           IsToggled="True"/>
+                            <Label Text="Green" FontSize="10" TextColor="#9CA3AF" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:ToggleBox Shape="Circular"
+                                           WidthRequest="36"
+                                           HeightRequest="36"
+                                           BorderColor="#3B82F6"
+                                           ToggledBackgroundColor="#3B82F6"
+                                           CheckType="Circular"
+                                           CheckColor="White"
+                                           IsToggled="True"/>
+                            <Label Text="Radio" FontSize="10" TextColor="#9CA3AF" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </FlexLayout>
                 </VerticalStackLayout>
-            </Frame>
-
-            <!-- Color variations -->
-            <Frame BorderColor="Gray" Padding="10">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Color Variations" FontSize="Subtitle" FontAttributes="Bold"/>
-                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="10" RowDefinitions="Auto, Auto, Auto">
-                        <VerticalStackLayout HorizontalOptions="Center">
-                            <aurora:ToggleBox BorderColor="DodgerBlue"
-                                           BackgroundColor="LightBlue"
-                                           ToggledBackgroundColor="DodgerBlue"
-                                           CheckColor="White"
-                                           IsToggled="true"/>
-                            <Label Text="Blue" HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1">
-                            <aurora:ToggleBox BorderColor="ForestGreen"
-                                           BackgroundColor="LightGreen"
-                                           ToggledBackgroundColor="ForestGreen"
-                                           CheckColor="White"
-                                           IsToggled="true"/>
-                            <Label Text="Green" HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2">
-                            <aurora:ToggleBox BorderColor="Crimson"
-                                           BackgroundColor="LightPink"
-                                           ToggledBackgroundColor="Crimson"
-                                           CheckColor="White"
-                                           IsToggled="true"/>
-                            <Label Text="Red" HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout HorizontalOptions="Center" Grid.Row="1">
-                            <aurora:ToggleBox BorderColor="Orange"
-                                           BackgroundColor="LightYellow"
-                                           ToggledBackgroundColor="Orange"
-                                           CheckColor="White"
-                                           IsToggled="true"/>
-                            <Label Text="Orange" HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="1" Grid.Row="1">
-                            <aurora:ToggleBox BorderColor="DarkViolet"
-                                           BackgroundColor="Lavender"
-                                           ToggledBackgroundColor="DarkViolet"
-                                           CheckColor="White"
-                                           IsToggled="true"/>
-                            <Label Text="Purple" HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout HorizontalOptions="Center" Grid.Column="2" Grid.Row="1">
-                            <aurora:ToggleBox BorderColor="Teal"
-                                           BackgroundColor="LightCyan"
-                                           ToggledBackgroundColor="Teal"
-                                           CheckColor="White"
-                                           IsToggled="true"/>
-                            <Label Text="Teal" HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-                    </Grid>
-                </VerticalStackLayout>
-            </Frame>
-
-            <!-- Interactive Test Section -->
-            <Frame BorderColor="Gray" Padding="10">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Interactive Test" FontSize="Subtitle" FontAttributes="Bold"/>
-                    <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto"
-                          ColumnSpacing="15" RowSpacing="15">
-
-                        <Label Text="Toggle State:" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
-                        <Switch x:Name="ToggleSwitch" Grid.Row="0" Grid.Column="1" Toggled="OnToggleSwitchToggled"/>
-
-                        <Label Text="Shape:" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"/>
-                        <Picker x:Name="ShapePicker" Grid.Row="1" Grid.Column="1"
-                                SelectedIndexChanged="OnShapePickerSelectedIndexChanged"/>
-
-                        <Label Text="Check Type:" Grid.Row="2" Grid.Column="0" VerticalOptions="Center"/>
-                        <Picker x:Name="CheckTypePicker" Grid.Row="2" Grid.Column="1"
-                                SelectedIndexChanged="OnCheckTypePickerSelectedIndexChanged"/>
-
-                        <Label Text="Border Width:" Grid.Row="3" Grid.Column="0" VerticalOptions="Center"/>
-                        <Slider x:Name="BorderWidthSlider" Grid.Row="3" Grid.Column="1"
-                                Minimum="1" Maximum="10" Value="2"
-                                ValueChanged="OnBorderWidthSliderValueChanged"/>
-
-                        <Label Text="Mark Width:" Grid.Row="4" Grid.Column="0" VerticalOptions="Center"/>
-                        <Slider x:Name="MarkWidthSlider" Grid.Row="4" Grid.Column="1"
-                                Minimum="1" Maximum="10" Value="2"
-                                ValueChanged="OnMarkWidthSliderValueChanged"/>
-
-                        <Label Text="Corner Radius:" Grid.Row="5" Grid.Column="0" VerticalOptions="Center"/>
-                        <Slider x:Name="CornerRadiusSlider" Grid.Row="5" Grid.Column="1"
-                                Minimum="0" Maximum="20" Value="8"
-                                ValueChanged="OnCornerRadiusSliderValueChanged"/>
-                    </Grid>
-
-                    <Label Text="Preview:" FontSize="Subtitle" Margin="0,10,0,0"/>
-                    <aurora:ToggleBox x:Name="PreviewToggleBox"
-                                   HorizontalOptions="Center"
-                                   VerticalOptions="Center"
-                                   HeightRequest="60"
-                                   WidthRequest="60"
-                                   BorderColor="Navy"
-                                   CheckColor="Navy"
-                                   ToggledBackgroundColor="LightBlue"/>
-                </VerticalStackLayout>
-            </Frame>
+            </Border>
+            
+            <!-- Bottom Spacing -->
+            <BoxView HeightRequest="40"/>
+            
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

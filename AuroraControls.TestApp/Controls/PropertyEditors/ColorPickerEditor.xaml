@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AuroraControls.TestApp.Controls.PropertyEditors.ColorPickerEditor"
+             x:Name="this">
+    <Grid ColumnDefinitions="Auto,*,Auto"
+          ColumnSpacing="12"
+          Padding="0,8">
+        <!-- Color Preview Swatch -->
+        <Border Grid.Column="0"
+                WidthRequest="40"
+                HeightRequest="40"
+                StrokeShape="RoundRectangle 8"
+                Stroke="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}"
+                StrokeThickness="1"
+                VerticalOptions="Center">
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnSwatchTapped" />
+            </Border.GestureRecognizers>
+            <BoxView x:Name="ColorSwatch"
+                     Color="{Binding SelectedColor, Source={x:Reference this}}"
+                     CornerRadius="7" />
+        </Border>
+        <!-- Property Label and Hex Value -->
+        <VerticalStackLayout Grid.Column="1"
+                             VerticalOptions="Center"
+                             Spacing="2">
+            <Label Text="{Binding Label, Source={x:Reference this}}"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}" />
+            <Entry x:Name="HexEntry"
+                   Text="{Binding HexValue, Source={x:Reference this}, Mode=TwoWay}"
+                   Placeholder="#RRGGBB"
+                   FontSize="12"
+                   FontFamily="JetBrainsMono"
+                   TextColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}"
+                   BackgroundColor="Transparent"
+                   Completed="OnHexEntryCompleted"
+                   MaxLength="9" />
+        </VerticalStackLayout>
+        <!-- Preset Colors -->
+        <HorizontalStackLayout Grid.Column="2"
+                               Spacing="6"
+                               VerticalOptions="Center">
+            <Border WidthRequest="28"
+                    HeightRequest="28"
+                    StrokeShape="RoundRectangle 6"
+                    Stroke="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}"
+                    StrokeThickness="1"
+                    BackgroundColor="#7C3AED">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnPurplePresetTapped" />
+                </Border.GestureRecognizers>
+            </Border>
+            <Border WidthRequest="28"
+                    HeightRequest="28"
+                    StrokeShape="RoundRectangle 6"
+                    Stroke="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}"
+                    StrokeThickness="1"
+                    BackgroundColor="#EC4899">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnPinkPresetTapped" />
+                </Border.GestureRecognizers>
+            </Border>
+            <Border WidthRequest="28"
+                    HeightRequest="28"
+                    StrokeShape="RoundRectangle 6"
+                    Stroke="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}"
+                    StrokeThickness="1"
+                    BackgroundColor="#3B82F6">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBluePresetTapped" />
+                </Border.GestureRecognizers>
+            </Border>
+            <Border WidthRequest="28"
+                    HeightRequest="28"
+                    StrokeShape="RoundRectangle 6"
+                    Stroke="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}"
+                    StrokeThickness="1"
+                    BackgroundColor="#14B8A6">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnTealPresetTapped" />
+                </Border.GestureRecognizers>
+            </Border>
+        </HorizontalStackLayout>
+    </Grid>
+</ContentView>

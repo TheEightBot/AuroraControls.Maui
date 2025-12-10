@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             xmlns:controls="clr-namespace:AuroraControls.TestApp.Controls"
+             xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
+             x:Class="AuroraControls.TestApp.Pages.Imaging.CutoutOverlayDemoPage"
+             Title="Cutout Overlay"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Light.PageBackground}, Dark={StaticResource Dark.PageBackground}}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="SectionTitle" TargetType="Label">
+                <Setter Property="TextColor" Value="#FFFFFF"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="Margin" Value="0,0,0,8"/>
+            </Style>
+            <Style x:Key="DescriptionText" TargetType="Label">
+                <Setter Property="TextColor" Value="#9CA3AF"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="Margin" Value="0,0,0,12"/>
+            </Style>
+            <Style x:Key="Card" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="#1A1A1A"/>
+                <Setter Property="Stroke" Value="#2A2A2A"/>
+                <Setter Property="StrokeThickness" Value="1"/>
+                <Setter Property="Padding" Value="16"/>
+                <Setter Property="Margin" Value="0,0,0,12"/>
+                <Setter Property="StrokeShape" Value="RoundRectangle 12"/>
+            </Style>
+            <Style x:Key="PresetCard" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="#262626"/>
+                <Setter Property="Stroke" Value="#3A3A3A"/>
+                <Setter Property="StrokeThickness" Value="1"/>
+                <Setter Property="Padding" Value="12"/>
+                <Setter Property="StrokeShape" Value="RoundRectangle 8"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <Border Grid.Row="0" 
+                BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" 
+                Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                StrokeThickness="0,0,0,1"
+                Padding="20,16">
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout>
+                    <Label Text="Cutout Overlay View" 
+                           FontSize="24" 
+                           FontAttributes="Bold" 
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"/>
+                    <Label Text="Spotlight and mask overlay effects" 
+                           FontSize="14" 
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
+                </VerticalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                    <Button Text="📋" 
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                            TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                            WidthRequest="44"
+                            HeightRequest="44"
+                            CornerRadius="8"
+                            Clicked="OnCopyCodeClicked"
+                            ToolTipProperties.Text="Copy XAML"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+        <!-- Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="0">
+
+                <!-- Interactive Preview -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="16">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Live Preview" Style="{StaticResource SectionTitle}"/>
+                            <Label x:Name="TapFeedbackLabel" 
+                                   Text="" 
+                                   TextColor="#10B981" 
+                                   FontSize="12"
+                                   Grid.Column="1"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                        
+                        <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}" 
+                                StrokeShape="RoundRectangle 8"
+                                Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
+                                HeightRequest="280"
+                                Padding="0">
+                            <Grid>
+                                <!-- Background image to demonstrate cutout effect -->
+                                <Image Source="dotnet_bot.png" 
+                                       Aspect="AspectFill" 
+                                       Opacity="0.8"/>
+
+                                <!-- The CutoutOverlayView control -->
+                                <aurora:CutoutOverlayView x:Name="CutoutOverlay"
+                                                        CutoutShape="Circular"
+                                                        CutoutOverlayColor="#80000000"
+                                                        BorderColor="#10B981"
+                                                        BorderWidth="3"
+                                                        CutoutInset="40"
+                                                        CornerRadius="12"
+                                                        Command="{Binding TapCommand}"/>
+
+                                <!-- Center label to show through cutout -->
+                                <Label Text="👆 Tap Me!" 
+                                       TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"/>
+                            </Grid>
+                        </Border>
+
+                        <Label Text="Tap inside the cutout area to trigger the command" 
+                               Style="{StaticResource DescriptionText}"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Quick Presets -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Quick Presets" Style="{StaticResource SectionTitle}"/>
+                        <controls:PresetSelector x:Name="PresetSelector"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Shape Settings -->
+                <controls:ExpandableSection Title="Shape Settings" Icon="⬡" IsExpanded="True">
+                    <VerticalStackLayout Spacing="12" Padding="0,8,0,0">
+                        <Label Text="Cutout Shape" 
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" 
+                               FontSize="13"/>
+                        <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}" 
+                                StrokeShape="RoundRectangle 8"
+                                Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
+                                Padding="4">
+                            <Picker x:Name="ShapePicker"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    SelectedIndexChanged="OnShapeChanged">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>Circular</x:String>
+                                        <x:String>Oval</x:String>
+                                        <x:String>Square</x:String>
+                                        <x:String>Rectangular</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </Border>
+                        
+                        <editors:SliderEditor x:Name="CornerRadiusEditor"
+                                             Label="Corner Radius"
+                                             Minimum="0"
+                                             Maximum="50"
+                                             Value="12"
+                                             Step="1"
+                                             ValueChanged="OnCornerRadiusChanged"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Inset Settings -->
+                <controls:ExpandableSection Title="Cutout Inset" Icon="↔" IsExpanded="True">
+                    <VerticalStackLayout Spacing="12" Padding="0,8,0,0">
+                        <editors:SliderEditor x:Name="UniformInsetEditor"
+                                             Label="Uniform Inset"
+                                             Minimum="0"
+                                             Maximum="100"
+                                             Value="40"
+                                             Step="1"
+                                             ValueChanged="OnUniformInsetChanged"/>
+
+                        <editors:ToggleEditor x:Name="IndividualInsetsToggle"
+                                             Label="Individual Insets"
+                                             ValueChanged="OnIndividualInsetsToggled"/>
+
+                        <VerticalStackLayout x:Name="IndividualInsetsPanel" 
+                                            IsVisible="False" 
+                                            Spacing="12">
+                            <editors:SliderEditor x:Name="LeftInsetEditor"
+                                                 Label="Left"
+                                                 Minimum="0"
+                                                 Maximum="100"
+                                                 Value="40"
+                                                 Step="1"
+                                                 ValueChanged="OnInsetChanged"/>
+                            <editors:SliderEditor x:Name="TopInsetEditor"
+                                                 Label="Top"
+                                                 Minimum="0"
+                                                 Maximum="100"
+                                                 Value="40"
+                                                 Step="1"
+                                                 ValueChanged="OnInsetChanged"/>
+                            <editors:SliderEditor x:Name="RightInsetEditor"
+                                                 Label="Right"
+                                                 Minimum="0"
+                                                 Maximum="100"
+                                                 Value="40"
+                                                 Step="1"
+                                                 ValueChanged="OnInsetChanged"/>
+                            <editors:SliderEditor x:Name="BottomInsetEditor"
+                                                 Label="Bottom"
+                                                 Minimum="0"
+                                                 Maximum="100"
+                                                 Value="40"
+                                                 Step="1"
+                                                 ValueChanged="OnInsetChanged"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Color Settings -->
+                <controls:ExpandableSection Title="Colors" Icon="🎨" IsExpanded="False">
+                    <VerticalStackLayout Spacing="12" Padding="0,8,0,0">
+                        <editors:ColorPickerEditor x:Name="OverlayColorEditor"
+                                                   Label="Overlay Color"
+                                                   SelectedColor="#80000000"
+                                                   ColorChanged="OnOverlayColorChanged"/>
+                        
+                        <editors:ColorPickerEditor x:Name="BorderColorEditor"
+                                                   Label="Border Color"
+                                                   SelectedColor="#10B981"
+                                                   ColorChanged="OnBorderColorChanged"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Border Settings -->
+                <controls:ExpandableSection Title="Border" Icon="▢" IsExpanded="False">
+                    <VerticalStackLayout Spacing="12" Padding="0,8,0,0">
+                        <editors:SliderEditor x:Name="BorderWidthEditor"
+                                             Label="Border Width"
+                                             Minimum="0"
+                                             Maximum="20"
+                                             Value="3"
+                                             Step="0.5"
+                                             ValueChanged="OnBorderWidthChanged"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Shape Examples Gallery -->
+                <Border Style="{StaticResource Card}" Margin="0,12,0,12">
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="Shape Gallery" Style="{StaticResource SectionTitle}"/>
+                        <Label Text="All available cutout shapes" Style="{StaticResource DescriptionText}"/>
+                        
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="12">
+                            <!-- Circular -->
+                            <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource PresetCard}">
+                                <VerticalStackLayout Spacing="8">
+                                    <Border HeightRequest="100" StrokeThickness="0">
+                                        <Grid>
+                                            <BoxView BackgroundColor="#3B82F6"/>
+                                            <aurora:CutoutOverlayView
+                                                CutoutShape="Circular"
+                                                CutoutOverlayColor="#80000000"
+                                                CutoutInset="15"
+                                                BorderColor="White"
+                                                BorderWidth="2"/>
+                                        </Grid>
+                                    </Border>
+                                    <Label Text="Circular" TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" FontSize="13" HorizontalOptions="Center"/>
+                                    <Label Text="Perfect circle" TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" FontSize="11" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Oval -->
+                            <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource PresetCard}">
+                                <VerticalStackLayout Spacing="8">
+                                    <Border HeightRequest="100" StrokeThickness="0">
+                                        <Grid>
+                                            <BoxView BackgroundColor="#8B5CF6"/>
+                                            <aurora:CutoutOverlayView
+                                                CutoutShape="Oval"
+                                                CutoutOverlayColor="#80000000"
+                                                CutoutInset="15"
+                                                BorderColor="White"
+                                                BorderWidth="2"/>
+                                        </Grid>
+                                    </Border>
+                                    <Label Text="Oval" TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" FontSize="13" HorizontalOptions="Center"/>
+                                    <Label Text="Elliptical shape" TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" FontSize="11" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Square -->
+                            <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource PresetCard}">
+                                <VerticalStackLayout Spacing="8">
+                                    <Border HeightRequest="100" StrokeThickness="0">
+                                        <Grid>
+                                            <BoxView BackgroundColor="#EC4899"/>
+                                            <aurora:CutoutOverlayView
+                                                CutoutShape="Square"
+                                                CutoutOverlayColor="#80000000"
+                                                CutoutInset="15"
+                                                CornerRadius="8"
+                                                BorderColor="White"
+                                                BorderWidth="2"/>
+                                        </Grid>
+                                    </Border>
+                                    <Label Text="Square" TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" FontSize="13" HorizontalOptions="Center"/>
+                                    <Label Text="Equal dimensions" TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" FontSize="11" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Rectangular -->
+                            <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource PresetCard}">
+                                <VerticalStackLayout Spacing="8">
+                                    <Border HeightRequest="100" StrokeThickness="0">
+                                        <Grid>
+                                            <BoxView BackgroundColor="#F59E0B"/>
+                                            <aurora:CutoutOverlayView
+                                                CutoutShape="Rectangular"
+                                                CutoutOverlayColor="#80000000"
+                                                CutoutInset="15"
+                                                CornerRadius="4"
+                                                BorderColor="White"
+                                                BorderWidth="2"/>
+                                        </Grid>
+                                    </Border>
+                                    <Label Text="Rectangular" TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" FontSize="13" HorizontalOptions="Center"/>
+                                    <Label Text="Flexible sizing" TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" FontSize="11" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Use Cases -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Common Use Cases" Style="{StaticResource SectionTitle}"/>
+                        
+                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="12" RowSpacing="8">
+                            <Label Grid.Row="0" Grid.Column="0" Text="🎯" FontSize="20"/>
+                            <Label Grid.Row="0" Grid.Column="1" Text="Spotlight onboarding tutorials" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" VerticalOptions="Center"/>
+                            
+                            <Label Grid.Row="1" Grid.Column="0" Text="📷" FontSize="20"/>
+                            <Label Grid.Row="1" Grid.Column="1" Text="Camera viewfinder overlays" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" VerticalOptions="Center"/>
+                            
+                            <Label Grid.Row="2" Grid.Column="0" Text="✂" FontSize="20"/>
+                            <Label Grid.Row="2" Grid.Column="1" Text="Image cropping guides" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" VerticalOptions="Center"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Bottom Spacing -->
+                <BoxView HeightRequest="40"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         AURORA CONTROLS - THEME COLOR TOKENS
+         
+         HOW TO USE:
+         Use these colors with AppThemeBinding in your XAML:
+         
+         BackgroundColor="{AppThemeBinding Light={StaticResource Light.PageBackground}, 
+                                           Dark={StaticResource Dark.PageBackground}}"
+         
+         Or use the pre-built styles that already have theme bindings.
+         ═══════════════════════════════════════════════════════════════════════ -->
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         LIGHT THEME COLORS
+         ═══════════════════════════════════════════════════════════════════════ -->
+    
+    <!-- Page/View Backgrounds -->
+    <Color x:Key="Light.PageBackground">#FAFAFA</Color>
+    <Color x:Key="Light.Surface">#FFFFFF</Color>
+    <Color x:Key="Light.SurfaceVariant">#F9FAFB</Color>
+    <Color x:Key="Light.SurfaceContainer">#F3F4F6</Color>
+    <Color x:Key="Light.SurfaceContainerHigh">#E5E7EB</Color>
+    
+    <!-- Borders/Outlines -->
+    <Color x:Key="Light.Border">#E5E7EB</Color>
+    <Color x:Key="Light.BorderStrong">#D1D5DB</Color>
+    <Color x:Key="Light.BorderSubtle">#F3F4F6</Color>
+    
+    <!-- Text -->
+    <Color x:Key="Light.TextPrimary">#111827</Color>
+    <Color x:Key="Light.TextSecondary">#4B5563</Color>
+    <Color x:Key="Light.TextTertiary">#6B7280</Color>
+    <Color x:Key="Light.TextMuted">#9CA3AF</Color>
+    
+    <!-- Interactive -->
+    <Color x:Key="Light.InputBackground">#FFFFFF</Color>
+    <Color x:Key="Light.InputBorder">#D1D5DB</Color>
+    <Color x:Key="Light.SliderTrack">#E5E7EB</Color>
+    <Color x:Key="Light.ButtonSecondary">#F3F4F6</Color>
+    <Color x:Key="Light.ButtonSecondaryText">#374151</Color>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         DARK THEME COLORS  
+         ═══════════════════════════════════════════════════════════════════════ -->
+    
+    <!-- Page/View Backgrounds -->
+    <Color x:Key="Dark.PageBackground">#0F0F0F</Color>
+    <Color x:Key="Dark.Surface">#1A1A1A</Color>
+    <Color x:Key="Dark.SurfaceVariant">#262626</Color>
+    <Color x:Key="Dark.SurfaceContainer">#1F1F1F</Color>
+    <Color x:Key="Dark.SurfaceContainerHigh">#2A2A2A</Color>
+    
+    <!-- Borders/Outlines -->
+    <Color x:Key="Dark.Border">#2A2A2A</Color>
+    <Color x:Key="Dark.BorderStrong">#3A3A3A</Color>
+    <Color x:Key="Dark.BorderSubtle">#404040</Color>
+    
+    <!-- Text -->
+    <Color x:Key="Dark.TextPrimary">#FFFFFF</Color>
+    <Color x:Key="Dark.TextSecondary">#9CA3AF</Color>
+    <Color x:Key="Dark.TextTertiary">#6B7280</Color>
+    <Color x:Key="Dark.TextMuted">#4B5563</Color>
+    
+    <!-- Interactive -->
+    <Color x:Key="Dark.InputBackground">#1A1A1A</Color>
+    <Color x:Key="Dark.InputBorder">#3A3A3A</Color>
+    <Color x:Key="Dark.SliderTrack">#3A3A3A</Color>
+    <Color x:Key="Dark.ButtonSecondary">#262626</Color>
+    <Color x:Key="Dark.ButtonSecondaryText">#E5E7EB</Color>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         ACCENT / BRAND COLORS (Same in both themes)
+         ═══════════════════════════════════════════════════════════════════════ -->
+    
+    <Color x:Key="Accent.Primary">#7C3AED</Color>
+    <Color x:Key="Accent.Secondary">#EC4899</Color>
+    <Color x:Key="Accent.Tertiary">#3B82F6</Color>
+    <Color x:Key="Accent.Teal">#14B8A6</Color>
+    
+    <Color x:Key="Status.Success">#22C55E</Color>
+    <Color x:Key="Status.Warning">#F59E0B</Color>
+    <Color x:Key="Status.Error">#EF4444</Color>
+    <Color x:Key="Status.Info">#3B82F6</Color>
+
+</ResourceDictionary>

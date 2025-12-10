@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:aurora="http://auroracontrols.maui/controls"
+    xmlns:controls="clr-namespace:AuroraControls.TestApp.Controls"
+    xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
+    x:Class="AuroraControls.TestApp.Pages.Inputs.SegmentedControlDemoPage"
+    Title="Segmented Control"
+    BackgroundColor="{AppThemeBinding Light={StaticResource Light.PageBackground}, Dark={StaticResource Dark.PageBackground}}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Live Preview Card -->
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
+                    StrokeShape="RoundRectangle 16"
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                    StrokeThickness="1"
+                    Padding="20">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="LIVE PREVIEW"
+                           FontSize="11"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                           CharacterSpacing="1.5"/>
+
+                    <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                            StrokeShape="RoundRectangle 12"
+                            Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
+                            StrokeThickness="1"
+                            HeightRequest="100"
+                            Padding="20">
+                        <aurora:SegmentedControl
+                            x:Name="PreviewSegmentedControl"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            HeightRequest="40"
+                            SegmentControlStyle="{Binding SelectedStyle}"
+                            ControlForegroundColor="{Binding ForegroundColorValue}"
+                            ControlBackgroundColor="{Binding BackgroundColorValue}"
+                            ForegroundTextColor="{Binding ForegroundTextColorValue}"
+                            BackgroundTextColor="{Binding BackgroundTextColorValue}"
+                            CornerRadius="{Binding CornerRadius}"
+                            BorderSize="{Binding BorderSize}"
+                            FontSize="{Binding FontSize}"
+                            SelectedIndex="0"
+                            ItemSelected="OnItemSelected">
+                            <aurora:Segment Text="First" Value="first"/>
+                            <aurora:Segment Text="Second" Value="second"/>
+                            <aurora:Segment Text="Third" Value="third"/>
+                        </aurora:SegmentedControl>
+                    </Border>
+
+                    <Label x:Name="SelectionLabel"
+                           Text="Selected: First"
+                           FontSize="12"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Preset Selector -->
+            <controls:PresetSelector x:Name="PresetSelector"/>
+
+            <!-- Style Section -->
+            <controls:ExpandableSection Title="Style" IsExpanded="True">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Control Style" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
+                    <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                            StrokeShape="RoundRectangle 8"
+                            Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
+                            StrokeThickness="1"
+                            Padding="4">
+                        <Picker x:Name="StylePicker"
+                                TextColor="#F9FAFB"
+                                SelectedIndexChanged="OnStyleChanged">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Cupertino</x:String>
+                                    <x:String>Filled</x:String>
+                                    <x:String>Rectangular</x:String>
+                                    <x:String>Underline</x:String>
+                                    <x:String>Pill</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </Border>
+                </VerticalStackLayout>
+            </controls:ExpandableSection>
+
+            <!-- Dimensions Section -->
+            <controls:ExpandableSection Title="Dimensions">
+                <VerticalStackLayout Spacing="12">
+                    <editors:SliderEditor
+                        x:Name="CornerRadiusSlider"
+                        Label="Corner Radius"
+                        Minimum="0"
+                        Maximum="20"
+                        Value="4"
+                        Unit="px"/>
+
+                    <editors:SliderEditor
+                        x:Name="BorderSizeSlider"
+                        Label="Border Size"
+                        Minimum="0"
+                        Maximum="6"
+                        Value="2"
+                        Unit="px"/>
+
+                    <editors:SliderEditor
+                        x:Name="FontSizeSlider"
+                        Label="Font Size"
+                        Minimum="10"
+                        Maximum="24"
+                        Value="14"
+                        Unit="sp"/>
+                </VerticalStackLayout>
+            </controls:ExpandableSection>
+
+            <!-- Colors Section -->
+            <controls:ExpandableSection Title="Colors">
+                <VerticalStackLayout Spacing="12">
+                    <editors:ColorPickerEditor
+                        x:Name="ForegroundColorPicker"
+                        Label="Control Foreground"/>
+
+                    <editors:ColorPickerEditor
+                        x:Name="BackgroundColorPicker"
+                        Label="Control Background"/>
+
+                    <editors:ColorPickerEditor
+                        x:Name="ForegroundTextColorPicker"
+                        Label="Foreground Text"/>
+
+                    <editors:ColorPickerEditor
+                        x:Name="BackgroundTextColorPicker"
+                        Label="Background Text"/>
+                </VerticalStackLayout>
+            </controls:ExpandableSection>
+
+            <!-- Examples Section -->
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
+                    StrokeShape="RoundRectangle 16"
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                    StrokeThickness="1"
+                    Padding="20">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="STYLE EXAMPLES"
+                           FontSize="11"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                           CharacterSpacing="1.5"/>
+
+                    <!-- Cupertino Style -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Cupertino" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
+                        <aurora:SegmentedControl
+                            HeightRequest="32"
+                            SegmentControlStyle="Cupertino"
+                            ControlForegroundColor="#7C3AED"
+                            ControlBackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                            ForegroundTextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                            SelectedIndex="0">
+                            <aurora:Segment Text="Day" Value="day"/>
+                            <aurora:Segment Text="Week" Value="week"/>
+                            <aurora:Segment Text="Month" Value="month"/>
+                        </aurora:SegmentedControl>
+                    </VerticalStackLayout>
+
+                    <!-- Filled Style -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Filled" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
+                        <aurora:SegmentedControl
+                            HeightRequest="32"
+                            SegmentControlStyle="Filled"
+                            ControlForegroundColor="#22C55E"
+                            ControlBackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                            ForegroundTextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                            SelectedIndex="1">
+                            <aurora:Segment Text="Small" Value="sm"/>
+                            <aurora:Segment Text="Medium" Value="md"/>
+                            <aurora:Segment Text="Large" Value="lg"/>
+                        </aurora:SegmentedControl>
+                    </VerticalStackLayout>
+
+                    <!-- Rectangular Style -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Rectangular" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
+                        <aurora:SegmentedControl
+                            HeightRequest="32"
+                            SegmentControlStyle="Rectangular"
+                            ControlForegroundColor="#3B82F6"
+                            ControlBackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                            ForegroundTextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                            SelectedIndex="0">
+                            <aurora:Segment Text="List" Value="list"/>
+                            <aurora:Segment Text="Grid" Value="grid"/>
+                            <aurora:Segment Text="Map" Value="map"/>
+                        </aurora:SegmentedControl>
+                    </VerticalStackLayout>
+
+                    <!-- Underline Style -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Underline" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
+                        <aurora:SegmentedControl
+                            HeightRequest="32"
+                            SegmentControlStyle="Underline"
+                            ControlForegroundColor="#EC4899"
+                            ControlBackgroundColor="Transparent"
+                            ForegroundTextColor="#EC4899"
+                            BackgroundTextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                            SelectedIndex="2">
+                            <aurora:Segment Text="All" Value="all"/>
+                            <aurora:Segment Text="Active" Value="active"/>
+                            <aurora:Segment Text="Completed" Value="completed"/>
+                        </aurora:SegmentedControl>
+                    </VerticalStackLayout>
+
+                    <!-- Pill Style -->
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Pill" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
+                        <aurora:SegmentedControl
+                            HeightRequest="32"
+                            SegmentControlStyle="Pill"
+                            ControlForegroundColor="#14B8A6"
+                            ControlBackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                            ForegroundTextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                            CornerRadius="16"
+                            SelectedIndex="1">
+                            <aurora:Segment Text="1" Value="1"/>
+                            <aurora:Segment Text="2" Value="2"/>
+                            <aurora:Segment Text="3" Value="3"/>
+                            <aurora:Segment Text="4" Value="4"/>
+                        </aurora:SegmentedControl>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Bottom Spacing -->
+            <BoxView HeightRequest="40"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

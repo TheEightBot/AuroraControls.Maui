@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="clr-namespace:AuroraControls;assembly=AuroraControls"
+             x:Class="AuroraControls.TestApp.Pages.Buttons.GradientPillButtonDemoPage"
+             Title="Gradient Pill Button"
+             Style="{StaticResource DemoPageStyle}"
+             BackgroundColor="{StaticResource SurfaceDim}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="{StaticResource SpacingL}" Spacing="{StaticResource SpacingM}">
+            
+            <!-- Header -->
+            <VerticalStackLayout Spacing="{StaticResource SpacingXS}">
+                <Label Text="Gradient Pill Button"
+                       Style="{StaticResource TitleLarge}" />
+                <Label Text="A pill-shaped button with gradient background, shadow, and ripple effect"
+                       Style="{StaticResource BodyMedium}"
+                       Opacity="0.7" />
+            </VerticalStackLayout>
+
+            <!-- Preview Section -->
+            <Border Style="{StaticResource CardStyle}"
+                    Padding="{StaticResource SpacingXL}"
+                    MinimumHeightRequest="200">
+                <VerticalStackLayout Spacing="{StaticResource SpacingM}" VerticalOptions="Center">
+                    <Label Text="PREVIEW"
+                           Style="{StaticResource LabelSmall}"
+                           TextColor="{StaticResource AuroraPurple}"
+                           HorizontalTextAlignment="Center" />
+                    
+                    <aurora:GradientPillButton x:Name="DemoButton"
+                                               Text="Tap Me"
+                                               ButtonBackgroundStartColor="{StaticResource AuroraPurple}"
+                                               ButtonBackgroundEndColor="{StaticResource AuroraPink}"
+                                               FontColor="White"
+                                               FontSize="16"
+                                               BorderWidth="0"
+                                               ShadowBlurRadius="8"
+                                               HeightRequest="50"
+                                               WidthRequest="200"
+                                               HorizontalOptions="Center"
+                                               Clicked="OnDemoButtonClicked" />
+                    
+                    <Label x:Name="ClickCountLabel"
+                           Text="Clicks: 0"
+                           Style="{StaticResource BodySmall}"
+                           HorizontalTextAlignment="Center"
+                           Opacity="0.6" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Properties Section -->
+            <Border Style="{StaticResource CardStyle}" Padding="{StaticResource SpacingM}">
+                <VerticalStackLayout Spacing="{StaticResource SpacingM}">
+                    
+                    <Label Text="▼ PROPERTIES"
+                           Style="{StaticResource LabelSmall}"
+                           TextColor="{StaticResource AuroraPurple}" />
+
+                    <!-- Text Property -->
+                    <VerticalStackLayout Spacing="{StaticResource SpacingXS}">
+                        <Label Text="Text" Style="{StaticResource TitleSmall}" />
+                        <Entry x:Name="TextEntry"
+                               Text="Tap Me"
+                               TextChanged="OnTextChanged"
+                               BackgroundColor="{StaticResource SurfaceContainer}"
+                               TextColor="{StaticResource OnSurface}" />
+                    </VerticalStackLayout>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource SurfaceContainer}" />
+
+                    <!-- Gradient Colors -->
+                    <Label Text="GRADIENT COLORS"
+                           Style="{StaticResource LabelSmall}"
+                           TextColor="{StaticResource AuroraPurple}"
+                           Margin="0,8,0,0" />
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0" Spacing="4">
+                            <Label Text="Start Color" Style="{StaticResource BodySmall}" />
+                            <HorizontalStackLayout x:Name="StartColorPicker" Spacing="8" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="4">
+                            <Label Text="End Color" Style="{StaticResource BodySmall}" />
+                            <HorizontalStackLayout x:Name="EndColorPicker" Spacing="8" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource SurfaceContainer}" />
+
+                    <!-- Gradient Direction -->
+                    <VerticalStackLayout Spacing="{StaticResource SpacingXS}">
+                        <Label Text="Gradient Direction" Style="{StaticResource TitleSmall}" />
+                        <Picker x:Name="DirectionPicker"
+                                SelectedIndexChanged="OnDirectionChanged"
+                                BackgroundColor="{StaticResource SurfaceContainer}"
+                                TextColor="{StaticResource OnSurface}">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Horizontal</x:String>
+                                    <x:String>Vertical</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </VerticalStackLayout>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource SurfaceContainer}" />
+
+                    <!-- Font Size -->
+                    <VerticalStackLayout Spacing="{StaticResource SpacingXS}">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Font Size" Style="{StaticResource TitleSmall}" />
+                            <Label x:Name="FontSizeLabel" Text="16" Style="{StaticResource BodySmall}" Opacity="0.6" Grid.Column="1" />
+                        </Grid>
+                        <Slider x:Name="FontSizeSlider"
+                                Minimum="10"
+                                Maximum="32"
+                                Value="16"
+                                ValueChanged="OnFontSizeChanged"
+                                MinimumTrackColor="{StaticResource AuroraPurple}"
+                                MaximumTrackColor="{StaticResource SurfaceContainer}"
+                                ThumbColor="{StaticResource AuroraPurple}" />
+                    </VerticalStackLayout>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource SurfaceContainer}" />
+
+                    <!-- Border Width -->
+                    <VerticalStackLayout Spacing="{StaticResource SpacingXS}">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Border Width" Style="{StaticResource TitleSmall}" />
+                            <Label x:Name="BorderWidthLabel" Text="0" Style="{StaticResource BodySmall}" Opacity="0.6" Grid.Column="1" />
+                        </Grid>
+                        <Slider x:Name="BorderWidthSlider"
+                                Minimum="0"
+                                Maximum="8"
+                                Value="0"
+                                ValueChanged="OnBorderWidthChanged"
+                                MinimumTrackColor="{StaticResource AuroraPurple}"
+                                MaximumTrackColor="{StaticResource SurfaceContainer}"
+                                ThumbColor="{StaticResource AuroraPurple}" />
+                    </VerticalStackLayout>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource SurfaceContainer}" />
+
+                    <!-- Shadow Blur Radius -->
+                    <VerticalStackLayout Spacing="{StaticResource SpacingXS}">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Shadow Blur" Style="{StaticResource TitleSmall}" />
+                            <Label x:Name="ShadowBlurLabel" Text="8" Style="{StaticResource BodySmall}" Opacity="0.6" Grid.Column="1" />
+                        </Grid>
+                        <Slider x:Name="ShadowBlurSlider"
+                                Minimum="0"
+                                Maximum="24"
+                                Value="8"
+                                ValueChanged="OnShadowBlurChanged"
+                                MinimumTrackColor="{StaticResource AuroraPurple}"
+                                MaximumTrackColor="{StaticResource SurfaceContainer}"
+                                ThumbColor="{StaticResource AuroraPurple}" />
+                    </VerticalStackLayout>
+
+                    <BoxView HeightRequest="1" Color="{StaticResource SurfaceContainer}" />
+
+                    <!-- Button Size -->
+                    <Label Text="BUTTON SIZE"
+                           Style="{StaticResource LabelSmall}"
+                           TextColor="{StaticResource AuroraPurple}"
+                           Margin="0,8,0,0" />
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0" Spacing="4">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Width" Style="{StaticResource BodySmall}" />
+                                <Label x:Name="WidthLabel" Text="200" Style="{StaticResource BodySmall}" Opacity="0.6" Grid.Column="1" />
+                            </Grid>
+                            <Slider x:Name="WidthSlider"
+                                    Minimum="100"
+                                    Maximum="350"
+                                    Value="200"
+                                    ValueChanged="OnWidthChanged"
+                                    MinimumTrackColor="{StaticResource AuroraPurple}"
+                                    MaximumTrackColor="{StaticResource SurfaceContainer}"
+                                    ThumbColor="{StaticResource AuroraPurple}" />
+                        </VerticalStackLayout>
+                        
+                        <VerticalStackLayout Grid.Column="1" Spacing="{StaticResource SpacingXS}">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Height" Style="{StaticResource BodySmall}" />
+                                <Label x:Name="HeightLabel" Text="50" Style="{StaticResource BodySmall}" Opacity="0.6" Grid.Column="1" />
+                            </Grid>
+                            <Slider x:Name="HeightSlider"
+                                    Minimum="30"
+                                    Maximum="100"
+                                    Value="50"
+                                    ValueChanged="OnHeightChanged"
+                                    MinimumTrackColor="{StaticResource AuroraPurple}"
+                                    MaximumTrackColor="{StaticResource SurfaceContainer}"
+                                    ThumbColor="{StaticResource AuroraPurple}" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Code Example Section -->
+            <Border Style="{StaticResource CardStyle}" Padding="{StaticResource SpacingM}">
+                <VerticalStackLayout Spacing="{StaticResource SpacingS}">
+                    <Label Text="📋 CODE EXAMPLE"
+                           Style="{StaticResource LabelSmall}"
+                           TextColor="{StaticResource AuroraPurple}" />
+                    
+                    <Border BackgroundColor="{StaticResource SurfaceDim}"
+                            StrokeShape="RoundRectangle 8"
+                            Stroke="{StaticResource SurfaceContainer}"
+                            Padding="{StaticResource SpacingM}">
+                        <Label x:Name="CodeExampleLabel"
+                               FontFamily="Consolas"
+                               FontSize="12"
+                               TextColor="{StaticResource OnSurface}" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:aurora="http://auroracontrols.maui/controls"
+    xmlns:controls="clr-namespace:AuroraControls.TestApp.Controls"
+    xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
+    x:Class="AuroraControls.TestApp.Pages.Inputs.CupertinoToggleSwitchDemoPage"
+    Title="Cupertino Toggle"
+    BackgroundColor="{AppThemeBinding Light={StaticResource Light.PageBackground}, Dark={StaticResource Dark.PageBackground}}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Live Preview Card -->
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
+                    StrokeShape="RoundRectangle 16"
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                    StrokeThickness="1"
+                    Padding="20">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="LIVE PREVIEW"
+                           FontSize="11"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                           CharacterSpacing="1.5"/>
+
+                    <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                            StrokeShape="RoundRectangle 12"
+                            Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
+                            StrokeThickness="1"
+                            HeightRequest="120"
+                            Padding="20">
+                        <aurora:CupertinoToggleSwitch
+                            x:Name="PreviewToggle"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            WidthRequest="{Binding ToggleWidth}"
+                            HeightRequest="{Binding ToggleHeight}"
+                            IsToggled="{Binding IsToggled, Mode=TwoWay}"
+                            ThumbColor="{Binding ThumbColorValue}"
+                            TrackEnabledColor="{Binding TrackEnabledColorValue}"
+                            TrackDisabledColor="{Binding TrackDisabledColorValue}"
+                            BorderWidth="{Binding BorderWidth}"
+                            Toggled="OnToggleChanged"/>
+                    </Border>
+
+                    <Label x:Name="ToggleStatusLabel"
+                           Text="ON"
+                           FontSize="12"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Preset Selector -->
+            <controls:PresetSelector x:Name="PresetSelector"/>
+
+            <!-- State Section -->
+            <controls:ExpandableSection Title="State" IsExpanded="True">
+                <VerticalStackLayout Spacing="12">
+                    <editors:ToggleEditor
+                        x:Name="IsToggledEditor"
+                        Label="Is Toggled"
+                        Value="True"/>
+
+                    <editors:ToggleEditor
+                        x:Name="IsEnabledEditor"
+                        Label="Is Enabled"
+                        Value="True"/>
+                </VerticalStackLayout>
+            </controls:ExpandableSection>
+
+            <!-- Size Section -->
+            <controls:ExpandableSection Title="Size">
+                <VerticalStackLayout Spacing="12">
+                    <editors:SliderEditor
+                        x:Name="WidthSlider"
+                        Label="Width"
+                        Minimum="40"
+                        Maximum="120"
+                        Value="60"
+                        Unit="px"/>
+
+                    <editors:SliderEditor
+                        x:Name="HeightSlider"
+                        Label="Height"
+                        Minimum="20"
+                        Maximum="60"
+                        Value="32"
+                        Unit="px"/>
+
+                    <editors:SliderEditor
+                        x:Name="BorderWidthSlider"
+                        Label="Border Width"
+                        Minimum="1"
+                        Maximum="10"
+                        Value="4"
+                        Unit="px"/>
+                </VerticalStackLayout>
+            </controls:ExpandableSection>
+
+            <!-- Colors Section -->
+            <controls:ExpandableSection Title="Colors">
+                <VerticalStackLayout Spacing="12">
+                    <editors:ColorPickerEditor
+                        x:Name="ThumbColorPicker"
+                        Label="Thumb Color"/>
+
+                    <editors:ColorPickerEditor
+                        x:Name="TrackEnabledColorPicker"
+                        Label="Track Enabled Color"/>
+
+                    <editors:ColorPickerEditor
+                        x:Name="TrackDisabledColorPicker"
+                        Label="Track Disabled Color"/>
+                </VerticalStackLayout>
+            </controls:ExpandableSection>
+
+            <!-- Animation Section -->
+            <controls:ExpandableSection Title="Animation">
+                <VerticalStackLayout Spacing="12">
+                    <editors:SliderEditor
+                        x:Name="AnimationDurationSlider"
+                        Label="Animation Duration"
+                        Minimum="100"
+                        Maximum="500"
+                        Value="240"
+                        Unit="ms"/>
+                </VerticalStackLayout>
+            </controls:ExpandableSection>
+
+            <!-- Examples Section -->
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
+                    StrokeShape="RoundRectangle 16"
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                    StrokeThickness="1"
+                    Padding="20">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="EXAMPLES"
+                           FontSize="11"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                           CharacterSpacing="1.5"/>
+
+                    <!-- Color Variations -->
+                    <Label Text="Color Variations" FontSize="14" TextColor="#F9FAFB" FontAttributes="Bold"/>
+                    <FlexLayout Wrap="Wrap" JustifyContent="SpaceEvenly" AlignItems="Center">
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:CupertinoToggleSwitch
+                                WidthRequest="50"
+                                HeightRequest="28"
+                                TrackEnabledColor="#22C55E"
+                                TrackDisabledColor="#404040"
+                                ThumbColor="White"
+                                IsToggled="True"/>
+                            <Label Text="Green" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:CupertinoToggleSwitch
+                                WidthRequest="50"
+                                HeightRequest="28"
+                                TrackEnabledColor="#3B82F6"
+                                TrackDisabledColor="#404040"
+                                ThumbColor="White"
+                                IsToggled="True"/>
+                            <Label Text="Blue" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:CupertinoToggleSwitch
+                                WidthRequest="50"
+                                HeightRequest="28"
+                                TrackEnabledColor="#7C3AED"
+                                TrackDisabledColor="#404040"
+                                ThumbColor="White"
+                                IsToggled="True"/>
+                            <Label Text="Purple" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:CupertinoToggleSwitch
+                                WidthRequest="50"
+                                HeightRequest="28"
+                                TrackEnabledColor="#EC4899"
+                                TrackDisabledColor="#404040"
+                                ThumbColor="White"
+                                IsToggled="True"/>
+                            <Label Text="Pink" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </FlexLayout>
+
+                    <!-- Size Variations -->
+                    <Label Text="Size Variations" FontSize="14" TextColor="#F9FAFB" FontAttributes="Bold" Margin="0,12,0,0"/>
+                    <FlexLayout Wrap="Wrap" JustifyContent="SpaceEvenly" AlignItems="Center">
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:CupertinoToggleSwitch
+                                WidthRequest="40"
+                                HeightRequest="22"
+                                TrackEnabledColor="#7C3AED"
+                                TrackDisabledColor="#404040"
+                                ThumbColor="White"
+                                BorderWidth="2"
+                                IsToggled="True"/>
+                            <Label Text="Small" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:CupertinoToggleSwitch
+                                WidthRequest="60"
+                                HeightRequest="32"
+                                TrackEnabledColor="#7C3AED"
+                                TrackDisabledColor="#404040"
+                                ThumbColor="White"
+                                BorderWidth="4"
+                                IsToggled="True"/>
+                            <Label Text="Medium" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:CupertinoToggleSwitch
+                                WidthRequest="80"
+                                HeightRequest="44"
+                                TrackEnabledColor="#7C3AED"
+                                TrackDisabledColor="#404040"
+                                ThumbColor="White"
+                                BorderWidth="6"
+                                IsToggled="True"/>
+                            <Label Text="Large" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </FlexLayout>
+
+                    <!-- States -->
+                    <Label Text="States" FontSize="14" TextColor="#F9FAFB" FontAttributes="Bold" Margin="0,12,0,0"/>
+                    <FlexLayout Wrap="Wrap" JustifyContent="SpaceEvenly" AlignItems="Center">
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:CupertinoToggleSwitch
+                                WidthRequest="50"
+                                HeightRequest="28"
+                                TrackEnabledColor="#22C55E"
+                                TrackDisabledColor="#404040"
+                                ThumbColor="White"
+                                IsToggled="True"/>
+                            <Label Text="On" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:CupertinoToggleSwitch
+                                WidthRequest="50"
+                                HeightRequest="28"
+                                TrackEnabledColor="#22C55E"
+                                TrackDisabledColor="#404040"
+                                ThumbColor="White"
+                                IsToggled="False"/>
+                            <Label Text="Off" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Margin="8" HorizontalOptions="Center">
+                            <aurora:CupertinoToggleSwitch
+                                WidthRequest="50"
+                                HeightRequest="28"
+                                TrackEnabledColor="#22C55E"
+                                TrackDisabledColor="#404040"
+                                ThumbColor="White"
+                                IsToggled="True"
+                                IsEnabled="False"
+                                Opacity="0.5"/>
+                            <Label Text="Disabled" FontSize="10" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </FlexLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Bottom Spacing -->
+            <BoxView HeightRequest="40"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

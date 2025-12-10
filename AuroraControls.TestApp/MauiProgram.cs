@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui;
+﻿using AuroraControls.TestApp.Services;
+using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Markup;
 using NPicker;
 
@@ -29,6 +30,10 @@ public static class MauiProgram
                 })
             .UseAuroraControls<App>();
 
+        // Register services
+        builder.Services.AddSingleton<IThemeService, ThemeService>();
+
+        // Register pages
         builder.Services.AddTransient<MainPage>();
 
         return builder.Build();

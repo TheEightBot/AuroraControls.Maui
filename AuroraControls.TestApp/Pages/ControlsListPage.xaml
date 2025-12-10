@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AuroraControls.TestApp.Pages.ControlsListPage"
+             x:Name="this"
+             Title="Controls"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Light.PageBackground}, Dark={StaticResource Dark.PageBackground}}">
+
+    <Grid RowDefinitions="Auto,*">
+        
+        <!-- Search Header -->
+        <VerticalStackLayout Grid.Row="0" Padding="20,20,20,0" Spacing="12">
+            
+            <Label Text="All Controls"
+                   TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                   FontSize="28"
+                   FontAttributes="Bold" />
+            
+            <!-- Search Bar -->
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" 
+                    StrokeShape="RoundRectangle 12" 
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}" 
+                    Padding="12,8">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Label Grid.Column="0" 
+                           Text="🔍" 
+                           FontSize="16" 
+                           VerticalOptions="Center" 
+                           Margin="0,0,8,0" />
+                    <Entry Grid.Column="1"
+                           x:Name="SearchEntry"
+                           Placeholder="Search controls..."
+                           PlaceholderColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                           BackgroundColor="Transparent"
+                           TextChanged="OnSearchTextChanged" />
+                    <Label Grid.Column="2"
+                           x:Name="ClearButton"
+                           Text="✕"
+                           FontSize="14"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                           VerticalOptions="Center"
+                           IsVisible="False">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnClearSearchTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+            </Border>
+            
+            <!-- Results count -->
+            <Label x:Name="ResultsLabel"
+                   Text=""
+                   TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                   FontSize="12"
+                   IsVisible="False" />
+        </VerticalStackLayout>
+
+        <!-- Controls List -->
+        <CollectionView Grid.Row="1"
+                        x:Name="ControlsCollection"
+                        ItemsSource="{Binding FilteredControls, Source={x:Reference this}}"
+                        SelectionMode="Single"
+                        SelectionChanged="OnControlSelected"
+                        Margin="20,12,20,0">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" 
+                            StrokeShape="RoundRectangle 12" 
+                            Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}" 
+                            Padding="16"
+                            Margin="0,0,0,8">
+                        <Grid ColumnDefinitions="4,*,Auto">
+                            <BoxView Color="{Binding AccentColor}" CornerRadius="2" WidthRequest="4" />
+                            <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                                <Label Text="{Binding Name}" 
+                                       TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold" />
+                                <Label Text="{Binding Description}" 
+                                       TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
+                                       FontSize="12" />
+                                <Label Text="{Binding Category}" 
+                                       TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" 
+                                       FontSize="10" 
+                                       Margin="0,4,0,0" />
+                            </VerticalStackLayout>
+                            <Label Grid.Column="2" 
+                                   Text="→" 
+                                   TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
+                                   FontSize="18" 
+                                   VerticalOptions="Center" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            
+            <CollectionView.EmptyView>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Padding="40">
+                    <Label Text="🔍" FontSize="48" HorizontalOptions="Center" />
+                    <Label Text="No controls found" 
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" 
+                           FontSize="18" 
+                           FontAttributes="Bold" 
+                           HorizontalOptions="Center" 
+                           Margin="0,12,0,4" />
+                    <Label Text="Try a different search term" 
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
+                           FontSize="14" 
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+            
+            <CollectionView.Footer>
+                <BoxView HeightRequest="100" Color="Transparent" />
+            </CollectionView.Footer>
+        </CollectionView>
+        
+    </Grid>
+
+</ContentPage>

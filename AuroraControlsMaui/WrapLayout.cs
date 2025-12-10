@@ -32,17 +32,17 @@ public class WrapLayout : Layout
             0.0, propertyChanged: OnLayoutPropertyChanged);
 
     /// <summary>
-    /// The horizontal options property for child alignment.
+    /// The horizontal child alignment property.
     /// </summary>
-    public static readonly BindableProperty HorizontalOptionsProperty =
-        BindableProperty.Create(nameof(HorizontalOptions), typeof(LayoutOptions), typeof(WrapLayout),
+    public static readonly BindableProperty ChildHorizontalAlignmentProperty =
+        BindableProperty.Create(nameof(ChildHorizontalAlignment), typeof(LayoutOptions), typeof(WrapLayout),
             LayoutOptions.Start, propertyChanged: OnLayoutPropertyChanged);
 
     /// <summary>
-    /// The vertical options property for child alignment.
+    /// The vertical child alignment property.
     /// </summary>
-    public static readonly BindableProperty VerticalOptionsProperty =
-        BindableProperty.Create(nameof(VerticalOptions), typeof(LayoutOptions), typeof(WrapLayout),
+    public static readonly BindableProperty ChildVerticalAlignmentProperty =
+        BindableProperty.Create(nameof(ChildVerticalAlignment), typeof(LayoutOptions), typeof(WrapLayout),
             LayoutOptions.Start, propertyChanged: OnLayoutPropertyChanged);
 
     /// <summary>
@@ -73,33 +73,48 @@ public class WrapLayout : Layout
     }
 
     /// <summary>
-    /// Gets or sets the horizontal alignment options for children.
+    /// Gets or sets the horizontal alignment for children within a column (when Orientation is Vertical).
     /// </summary>
-    public LayoutOptions HorizontalOptions
+    public LayoutOptions ChildHorizontalAlignment
     {
-        get => (LayoutOptions)GetValue(HorizontalOptionsProperty);
-        set => SetValue(HorizontalOptionsProperty, value);
+        get => (LayoutOptions)GetValue(ChildHorizontalAlignmentProperty);
+        set => SetValue(ChildHorizontalAlignmentProperty, value);
     }
 
     /// <summary>
-    /// Gets or sets the vertical alignment options for children.
+    /// Gets or sets the vertical alignment for children within a row (when Orientation is Horizontal).
     /// </summary>
-    public LayoutOptions VerticalOptions
+    public LayoutOptions ChildVerticalAlignment
     {
-        get => (LayoutOptions)GetValue(VerticalOptionsProperty);
-        set => SetValue(VerticalOptionsProperty, value);
+        get => (LayoutOptions)GetValue(ChildVerticalAlignmentProperty);
+        set => SetValue(ChildVerticalAlignmentProperty, value);
     }
 
     private static void OnLayoutPropertyChanged(BindableObject bindable, object oldValue, object newValue)
     {
         if (bindable is WrapLayout layout)
         {
-            layout.InvalidateMeasureNonVirtual(InvalidationTrigger.HorizontalOptionsChanged);
+            // Invalidate measure to force complete re-layout
+            layout.InvalidateMeasure();
+
+            // Request a new layout pass through the handler
+            (layout as IView)?.InvalidateArrange();
+
+            // Also invalidate the parent to ensure layout cascade
+            if (layout.Parent is IView parentView)
+            {
+                parentView.InvalidateMeasure();
+            }
 
             #if ANDROID
             if (layout.Handler?.PlatformView is Android.Views.View platformView)
             {
                 platformView.RequestLayout();
+            }
+            #elif IOS || MACCATALYST
+            if (layout.Handler?.PlatformView is UIKit.UIView platformView)
+            {
+                platformView.SetNeedsLayout();
             }
             #endif
         }
@@ -409,11 +424,11 @@ public class WrapLayoutManager : ILayoutManager
                 var childRect = new Rect(currentX, currentY, size.Width, size.Height);
 
                 // Apply vertical alignment within the row
-                if (_layout.VerticalOptions.Alignment == LayoutAlignment.Center)
+                if (_layout.ChildVerticalAlignment.Alignment == LayoutAlignment.Center)
                 {
                     childRect.Y += (rowHeight - size.Height) / 2;
                 }
-                else if (_layout.VerticalOptions.Alignment == LayoutAlignment.End)
+                else if (_layout.ChildVerticalAlignment.Alignment == LayoutAlignment.End)
                 {
                     childRect.Y += rowHeight - size.Height;
                 }
@@ -508,11 +523,11 @@ public class WrapLayoutManager : ILayoutManager
                 var childRect = new Rect(currentX, currentY, size.Width, size.Height);
 
                 // Apply horizontal alignment within the column
-                if (_layout.HorizontalOptions.Alignment == LayoutAlignment.Center)
+                if (_layout.ChildHorizontalAlignment.Alignment == LayoutAlignment.Center)
                 {
                     childRect.X += (columnWidth - size.Width) / 2;
                 }
-                else if (_layout.HorizontalOptions.Alignment == LayoutAlignment.End)
+                else if (_layout.ChildHorizontalAlignment.Alignment == LayoutAlignment.End)
                 {
                     childRect.X += columnWidth - size.Width;
                 }

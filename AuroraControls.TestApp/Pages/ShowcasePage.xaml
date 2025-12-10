@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AuroraControls.TestApp.Pages.ShowcasePage"
+             Title="Showcase"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Light.PageBackground}, Dark={StaticResource Dark.PageBackground}}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Header -->
+            <VerticalStackLayout Spacing="8" Margin="0,20,0,10">
+                <Label Text="Aurora Controls"
+                       TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                       FontSize="32"
+                       FontAttributes="Bold"
+                       HorizontalTextAlignment="Center" />
+                <Label Text="Beautiful MAUI Controls"
+                       TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
+                       FontSize="16"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+            <!-- Featured Control Card -->
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
+                    StrokeShape="RoundRectangle 16"
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                    Padding="20">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="🎨 Featured Control"
+                           TextColor="{StaticResource Accent.Primary}"
+                           FontSize="14"
+                           FontAttributes="Bold" />
+
+                    <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceContainer}, Dark={StaticResource Dark.SurfaceVariant}}"
+                            StrokeShape="RoundRectangle 12"
+                            Stroke="Transparent"
+                            HeightRequest="120"
+                            Padding="20">
+                        <Label Text="Gradient Pill Button"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                               FontSize="20"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center" />
+                    </Border>
+
+                    <Label Text="Create beautiful gradient buttons with customizable colors, shadows, and animations."
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
+                           FontSize="14"
+                           LineBreakMode="WordWrap" />
+
+                    <Button Text="Explore →"
+                            BackgroundColor="{StaticResource Accent.Primary}"
+                            TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                            CornerRadius="8"
+                            HeightRequest="44"
+                            Clicked="OnExploreClicked" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Popular Controls -->
+            <Label Text="Popular Controls"
+                   TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   Margin="0,10,0,0" />
+
+            <HorizontalStackLayout Spacing="12">
+                <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                        WidthRequest="100"
+                        HeightRequest="100"
+                        Padding="12">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnToggleBoxTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout VerticalOptions="Center" Spacing="8">
+                        <Label Text="✓"
+                               TextColor="{StaticResource Status.Success}"
+                               FontSize="24"
+                               HorizontalTextAlignment="Center" />
+                        <Label Text="ToggleBox"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                               FontSize="12"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                        WidthRequest="100"
+                        HeightRequest="100"
+                        Padding="12">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCalendarTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout VerticalOptions="Center" Spacing="8">
+                        <Label Text="📅"
+                               FontSize="24"
+                               HorizontalTextAlignment="Center" />
+                        <Label Text="Calendar"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                               FontSize="12"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                        WidthRequest="100"
+                        HeightRequest="100"
+                        Padding="12">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnConfettiTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout VerticalOptions="Center" Spacing="8">
+                        <Label Text="🎉"
+                               FontSize="24"
+                               HorizontalTextAlignment="Center" />
+                        <Label Text="Confetti"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                               FontSize="12"
+                               HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Border>
+            </HorizontalStackLayout>
+
+            <!-- Version Info -->
+            <Label Text="Version 1.0 • .NET MAUI 9"
+                   TextColor="{AppThemeBinding Light={StaticResource Light.TextMuted}, Dark={StaticResource Dark.TextMuted}}"
+                   FontSize="12"
+                   HorizontalTextAlignment="Center"
+                   Margin="0,20,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

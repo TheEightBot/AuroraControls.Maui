@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             xmlns:controls="clr-namespace:AuroraControls.TestApp.Controls"
+             xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
+             x:Class="AuroraControls.TestApp.Pages.Calendar.CalendarViewDemoPage"
+             Title="Calendar View"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Light.PageBackground}, Dark={StaticResource Dark.PageBackground}}">
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <Border Grid.Row="0"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
+                StrokeThickness="0"
+                Padding="20,16">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Border BackgroundColor="{StaticResource Accent.Primary}"
+                        StrokeThickness="0"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        Padding="8">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12"/>
+                    </Border.StrokeShape>
+                    <Label Text="📅"
+                           FontSize="20"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                </Border>
+
+                <VerticalStackLayout Grid.Column="1" Spacing="2" Margin="16,0,0,0">
+                    <Label Text="Calendar View"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"/>
+                    <Label Text="Full-featured calendar control"
+                           FontSize="13"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout Grid.Column="2" Spacing="8">
+                    <Button Text="Add Event"
+                            BackgroundColor="#22C55E"
+                            TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                            FontSize="12"
+                            HeightRequest="36"
+                            Padding="12,0"
+                            CornerRadius="8"
+                            Clicked="OnAddEventClicked"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+        <!-- Main Content -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="16" Padding="20">
+
+                <!-- Live Preview Card -->
+                <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
+                        StrokeThickness="1"
+                        Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                        Padding="20">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16"/>
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="LIVE PREVIEW"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                               CharacterSpacing="1"/>
+
+                        <!-- Calendar Control -->
+                        <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                                StrokeThickness="1"
+                                Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
+                                Padding="16"
+                                HeightRequest="350">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12"/>
+                            </Border.StrokeShape>
+                            <aurora:CalendarView x:Name="PreviewCalendar"
+                                                 HeaderTextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                                 SeparatorColor="#404040"
+                                                 DateColor="#9CA3AF"
+                                                 DateTextColor="#E5E7EB"
+                                                 SelectedDateColor="#7C3AED"
+                                                 SelectedDateTextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                                 DateBackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                                                 AvailableDateColor="#E5E7EB"
+                                                 UnavailableDateColor="#4B5563"
+                                                 SelectionType="Single"
+                                                 DayOfWeekDisplayType="Abbreviated"
+                                                 CalendarDayDisplayLocation="Centered"
+                                                 CalendarSelectedDatesChanged="OnCalendarSelectedDatesChanged"/>
+                        </Border>
+
+                        <!-- Selected Date Display -->
+                        <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                                StrokeThickness="0"
+                                Padding="12">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8"/>
+                            </Border.StrokeShape>
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="Selected:"
+                                       TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
+                                       FontSize="14"
+                                       VerticalOptions="Center"/>
+                                <Label x:Name="SelectedDatesLabel"
+                                       Text="No date selected"
+                                       TextColor="{StaticResource Accent.Primary}"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </Border>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Presets -->
+                <controls:PresetSelector x:Name="PresetSelector"
+                                         Label="Theme Presets"
+                                         PresetChanged="OnPresetSelected"/>
+
+                <!-- Navigation Controls -->
+                <controls:ExpandableSection Title="📆 Navigation" IsExpanded="True">
+                    <VerticalStackLayout Spacing="12" Padding="0,8">
+                        <!-- Month/Year Display -->
+                        <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                                StrokeThickness="0"
+                                Padding="16">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8"/>
+                            </Border.StrokeShape>
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <Button Text="◀"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource Light.SliderTrack}, Dark={StaticResource Dark.SliderTrack}}"
+                                        TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                        FontSize="16"
+                                        HeightRequest="40"
+                                        WidthRequest="40"
+                                        CornerRadius="8"
+                                        Clicked="OnPreviousMonthClicked"/>
+                                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="2">
+                                    <Label x:Name="CurrentMonthYearLabel"
+                                           Text="December 2025"
+                                           TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                                <Button Text="▶"
+                                        Grid.Column="2"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource Light.SliderTrack}, Dark={StaticResource Dark.SliderTrack}}"
+                                        TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                        FontSize="16"
+                                        HeightRequest="40"
+                                        WidthRequest="40"
+                                        CornerRadius="8"
+                                        Clicked="OnNextMonthClicked"/>
+                            </Grid>
+                        </Border>
+
+                        <Button Text="Go to Today"
+                                BackgroundColor="{StaticResource Accent.Primary}"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                FontSize="14"
+                                HeightRequest="44"
+                                CornerRadius="8"
+                                Clicked="OnGoToTodayClicked"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Selection Settings -->
+                <controls:ExpandableSection Title="✅ Selection Mode" IsExpanded="True">
+                    <VerticalStackLayout Spacing="12" Padding="0,8">
+                        <Label Text="Selection Type"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
+                               FontSize="13"/>
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                            <Button x:Name="SingleSelectionBtn"
+                                    Text="Single"
+                                    BackgroundColor="{StaticResource Accent.Primary}"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    FontSize="13"
+                                    HeightRequest="40"
+                                    CornerRadius="8"
+                                    Clicked="OnSelectionTypeChanged"/>
+                            <Button x:Name="SpanSelectionBtn"
+                                    Grid.Column="1"
+                                    Text="Span"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.SliderTrack}, Dark={StaticResource Dark.SliderTrack}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    FontSize="13"
+                                    HeightRequest="40"
+                                    CornerRadius="8"
+                                    Clicked="OnSelectionTypeChanged"/>
+                            <Button x:Name="MultipleSelectionBtn"
+                                    Grid.Column="2"
+                                    Text="Multiple"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.SliderTrack}, Dark={StaticResource Dark.SliderTrack}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    FontSize="13"
+                                    HeightRequest="40"
+                                    CornerRadius="8"
+                                    Clicked="OnSelectionTypeChanged"/>
+                        </Grid>
+
+                        <Button Text="Clear Selection"
+                                BackgroundColor="#EF4444"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                FontSize="14"
+                                HeightRequest="40"
+                                CornerRadius="8"
+                                Clicked="OnClearSelectionClicked"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Display Options -->
+                <controls:ExpandableSection Title="🎨 Display Options">
+                    <VerticalStackLayout Spacing="12" Padding="0,8">
+                        <Label Text="Day of Week Display"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
+                               FontSize="13"/>
+                        <Picker x:Name="DayOfWeekPicker"
+                                Title="Select format"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                TitleColor="#6B7280"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                                SelectedIndexChanged="OnDayOfWeekDisplayChanged">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Full (Sunday)</x:String>
+                                    <x:String>Abbreviated (Sun)</x:String>
+                                    <x:String>Abbreviated Uppercase (SUN)</x:String>
+                                    <x:String>Shortest (S)</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+
+                        <Label Text="Day Number Position"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
+                               FontSize="13"
+                               Margin="0,8,0,0"/>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <Button x:Name="CenteredBtn"
+                                    Text="Centered"
+                                    BackgroundColor="{StaticResource Accent.Primary}"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    FontSize="13"
+                                    HeightRequest="40"
+                                    CornerRadius="8"
+                                    Clicked="OnDayDisplayLocationChanged"/>
+                            <Button x:Name="UpperRightBtn"
+                                    Grid.Column="1"
+                                    Text="Upper Right"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.SliderTrack}, Dark={StaticResource Dark.SliderTrack}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    FontSize="13"
+                                    HeightRequest="40"
+                                    CornerRadius="8"
+                                    Clicked="OnDayDisplayLocationChanged"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Colors -->
+                <controls:ExpandableSection Title="🎨 Colors">
+                    <VerticalStackLayout Spacing="12" Padding="0,8">
+                        <editors:ColorPickerEditor x:Name="HeaderTextColorPicker"
+                                                   Label="Header Text Color"
+                                                   ColorChanged="OnColorChanged"/>
+                        <editors:ColorPickerEditor x:Name="SeparatorColorPicker"
+                                                   Label="Separator Color"
+                                                   ColorChanged="OnColorChanged"/>
+                        <editors:ColorPickerEditor x:Name="DateTextColorPicker"
+                                                   Label="Date Text Color"
+                                                   ColorChanged="OnColorChanged"/>
+                        <editors:ColorPickerEditor x:Name="SelectedDateColorPicker"
+                                                   Label="Selected Date Color"
+                                                   ColorChanged="OnColorChanged"/>
+                        <editors:ColorPickerEditor x:Name="SelectedDateTextColorPicker"
+                                                   Label="Selected Date Text Color"
+                                                   ColorChanged="OnColorChanged"/>
+                        <editors:ColorPickerEditor x:Name="DateBackgroundColorPicker"
+                                                   Label="Date Background Color"
+                                                   ColorChanged="OnColorChanged"/>
+                        <editors:ColorPickerEditor x:Name="UnavailableDateColorPicker"
+                                                   Label="Unavailable Date Color"
+                                                   ColorChanged="OnColorChanged"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Date Range -->
+                <controls:ExpandableSection Title="📅 Date Constraints">
+                    <VerticalStackLayout Spacing="12" Padding="0,8">
+                        <editors:ToggleEditor x:Name="EnableMinDateToggle"
+                                              Label="Enable Minimum Date"
+                                              ValueChanged="OnMinDateToggleChanged"/>
+                        <editors:ToggleEditor x:Name="EnableMaxDateToggle"
+                                              Label="Enable Maximum Date"
+                                              ValueChanged="OnMaxDateToggleChanged"/>
+                        <Label Text="When enabled, dates outside the range will be unavailable"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                               FontSize="12"
+                               FontAttributes="Italic"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Events -->
+                <controls:ExpandableSection Title="🎉 Events">
+                    <VerticalStackLayout Spacing="12" Padding="0,8">
+                        <Label x:Name="EventCountLabel"
+                               Text="No events"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
+                               FontSize="14"/>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <Button Text="Add Sample Events"
+                                    BackgroundColor="#22C55E"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    FontSize="13"
+                                    HeightRequest="40"
+                                    CornerRadius="8"
+                                    Clicked="OnAddSampleEventsClicked"/>
+                            <Button Text="Clear Events"
+                                    Grid.Column="1"
+                                    BackgroundColor="#EF4444"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    FontSize="13"
+                                    HeightRequest="40"
+                                    CornerRadius="8"
+                                    Clicked="OnClearEventsClicked"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Bottom spacing -->
+                <BoxView HeightRequest="40" Color="Transparent"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

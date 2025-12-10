@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AuroraControls.TestApp.Controls.PropertyEditors.SliderEditor"
+             x:Name="this">
+    
+    <Grid RowDefinitions="Auto,Auto" 
+          RowSpacing="8"
+          Padding="0,8">
+        
+        <!-- Header: Label + Value -->
+        <Grid Grid.Row="0" 
+              ColumnDefinitions="*,Auto"
+              ColumnSpacing="12">
+            
+            <Label Grid.Column="0"
+                   Text="{Binding Label, Source={x:Reference this}}"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"
+                   TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}" />
+            
+            <Border Grid.Column="1"
+                    Padding="12,6"
+                    StrokeShape="RoundRectangle 8"
+                    Stroke="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}"
+                    StrokeThickness="1"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource LightSurfaceContainer}, Dark={StaticResource DarkSurfaceContainer}}">
+                <HorizontalStackLayout Spacing="4">
+                    <Label x:Name="ValueLabel"
+                           Text="{Binding DisplayValue, Source={x:Reference this}}"
+                           FontSize="13"
+                           FontFamily="JetBrainsMono"
+                           VerticalOptions="Center"
+                           TextColor="{StaticResource AuroraPurple}" />
+                    <Label Text="{Binding Unit, Source={x:Reference this}}"
+                           FontSize="11"
+                           VerticalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}" />
+                </HorizontalStackLayout>
+            </Border>
+        </Grid>
+        
+        <!-- Slider -->
+        <Grid Grid.Row="1" 
+              ColumnDefinitions="Auto,*,Auto"
+              ColumnSpacing="12">
+            
+            <Label Grid.Column="0"
+                   Text="{Binding Minimum, Source={x:Reference this}, StringFormat='{0:F0}'}"
+                   FontSize="11"
+                   VerticalOptions="Center"
+                   WidthRequest="36"
+                   HorizontalTextAlignment="End"
+                   TextColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}" />
+            
+            <Slider Grid.Column="1"
+                    x:Name="ValueSlider"
+                    Minimum="{Binding Minimum, Source={x:Reference this}}"
+                    Maximum="{Binding Maximum, Source={x:Reference this}}"
+                    Value="{Binding Value, Source={x:Reference this}, Mode=TwoWay}"
+                    MinimumTrackColor="{StaticResource AuroraPurple}"
+                    MaximumTrackColor="{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}"
+                    ThumbColor="{StaticResource AuroraPurple}"
+                    VerticalOptions="Center" />
+            
+            <Label Grid.Column="2"
+                   Text="{Binding Maximum, Source={x:Reference this}, StringFormat='{0:F0}'}"
+                   FontSize="11"
+                   VerticalOptions="Center"
+                   WidthRequest="36"
+                   HorizontalTextAlignment="Start"
+                   TextColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}" />
+        </Grid>
+        
+    </Grid>
+    
+</ContentView>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             xmlns:controls="clr-namespace:AuroraControls.TestApp.Controls"
+             xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
+             x:Class="AuroraControls.TestApp.Pages.Imaging.SignaturePadDemoPage"
+             Title="Signature Pad"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Light.PageBackground}, Dark={StaticResource Dark.PageBackground}}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="SectionTitle" TargetType="Label">
+                <Setter Property="TextColor" Value="#FFFFFF"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="Margin" Value="0,0,0,8"/>
+            </Style>
+            <Style x:Key="DescriptionText" TargetType="Label">
+                <Setter Property="TextColor" Value="#9CA3AF"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="Margin" Value="0,0,0,12"/>
+            </Style>
+            <Style x:Key="Card" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="#1A1A1A"/>
+                <Setter Property="Stroke" Value="#2A2A2A"/>
+                <Setter Property="StrokeThickness" Value="1"/>
+                <Setter Property="Padding" Value="16"/>
+                <Setter Property="Margin" Value="0,0,0,12"/>
+                <Setter Property="StrokeShape" Value="RoundRectangle 12"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <Border Grid.Row="0" 
+                BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" 
+                Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                StrokeThickness="0,0,0,1"
+                Padding="20,16">
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout>
+                    <Label Text="Signature Pad" 
+                           FontSize="24" 
+                           FontAttributes="Bold" 
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"/>
+                    <Label Text="Smooth bezier curve signature capture" 
+                           FontSize="14" 
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
+                </VerticalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                    <Button Text="📋" 
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                            TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                            WidthRequest="44"
+                            HeightRequest="44"
+                            CornerRadius="8"
+                            Clicked="OnCopyCodeClicked"
+                            ToolTipProperties.Text="Copy XAML"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+        <!-- Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="0">
+
+                <!-- Signature Canvas -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="16">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Sign Below" Style="{StaticResource SectionTitle}"/>
+                            <HorizontalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                <Label x:Name="SignedStatusLabel" 
+                                       Text="Not signed" 
+                                       TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" 
+                                       FontSize="12"/>
+                                <Label x:Name="SignedIndicator" 
+                                       Text="○" 
+                                       TextColor="#EF4444" 
+                                       FontSize="14"/>
+                            </HorizontalStackLayout>
+                        </Grid>
+                        
+                        <Border BackgroundColor="White" 
+                                StrokeShape="RoundRectangle 8"
+                                Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
+                                HeightRequest="200">
+                            <aurora:SignaturePad x:Name="SignaturePadControl"
+                                                PenColor="Black"
+                                                MinWidth="2"
+                                                MaxWidth="6"
+                                                VelocityFilterWeight="0.9"
+                                                ClearOnDoubleClick="True"
+                                                HorizontalOptions="Fill"
+                                                VerticalOptions="Fill"/>
+                        </Border>
+
+                        <Label Text="Draw your signature above • Double-tap to clear" 
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
+                               FontSize="11" 
+                               HorizontalOptions="Center"/>
+
+                        <!-- Action Buttons -->
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                            <Button Text="Clear"
+                                    BackgroundColor="#EF4444"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    CornerRadius="8"
+                                    Clicked="OnClearClicked"/>
+                            <Button Grid.Column="1"
+                                    Text="Export PNG"
+                                    BackgroundColor="#22C55E"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    CornerRadius="8"
+                                    Clicked="OnExportPngClicked"/>
+                            <Button Grid.Column="2"
+                                    Text="Bitmap Info"
+                                    BackgroundColor="#3B82F6"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    CornerRadius="8"
+                                    Clicked="OnExportSvgClicked"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Preset Selector -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Quick Presets" Style="{StaticResource SectionTitle}"/>
+                        <controls:PresetSelector x:Name="PresetControl" PresetChanged="OnPresetChanged"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Pen Settings -->
+                <controls:ExpandableSection Title="Pen Settings" Icon="✏️" IsExpanded="True">
+                    <VerticalStackLayout Spacing="12">
+                        <editors:ColorPickerEditor x:Name="PenColorPicker"
+                                                  Label="Pen Color"
+                                                  SelectedColor="{Binding Source={x:Reference SignaturePadControl}, Path=PenColor, Mode=TwoWay}"/>
+                        
+                        <editors:SliderEditor x:Name="MinWidthSlider"
+                                             Label="Min Stroke Width"
+                                             Minimum="1"
+                                             Maximum="10"
+                                             Value="{Binding Source={x:Reference SignaturePadControl}, Path=MinWidth, Mode=TwoWay}"
+                                             Step="0.5"/>
+                        
+                        <editors:SliderEditor x:Name="MaxWidthSlider"
+                                             Label="Max Stroke Width"
+                                             Minimum="2"
+                                             Maximum="20"
+                                             Value="{Binding Source={x:Reference SignaturePadControl}, Path=MaxWidth, Mode=TwoWay}"
+                                             Step="0.5"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Advanced Settings -->
+                <controls:ExpandableSection Title="Advanced Settings" Icon="⚙️">
+                    <VerticalStackLayout Spacing="12">
+                        <editors:SliderEditor x:Name="VelocitySlider"
+                                             Label="Velocity Filter Weight"
+                                             Minimum="0.1"
+                                             Maximum="1.0"
+                                             Value="{Binding Source={x:Reference SignaturePadControl}, Path=VelocityFilterWeight, Mode=TwoWay}"
+                                             Step="0.05"/>
+                        
+                        <editors:ToggleEditor x:Name="ClearOnDoubleClickToggle"
+                                             Label="Clear on Double-Tap"
+                                             Value="{Binding Source={x:Reference SignaturePadControl}, Path=ClearOnDoubleClick, Mode=TwoWay}"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Bottom Padding -->
+                <BoxView HeightRequest="40"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

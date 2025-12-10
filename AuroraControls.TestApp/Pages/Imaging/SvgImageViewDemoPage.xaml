@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             xmlns:controls="clr-namespace:AuroraControls.TestApp.Controls"
+             xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
+             x:Class="AuroraControls.TestApp.Pages.Imaging.SvgImageViewDemoPage"
+             x:Name="ThisPage"
+             Title="SVG Image View"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Light.PageBackground}, Dark={StaticResource Dark.PageBackground}}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="SectionTitle" TargetType="Label">
+                <Setter Property="TextColor" Value="#FFFFFF"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="Margin" Value="0,0,0,8"/>
+            </Style>
+            <Style x:Key="DescriptionText" TargetType="Label">
+                <Setter Property="TextColor" Value="#9CA3AF"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="Margin" Value="0,0,0,12"/>
+            </Style>
+            <Style x:Key="Card" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="#1A1A1A"/>
+                <Setter Property="Stroke" Value="#2A2A2A"/>
+                <Setter Property="StrokeThickness" Value="1"/>
+                <Setter Property="Padding" Value="16"/>
+                <Setter Property="Margin" Value="0,0,0,12"/>
+                <Setter Property="StrokeShape" Value="RoundRectangle 12"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <Border Grid.Row="0" 
+                BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" 
+                Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                StrokeThickness="0,0,0,1"
+                Padding="20,16">
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout>
+                    <Label Text="SVG Image View" 
+                           FontSize="24" 
+                           FontAttributes="Bold" 
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"/>
+                    <Label Text="Display and style SVG images with overlay colors" 
+                           FontSize="14" 
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
+                </VerticalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                    <Button Text="📋" 
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                            TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                            WidthRequest="44"
+                            HeightRequest="44"
+                            CornerRadius="8"
+                            Clicked="OnCopyCodeClicked"
+                            ToolTipProperties.Text="Copy XAML"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+        <!-- Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="0">
+
+                <!-- Live Preview -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="Live Preview" Style="{StaticResource SectionTitle}"/>
+                        
+                        <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}" 
+                                StrokeShape="RoundRectangle 8"
+                                Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
+                                Padding="24"
+                                HeightRequest="200">
+                            <Grid HorizontalOptions="Center" VerticalOptions="Center">
+                                <aurora:SvgImageView x:Name="PreviewSvg"
+                                                    EmbeddedImageName="splatoon.svg"
+                                                    HeightRequest="120"
+                                                    WidthRequest="120"
+                                                    HorizontalOptions="Center"
+                                                    VerticalOptions="Center"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Image Selection -->
+                        <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="8">
+                            <Button x:Name="SplatoonBtn" 
+                                    Text="🎮"
+                                    BackgroundColor="#3B82F6"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    CornerRadius="8"
+                                    HeightRequest="44"
+                                    Clicked="OnImageSelected"/>
+                            <Button x:Name="TriforceBtn" 
+                                    Grid.Column="1"
+                                    Text="🔺"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    CornerRadius="8"
+                                    HeightRequest="44"
+                                    Clicked="OnImageSelected"/>
+                            <Button x:Name="MoreBtn" 
+                                    Grid.Column="2"
+                                    Text="⋯"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    CornerRadius="8"
+                                    HeightRequest="44"
+                                    Clicked="OnImageSelected"/>
+                            <Button x:Name="CheckBtn" 
+                                    Grid.Column="3"
+                                    Text="✓"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    CornerRadius="8"
+                                    HeightRequest="44"
+                                    Clicked="OnImageSelected"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Preset Selector -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Quick Presets" Style="{StaticResource SectionTitle}"/>
+                        <controls:PresetSelector x:Name="PresetControl" PresetChanged="OnPresetChanged"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Overlay Color -->
+                <controls:ExpandableSection Title="Overlay Color" Icon="🎨" IsExpanded="True">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Apply a color overlay to tint the SVG image" Style="{StaticResource DescriptionText}"/>
+                        
+                        <editors:ColorPickerEditor x:Name="OverlayColorPickerEditor"
+                                            Label="Overlay Color"
+                                            SelectedColor="{Binding Source={x:Reference PreviewSvg}, Path=OverlayColor, Mode=TwoWay}"/>
+
+                        <!-- Quick Color Buttons -->
+                        <Label Text="Quick Colors" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" FontSize="12"/>
+                        <Grid ColumnDefinitions="*,*,*,*,*,*" ColumnSpacing="6">
+                            <Button BackgroundColor="Transparent"
+                                    CornerRadius="20"
+                                    WidthRequest="40"
+                                    HeightRequest="40"
+                                    BorderColor="#FFFFFF"
+                                    BorderWidth="2"
+                                    Clicked="OnQuickColorClicked"/>
+                            <Button Grid.Column="1"
+                                    BackgroundColor="#3B82F6"
+                                    CornerRadius="20"
+                                    WidthRequest="40"
+                                    HeightRequest="40"
+                                    Clicked="OnQuickColorClicked"/>
+                            <Button Grid.Column="2"
+                                    BackgroundColor="#22C55E"
+                                    CornerRadius="20"
+                                    WidthRequest="40"
+                                    HeightRequest="40"
+                                    Clicked="OnQuickColorClicked"/>
+                            <Button Grid.Column="3"
+                                    BackgroundColor="#EAB308"
+                                    CornerRadius="20"
+                                    WidthRequest="40"
+                                    HeightRequest="40"
+                                    Clicked="OnQuickColorClicked"/>
+                            <Button Grid.Column="4"
+                                    BackgroundColor="#EF4444"
+                                    CornerRadius="20"
+                                    WidthRequest="40"
+                                    HeightRequest="40"
+                                    Clicked="OnQuickColorClicked"/>
+                            <Button Grid.Column="5"
+                                    BackgroundColor="#A855F7"
+                                    CornerRadius="20"
+                                    WidthRequest="40"
+                                    HeightRequest="40"
+                                    Clicked="OnQuickColorClicked"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Size Controls -->
+                <controls:ExpandableSection Title="Size &amp; Dimensions" Icon="📐">
+                    <VerticalStackLayout Spacing="12">
+                        <editors:SliderEditor x:Name="WidthEditor"
+                                             Label="Width"
+                                             Minimum="40"
+                                             Maximum="200"
+                                             Value="120"
+                                             Step="10"
+                                             ValueChanged="OnSizeChanged"/>
+                        
+                        <editors:SliderEditor x:Name="HeightEditor"
+                                             Label="Height"
+                                             Minimum="40"
+                                             Maximum="200"
+                                             Value="120"
+                                             Step="10"
+                                             ValueChanged="OnSizeChanged"/>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <Button Text="Square (100x100)"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    CornerRadius="8"
+                                    Clicked="OnSquareClicked"/>
+                            <Button Grid.Column="1"
+                                    Text="Large (180x180)"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    CornerRadius="8"
+                                    Clicked="OnLargeClicked"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Max Image Size -->
+                <controls:ExpandableSection Title="Max Image Size" Icon="📏">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Constrain the maximum size of the SVG rendering" Style="{StaticResource DescriptionText}"/>
+                        
+                        <editors:SliderEditor x:Name="MaxWidthEditor"
+                                             Label="Max Width"
+                                             Minimum="0"
+                                             Maximum="300"
+                                             Value="0"
+                                             Step="10"
+                                             ValueChanged="OnMaxSizeChanged"/>
+                        
+                        <editors:SliderEditor x:Name="MaxHeightEditor"
+                                             Label="Max Height"
+                                             Minimum="0"
+                                             Maximum="300"
+                                             Value="0"
+                                             Step="10"
+                                             ValueChanged="OnMaxSizeChanged"/>
+
+                        <Button Text="Reset Max Size"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                                TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                CornerRadius="8"
+                                Clicked="OnResetMaxSizeClicked"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Gallery -->
+                <controls:ExpandableSection Title="Color Gallery" Icon="🖼️">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Same SVG with different overlay colors" Style="{StaticResource DescriptionText}"/>
+                        
+                        <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="12">
+                            <VerticalStackLayout HorizontalOptions="Center">
+                                <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}" 
+                                        StrokeShape="RoundRectangle 8"
+                                        Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
+                                        Padding="12">
+                                    <aurora:SvgImageView EmbeddedImageName="splatoon.svg"
+                                                        HeightRequest="50"
+                                                        WidthRequest="50"/>
+                                </Border>
+                                <Label Text="Original" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" FontSize="11" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                            
+                            <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                                <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}" 
+                                        StrokeShape="RoundRectangle 8"
+                                        Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
+                                        Padding="12">
+                                    <aurora:SvgImageView EmbeddedImageName="splatoon.svg"
+                                                        OverlayColor="#3B82F6"
+                                                        HeightRequest="50"
+                                                        WidthRequest="50"/>
+                                </Border>
+                                <Label Text="Blue" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" FontSize="11" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                            
+                            <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center">
+                                <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}" 
+                                        StrokeShape="RoundRectangle 8"
+                                        Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
+                                        Padding="12">
+                                    <aurora:SvgImageView EmbeddedImageName="splatoon.svg"
+                                                        OverlayColor="#22C55E"
+                                                        HeightRequest="50"
+                                                        WidthRequest="50"/>
+                                </Border>
+                                <Label Text="Green" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" FontSize="11" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                            
+                            <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center">
+                                <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}" 
+                                        StrokeShape="RoundRectangle 8"
+                                        Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
+                                        Padding="12">
+                                    <aurora:SvgImageView EmbeddedImageName="splatoon.svg"
+                                                        OverlayColor="#EF4444"
+                                                        HeightRequest="50"
+                                                        WidthRequest="50"/>
+                                </Border>
+                                <Label Text="Red" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" FontSize="11" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Row="1" HorizontalOptions="Center">
+                                <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}" 
+                                        StrokeShape="RoundRectangle 8"
+                                        Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
+                                        Padding="12">
+                                    <aurora:SvgImageView EmbeddedImageName="triforce.svg"
+                                                        OverlayColor="#FBBF24"
+                                                        HeightRequest="50"
+                                                        WidthRequest="50"/>
+                                </Border>
+                                <Label Text="Yellow" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" FontSize="11" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                            
+                            <VerticalStackLayout Grid.Row="1" Grid.Column="1" HorizontalOptions="Center">
+                                <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}" 
+                                        StrokeShape="RoundRectangle 8"
+                                        Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
+                                        Padding="12">
+                                    <aurora:SvgImageView EmbeddedImageName="triforce.svg"
+                                                        OverlayColor="#A855F7"
+                                                        HeightRequest="50"
+                                                        WidthRequest="50"/>
+                                </Border>
+                                <Label Text="Purple" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" FontSize="11" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                            
+                            <VerticalStackLayout Grid.Row="1" Grid.Column="2" HorizontalOptions="Center">
+                                <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}" 
+                                        StrokeShape="RoundRectangle 8"
+                                        Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
+                                        Padding="12">
+                                    <aurora:SvgImageView EmbeddedImageName="more.svg"
+                                                        OverlayColor="#EC4899"
+                                                        HeightRequest="50"
+                                                        WidthRequest="50"/>
+                                </Border>
+                                <Label Text="Pink" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" FontSize="11" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                            
+                            <VerticalStackLayout Grid.Row="1" Grid.Column="3" HorizontalOptions="Center">
+                                <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}" 
+                                        StrokeShape="RoundRectangle 8"
+                                        Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
+                                        Padding="12">
+                                    <aurora:SvgImageView EmbeddedImageName="more.svg"
+                                                        OverlayColor="#14B8A6"
+                                                        HeightRequest="50"
+                                                        WidthRequest="50"/>
+                                </Border>
+                                <Label Text="Teal" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" FontSize="11" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Events Demo -->
+                <controls:ExpandableSection Title="Touch Events" Icon="👆">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Tap the SVG to trigger touch events" Style="{StaticResource DescriptionText}"/>
+                        
+                        <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}" 
+                                StrokeShape="RoundRectangle 8"
+                                Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
+                                Padding="16">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                                <aurora:SvgImageView x:Name="TouchableSvg"
+                                                    EmbeddedImageName="splatoon.svg"
+                                                    OverlayColor="#3B82F6"
+                                                    HeightRequest="60"
+                                                    WidthRequest="60"
+                                                    Touch="OnSvgTouched"/>
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                    <Label Text="Tap the SVG →" TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" FontSize="14"/>
+                                    <Label x:Name="TouchEventLabel" 
+                                           Text="No events yet" 
+                                           TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" 
+                                           FontSize="12"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+
+                        <Label x:Name="TouchCountLabel" 
+                               Text="Touch count: 0" 
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
+                               FontSize="12"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Bottom Padding -->
+                <BoxView HeightRequest="40"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

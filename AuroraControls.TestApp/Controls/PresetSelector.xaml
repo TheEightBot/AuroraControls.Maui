@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:AuroraControls.TestApp.Controls"
+             x:Class="AuroraControls.TestApp.Controls.PresetSelector"
+             x:Name="this">
+    
+    <VerticalStackLayout Spacing="8">
+        
+        <!-- Label -->
+        <Label Text="{Binding Label, Source={x:Reference this}}"
+               FontSize="12"
+               FontAttributes="Bold"
+               TextColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}"
+               IsVisible="{Binding ShowLabel, Source={x:Reference this}}" />
+        
+        <!-- Preset Buttons -->
+        <ScrollView Orientation="Horizontal"
+                    HorizontalScrollBarVisibility="Never">
+            <HorizontalStackLayout x:Name="PresetsContainer"
+                                   Spacing="8"
+                                   BindableLayout.ItemsSource="{Binding Presets, Source={x:Reference this}}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Border x:Name="PresetBorder"
+                                Padding="14,10"
+                                StrokeShape="RoundRectangle 10"
+                                StrokeThickness="2"
+                                BackgroundColor="{Binding IsSelected, Converter={StaticResource BoolToPresetBackgroundConverter}}">
+                            <Border.Stroke>
+                                <SolidColorBrush Color="{Binding IsSelected, Converter={StaticResource BoolToPresetStrokeConverter}}" />
+                            </Border.Stroke>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                    Command="{Binding SelectPresetCommand, Source={x:Reference this}}"
+                                    CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+                            
+                            <Label Text="{Binding Name}"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   TextColor="{Binding IsSelected, Converter={StaticResource BoolToPresetTextColorConverter}}" />
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </HorizontalStackLayout>
+        </ScrollView>
+        
+    </VerticalStackLayout>
+    
+</ContentView>

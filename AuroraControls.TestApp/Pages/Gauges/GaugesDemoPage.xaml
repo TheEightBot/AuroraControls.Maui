@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             xmlns:gauges="clr-namespace:AuroraControls.Gauges;assembly=AuroraControls"
+             xmlns:loading="clr-namespace:AuroraControls.Loading;assembly=AuroraControls"
+             xmlns:controls="clr-namespace:AuroraControls.TestApp.Controls"
+             xmlns:editors="clr-namespace:AuroraControls.TestApp.Controls.PropertyEditors"
+             x:Class="AuroraControls.TestApp.Pages.Gauges.GaugesDemoPage"
+             Title="Gauges &amp; Progress"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Light.PageBackground}, Dark={StaticResource Dark.PageBackground}}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="SectionTitle" TargetType="Label">
+                <Setter Property="TextColor" Value="#FFFFFF"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="Margin" Value="0,0,0,8"/>
+            </Style>
+            <Style x:Key="DescriptionText" TargetType="Label">
+                <Setter Property="TextColor" Value="#9CA3AF"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="Margin" Value="0,0,0,12"/>
+            </Style>
+            <Style x:Key="Card" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="#1A1A1A"/>
+                <Setter Property="Stroke" Value="#2A2A2A"/>
+                <Setter Property="StrokeThickness" Value="1"/>
+                <Setter Property="Padding" Value="16"/>
+                <Setter Property="Margin" Value="0,0,0,12"/>
+                <Setter Property="StrokeShape" Value="RoundRectangle 12"/>
+            </Style>
+            <Style x:Key="PresetCard" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="#262626"/>
+                <Setter Property="Stroke" Value="#3A3A3A"/>
+                <Setter Property="StrokeThickness" Value="1"/>
+                <Setter Property="Padding" Value="12"/>
+                <Setter Property="StrokeShape" Value="RoundRectangle 8"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <Border Grid.Row="0" 
+                BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" 
+                Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                StrokeThickness="0,0,0,1"
+                Padding="20,16">
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout>
+                    <Label Text="Gauges &amp; Progress" 
+                           FontSize="24" 
+                           FontAttributes="Bold" 
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"/>
+                    <Label Text="Visual progress indicators and loading animations" 
+                           FontSize="14" 
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"/>
+                </VerticalStackLayout>
+                <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                    <Button Text="📋" 
+                            BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                            TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                            WidthRequest="44"
+                            HeightRequest="44"
+                            CornerRadius="8"
+                            Clicked="OnCopyCodeClicked"
+                            ToolTipProperties.Text="Copy XAML"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+        <!-- Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="0">
+
+                <!-- Circular Gauge Section -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="Circular Gauge" Style="{StaticResource SectionTitle}"/>
+                        <Label Text="Ring-style progress indicator with customizable angles" Style="{StaticResource DescriptionText}"/>
+                        
+                        <Grid HeightRequest="150" HorizontalOptions="Center" WidthRequest="150">
+                            <gauges:CircularGauge x:Name="CircularGaugeControl"
+                                                  StartingDegree="0"
+                                                  EndingDegree="75"
+                                                  ProgressThickness="12"
+                                                  ProgressColor="#8B5CF6"
+                                                  ProgressBackgroundColor="{AppThemeBinding Light={StaticResource Light.SliderTrack}, Dark={StaticResource Dark.SliderTrack}}"
+                                                  EndCapType="Rounded"/>
+                            <Label x:Name="CircularGaugeLabel"
+                                   Text="75%"
+                                   TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Circular Gauge Controls -->
+                <controls:ExpandableSection Title="Circular Gauge Settings" Icon="⚙" IsExpanded="True">
+                    <VerticalStackLayout Spacing="12" Padding="0,8,0,0">
+                        <editors:SliderEditor x:Name="CircularProgressSlider"
+                                             Label="Progress (degrees)"
+                                             Minimum="0"
+                                             Maximum="360"
+                                             Value="75"
+                                             Step="1"
+                                             ValueChanged="OnCircularProgressChanged"/>
+                        
+                        <editors:SliderEditor x:Name="CircularThicknessSlider"
+                                             Label="Thickness"
+                                             Minimum="4"
+                                             Maximum="30"
+                                             Value="12"
+                                             Step="1"
+                                             ValueChanged="OnCircularThicknessChanged"/>
+                        
+                        <editors:ColorPickerEditor x:Name="CircularProgressColorPicker"
+                                                   Label="Progress Color"
+                                                   SelectedColor="#8B5CF6"
+                                                   ColorChanged="OnCircularProgressColorChanged"/>
+                        
+                        <editors:ColorPickerEditor x:Name="CircularBackgroundColorPicker"
+                                                   Label="Background Color"
+                                                   SelectedColor="#3A3A3A"
+                                                   ColorChanged="OnCircularBackgroundColorChanged"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Circular Fill Gauge Section -->
+                <Border Style="{StaticResource Card}" Margin="0,12,0,12">
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="Circular Fill Gauge" Style="{StaticResource SectionTitle}"/>
+                        <Label Text="Solid fill circular progress indicator" Style="{StaticResource DescriptionText}"/>
+                        
+                        <Grid HeightRequest="150" HorizontalOptions="Center" WidthRequest="150">
+                            <gauges:CircularFillGauge x:Name="CircularFillGaugeControl"
+                                                      ProgressPercentage="65"
+                                                      ProgressColor="#10B981"
+                                                      ProgressBackgroundColor="{AppThemeBinding Light={StaticResource Light.SliderTrack}, Dark={StaticResource Dark.SliderTrack}}"/>
+                            <Label x:Name="CircularFillGaugeLabel"
+                                   Text="65%"
+                                   TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Circular Fill Gauge Controls -->
+                <controls:ExpandableSection Title="Circular Fill Gauge Settings" Icon="⚙" IsExpanded="False">
+                    <VerticalStackLayout Spacing="12" Padding="0,8,0,0">
+                        <editors:SliderEditor x:Name="CircularFillProgressSlider"
+                                             Label="Progress (%)"
+                                             Minimum="0"
+                                             Maximum="100"
+                                             Value="65"
+                                             Step="1"
+                                             ValueChanged="OnCircularFillProgressChanged"/>
+                        
+                        <editors:ColorPickerEditor x:Name="CircularFillColorPicker"
+                                                   Label="Fill Color"
+                                                   SelectedColor="#10B981"
+                                                   ColorChanged="OnCircularFillColorChanged"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Linear Gauge Section -->
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="Linear Gauge" Style="{StaticResource SectionTitle}"/>
+                        <Label Text="Horizontal or vertical progress bar" Style="{StaticResource DescriptionText}"/>
+                        
+                        <gauges:LinearGauge x:Name="LinearGaugeControl"
+                                            HeightRequest="24"
+                                            StartingPercent="0"
+                                            EndingPercent="45"
+                                            ProgressThickness="12"
+                                            ProgressColor="#3B82F6"
+                                            Orientation="Horizontal"
+                                            EndCapType="Rounded"
+                                            HorizontalOptions="Fill"/>
+                        
+                        <Label x:Name="LinearGaugeLabel"
+                               Text="45%"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
+                               FontSize="14"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Linear Gauge Controls -->
+                <controls:ExpandableSection Title="Linear Gauge Settings" Icon="⚙" IsExpanded="False">
+                    <VerticalStackLayout Spacing="12" Padding="0,8,0,0">
+                        <editors:SliderEditor x:Name="LinearProgressSlider"
+                                             Label="Progress (%)"
+                                             Minimum="0"
+                                             Maximum="100"
+                                             Value="45"
+                                             Step="1"
+                                             ValueChanged="OnLinearProgressChanged"/>
+                        
+                        <editors:SliderEditor x:Name="LinearThicknessSlider"
+                                             Label="Thickness"
+                                             Minimum="4"
+                                             Maximum="30"
+                                             Value="12"
+                                             Step="1"
+                                             ValueChanged="OnLinearThicknessChanged"/>
+                        
+                        <Label Text="Orientation" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" FontSize="13"/>
+                        <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}" 
+                                StrokeShape="RoundRectangle 8"
+                                Stroke="{AppThemeBinding Light={StaticResource Light.BorderStrong}, Dark={StaticResource Dark.BorderStrong}}"
+                                Padding="4">
+                            <Picker x:Name="LinearOrientationPicker"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    SelectedIndexChanged="OnLinearOrientationChanged">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>Horizontal</x:String>
+                                        <x:String>ReverseHorizontal</x:String>
+                                        <x:String>Vertical</x:String>
+                                        <x:String>ReverseVertical</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </Border>
+                        
+                        <editors:ColorPickerEditor x:Name="LinearProgressColorPicker"
+                                                   Label="Progress Color"
+                                                   SelectedColor="#3B82F6"
+                                                   ColorChanged="OnLinearProgressColorChanged"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Loading Indicators Section -->
+                <Border Style="{StaticResource Card}" Margin="0,12,0,12">
+                    <VerticalStackLayout Spacing="16">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Loading Indicators" Style="{StaticResource SectionTitle}"/>
+                            <Button x:Name="AnimationToggleButton"
+                                    Text="⏸ Pause"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.SurfaceVariant}, Dark={StaticResource Dark.SurfaceVariant}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                    HeightRequest="36"
+                                    FontSize="12"
+                                    CornerRadius="8"
+                                    Clicked="OnToggleAnimationsClicked"
+                                    Grid.Column="1"/>
+                        </Grid>
+                        <Label Text="Various animated loading spinners" Style="{StaticResource DescriptionText}"/>
+                        
+                        <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="12" RowSpacing="16">
+                            <!-- Rainbow Ring -->
+                            <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="8" HorizontalOptions="Center">
+                                <Border Style="{StaticResource PresetCard}" HeightRequest="80" WidthRequest="80">
+                                    <loading:RainbowRing x:Name="RainbowRingControl"
+                                                         HorizontalOptions="Center"
+                                                         VerticalOptions="Center"
+                                                         HeightRequest="50"
+                                                         WidthRequest="50"/>
+                                </Border>
+                                <Label Text="Rainbow Ring" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" FontSize="11" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+
+                            <!-- Material Circular -->
+                            <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="8" HorizontalOptions="Center">
+                                <Border Style="{StaticResource PresetCard}" HeightRequest="80" WidthRequest="80">
+                                    <loading:MaterialCircular x:Name="MaterialCircularControl"
+                                                              ForegroundLoadingColor="#10B981"
+                                                              HorizontalOptions="Center"
+                                                              VerticalOptions="Center"
+                                                              HeightRequest="50"
+                                                              WidthRequest="50"/>
+                                </Border>
+                                <Label Text="Material" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" FontSize="11" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+
+                            <!-- Cupertino Activity Indicator -->
+                            <VerticalStackLayout Grid.Row="0" Grid.Column="2" Spacing="8" HorizontalOptions="Center">
+                                <Border Style="{StaticResource PresetCard}" HeightRequest="80" WidthRequest="80">
+                                    <loading:CupertinoActivityIndicator x:Name="CupertinoControl"
+                                                                        HorizontalOptions="Center"
+                                                                        VerticalOptions="Center"
+                                                                        HeightRequest="50"
+                                                                        WidthRequest="50"/>
+                                </Border>
+                                <Label Text="Cupertino" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" FontSize="11" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+
+                            <!-- Nofriendo -->
+                            <VerticalStackLayout Grid.Row="1" Grid.Column="0" Spacing="8" HorizontalOptions="Center">
+                                <Border Style="{StaticResource PresetCard}" HeightRequest="80" WidthRequest="80">
+                                    <loading:Nofriendo x:Name="NofriendoControl"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"
+                                                       HeightRequest="50"
+                                                       WidthRequest="50"/>
+                                </Border>
+                                <Label Text="Nofriendo" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" FontSize="11" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+
+                            <!-- Waves -->
+                            <VerticalStackLayout Grid.Row="1" Grid.Column="1" Spacing="8" HorizontalOptions="Center">
+                                <Border Style="{StaticResource PresetCard}" HeightRequest="80" WidthRequest="80">
+                                    <loading:Waves x:Name="WavesControl"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"
+                                                   HeightRequest="50"
+                                                   WidthRequest="50"/>
+                                </Border>
+                                <Label Text="Waves" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" FontSize="11" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+
+                            <!-- Combined Demo -->
+                            <VerticalStackLayout Grid.Row="1" Grid.Column="2" Spacing="8" HorizontalOptions="Center">
+                                <Border Style="{StaticResource PresetCard}" HeightRequest="80" WidthRequest="80">
+                                    <Grid>
+                                        <gauges:CircularGauge x:Name="CombinedGauge"
+                                                              StartingDegree="0"
+                                                              EndingDegree="270"
+                                                              ProgressThickness="6"
+                                                              ProgressColor="#EC4899"
+                                                              ProgressBackgroundColor="{AppThemeBinding Light={StaticResource Light.SliderTrack}, Dark={StaticResource Dark.SliderTrack}}"
+                                                              EndCapType="Rounded"
+                                                              HeightRequest="50"
+                                                              WidthRequest="50"
+                                                              HorizontalOptions="Center"
+                                                              VerticalOptions="Center"/>
+                                        <Label Text="75%"
+                                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                                               FontSize="10"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+                                </Border>
+                                <Label Text="Progress" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" FontSize="11" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Loading Color Control -->
+                <controls:ExpandableSection Title="Loading Indicator Color" Icon="🎨" IsExpanded="False">
+                    <VerticalStackLayout Spacing="12" Padding="0,8,0,0">
+                        <editors:ColorPickerEditor x:Name="LoadingColorPicker"
+                                                   Label="Indicator Color"
+                                                   SelectedColor="#8B5CF6"
+                                                   ColorChanged="OnLoadingColorChanged"/>
+                    </VerticalStackLayout>
+                </controls:ExpandableSection>
+
+                <!-- Use Cases -->
+                <Border Style="{StaticResource Card}" Margin="0,12,0,12">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Common Use Cases" Style="{StaticResource SectionTitle}"/>
+                        
+                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="12" RowSpacing="8">
+                            <Label Grid.Row="0" Grid.Column="0" Text="📊" FontSize="20"/>
+                            <Label Grid.Row="0" Grid.Column="1" Text="Dashboard metrics and KPIs" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" VerticalOptions="Center"/>
+                            
+                            <Label Grid.Row="1" Grid.Column="0" Text="⏳" FontSize="20"/>
+                            <Label Grid.Row="1" Grid.Column="1" Text="Loading states and async operations" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" VerticalOptions="Center"/>
+                            
+                            <Label Grid.Row="2" Grid.Column="0" Text="📈" FontSize="20"/>
+                            <Label Grid.Row="2" Grid.Column="1" Text="Progress tracking for downloads/uploads" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" VerticalOptions="Center"/>
+                            
+                            <Label Grid.Row="3" Grid.Column="0" Text="🎯" FontSize="20"/>
+                            <Label Grid.Row="3" Grid.Column="1" Text="Goal completion and achievements" TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}" VerticalOptions="Center"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Bottom Spacing -->
+                <BoxView HeightRequest="40"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AuroraControls.TestApp.Pages.SettingsPage"
+             Title="Settings"
+             BackgroundColor="{AppThemeBinding Light={StaticResource Light.PageBackground}, Dark={StaticResource Dark.PageBackground}}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+
+            <!-- Header -->
+            <Label Text="Settings"
+                   TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   Margin="0,10,0,20" />
+
+            <!-- Appearance Section -->
+            <Label Text="Appearance"
+                   TextColor="{StaticResource Accent.Primary}"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   Margin="0,0,0,8" />
+
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" 
+                    StrokeShape="RoundRectangle 12" 
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}" 
+                    Padding="16">
+                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+                    <VerticalStackLayout VerticalOptions="Center">
+                        <Label Text="Dark Mode" 
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" 
+                               FontSize="16" />
+                        <Label Text="Use dark theme" 
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
+                               FontSize="12" />
+                    </VerticalStackLayout>
+                    <Switch Grid.Column="1" 
+                            x:Name="DarkModeSwitch"
+                            OnColor="{StaticResource Accent.Primary}"
+                            ThumbColor="White"
+                            Toggled="OnDarkModeToggled" />
+                </Grid>
+            </Border>
+
+            <!-- About Section -->
+            <Label Text="About"
+                   TextColor="{StaticResource Accent.Secondary}"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   Margin="0,16,0,8" />
+
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" 
+                    StrokeShape="RoundRectangle 12" 
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}" 
+                    Padding="16">
+                <VerticalStackLayout Spacing="12">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Version" 
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" 
+                               FontSize="16" />
+                        <Label Grid.Column="1" Text="1.0.0" 
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
+                               FontSize="16" />
+                    </Grid>
+                    <BoxView HeightRequest="1" 
+                             Color="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}" />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Framework" 
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" 
+                               FontSize="16" />
+                        <Label Grid.Column="1" Text=".NET MAUI 9" 
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
+                               FontSize="16" />
+                    </Grid>
+                    <BoxView HeightRequest="1" 
+                             Color="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}" />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="SkiaSharp" 
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" 
+                               FontSize="16" />
+                        <Label Grid.Column="1" Text="3.x" 
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
+                               FontSize="16" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Credits -->
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" 
+                    StrokeShape="RoundRectangle 12" 
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}" 
+                    Padding="20" 
+                    Margin="0,16,0,0">
+                <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                    <Label Text="Aurora Controls"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           HorizontalTextAlignment="Center" />
+                    <Label Text="Beautiful MAUI Controls"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextSecondary}, Dark={StaticResource Dark.TextSecondary}}"
+                           FontSize="14"
+                           HorizontalTextAlignment="Center" />
+                    <Label Text="© 2025 TheEightBot"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextMuted}, Dark={StaticResource Dark.TextMuted}}"
+                           FontSize="12"
+                           HorizontalTextAlignment="Center"
+                           Margin="0,8,0,0" />
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
