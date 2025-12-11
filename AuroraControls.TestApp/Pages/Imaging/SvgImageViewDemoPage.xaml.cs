@@ -161,7 +161,7 @@ public partial class SvgImageViewDemoPage : ContentPage, INotifyPropertyChanged
         }
     }
 
-    private void OnSizeChanged(object? sender, double value)
+    private void OnSizeChanged(object? sender, ValueChangedEventArgs value)
     {
         PreviewSvg.WidthRequest = WidthEditor.Value;
         PreviewSvg.HeightRequest = HeightEditor.Value;
@@ -183,7 +183,7 @@ public partial class SvgImageViewDemoPage : ContentPage, INotifyPropertyChanged
         PreviewSvg.HeightRequest = 180;
     }
 
-    private void OnMaxSizeChanged(object? sender, double value)
+    private void OnMaxSizeChanged(object? sender, ValueChangedEventArgs value)
     {
         var maxWidth = MaxWidthEditor.Value;
         var maxHeight = MaxHeightEditor.Value;

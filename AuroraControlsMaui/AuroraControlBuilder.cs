@@ -31,7 +31,7 @@ public static class AuroraControlBuilder
                         .Add<Effects.ShadowEffect, ShadowPlatformEffect>()
                         .Add<Effects.RoundedCornersEffect, RoundedCornersPlatformEffect>()
                         .Add<Effects.KeyboardReturnKeyTypeNameEffect, DroidKeyboardReturnKeyTypeNameEffect>();
-#elif IOS || MACCATALYST
+#elif IOS
                     effects
                         .Add<Effects.ImageProcessingEffect, Effects.ImageProcessingPlatformEffect>()
                         .Add<Effects.ShadowEffect, ShadowPlatformEffect>()
@@ -39,7 +39,16 @@ public static class AuroraControlBuilder
                         .Add<Effects.SafeAreaEffect, SafeAreaPlatformEffect>()
                         .Add<Effects.KeyboardReturnKeyTypeNameEffect, AppleKeyboardReturnKeyTypeNameEffect>()
                         .Add<Effects.ListViewHideEmptyCellsEffect, AppleListViewHideEmptyCellsEffect>()
-                        .Add<Effects.ShowKeyboardDoneButtonEffect, ShowKeyboardDoneButtonEffect>();
+                        .Add<Effects.ShowKeyboardDoneButtonEffect, AppleShowKeyboardDoneButtonEffect>();
+#elif MACCATALYST
+                    effects
+                        .Add<Effects.ImageProcessingEffect, Effects.ImageProcessingPlatformEffect>()
+                        .Add<Effects.ShadowEffect, ShadowPlatformEffect>()
+                        .Add<Effects.RoundedCornersEffect, RoundedCornersPlatformEffect>()
+                        .Add<Effects.SafeAreaEffect, SafeAreaPlatformEffect>()
+                        .Add<Effects.KeyboardReturnKeyTypeNameEffect, AppleKeyboardReturnKeyTypeNameEffect>()
+                        .Add<Effects.ListViewHideEmptyCellsEffect, AppleListViewHideEmptyCellsEffect>()
+                        .Add<Effects.ShowKeyboardDoneButtonEffect, MacCatalystShowKeyboardDoneButtonEffect>();
 #endif
                 })
             .ConfigureImageSources(

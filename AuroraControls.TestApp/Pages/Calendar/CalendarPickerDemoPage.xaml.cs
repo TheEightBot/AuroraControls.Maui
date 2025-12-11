@@ -4,6 +4,7 @@
 
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using AuroraControls.TestApp.Controls;
 
 namespace AuroraControls.TestApp.Pages.Calendar;
@@ -49,7 +50,7 @@ public partial class CalendarPickerDemoPage : ContentPage, INotifyPropertyChange
         // Update constraint labels
         if (PreviewPicker.MinimumDate > DateTime.MinValue.AddYears(100))
         {
-            MinDateLabel.Text = PreviewPicker.MinimumDate.ToString("MMM d, yyyy");
+            MinDateLabel.Text = $"{PreviewPicker.MinimumDate:MMM d, yyyy}";
         }
         else
         {
@@ -58,7 +59,7 @@ public partial class CalendarPickerDemoPage : ContentPage, INotifyPropertyChange
 
         if (PreviewPicker.MaximumDate < DateTime.MaxValue.AddYears(-100))
         {
-            MaxDateLabel.Text = PreviewPicker.MaximumDate.ToString("MMM d, yyyy");
+            MaxDateLabel.Text = $"{PreviewPicker.MaximumDate:MMM d, yyyy}";
         }
         else
         {
@@ -109,7 +110,7 @@ public partial class CalendarPickerDemoPage : ContentPage, INotifyPropertyChange
         UpdateDateLabels();
     }
 
-    private void OnDateSelected(object? sender, NullableDateChangedEventArgs e)
+    private void OnDateSelected(object? sender, DateChangedEventArgs e)
     {
         UpdateDateLabels();
     }
