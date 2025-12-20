@@ -118,6 +118,9 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 .BindClicked(async () => await this.Navigation.PushAsync(new ImageProcessing()))
                                 .Assign(out _viewImageProcessingButton),
 
+                            new Button { Text = "View Numeric Converters Test", }
+                                .BindClicked(async () => await this.Navigation.PushAsync(new NumericConvertersTestPage())),
+
                             new Button { Text = "View Card View Layout", }
                                 .BindClicked(async () => await this.Navigation.PushAsync(new CardViewLayoutPage()))
                                 .Assign(out _viewCardViewLayoutButton),

@@ -22,10 +22,10 @@
                    FontAttributes="Bold"
                    Margin="0,8,0,4" />
 
-            <Border x:Name="ImageProcessingCard" 
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" 
-                    StrokeShape="RoundRectangle 12" 
-                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}" 
+            <Border x:Name="ImageProcessingCard"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
+                    StrokeShape="RoundRectangle 12"
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
                     Padding="16">
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="OnImageProcessingTapped" />
@@ -33,18 +33,18 @@
                 <Grid ColumnDefinitions="4,*,Auto">
                     <BoxView Color="{StaticResource Accent.Tertiary}" CornerRadius="2" WidthRequest="4" />
                     <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
-                        <Label Text="Image Processing" 
-                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" 
-                               FontSize="16" 
+                        <Label Text="Image Processing"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                               FontSize="16"
                                FontAttributes="Bold" />
-                        <Label Text="Blur, grayscale, sepia, and more" 
-                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
+                        <Label Text="Blur, grayscale, sepia, and more"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
                                FontSize="12" />
                     </VerticalStackLayout>
-                    <Label Grid.Column="2" 
-                           Text="→" 
-                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
-                           FontSize="18" 
+                    <Label Grid.Column="2"
+                           Text="→"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                           FontSize="18"
                            VerticalOptions="Center" />
                 </Grid>
             </Border>
@@ -56,10 +56,10 @@
                    FontAttributes="Bold"
                    Margin="0,16,0,4" />
 
-            <Border x:Name="KeyboardEffectCard" 
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" 
-                    StrokeShape="RoundRectangle 12" 
-                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}" 
+            <Border x:Name="KeyboardEffectCard"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
+                    StrokeShape="RoundRectangle 12"
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
                     Padding="16">
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="OnKeyboardEffectTapped" />
@@ -67,26 +67,26 @@
                 <Grid ColumnDefinitions="4,*,Auto">
                     <BoxView Color="{StaticResource Accent.Secondary}" CornerRadius="2" WidthRequest="4" />
                     <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
-                        <Label Text="Keyboard Return Key" 
-                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" 
-                               FontSize="16" 
+                        <Label Text="Keyboard Return Key"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                               FontSize="16"
                                FontAttributes="Bold" />
-                        <Label Text="Customize keyboard return button" 
-                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
+                        <Label Text="Customize keyboard return button"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
                                FontSize="12" />
                     </VerticalStackLayout>
-                    <Label Grid.Column="2" 
-                           Text="→" 
-                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
-                           FontSize="18" 
+                    <Label Grid.Column="2"
+                           Text="→"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                           FontSize="18"
                            VerticalOptions="Center" />
                 </Grid>
             </Border>
 
-            <Border x:Name="DoneButtonCard" 
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" 
-                    StrokeShape="RoundRectangle 12" 
-                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}" 
+            <Border x:Name="DoneButtonCard"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
+                    StrokeShape="RoundRectangle 12"
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
                     Padding="16">
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="OnDoneButtonTapped" />
@@ -94,26 +94,26 @@
                 <Grid ColumnDefinitions="4,*,Auto">
                     <BoxView Color="{StaticResource Accent.Teal}" CornerRadius="2" WidthRequest="4" />
                     <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
-                        <Label Text="Keyboard Done Button" 
-                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" 
-                               FontSize="16" 
+                        <Label Text="Keyboard Done Button"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                               FontSize="16"
                                FontAttributes="Bold" />
-                        <Label Text="Add done button to keyboard" 
-                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
+                        <Label Text="Add done button to keyboard"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
                                FontSize="12" />
                     </VerticalStackLayout>
-                    <Label Grid.Column="2" 
-                           Text="→" 
-                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
-                           FontSize="18" 
+                    <Label Grid.Column="2"
+                           Text="→"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                           FontSize="18"
                            VerticalOptions="Center" />
                 </Grid>
             </Border>
 
-            <Border x:Name="SafeAreaCard" 
-                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}" 
-                    StrokeShape="RoundRectangle 12" 
-                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}" 
+            <Border x:Name="SafeAreaCard"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
+                    StrokeShape="RoundRectangle 12"
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
                     Padding="16">
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="OnSafeAreaTapped" />
@@ -121,18 +121,52 @@
                 <Grid ColumnDefinitions="4,*,Auto">
                     <BoxView Color="{StaticResource Status.Warning}" CornerRadius="2" WidthRequest="4" />
                     <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
-                        <Label Text="Safe Area Effect" 
-                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}" 
-                               FontSize="16" 
+                        <Label Text="Safe Area Effect"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                               FontSize="16"
                                FontAttributes="Bold" />
-                        <Label Text="Respect device safe areas" 
-                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
+                        <Label Text="Respect device safe areas"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
                                FontSize="12" />
                     </VerticalStackLayout>
-                    <Label Grid.Column="2" 
-                           Text="→" 
-                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}" 
-                           FontSize="18" 
+                    <Label Grid.Column="2"
+                           Text="→"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                           FontSize="18"
+                           VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <!-- Value Converters Section -->
+            <Label Text="🔢 Value Converters"
+                   TextColor="{StaticResource Accent.Primary}"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   Margin="0,16,0,4" />
+
+            <Border x:Name="NumericConvertersCard"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
+                    StrokeShape="RoundRectangle 12"
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                    Padding="16">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnNumericConvertersTapped" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="4,*,Auto">
+                    <BoxView Color="{StaticResource Accent.Primary}" CornerRadius="2" WidthRequest="4" />
+                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                        <Label Text="Numeric Converters"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                               FontSize="16"
+                               FontAttributes="Bold" />
+                        <Label Text="Currency, percent, decimal formatting"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                               FontSize="12" />
+                    </VerticalStackLayout>
+                    <Label Grid.Column="2"
+                           Text="→"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                           FontSize="18"
                            VerticalOptions="Center" />
                 </Grid>
             </Border>

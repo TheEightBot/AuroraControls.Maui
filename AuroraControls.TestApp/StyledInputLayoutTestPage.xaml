@@ -6,80 +6,82 @@
              xmlns:controls="clr-namespace:AuroraControls.TestApp.Controls"
              x:Class="AuroraControls.TestApp.StyledInputLayoutTestPage"
              Title="Styled Input Layout"
-             BackgroundColor="#0F0F0F">
-    
+             Style="{StaticResource ThemedPage}">
+
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="16">
-            
+
             <!-- Header -->
             <Label Text="Styled Input Layout"
-                   TextColor="White"
+                   Style="{StaticResource PageTitleLabel}"
                    FontSize="28"
                    FontAttributes="Bold" />
             <Label Text="Material Design-inspired input fields with animated placeholders"
-                   TextColor="#6B7280"
+                   Style="{StaticResource MutedTextLabel}"
                    FontSize="14"
                    Margin="0,-8,0,8" />
-            
+
             <!-- Live Preview -->
-            <Border BackgroundColor="#1A1A1A" 
-                    StrokeShape="RoundRectangle 16" 
-                    Stroke="#2A2A2A" 
+            <Border Style="{StaticResource ThemedCard}"
                     Padding="24"
                     HeightRequest="180">
                 <VerticalStackLayout VerticalOptions="Center" Spacing="16">
                     <aurora:StyledInputLayout x:Name="PreviewInput"
-                                              Placeholder="{Binding PlaceholderText}"
                                               PlaceholderColor="{Binding PlaceholderColor}"
                                               ActiveColor="{Binding ActiveColor}"
                                               InactiveColor="{Binding InactiveColor}"
                                               ErrorColor="{Binding ErrorColor}"
                                               BorderStyle="{Binding SelectedBorderStyle}"
-                                              CornerRadius="{Binding CornerRadius}"
-                                              BorderSize="{Binding BorderSize}"
+                                              CornerRadius="{Binding CornerRadius, Converter={StaticResource DoubleToFloatConverter}}"
+                                              BorderSize="{Binding BorderSize, Converter={StaticResource DoubleToFloatConverter}}"
                                               IsError="{Binding IsError}"
                                               ErrorText="{Binding ErrorText}"
                                               HeightRequest="60"
                                               HorizontalOptions="Fill">
-                        <Entry Placeholder="" TextColor="White" />
+                        <Entry Placeholder="{Binding PlaceholderText}"
+                               TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}" />
                     </aurora:StyledInputLayout>
                     <Label Text="Tap to focus and see animations"
-                           TextColor="#6B7280"
+                           Style="{StaticResource MutedTextLabel}"
                            FontSize="12"
                            HorizontalOptions="Center" />
                 </VerticalStackLayout>
             </Border>
-            
+
             <!-- Presets -->
             <controls:PresetSelector x:Name="PresetSelector"
                                      Label="Quick Presets"
                                      ShowLabel="True" />
-            
+
             <!-- Properties Section -->
             <controls:ExpandableSection Title="Placeholder" Icon="📝" IsExpanded="True">
                 <controls:ExpandableSection.SectionContent>
                     <VerticalStackLayout Spacing="8">
                         <Grid ColumnDefinitions="*,2*" ColumnSpacing="12">
-                            <Label Text="Placeholder" TextColor="White" VerticalOptions="Center" />
-                            <Entry Text="{Binding PlaceholderText}" 
-                                   TextColor="White" 
-                                   BackgroundColor="#2A2A2A" 
-                                   PlaceholderColor="#6B7280" />
+                            <Label Text="Placeholder"
+                                   TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}"
+                                   VerticalOptions="Center" />
+                            <Entry Text="{Binding PlaceholderText}"
+                                   TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}"
+                                   BackgroundColor="{AppThemeBinding Light={StaticResource LightSurfaceVariant}, Dark={StaticResource DarkSurfaceVariant}}"
+                                   PlaceholderColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}" />
                         </Grid>
                         <editors:ColorPickerEditor Label="Placeholder Color"
-                                                   SelectedColor="{Binding PlaceholderColor}" />
+                                                   SelectedColor="{Binding PlaceholderColor, Mode=TwoWay}" />
                     </VerticalStackLayout>
                 </controls:ExpandableSection.SectionContent>
             </controls:ExpandableSection>
-            
+
             <controls:ExpandableSection Title="Border Style" Icon="⬜" IsExpanded="False">
                 <controls:ExpandableSection.SectionContent>
                     <VerticalStackLayout Spacing="8">
                         <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                            <Label Text="Style" TextColor="White" VerticalOptions="Center" />
+                            <Label Text="Style"
+                                   TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}"
+                                   VerticalOptions="Center" />
                             <Picker x:Name="StylePicker"
-                                    TextColor="White"
-                                    BackgroundColor="#2A2A2A"
+                                    TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource LightSurfaceVariant}, Dark={StaticResource DarkSurfaceVariant}}"
                                     SelectedIndexChanged="OnStyleChanged">
                                 <Picker.Items>
                                     <x:String>Underline</x:String>
@@ -91,128 +93,143 @@
                             </Picker>
                         </Grid>
                         <editors:SliderEditor Label="Corner Radius"
-                                              Value="{Binding CornerRadius}"
+                                              Value="{Binding CornerRadius, Mode=TwoWay}"
                                               Minimum="0"
                                               Maximum="20"
                                               Unit="px" />
                         <editors:SliderEditor Label="Border Size"
-                                              Value="{Binding BorderSize}"
+                                              Value="{Binding BorderSize, Mode=TwoWay}"
                                               Minimum="1"
                                               Maximum="5"
                                               Unit="px" />
                     </VerticalStackLayout>
                 </controls:ExpandableSection.SectionContent>
             </controls:ExpandableSection>
-            
-            <controls:ExpandableSection Title="Colors" Icon="��" IsExpanded="False">
+
+            <controls:ExpandableSection Title="Colors" Icon="🎨" IsExpanded="False">
                 <controls:ExpandableSection.SectionContent>
                     <VerticalStackLayout Spacing="8">
                         <editors:ColorPickerEditor Label="Active Color"
-                                                   SelectedColor="{Binding ActiveColor}" />
+                                                   SelectedColor="{Binding ActiveColor, Mode=TwoWay}" />
                         <editors:ColorPickerEditor Label="Inactive Color"
-                                                   SelectedColor="{Binding InactiveColor}" />
+                                                   SelectedColor="{Binding InactiveColor, Mode=TwoWay}" />
                         <editors:ColorPickerEditor Label="Error Color"
-                                                   SelectedColor="{Binding ErrorColor}" />
+                                                   SelectedColor="{Binding ErrorColor, Mode=TwoWay}" />
                     </VerticalStackLayout>
                 </controls:ExpandableSection.SectionContent>
             </controls:ExpandableSection>
-            
+
             <controls:ExpandableSection Title="Error State" Icon="⚠️" IsExpanded="False">
                 <controls:ExpandableSection.SectionContent>
                     <VerticalStackLayout Spacing="8">
                         <editors:ToggleEditor Label="Show Error"
-                                              Value="{Binding IsError}" />
+                                              Value="{Binding IsError, Mode=TwoWay}" />
                         <Grid ColumnDefinitions="*,2*" ColumnSpacing="12">
-                            <Label Text="Error Text" TextColor="White" VerticalOptions="Center" />
-                            <Entry Text="{Binding ErrorText}" 
-                                   TextColor="White" 
-                                   BackgroundColor="#2A2A2A" 
-                                   PlaceholderColor="#6B7280" />
+                            <Label Text="Error Text"
+                                   TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}"
+                                   VerticalOptions="Center" />
+                            <Entry Text="{Binding ErrorText}"
+                                   TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}"
+                                   BackgroundColor="{AppThemeBinding Light={StaticResource LightSurfaceVariant}, Dark={StaticResource DarkSurfaceVariant}}"
+                                   PlaceholderColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}" />
                         </Grid>
                     </VerticalStackLayout>
                 </controls:ExpandableSection.SectionContent>
             </controls:ExpandableSection>
-            
+
             <!-- Border Style Examples -->
             <Label Text="Border Styles"
-                   TextColor="#7C3AED"
+                   TextColor="{StaticResource AuroraPurple}"
                    FontSize="18"
                    FontAttributes="Bold"
                    Margin="0,16,0,8" />
-            
+
             <VerticalStackLayout Spacing="16">
                 <aurora:StyledInputLayout Placeholder="Underline"
-                                          PlaceholderColor="#9CA3AF"
-                                          ActiveColor="#7C3AED"
-                                          InactiveColor="#4B5563"
+                                          PlaceholderColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}"
+                                          ActiveColor="{StaticResource AuroraPurple}"
+                                          InactiveColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}"
                                           BorderStyle="Underline"
                                           HeightRequest="56">
-                    <Entry Placeholder="" TextColor="White" />
+                    <Entry Placeholder="" TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}" />
                 </aurora:StyledInputLayout>
-                
+
                 <aurora:StyledInputLayout Placeholder="Rounded Underline"
-                                          PlaceholderColor="#9CA3AF"
-                                          ActiveColor="#22C55E"
-                                          InactiveColor="#4B5563"
+                                          PlaceholderColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}"
+                                          ActiveColor="{StaticResource Success}"
+                                          InactiveColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}"
                                           BorderStyle="RoundedUnderline"
                                           HeightRequest="56">
-                    <Entry Placeholder="" TextColor="White" />
+                    <Entry Placeholder="" TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}" />
                 </aurora:StyledInputLayout>
-                
+
                 <aurora:StyledInputLayout Placeholder="Rectangle"
-                                          PlaceholderColor="#9CA3AF"
-                                          ActiveColor="#3B82F6"
-                                          InactiveColor="#4B5563"
+                                          PlaceholderColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}"
+                                          ActiveColor="{StaticResource AuroraBlue}"
+                                          InactiveColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}"
                                           BorderStyle="Rectangle"
                                           HeightRequest="56">
-                    <Entry Placeholder="" TextColor="White" />
+                    <Entry Placeholder="" TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}" />
                 </aurora:StyledInputLayout>
-                
+
                 <aurora:StyledInputLayout Placeholder="Rounded Rectangle"
-                                          PlaceholderColor="#9CA3AF"
-                                          ActiveColor="#EC4899"
-                                          InactiveColor="#4B5563"
+                                          PlaceholderColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}"
+                                          ActiveColor="{StaticResource AuroraPink}"
+                                          InactiveColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}"
                                           BorderStyle="RoundedRectangle"
                                           CornerRadius="12"
                                           HeightRequest="56">
-                    <Entry Placeholder="" TextColor="White" />
+                    <Entry Placeholder="" TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}" />
                 </aurora:StyledInputLayout>
-                
+
                 <aurora:StyledInputLayout Placeholder="Placeholder Through"
-                                          PlaceholderColor="#9CA3AF"
-                                          ActiveColor="#F59E0B"
-                                          InactiveColor="#4B5563"
+                                          PlaceholderColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}"
+                                          ActiveColor="{StaticResource Warning}"
+                                          InactiveColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}"
                                           BorderStyle="RoundedRectanglePlaceholderThrough"
                                           CornerRadius="8"
                                           HeightRequest="56">
-                    <Entry Placeholder="" TextColor="White" />
+                    <Entry Placeholder="" TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}" />
                 </aurora:StyledInputLayout>
             </VerticalStackLayout>
-            
+
             <!-- Error State Example -->
             <Label Text="Error State"
-                   TextColor="#7C3AED"
+                   TextColor="{StaticResource AuroraPurple}"
                    FontSize="18"
                    FontAttributes="Bold"
                    Margin="0,16,0,8" />
-            
+
             <aurora:StyledInputLayout Placeholder="Email Address"
-                                      PlaceholderColor="#9CA3AF"
-                                      ActiveColor="#7C3AED"
-                                      InactiveColor="#4B5563"
-                                      ErrorColor="#EF4444"
+                                      PlaceholderColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}"
+                                      ActiveColor="{StaticResource AuroraPurple}"
+                                      InactiveColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}"
+                                      ErrorColor="{StaticResource Error}"
                                       IsError="True"
                                       ErrorText="Please enter a valid email address"
                                       BorderStyle="RoundedRectangle"
                                       CornerRadius="8"
                                       HeightRequest="56">
-                <Entry Placeholder="" TextColor="White" Text="invalid-email" />
+                <Entry Placeholder="" TextColor="{AppThemeBinding Light={StaticResource LightOnSurface}, Dark={StaticResource DarkOnSurface}}" Text="invalid-email" />
             </aurora:StyledInputLayout>
-            
+
             <!-- Bottom spacing -->
             <BoxView HeightRequest="40" Color="Transparent" />
-            
+
+            <aurora:StyledInputLayout
+                Placeholder="Buttons Example"
+                  PlaceholderColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}"
+                  ActiveColor="{StaticResource AuroraPurple}"
+                  InactiveColor="{AppThemeBinding Light={StaticResource LightOnSurfaceVariant}, Dark={StaticResource DarkOnSurfaceVariant}}"
+                  BorderStyle="RoundedRectanglePlaceholderThrough"
+                  CornerRadius="8">
+                <Grid ColumnDefinitions="*,*" Padding="8" ColumnSpacing="8">
+                    <Button Text="Test 1" Grid.Column="0" />
+                    <Button Text="Test 2" Grid.Column="1" />
+                </Grid>
+            </aurora:StyledInputLayout>
+
         </VerticalStackLayout>
     </ScrollView>
-    
+
 </ContentPage>
