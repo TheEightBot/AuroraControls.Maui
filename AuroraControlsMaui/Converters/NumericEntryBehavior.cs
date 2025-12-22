@@ -98,6 +98,46 @@ public class NumericEntryBehavior : Behavior<Entry>
             null);
 
     /// <summary>
+    /// Bindable property for <see cref="MaximumFractionDigits"/>.
+    /// </summary>
+    public static readonly BindableProperty MaximumFractionDigitsProperty =
+        BindableProperty.Create(
+            nameof(MaximumFractionDigits),
+            typeof(int?),
+            typeof(NumericEntryBehavior),
+            null);
+
+    /// <summary>
+    /// Bindable property for <see cref="MinimumFractionDigits"/>.
+    /// </summary>
+    public static readonly BindableProperty MinimumFractionDigitsProperty =
+        BindableProperty.Create(
+            nameof(MinimumFractionDigits),
+            typeof(int?),
+            typeof(NumericEntryBehavior),
+            null);
+
+    /// <summary>
+    /// Bindable property for <see cref="RoundingMode"/>.
+    /// </summary>
+    public static readonly BindableProperty RoundingModeProperty =
+        BindableProperty.Create(
+            nameof(RoundingMode),
+            typeof(NumericRoundingMode),
+            typeof(NumericEntryBehavior),
+            NumericRoundingMode.ToEven);
+
+    /// <summary>
+    /// Bindable property for <see cref="EnforceMaxFractionDigitsDuringInput"/>.
+    /// </summary>
+    public static readonly BindableProperty EnforceMaxFractionDigitsDuringInputProperty =
+        BindableProperty.Create(
+            nameof(EnforceMaxFractionDigitsDuringInput),
+            typeof(bool),
+            typeof(NumericEntryBehavior),
+            true);
+
+    /// <summary>
     /// Gets or sets the format string to use when displaying the value.
     /// Supports standard .NET numeric format strings (e.g., "C2", "N0", "P1").
     /// Defaults to "N2".
@@ -169,9 +209,65 @@ public class NumericEntryBehavior : Behavior<Entry>
     }
 
     /// <summary>
+    /// Gets or sets the maximum number of fractional (decimal) digits allowed.
+    /// When set, input and the stored value will be limited to this number of decimal places.
+    /// When null, no limit is enforced (but formatting may still round the display).
+    /// </summary>
+    public int? MaximumFractionDigits
+    {
+        get => (int?)GetValue(MaximumFractionDigitsProperty);
+        set => SetValue(MaximumFractionDigitsProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the minimum number of fractional (decimal) digits to display.
+    /// Values with fewer decimal digits will be zero-padded when formatting.
+    /// When null, the format string determines the display.
+    /// </summary>
+    public int? MinimumFractionDigits
+    {
+        get => (int?)GetValue(MinimumFractionDigitsProperty);
+        set => SetValue(MinimumFractionDigitsProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the rounding mode to use when limiting decimal places.
+    /// Defaults to <see cref="NumericRoundingMode.ToEven"/>.
+    /// </summary>
+    public NumericRoundingMode RoundingMode
+    {
+        get => (NumericRoundingMode)GetValue(RoundingModeProperty);
+        set => SetValue(RoundingModeProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether to enforce the maximum fraction digits during input.
+    /// When true (default), users cannot type more decimal places than allowed.
+    /// When false, extra decimals can be entered but will be rounded on unfocus.
+    /// </summary>
+    public bool EnforceMaxFractionDigitsDuringInput
+    {
+        get => (bool)GetValue(EnforceMaxFractionDigitsDuringInputProperty);
+        set => SetValue(EnforceMaxFractionDigitsDuringInputProperty, value);
+    }
+
+    /// <summary>
     /// Gets the effective culture for formatting and parsing.
     /// </summary>
     private CultureInfo EffectiveCulture => Culture ?? CultureInfo.CurrentUICulture;
+
+    /// <summary>
+    /// Gets the <see cref="MidpointRounding"/> equivalent for the current <see cref="RoundingMode"/>.
+    /// </summary>
+    private MidpointRounding MidpointRounding => RoundingMode switch
+    {
+        NumericRoundingMode.ToEven => MidpointRounding.ToEven,
+        NumericRoundingMode.AwayFromZero => MidpointRounding.AwayFromZero,
+        NumericRoundingMode.Ceiling => MidpointRounding.ToPositiveInfinity,
+        NumericRoundingMode.Floor => MidpointRounding.ToNegativeInfinity,
+        NumericRoundingMode.Truncate => MidpointRounding.ToZero,
+        _ => MidpointRounding.ToEven,
+    };
 
     /// <inheritdoc/>
     protected override void OnAttachedTo(Entry bindable)
@@ -360,6 +456,31 @@ public class NumericEntryBehavior : Behavior<Entry>
         var decimalSeparator = culture.NumberFormat.NumberDecimalSeparator;
         var negativeSign = culture.NumberFormat.NegativeSign;
 
+        // Check for max fraction digits enforcement
+        if (EnforceMaxFractionDigitsDuringInput && MaximumFractionDigits.HasValue)
+        {
+            var decimalIndex = text.IndexOf(decimalSeparator, StringComparison.Ordinal);
+            if (decimalIndex >= 0)
+            {
+                var fractionPart = text.Substring(decimalIndex + decimalSeparator.Length);
+
+                // Count only digit characters in the fraction part
+                var fractionDigitCount = 0;
+                foreach (var c in fractionPart)
+                {
+                    if (char.IsDigit(c))
+                    {
+                        fractionDigitCount++;
+                    }
+                }
+
+                if (fractionDigitCount > MaximumFractionDigits.Value)
+                {
+                    return false;
+                }
+            }
+        }
+
         foreach (var c in text)
         {
             // Allow digits
@@ -401,6 +522,12 @@ public class NumericEntryBehavior : Behavior<Entry>
 
     private double ApplyConstraints(double value)
     {
+        // Apply fraction digit rounding first
+        if (MaximumFractionDigits.HasValue && MaximumFractionDigits.Value >= 0)
+        {
+            value = Math.Round(value, MaximumFractionDigits.Value, MidpointRounding);
+        }
+
         if (!AllowNegative && value < 0)
         {
             value = 0;

@@ -201,6 +201,50 @@
                 </VerticalStackLayout>
             </Frame>
 
+            <Frame BackgroundColor="#E0F7FA" Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Decimal Precision Control" FontAttributes="Bold" FontSize="16" />
+                    <Label Text="MaximumFractionDigits limits decimal places during input and in stored value" FontSize="11" TextColor="Gray" />
+
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                        <Label Text="Currency (2 decimals):" VerticalOptions="Center" />
+                        <Entry Grid.Column="1" Text="100.99" Keyboard="Numeric" Placeholder="Max 2 decimals">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="C2" MaximumFractionDigits="2" />
+                            </Entry.Behaviors>
+                        </Entry>
+
+                        <Label Grid.Row="1" Text="4 decimal places:" VerticalOptions="Center" />
+                        <Entry Grid.Row="1" Grid.Column="1" Text="3.1415" Keyboard="Numeric" Placeholder="Max 4 decimals">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="N4" MaximumFractionDigits="4" />
+                            </Entry.Behaviors>
+                        </Entry>
+
+                        <Label Grid.Row="2" Text="No decimals enforced:" VerticalOptions="Center" />
+                        <Entry Grid.Row="2" Grid.Column="1" Text="42" Keyboard="Numeric" Placeholder="No decimals allowed">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="N0" MaximumFractionDigits="0" AllowDecimal="False" />
+                            </Entry.Behaviors>
+                        </Entry>
+
+                        <Label Grid.Row="3" Text="Round up (Ceiling):" VerticalOptions="Center" />
+                        <Entry Grid.Row="3" Grid.Column="1" Text="10.001" Keyboard="Numeric" Placeholder="Rounds up">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="N2" MaximumFractionDigits="2" RoundingMode="Ceiling" />
+                            </Entry.Behaviors>
+                        </Entry>
+
+                        <Label Grid.Row="4" Text="Delayed enforcement:" VerticalOptions="Center" />
+                        <Entry Grid.Row="4" Grid.Column="1" Text="5.12345" Keyboard="Numeric" Placeholder="Type freely, rounds on unfocus">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="N2" MaximumFractionDigits="2" EnforceMaxFractionDigitsDuringInput="False" />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
             <Frame BackgroundColor="#FCE4EC" Padding="15" CornerRadius="10">
                 <VerticalStackLayout Spacing="10">
                     <Label Text="Edge Cases" FontAttributes="Bold" FontSize="16" />
