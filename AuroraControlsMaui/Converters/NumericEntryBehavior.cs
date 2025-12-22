@@ -288,18 +288,19 @@ public class NumericEntryBehavior : Behavior<Entry>
         _isFormatting = true;
         try
         {
+            // If we don't have a current value yet, try to parse from the entry text
+            if (!_currentValue.HasValue && !string.IsNullOrWhiteSpace(_entry.Text))
+            {
+                if (TryParseValue(_entry.Text, out var parsedValue))
+                {
+                    _currentValue = ApplyConstraints(parsedValue);
+                }
+            }
+
+            // Now format if we have a value
             if (_currentValue.HasValue)
             {
                 _entry.Text = _currentValue.Value.ToString(Format, EffectiveCulture);
-            }
-            else if (string.IsNullOrWhiteSpace(_entry.Text))
-            {
-                // Parse existing text if no current value
-                if (TryParseValue(_entry.Text, out var value))
-                {
-                    _currentValue = ApplyConstraints(value);
-                    _entry.Text = _currentValue.Value.ToString(Format, EffectiveCulture);
-                }
             }
         }
         finally

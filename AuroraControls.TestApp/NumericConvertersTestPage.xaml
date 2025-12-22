@@ -114,6 +114,93 @@
                     </Grid>
                 </VerticalStackLayout>
             </Frame>
+
+            <Frame BackgroundColor="#E1F5FE" Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Two-Way Binding with Converters" FontAttributes="Bold" FontSize="16" />
+                    <Label Text="Type values and see formatted output update in real-time" FontSize="11" TextColor="Gray" />
+
+                    <Grid ColumnDefinitions="Auto,*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="8">
+                        <!-- Headers -->
+                        <Label Text="Type" FontAttributes="Bold" FontSize="12" />
+                        <Label Grid.Column="1" Text="Input" FontAttributes="Bold" FontSize="12" HorizontalOptions="Center" />
+                        <Label Grid.Column="2" Text="Formatted" FontAttributes="Bold" FontSize="12" HorizontalOptions="Center" />
+
+                        <!-- Currency -->
+                        <Label Grid.Row="1" Text="Currency:" VerticalOptions="Center" />
+                        <Entry Grid.Row="1" Grid.Column="1" x:Name="CurrencyInput" Text="1234.56" Keyboard="Numeric" />
+                        <Label Grid.Row="1" Grid.Column="2"
+                               Text="{Binding Source={x:Reference CurrencyInput}, Path=Text, Converter={StaticResource CurrencyConverter}}"
+                               VerticalOptions="Center" FontAttributes="Bold" />
+
+                        <!-- Percent -->
+                        <Label Grid.Row="2" Text="Percent:" VerticalOptions="Center" />
+                        <Entry Grid.Row="2" Grid.Column="1" x:Name="PercentInput" Text="0.75" Keyboard="Numeric" />
+                        <Label Grid.Row="2" Grid.Column="2"
+                               Text="{Binding Source={x:Reference PercentInput}, Path=Text, Converter={StaticResource PercentConverter}}"
+                               VerticalOptions="Center" FontAttributes="Bold" />
+
+                        <!-- Decimal -->
+                        <Label Grid.Row="3" Text="Decimal:" VerticalOptions="Center" />
+                        <Entry Grid.Row="3" Grid.Column="1" x:Name="DecimalInput" Text="9876543.21" Keyboard="Numeric" />
+                        <Label Grid.Row="3" Grid.Column="2"
+                               Text="{Binding Source={x:Reference DecimalInput}, Path=Text, Converter={StaticResource DecimalConverter}}"
+                               VerticalOptions="Center" FontAttributes="Bold" />
+
+                        <!-- Custom Format -->
+                        <Label Grid.Row="4" Text="Custom:" VerticalOptions="Center" />
+                        <Entry Grid.Row="4" Grid.Column="1" x:Name="CustomInput" Text="5000" Keyboard="Numeric" />
+                        <Label Grid.Row="4" Grid.Column="2"
+                               Text="{Binding Source={x:Reference CustomInput}, Path=Text, Converter={StaticResource CustomFormatConverter}}"
+                               VerticalOptions="Center" FontAttributes="Bold" />
+
+                        <!-- Precision -->
+                        <Label Grid.Row="5" Text="Precision:" VerticalOptions="Center" />
+                        <Entry Grid.Row="5" Grid.Column="1" x:Name="PrecisionInput" Text="42.12345" Keyboard="Numeric" />
+                        <Label Grid.Row="5" Grid.Column="2"
+                               Text="{Binding Source={x:Reference PrecisionInput}, Path=Text, Converter={StaticResource PrecisionConverter}}"
+                               VerticalOptions="Center" FontAttributes="Bold" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame BackgroundColor="#F3E5F5" Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Formatted Entry Fields" FontAttributes="Bold" FontSize="16" />
+                    <Label Text="These entries format on text change using behaviors" FontSize="11" TextColor="Gray" />
+
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                        <Label Text="Price (C2):" VerticalOptions="Center" />
+                        <Entry Grid.Column="1" Text="99.99" Keyboard="Numeric" Placeholder="Enter price">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="C2" />
+                            </Entry.Behaviors>
+                        </Entry>
+
+                        <Label Grid.Row="1" Text="Discount (P1):" VerticalOptions="Center" />
+                        <Entry Grid.Row="1" Grid.Column="1" Text="0.15" Keyboard="Numeric" Placeholder="Enter discount">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="P1" />
+                            </Entry.Behaviors>
+                        </Entry>
+
+                        <Label Grid.Row="2" Text="Quantity (N0):" VerticalOptions="Center" />
+                        <Entry Grid.Row="2" Grid.Column="1" Text="100" Keyboard="Numeric" Placeholder="Enter quantity">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="N0" AllowDecimal="False" MinValue="1" MaxValue="9999" />
+                            </Entry.Behaviors>
+                        </Entry>
+
+                        <Label Grid.Row="3" Text="Score (0-100):" VerticalOptions="Center" />
+                        <Entry Grid.Row="3" Grid.Column="1" Text="85" Keyboard="Numeric" Placeholder="Enter score">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="N0" MinValue="0" MaxValue="100" AllowNegative="False" AllowDecimal="False" />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
             <Frame BackgroundColor="#FCE4EC" Padding="15" CornerRadius="10">
                 <VerticalStackLayout Spacing="10">
                     <Label Text="Edge Cases" FontAttributes="Bold" FontSize="16" />
