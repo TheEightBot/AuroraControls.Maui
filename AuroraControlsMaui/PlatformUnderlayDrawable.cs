@@ -326,14 +326,20 @@ public class PlatformUnderlayDrawable : IDisposable
 #elif ANDROID
             var addedView = _platformView.GetChildAt(0);
 
-            if (addedView is not null)
+            addedView?.Background = null;
+
+            if (addedView is TextView tv)
             {
-                if (addedView is EditText et)
-                {
-                    et.SetBackgroundColor(Android.Graphics.Color.Transparent);
-                    et.SetIncludeFontPadding(false);
-                    et.SetPadding(0, 0, 0, 0);
-                }
+                tv.SetIncludeFontPadding(false);
+            }
+
+            if (_virtualView is IUnderlayDrawable vud)
+            {
+                // Get the horizontal padding from the TextView and convert to device-independent units
+                // Only X offset is needed; Y position is already correctly calculated from controlFrame.Center.Y
+                var density = DeviceDisplay.Current.MainDisplayInfo.Density;
+                var paddingLeft = addedView.PaddingLeft / density;
+                vud.PlaceholderOffset = new Point(paddingLeft, 0);
             }
 
             _platformView.AddView(_canvas, 0);
