@@ -326,7 +326,10 @@ public class PlatformUnderlayDrawable : IDisposable
 #elif ANDROID
             var addedView = _platformView.GetChildAt(0);
 
-            addedView?.Background = null;
+            if (addedView is not null)
+            {
+                addedView.Background = null;
+            }
 
             if (addedView is TextView tv)
             {
