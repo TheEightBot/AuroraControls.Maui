@@ -326,6 +326,11 @@ public class PlatformUnderlayDrawable : IDisposable
 #elif ANDROID
             var addedView = _platformView.GetChildAt(0);
 
+            if (addedView is WrapperView wv)
+            {
+                addedView = wv.GetChildAt(0);
+            }
+
             if (addedView is not null)
             {
                 addedView.Background = null;
