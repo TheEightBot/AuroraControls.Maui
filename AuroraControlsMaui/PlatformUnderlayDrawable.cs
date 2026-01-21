@@ -334,6 +334,7 @@ public class PlatformUnderlayDrawable : IDisposable
             if (addedView is not null)
             {
                 addedView.Background = null;
+                addedView.SetPadding(0, 0, 0, 0);
             }
 
             if (addedView is TextView tv)
