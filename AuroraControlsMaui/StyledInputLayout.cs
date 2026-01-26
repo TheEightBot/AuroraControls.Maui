@@ -16,7 +16,11 @@ public class StyledInputLayout : ContentView, IUnderlayDrawable
                     view => view.Date.HasValue,
                     false),
             [typeof(IDatePicker)] = StyledContentTypeRegistration.Default,
-            [typeof(ITimePicker)] = StyledContentTypeRegistration.Default,
+            [typeof(ITimePicker)] =
+                StyledContentTypeRegistration.Build<TimePicker>(
+                    nameof(TimePicker.Time),
+                    view => view.Time.HasValue,
+                    false),
             [typeof(Editor)] =
                 StyledContentTypeRegistration.Build<Editor>(
                     nameof(Editor.Text),
