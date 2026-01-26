@@ -1,4 +1,4 @@
-﻿namespace AuroraControls;
+namespace AuroraControls;
 
 public class StyledInputLayout : ContentView, IUnderlayDrawable
 {
@@ -15,7 +15,11 @@ public class StyledInputLayout : ContentView, IUnderlayDrawable
                     nameof(CalendarPicker.Date),
                     view => view.Date.HasValue,
                     false),
-            [typeof(IDatePicker)] = StyledContentTypeRegistration.Default,
+            [typeof(IDatePicker)] =
+                StyledContentTypeRegistration.Build<IDatePicker>(
+                    nameof(IDatePicker.Date),
+                    view => view.Date.HasValue,
+                    false),
             [typeof(ITimePicker)] =
                 StyledContentTypeRegistration.Build<TimePicker>(
                     nameof(TimePicker.Time),
