@@ -82,7 +82,7 @@
                                                        HorizontalOptions="Center"
                                                        UpdateMode="WhenDone"
                                                        DateSelected="OnDateSelected"
-                                                       FontSize="10"
+                                                       FontSize="16"
                                                        FontAttributes="Bold"
                                                        FontFamily="Helvetica"/>
 
