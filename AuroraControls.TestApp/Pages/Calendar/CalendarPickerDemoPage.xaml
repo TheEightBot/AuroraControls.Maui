@@ -81,7 +81,10 @@
                                                        WidthRequest="200"
                                                        HorizontalOptions="Center"
                                                        UpdateMode="WhenDone"
-                                                       DateSelected="OnDateSelected"/>
+                                                       DateSelected="OnDateSelected"
+                                                       FontSize="10"
+                                                       FontAttributes="Bold"
+                                                       FontFamily="Helvetica"/>
 
                                 <!-- Selected Date Display -->
                                 <Border BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
