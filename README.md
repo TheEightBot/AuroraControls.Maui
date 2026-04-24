@@ -977,6 +977,213 @@ public class CustomEffect : VisualEffect
 - Consider using GPU acceleration when available by implementing the GRBackendRenderTarget version of ApplyEffect
 - Effects are processed on a background thread to maintain UI responsiveness
 
+## Numeric Value Converters
+
+Aurora Controls includes a comprehensive suite of value converters and behaviors for formatting numeric values in Entry, Editor, and other text input controls. These converters provide flexible, culture-aware formatting for currency, percentages, decimals, and custom numeric formats.
+
+### Available Converters
+
+#### CurrencyConverter
+
+Formats numeric values as currency with customizable decimal digits.
+
+```xml
+<ContentPage.Resources>
+    <aurora:CurrencyConverter x:Key="CurrencyConverter" DecimalDigits="2" />
+</ContentPage.Resources>
+
+<Label Text="{Binding Price, Converter={StaticResource CurrencyConverter}}" />
+<!-- Output: $1,234.56 (culture-dependent) -->
+```
+
+#### PercentConverter
+
+Formats numeric values as percentages. Note: The value is multiplied by 100.
+
+```xml
+<ContentPage.Resources>
+    <aurora:PercentConverter x:Key="PercentConverter" DecimalDigits="1" />
+</ContentPage.Resources>
+
+<Label Text="{Binding DiscountRate, Converter={StaticResource PercentConverter}}" />
+<!-- Input: 0.15 → Output: 15.0% -->
+```
+
+#### DecimalFormatConverter
+
+Formats numeric values with standard decimal notation and group separators.
+
+```xml
+<ContentPage.Resources>
+    <aurora:DecimalFormatConverter x:Key="DecimalConverter" DecimalDigits="2" UseGroupSeparator="True" />
+</ContentPage.Resources>
+
+<Label Text="{Binding Quantity, Converter={StaticResource DecimalConverter}}" />
+<!-- Output: 1,234.56 -->
+```
+
+#### NumericPrecisionConverter
+
+Provides precise control over minimum and maximum integer and fractional digits.
+
+```xml
+<ContentPage.Resources>
+    <aurora:NumericPrecisionConverter x:Key="PrecisionConverter"
+        MinimumIntegerDigits="5"
+        MinimumFractionDigits="2"
+        MaximumFractionDigits="4"
+        UseGroupSeparator="True"
+        Prefix="$"
+        Suffix=" USD" />
+</ContentPage.Resources>
+
+<Label Text="{Binding Amount, Converter={StaticResource PrecisionConverter}}" />
+<!-- Input: 42.5 → Output: $00,042.50 USD -->
+```
+
+Features:
+- Control minimum integer digits (zero-padding on left)
+- Control minimum/maximum fractional digits
+- Optional prefix and suffix strings
+- Group separator support
+- Configurable rounding modes
+
+#### CustomNumericFormatConverter
+
+Uses any standard .NET numeric format string.
+
+```xml
+<ContentPage.Resources>
+    <aurora:CustomNumericFormatConverter x:Key="CustomConverter" Format="$#,##0.00" />
+</ContentPage.Resources>
+
+<Label Text="{Binding Value, Converter={StaticResource CustomConverter}}" />
+```
+
+#### NumericToStringConverter
+
+A simple converter for basic numeric-to-string and string-to-numeric conversion.
+
+```xml
+<Entry Text="{Binding Value, Converter={StaticResource NumericConverter}}" />
+```
+
+### NumericEntryBehavior
+
+A behavior that provides automatic formatting for Entry controls, with real-time input validation and formatting on focus/unfocus.
+
+```xml
+<Entry Text="{Binding Price}" Keyboard="Numeric">
+    <Entry.Behaviors>
+        <aurora:NumericEntryBehavior 
+            Format="C2"
+            AllowNegative="False"
+            AllowDecimal="True"
+            MinValue="0"
+            MaxValue="10000"
+            MaximumFractionDigits="2"
+            RoundingMode="ToEven"
+            EnforceMaxFractionDigitsDuringInput="True" />
+    </Entry.Behaviors>
+</Entry>
+```
+
+Features:
+- **Format**: Standard .NET numeric format string (e.g., "C2", "N0", "P1")
+- **AllowNegative**: Controls whether negative values can be entered
+- **AllowDecimal**: Controls whether decimal values are allowed
+- **MinValue/MaxValue**: Constrains the value range
+- **MaximumFractionDigits**: Limits decimal places (e.g., 2 for currency)
+- **MinimumFractionDigits**: Ensures minimum decimal places in display
+- **RoundingMode**: Controls rounding behavior (ToEven, AwayFromZero, Ceiling, Floor, Truncate)
+- **EnforceMaxFractionDigitsDuringInput**: When true, prevents typing more decimals than allowed
+- **FormatOnUnfocus**: Automatically formats the value when the field loses focus
+
+#### Decimal Precision Control
+
+For currency and financial applications, use `MaximumFractionDigits` to limit decimal places:
+
+```xml
+<!-- Currency limited to 2 decimal places -->
+<Entry Text="{Binding Price}" Keyboard="Numeric">
+    <Entry.Behaviors>
+        <aurora:NumericEntryBehavior 
+            Format="C2" 
+            MaximumFractionDigits="2" />
+    </Entry.Behaviors>
+</Entry>
+<!-- User cannot enter more than 2 decimal places -->
+<!-- 100.999 is automatically rounded to 100.99 -->
+```
+
+```xml
+<!-- Allow typing freely, round only on unfocus -->
+<Entry Text="{Binding Value}" Keyboard="Numeric">
+    <Entry.Behaviors>
+        <aurora:NumericEntryBehavior 
+            Format="N2" 
+            MaximumFractionDigits="2" 
+            EnforceMaxFractionDigitsDuringInput="False" />
+    </Entry.Behaviors>
+</Entry>
+```
+
+#### Rounding Modes
+
+```xml
+<!-- Round up (Ceiling) -->
+<aurora:NumericEntryBehavior Format="N2" MaximumFractionDigits="2" RoundingMode="Ceiling" />
+<!-- 10.001 → 10.01 -->
+
+<!-- Round down (Floor) -->
+<aurora:NumericEntryBehavior Format="N2" MaximumFractionDigits="2" RoundingMode="Floor" />
+<!-- 10.009 → 10.00 -->
+
+<!-- Banker's rounding (ToEven) - default -->
+<aurora:NumericEntryBehavior Format="N2" MaximumFractionDigits="2" RoundingMode="ToEven" />
+<!-- 10.005 → 10.00, 10.015 → 10.02 -->
+```
+
+### NumericFormatting Attached Property
+
+Apply numeric formatting to any Entry using attached properties:
+
+```xml
+<Entry Text="{Binding Value}" 
+       aurora:NumericFormatting.Format="C2" />
+```
+
+### Converter Base Class Features
+
+All numeric converters inherit from `NumericFormattingConverterBase` which provides:
+
+- **Culture Support**: Respects `CultureInfo` for locale-specific formatting
+- **Null Handling**: Configurable `NullPlaceholder` text for null values
+- **Error Handling**: `ThrowOnError` option or graceful `FallbackValue`
+- **Rounding Modes**: All standard `MidpointRounding` options
+- **Type Conversion**: Automatic conversion between numeric types
+
+```xml
+<aurora:CurrencyConverter 
+    x:Key="SafeCurrencyConverter"
+    NullPlaceholder="N/A"
+    FallbackValue="$0.00"
+    ThrowOnError="False"
+    RoundingMode="AwayFromZero" />
+```
+
+### NumericRoundingMode Enumeration
+
+Available rounding modes for all converters and behaviors:
+
+| Mode | Description |
+|------|-------------|
+| `ToEven` | Banker's rounding (default) - rounds to nearest even number |
+| `AwayFromZero` | Always rounds away from zero |
+| `Ceiling` | Always rounds up (toward positive infinity) |
+| `Floor` | Always rounds down (toward negative infinity) |
+| `Truncate` | Rounds toward zero (removes decimal portion) |
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.

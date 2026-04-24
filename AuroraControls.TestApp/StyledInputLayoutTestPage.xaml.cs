@@ -2,22 +2,23 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using AuroraControls.TestApp.Controls;
+using ContainerBorderStyle = global::AuroraControls.ContainerBorderStyle;
 
 namespace AuroraControls.TestApp;
 
 /// <summary>
 /// Test page for StyledInputLayout control with live property editing.
 /// </summary>
-public partial class StyledInputLayoutTestPage : ContentPage, INotifyPropertyChanged
+public partial class StyledInputLayoutTestPage : ContentPage
 {
     private string _placeholderText = "Enter text";
     private Color _placeholderColor = Color.FromArgb("#9CA3AF");
     private Color _activeColor = Color.FromArgb("#7C3AED");
     private Color _inactiveColor = Color.FromArgb("#4B5563");
     private Color _errorColor = Color.FromArgb("#EF4444");
-    private AuroraControls.ContainerBorderStyle _selectedBorderStyle = AuroraControls.ContainerBorderStyle.RoundedRectangle;
-    private float _cornerRadius = 8;
-    private float _borderSize = 2;
+    private ContainerBorderStyle _selectedBorderStyle = ContainerBorderStyle.RoundedRectangle;
+    private double _cornerRadius = 8;
+    private double _borderSize = 2;
     private bool _isError;
     private string _errorText = "This field is required";
 
@@ -80,7 +81,7 @@ public partial class StyledInputLayoutTestPage : ContentPage, INotifyPropertyCha
     /// <summary>
     /// Gets or sets the selected border style.
     /// </summary>
-    public AuroraControls.ContainerBorderStyle SelectedBorderStyle
+    public ContainerBorderStyle SelectedBorderStyle
     {
         get => _selectedBorderStyle;
         set => SetProperty(ref _selectedBorderStyle, value);
@@ -89,7 +90,7 @@ public partial class StyledInputLayoutTestPage : ContentPage, INotifyPropertyCha
     /// <summary>
     /// Gets or sets the corner radius.
     /// </summary>
-    public float CornerRadius
+    public double CornerRadius
     {
         get => _cornerRadius;
         set => SetProperty(ref _cornerRadius, value);
@@ -98,7 +99,7 @@ public partial class StyledInputLayoutTestPage : ContentPage, INotifyPropertyCha
     /// <summary>
     /// Gets or sets the border size.
     /// </summary>
-    public float BorderSize
+    public double BorderSize
     {
         get => _borderSize;
         set => SetProperty(ref _borderSize, value);
@@ -129,12 +130,12 @@ public partial class StyledInputLayoutTestPage : ContentPage, INotifyPropertyCha
             var styleName = StylePicker.Items[StylePicker.SelectedIndex];
             SelectedBorderStyle = styleName switch
             {
-                "Underline" => AuroraControls.ContainerBorderStyle.Underline,
-                "RoundedUnderline" => AuroraControls.ContainerBorderStyle.RoundedUnderline,
-                "Rectangle" => AuroraControls.ContainerBorderStyle.Rectangle,
-                "RoundedRectangle" => AuroraControls.ContainerBorderStyle.RoundedRectangle,
-                "RoundedRectanglePlaceholderThrough" => AuroraControls.ContainerBorderStyle.RoundedRectanglePlaceholderThrough,
-                _ => AuroraControls.ContainerBorderStyle.Underline,
+                "Underline" => ContainerBorderStyle.Underline,
+                "RoundedUnderline" => ContainerBorderStyle.RoundedUnderline,
+                "Rectangle" => ContainerBorderStyle.Rectangle,
+                "RoundedRectangle" => ContainerBorderStyle.RoundedRectangle,
+                "RoundedRectanglePlaceholderThrough" => ContainerBorderStyle.RoundedRectanglePlaceholderThrough,
+                _ => ContainerBorderStyle.Underline,
             };
         }
     }
@@ -147,7 +148,7 @@ public partial class StyledInputLayoutTestPage : ContentPage, INotifyPropertyCha
             {
                 Name = "Material",
                 OnSelected = () => ApplyPreset(
-                    style: AuroraControls.ContainerBorderStyle.Underline,
+                    style: ContainerBorderStyle.Underline,
                     activeColor: "#7C3AED",
                     inactiveColor: "#4B5563",
                     cornerRadius: 0),
@@ -156,7 +157,7 @@ public partial class StyledInputLayoutTestPage : ContentPage, INotifyPropertyCha
             {
                 Name = "Outlined",
                 OnSelected = () => ApplyPreset(
-                    style: AuroraControls.ContainerBorderStyle.RoundedRectangle,
+                    style: ContainerBorderStyle.RoundedRectangle,
                     activeColor: "#3B82F6",
                     inactiveColor: "#4B5563",
                     cornerRadius: 8),
@@ -165,7 +166,7 @@ public partial class StyledInputLayoutTestPage : ContentPage, INotifyPropertyCha
             {
                 Name = "Rounded",
                 OnSelected = () => ApplyPreset(
-                    style: AuroraControls.ContainerBorderStyle.RoundedRectangle,
+                    style: ContainerBorderStyle.RoundedRectangle,
                     activeColor: "#22C55E",
                     inactiveColor: "#4B5563",
                     cornerRadius: 16),
@@ -174,7 +175,7 @@ public partial class StyledInputLayoutTestPage : ContentPage, INotifyPropertyCha
             {
                 Name = "Floating",
                 OnSelected = () => ApplyPreset(
-                    style: AuroraControls.ContainerBorderStyle.RoundedRectanglePlaceholderThrough,
+                    style: ContainerBorderStyle.RoundedRectanglePlaceholderThrough,
                     activeColor: "#EC4899",
                     inactiveColor: "#4B5563",
                     cornerRadius: 8),
@@ -183,7 +184,7 @@ public partial class StyledInputLayoutTestPage : ContentPage, INotifyPropertyCha
             {
                 Name = "Sharp",
                 OnSelected = () => ApplyPreset(
-                    style: AuroraControls.ContainerBorderStyle.Rectangle,
+                    style: ContainerBorderStyle.Rectangle,
                     activeColor: "#F59E0B",
                     inactiveColor: "#4B5563",
                     cornerRadius: 0),
@@ -194,10 +195,10 @@ public partial class StyledInputLayoutTestPage : ContentPage, INotifyPropertyCha
     }
 
     private void ApplyPreset(
-        AuroraControls.ContainerBorderStyle style,
+        ContainerBorderStyle style,
         string activeColor,
         string inactiveColor,
-        float cornerRadius)
+        double cornerRadius)
     {
         SelectedBorderStyle = style;
         ActiveColor = Color.FromArgb(activeColor);
@@ -207,11 +208,11 @@ public partial class StyledInputLayoutTestPage : ContentPage, INotifyPropertyCha
         // Update style picker to match
         StylePicker.SelectedIndex = style switch
         {
-            AuroraControls.ContainerBorderStyle.Underline => 0,
-            AuroraControls.ContainerBorderStyle.RoundedUnderline => 1,
-            AuroraControls.ContainerBorderStyle.Rectangle => 2,
-            AuroraControls.ContainerBorderStyle.RoundedRectangle => 3,
-            AuroraControls.ContainerBorderStyle.RoundedRectanglePlaceholderThrough => 4,
+            ContainerBorderStyle.Underline => 0,
+            ContainerBorderStyle.RoundedUnderline => 1,
+            ContainerBorderStyle.Rectangle => 2,
+            ContainerBorderStyle.RoundedRectangle => 3,
+            ContainerBorderStyle.RoundedRectanglePlaceholderThrough => 4,
             _ => 0,
         };
     }
@@ -234,19 +235,5 @@ public partial class StyledInputLayoutTestPage : ContentPage, INotifyPropertyCha
         backingStore = value;
         OnPropertyChanged(propertyName);
         return true;
-    }
-
-    /// <summary>
-    /// Event raised when a property value changes.
-    /// </summary>
-    public new event PropertyChangedEventHandler PropertyChanged;
-
-    /// <summary>
-    /// Raises the PropertyChanged event.
-    /// </summary>
-    /// <param name="propertyName">The name of the property that changed.</param>
-    protected new void OnPropertyChanged([CallerMemberName] string propertyName = "")
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

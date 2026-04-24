@@ -111,7 +111,13 @@
                     <Label Text="📱 Instructions:" FontSize="16" FontAttributes="Bold" TextColor="DarkOrange"/>
                     <Label TextColor="DarkOrange">
                         <Label.FormattedText>
-                            • This effect only works on iOS and Android devices&#10;• Tap in any Entry field to see the virtual keyboard&#10;• Look at the return key (bottom-right of keyboard)&#10;• The 'Next' entries will automatically move focus to the next field&#10;• Try changing the return key type in the interactive demo
+                            <FormattedString>
+                                <Span>• This effect only works on iOS and Android devices</Span>
+                                <Span>• Tap in any Entry field to see the virtual keyboard</Span>
+                                <Span>• Look at the return key (bottom-right of keyboard)</Span>
+                                <Span>• The 'Next' entries will automatically move focus to the next field</Span>
+                                <Span>• Try changing the return key type in the interactive demo</Span>
+                            </FormattedString>
                         </Label.FormattedText>
                     </Label>
                 </VerticalStackLayout>

@@ -50,4 +50,15 @@ public partial class EffectsPage : ContentPage
 
         await Navigation.PushAsync(new SafeAreaTestPage());
     }
+
+    private async void OnNumericConvertersTapped(object? sender, TappedEventArgs e)
+    {
+        if (sender is View view)
+        {
+            AnimationExtensions.TriggerHaptic();
+            await view.AnimatePressAsync();
+        }
+
+        await Navigation.PushAsync(new NumericConvertersTestPage());
+    }
 }

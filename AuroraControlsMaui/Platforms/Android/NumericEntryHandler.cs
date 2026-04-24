@@ -2,6 +2,7 @@
 using AndroidX.AppCompat.Widget;
 using Java.Lang;
 using Microsoft.Maui.Handlers;
+using Microsoft.Maui.Platform;
 
 namespace AuroraControls;
 
@@ -13,7 +14,7 @@ public partial class NumericEntryHandler : EntryHandler, IDisposable
 
     private IInputFilter _numericInputFilter;
 
-    protected override void ConnectHandler(AppCompatEditText platformView)
+    protected override void ConnectHandler(MauiAppCompatEditText platformView)
     {
         base.ConnectHandler(platformView);
 
@@ -30,7 +31,7 @@ public partial class NumericEntryHandler : EntryHandler, IDisposable
         platformView.SetFilters(allInputFilters.ToArray());
     }
 
-    protected override void DisconnectHandler(AppCompatEditText platformView)
+    protected override void DisconnectHandler(MauiAppCompatEditText platformView)
     {
         platformView.SetFilters(_startingInputFilters);
 

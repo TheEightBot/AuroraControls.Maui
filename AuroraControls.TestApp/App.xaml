@@ -13,7 +13,7 @@
                 <ResourceDictionary Source="Themes/AuroraColors.xaml" />
                 <ResourceDictionary Source="Themes/AuroraStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
+
             <!-- Global Converters -->
             <controls:StringNotEmptyConverter x:Key="StringNotEmptyConverter" />
             <controls:InverseBoolConverter x:Key="InverseBoolConverter" />
@@ -21,6 +21,7 @@
             <controls:NullToBoolConverter x:Key="NullToBoolConverter" />
             <controls:DoubleFormatConverter x:Key="DoubleFormatConverter" />
             <controls:IndexToColorConverter x:Key="IndexToColorConverter" />
+            <controls:DoubleToFloatConverter x:Key="DoubleToFloatConverter" />
             <controls:BoolToPresetStrokeConverter x:Key="BoolToPresetStrokeConverter" />
             <controls:BoolToPresetBackgroundConverter x:Key="BoolToPresetBackgroundConverter" />
             <controls:BoolToPresetTextColorConverter x:Key="BoolToPresetTextColorConverter" />

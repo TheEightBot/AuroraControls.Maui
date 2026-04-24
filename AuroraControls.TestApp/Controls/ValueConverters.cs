@@ -182,3 +182,41 @@ public class IndexToColorConverter : IValueConverter
         throw new NotImplementedException();
     }
 }
+
+/// <summary>
+/// Converter that converts between double and float values.
+/// </summary>
+public class DoubleToFloatConverter : IValueConverter
+{
+    /// <inheritdoc/>
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is double d)
+        {
+            return (float)d;
+        }
+
+        if (value is float f)
+        {
+            return f;
+        }
+
+        return 0f;
+    }
+
+    /// <inheritdoc/>
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is float f)
+        {
+            return (double)f;
+        }
+
+        if (value is double d)
+        {
+            return d;
+        }
+
+        return 0.0;
+    }
+}

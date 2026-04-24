@@ -28,7 +28,7 @@ public class CalendarPicker : DatePicker
         set => SetValue(UpdateModeProperty, value);
     }
 
-    public new event EventHandler<NullableDateChangedEventArgs> DateSelected;
+    public new event EventHandler<DateChangedEventArgs> DateSelected;
 
     /// <summary>
     /// The date property.
@@ -42,7 +42,7 @@ public class CalendarPicker : DatePicker
 
             picker?.DateSelected?.Invoke(
                 picker,
-                new NullableDateChangedEventArgs((DateTime?)oldValue, (DateTime?)newValue));
+                new DateChangedEventArgs((DateTime?)oldValue, (DateTime?)newValue));
         },
         defaultValueCreator: (_) => null);
 

@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="clr-namespace:AuroraControls.Converters;assembly=AuroraControls"
+             x:Class="AuroraControls.TestApp.NumericConvertersTestPage"
+             Title="Numeric Converters">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <aurora:CurrencyConverter x:Key="CurrencyConverter" DecimalDigits="2" />
+            <aurora:CurrencyConverter x:Key="CurrencyNoDecimalsConverter" DecimalDigits="0" />
+            <aurora:PercentConverter x:Key="PercentConverter" DecimalDigits="0" />
+            <aurora:PercentConverter x:Key="PercentWithDecimalsConverter" DecimalDigits="2" />
+            <aurora:DecimalFormatConverter x:Key="DecimalConverter" DecimalDigits="2" />
+            <aurora:CustomNumericFormatConverter x:Key="CustomFormatConverter" Format="$#,##0.00" />
+            <aurora:NumericPrecisionConverter x:Key="PrecisionConverter"
+                                              MinimumIntegerDigits="3"
+                                              MinimumFractionDigits="2"
+                                              MaximumFractionDigits="4" />
+            <aurora:NumericToStringConverter x:Key="SimpleConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <Label Text="Numeric Value Converters"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+            <Frame BackgroundColor="#F0F0F0" Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Test Value" FontAttributes="Bold" FontSize="16" />
+                    <Entry x:Name="TestValueEntry"
+                           Text="1234.5678"
+                           Keyboard="Numeric"
+                           TextChanged="OnTestValueChanged" />
+                    <Label x:Name="ParsedValueLabel" Text="Parsed: 1234.5678" FontSize="12" TextColor="Gray" />
+                </VerticalStackLayout>
+            </Frame>
+            <Frame BackgroundColor="#E8F5E9" Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Currency Converters" FontAttributes="Bold" FontSize="16" />
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="5">
+                        <Label Text="Currency (C2):" VerticalOptions="Center" />
+                        <Label Grid.Column="1"
+                               Text="{Binding Source={x:Reference TestValueEntry}, Path=Text, Converter={StaticResource CurrencyConverter}}"
+                               FontAttributes="Bold" />
+                        <Label Grid.Row="1" Text="No Decimals (C0):" VerticalOptions="Center" />
+                        <Label Grid.Row="1" Grid.Column="1"
+                               Text="{Binding Source={x:Reference TestValueEntry}, Path=Text, Converter={StaticResource CurrencyNoDecimalsConverter}}"
+                               FontAttributes="Bold" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+            <Frame BackgroundColor="#E3F2FD" Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Percent Converters" FontAttributes="Bold" FontSize="16" />
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="5">
+                        <Label Text="Percent (P0):" VerticalOptions="Center" />
+                        <Label Grid.Column="1"
+                               Text="{Binding Source={x:Reference TestValueEntry}, Path=Text, Converter={StaticResource PercentConverter}}"
+                               FontAttributes="Bold" />
+                        <Label Grid.Row="1" Text="With Decimals (P2):" VerticalOptions="Center" />
+                        <Label Grid.Row="1" Grid.Column="1"
+                               Text="{Binding Source={x:Reference TestValueEntry}, Path=Text, Converter={StaticResource PercentWithDecimalsConverter}}"
+                               FontAttributes="Bold" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+            <Frame BackgroundColor="#FFF3E0" Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Decimal/Custom Converters" FontAttributes="Bold" FontSize="16" />
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="5">
+                        <Label Text="Decimal (N2):" VerticalOptions="Center" />
+                        <Label Grid.Column="1"
+                               Text="{Binding Source={x:Reference TestValueEntry}, Path=Text, Converter={StaticResource DecimalConverter}}"
+                               FontAttributes="Bold" />
+                        <Label Grid.Row="1" Text="Custom Format:" VerticalOptions="Center" />
+                        <Label Grid.Row="1" Grid.Column="1"
+                               Text="{Binding Source={x:Reference TestValueEntry}, Path=Text, Converter={StaticResource CustomFormatConverter}}"
+                               FontAttributes="Bold" />
+                        <Label Grid.Row="2" Text="Precision:" VerticalOptions="Center" />
+                        <Label Grid.Row="2" Grid.Column="1"
+                               Text="{Binding Source={x:Reference TestValueEntry}, Path=Text, Converter={StaticResource PrecisionConverter}}"
+                               FontAttributes="Bold" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+            <Frame BackgroundColor="#FFF8E1" Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="NumericEntryBehavior Test" FontAttributes="Bold" FontSize="16" />
+                    <Label Text="Focus and unfocus to see formatting" FontSize="11" TextColor="Gray" />
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                        <Label Text="Currency:" VerticalOptions="Center" />
+                        <Entry Grid.Column="1" Text="1234.56" Keyboard="Numeric">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="C2" />
+                            </Entry.Behaviors>
+                        </Entry>
+                        <Label Grid.Row="1" Text="Constrained:" VerticalOptions="Center" />
+                        <Entry Grid.Row="1" Grid.Column="1" Text="50" Keyboard="Numeric">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="N0" MinValue="0" MaxValue="100" AllowNegative="False" />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+            <Frame BackgroundColor="#E8EAF6" Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Attached Properties Test" FontAttributes="Bold" FontSize="16" />
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto" ColumnSpacing="10" RowSpacing="10">
+                        <Label Text="Currency:" VerticalOptions="Center" />
+                        <Entry Grid.Column="1" Text="9876.54" Keyboard="Numeric"
+                               aurora:NumericFormatting.Format="C2" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame BackgroundColor="#E1F5FE" Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Two-Way Binding with Converters" FontAttributes="Bold" FontSize="16" />
+                    <Label Text="Type values and see formatted output update in real-time" FontSize="11" TextColor="Gray" />
+
+                    <Grid ColumnDefinitions="Auto,*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="8">
+                        <!-- Headers -->
+                        <Label Text="Type" FontAttributes="Bold" FontSize="12" />
+                        <Label Grid.Column="1" Text="Input" FontAttributes="Bold" FontSize="12" HorizontalOptions="Center" />
+                        <Label Grid.Column="2" Text="Formatted" FontAttributes="Bold" FontSize="12" HorizontalOptions="Center" />
+
+                        <!-- Currency -->
+                        <Label Grid.Row="1" Text="Currency:" VerticalOptions="Center" />
+                        <Entry Grid.Row="1" Grid.Column="1" x:Name="CurrencyInput" Text="1234.56" Keyboard="Numeric" />
+                        <Label Grid.Row="1" Grid.Column="2"
+                               Text="{Binding Source={x:Reference CurrencyInput}, Path=Text, Converter={StaticResource CurrencyConverter}}"
+                               VerticalOptions="Center" FontAttributes="Bold" />
+
+                        <!-- Percent -->
+                        <Label Grid.Row="2" Text="Percent:" VerticalOptions="Center" />
+                        <Entry Grid.Row="2" Grid.Column="1" x:Name="PercentInput" Text="0.75" Keyboard="Numeric" />
+                        <Label Grid.Row="2" Grid.Column="2"
+                               Text="{Binding Source={x:Reference PercentInput}, Path=Text, Converter={StaticResource PercentConverter}}"
+                               VerticalOptions="Center" FontAttributes="Bold" />
+
+                        <!-- Decimal -->
+                        <Label Grid.Row="3" Text="Decimal:" VerticalOptions="Center" />
+                        <Entry Grid.Row="3" Grid.Column="1" x:Name="DecimalInput" Text="9876543.21" Keyboard="Numeric" />
+                        <Label Grid.Row="3" Grid.Column="2"
+                               Text="{Binding Source={x:Reference DecimalInput}, Path=Text, Converter={StaticResource DecimalConverter}}"
+                               VerticalOptions="Center" FontAttributes="Bold" />
+
+                        <!-- Custom Format -->
+                        <Label Grid.Row="4" Text="Custom:" VerticalOptions="Center" />
+                        <Entry Grid.Row="4" Grid.Column="1" x:Name="CustomInput" Text="5000" Keyboard="Numeric" />
+                        <Label Grid.Row="4" Grid.Column="2"
+                               Text="{Binding Source={x:Reference CustomInput}, Path=Text, Converter={StaticResource CustomFormatConverter}}"
+                               VerticalOptions="Center" FontAttributes="Bold" />
+
+                        <!-- Precision -->
+                        <Label Grid.Row="5" Text="Precision:" VerticalOptions="Center" />
+                        <Entry Grid.Row="5" Grid.Column="1" x:Name="PrecisionInput" Text="42.12345" Keyboard="Numeric" />
+                        <Label Grid.Row="5" Grid.Column="2"
+                               Text="{Binding Source={x:Reference PrecisionInput}, Path=Text, Converter={StaticResource PrecisionConverter}}"
+                               VerticalOptions="Center" FontAttributes="Bold" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame BackgroundColor="#F3E5F5" Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Formatted Entry Fields" FontAttributes="Bold" FontSize="16" />
+                    <Label Text="These entries format on text change using behaviors" FontSize="11" TextColor="Gray" />
+
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                        <Label Text="Price (C2):" VerticalOptions="Center" />
+                        <Entry Grid.Column="1" Text="99.99" Keyboard="Numeric" Placeholder="Enter price">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="C2" />
+                            </Entry.Behaviors>
+                        </Entry>
+
+                        <Label Grid.Row="1" Text="Discount (P1):" VerticalOptions="Center" />
+                        <Entry Grid.Row="1" Grid.Column="1" Text="0.15" Keyboard="Numeric" Placeholder="Enter discount">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="P1" />
+                            </Entry.Behaviors>
+                        </Entry>
+
+                        <Label Grid.Row="2" Text="Quantity (N0):" VerticalOptions="Center" />
+                        <Entry Grid.Row="2" Grid.Column="1" Text="100" Keyboard="Numeric" Placeholder="Enter quantity">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="N0" AllowDecimal="False" MinValue="1" MaxValue="9999" />
+                            </Entry.Behaviors>
+                        </Entry>
+
+                        <Label Grid.Row="3" Text="Score (0-100):" VerticalOptions="Center" />
+                        <Entry Grid.Row="3" Grid.Column="1" Text="85" Keyboard="Numeric" Placeholder="Enter score">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="N0" MinValue="0" MaxValue="100" AllowNegative="False" AllowDecimal="False" />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame BackgroundColor="#E0F7FA" Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Decimal Precision Control" FontAttributes="Bold" FontSize="16" />
+                    <Label Text="MaximumFractionDigits limits decimal places during input and in stored value" FontSize="11" TextColor="Gray" />
+
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                        <Label Text="Currency (2 decimals):" VerticalOptions="Center" />
+                        <Entry Grid.Column="1" Text="100.99" Keyboard="Numeric" Placeholder="Max 2 decimals">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="C2" MaximumFractionDigits="2" />
+                            </Entry.Behaviors>
+                        </Entry>
+
+                        <Label Grid.Row="1" Text="4 decimal places:" VerticalOptions="Center" />
+                        <Entry Grid.Row="1" Grid.Column="1" Text="3.1415" Keyboard="Numeric" Placeholder="Max 4 decimals">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="N4" MaximumFractionDigits="4" />
+                            </Entry.Behaviors>
+                        </Entry>
+
+                        <Label Grid.Row="2" Text="No decimals enforced:" VerticalOptions="Center" />
+                        <Entry Grid.Row="2" Grid.Column="1" Text="42" Keyboard="Numeric" Placeholder="No decimals allowed">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="N0" MaximumFractionDigits="0" AllowDecimal="False" />
+                            </Entry.Behaviors>
+                        </Entry>
+
+                        <Label Grid.Row="3" Text="Round up (Ceiling):" VerticalOptions="Center" />
+                        <Entry Grid.Row="3" Grid.Column="1" Text="10.001" Keyboard="Numeric" Placeholder="Rounds up">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="N2" MaximumFractionDigits="2" RoundingMode="Ceiling" />
+                            </Entry.Behaviors>
+                        </Entry>
+
+                        <Label Grid.Row="4" Text="Delayed enforcement:" VerticalOptions="Center" />
+                        <Entry Grid.Row="4" Grid.Column="1" Text="5.12345" Keyboard="Numeric" Placeholder="Type freely, rounds on unfocus">
+                            <Entry.Behaviors>
+                                <aurora:NumericEntryBehavior Format="N2" MaximumFractionDigits="2" EnforceMaxFractionDigitsDuringInput="False" />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame BackgroundColor="#FCE4EC" Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Edge Cases" FontAttributes="Bold" FontSize="16" />
+                    <Button Text="Test Null Value" Clicked="OnTestNullClicked" />
+                    <Button Text="Test Large Number" Clicked="OnTestLargeNumberClicked" />
+                    <Button Text="Test Negative Number" Clicked="OnTestNegativeClicked" />
+                    <Label x:Name="EdgeCaseResultLabel"
+                           Text="Click a button to test edge cases"
+                           FontSize="12"
+                           TextColor="Gray"
+                           HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

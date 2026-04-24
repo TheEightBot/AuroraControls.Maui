@@ -4,7 +4,7 @@ using UIKit;
 
 namespace AuroraControls;
 
-public class ShowKeyboardDoneButtonEffect : PlatformEffect
+public class MacCatalystShowKeyboardDoneButtonEffect : PlatformEffect
 {
     protected override void OnAttached()
     {
