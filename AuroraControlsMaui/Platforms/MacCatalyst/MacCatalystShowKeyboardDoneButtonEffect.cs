@@ -1,35 +1,49 @@
-using System.Drawing;
 using Microsoft.Maui.Controls.Platform;
 using UIKit;
 
 namespace AuroraControls;
 
+[Obsolete("Use KeyboardToolbarEffect with KeyboardToolbar attached properties instead. See docs/keyboard-toolbar.md for migration guidance.")]
 public class MacCatalystShowKeyboardDoneButtonEffect : PlatformEffect
 {
     protected override void OnAttached()
     {
         var textField = this.Control as UITextField;
 
-        if (textField == null && textField.InputAccessoryView != null)
+        // Fixed: was `&&` (would NullReferenceException); now `||` correctly guards both conditions
+        if (textField == null || textField.InputAccessoryView != null)
         {
             return;
         }
 
-        var width = (float)UIScreen.MainScreen.Bounds.Width;
-        var toolbar = new UIToolbar(new RectangleF(0, 0, width, 44)) { BarStyle = UIBarStyle.Default, Translucent = true };
-        var spacer = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
-        var doneButton = new UIBarButtonItem(UIBarButtonSystemItem.Done, (o, a) => textField.ResignFirstResponder());
+        var accessoryView = new Platforms.MacCatalyst.AuroraKeyboardAccessoryView();
+        accessoryView.Configure(
+            KeyboardToolbarOptions.Default.DefaultButtonStyle,
+            KeyboardToolbarOptions.Default.DefaultTitle,
+            KeyboardToolbarOptions.Default.DefaultTitleColor,
+            KeyboardToolbarOptions.Default.DefaultBackgroundColor,
+            KeyboardToolbarOptions.Default.DefaultFontFamily,
+            KeyboardToolbarOptions.Default.DefaultFontSize,
+            KeyboardToolbarOptions.Default.DefaultHeight);
 
-        toolbar.SetItems(new[] { spacer, doneButton }, false);
+        var weakField = new WeakReference<UITextField>(textField);
+        accessoryView.DoneAction = () =>
+        {
+            if (weakField.TryGetTarget(out var tf))
+            {
+                tf.ResignFirstResponder();
+            }
+        };
 
-        textField.InputAccessoryView = toolbar;
+        textField.InputAccessoryView = accessoryView;
     }
 
     protected override void OnDetached()
     {
         var textField = this.Control as UITextField;
 
-        if (textField == null && textField.InputAccessoryView != null)
+        // Fixed: was `&&` (same bug); now `||`
+        if (textField == null || textField.InputAccessoryView == null)
         {
             return;
         }

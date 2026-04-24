@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:aurora="http://auroracontrols.maui/controls"
+             xmlns:ap="clr-namespace:AuroraControls.AttachedProperties;assembly=AuroraControlsMaui"
+             x:Class="AuroraControls.TestApp.KeyboardToolbarTestPage"
+             Title="Keyboard Toolbar Test">
+    <ScrollView>
+        <VerticalStackLayout Spacing="24" Padding="20">
+
+            <Label Text="Keyboard Toolbar"
+                   FontSize="Title"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <Label Text="iOS / macOS only. Tap each Entry or Editor to show the keyboard and its custom accessory bar."
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   TextColor="Gray" />
+
+            <!-- ─── A: Default Text style ──────────────────────────────────── -->
+            <Frame BorderColor="LightGray" CornerRadius="8" Padding="12">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="A — Default Text Style (Entry)"
+                           FontAttributes="Bold" />
+                    <Label Text="Shows 'Done' button with default title and system tint." TextColor="Gray" FontSize="Small" />
+                    <Entry Placeholder="Tap to open keyboard"
+                           Text="{Binding EntryText}"
+                           ap:KeyboardToolbar.Show="True" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- ─── B: Default Text style on Editor ───────────────────────── -->
+            <Frame BorderColor="LightGray" CornerRadius="8" Padding="12">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="B — Default Text Style (Editor)"
+                           FontAttributes="Bold" />
+                    <Label Text="Multi-line input; same 'Done' button." TextColor="Gray" FontSize="Small" />
+                    <Editor Placeholder="Tap to open keyboard"
+                            Text="{Binding EditorText}"
+                            MinimumHeightRequest="80"
+                            ap:KeyboardToolbar.Show="True" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- ─── C: Custom title and color ─────────────────────────────── -->
+            <Frame BorderColor="LightGray" CornerRadius="8" Padding="12">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="C — Custom Title &amp; Color"
+                           FontAttributes="Bold" />
+                    <Label Text="Title: 'Close' | Color: OrangeRed | FontSize: 17" TextColor="Gray" FontSize="Small" />
+                    <Entry Placeholder="Custom styled done button"
+                           Text="{Binding CustomEntry}"
+                           ap:KeyboardToolbar.Show="True"
+                           ap:KeyboardToolbar.Title="Close"
+                           ap:KeyboardToolbar.TitleColor="OrangeRed"
+                           ap:KeyboardToolbar.ToolbarFontSize="17" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- ─── D: Custom background color ────────────────────────────── -->
+            <Frame BorderColor="LightGray" CornerRadius="8" Padding="12">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="D — Custom Background Color"
+                           FontAttributes="Bold" />
+                    <Label Text="Dark toolbar background with white title." TextColor="Gray" FontSize="Small" />
+                    <Entry Placeholder="Dark accessory bar"
+                           Text="{Binding DarkEntry}"
+                           ap:KeyboardToolbar.Show="True"
+                           ap:KeyboardToolbar.Title="Dismiss"
+                           ap:KeyboardToolbar.TitleColor="White"
+                           ap:KeyboardToolbar.ToolbarBackgroundColor="#CC333333" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- ─── E: SystemCheckmark style ──────────────────────────────── -->
+            <Frame BorderColor="LightGray" CornerRadius="8" Padding="12">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="E — SystemCheckmark Style (iOS 26+)"
+                           FontAttributes="Bold" />
+                    <Label Text="Uses UIBarButtonSystemItem.Done inside an unconstrained UIToolbar. Not clipped on iOS 26." TextColor="Gray" FontSize="Small" />
+                    <Entry Placeholder="System checkmark style"
+                           Text="{Binding SystemEntry}"
+                           ap:KeyboardToolbar.Show="True"
+                           ap:KeyboardToolbar.ButtonStyle="SystemCheckmark" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- ─── F: Fixed height ────────────────────────────────────────── -->
+            <Frame BorderColor="LightGray" CornerRadius="8" Padding="12">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="F — Fixed Height (64 pt)"
+                           FontAttributes="Bold" />
+                    <Label Text="Toolbar is pinned to 64 pt tall — demonstrates explicit height override." TextColor="Gray" FontSize="Small" />
+                    <Entry Placeholder="Tall toolbar"
+                           Text="{Binding TallEntry}"
+                           ap:KeyboardToolbar.Show="True"
+                           ap:KeyboardToolbar.ToolbarHeight="64"
+                           ap:KeyboardToolbar.Title="Done ✓" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- ─── G: IsEnabled = false (should NOT show toolbar) ────────── -->
+            <Frame BorderColor="LightGray" CornerRadius="8" Padding="12">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="G — IsEnabled = False"
+                           FontAttributes="Bold" />
+                    <Label Text="Toolbar must NOT appear when the control is disabled." TextColor="Gray" FontSize="Small" />
+                    <Entry Placeholder="Disabled — no toolbar"
+                           IsEnabled="False"
+                           ap:KeyboardToolbar.Show="True" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- ─── H: IsReadOnly = true (should NOT show toolbar) ────────── -->
+            <Frame BorderColor="LightGray" CornerRadius="8" Padding="12">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="H — IsReadOnly = True"
+                           FontAttributes="Bold" />
+                    <Label Text="Toolbar must NOT appear when the control is read-only." TextColor="Gray" FontSize="Small" />
+                    <Entry Text="Read-only text"
+                           IsReadOnly="True"
+                           ap:KeyboardToolbar.Show="True" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- ─── I: Dynamic toggle ─────────────────────────────────────── -->
+            <Frame BorderColor="LightGray" CornerRadius="8" Padding="12">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="I — Dynamic Toggle (Show on/off)"
+                           FontAttributes="Bold" />
+                    <Label Text="Tap the toggle to add/remove the toolbar at runtime." TextColor="Gray" FontSize="Small" />
+                    <HorizontalStackLayout Spacing="12">
+                        <Label Text="Show Toolbar:" VerticalOptions="Center" />
+                        <Switch IsToggled="{Binding ToggleToolbarShown}" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    <Entry Placeholder="Toggle the switch then tap here"
+                           ap:KeyboardToolbar.Show="{Binding ToggleToolbarShown}"
+                           ap:KeyboardToolbar.Title="Done!" />
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

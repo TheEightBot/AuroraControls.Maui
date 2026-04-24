@@ -213,6 +213,10 @@ public class MainPage : ReactiveContentPage<TestRxViewModel>
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new ShowKeyboardDoneButtonEffectTestPage())),
 
+                            new Button { Text = "View Keyboard Toolbar Test", }
+                                .BindClicked(async () =>
+                                    await this.Navigation.PushAsync(new KeyboardToolbarTestPage())),
+
                             new Button { Text = "Grid Image Page", }
                                 .BindClicked(async () =>
                                     await this.Navigation.PushAsync(new GridImagePage())),
