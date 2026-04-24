@@ -1,3 +1,4 @@
+using Microsoft.Maui;
 using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using UIKit;
@@ -13,6 +14,9 @@ public partial class CalendarPickerHandler : DatePickerHandler, IDisposable
         new(ViewMapper)
         {
             [nameof(CalendarPicker.Date)] = MapDate,
+            [nameof(CalendarPicker.FontSize)] = MapFontSize,
+            [nameof(CalendarPicker.FontFamily)] = MapFontFamily,
+            [nameof(CalendarPicker.FontAttributes)] = MapFontAttributes,
         };
 
     public CalendarPickerHandler()
@@ -88,6 +92,77 @@ public partial class CalendarPickerHandler : DatePickerHandler, IDisposable
     }
 
     public static void MapDate(CalendarPickerHandler handler, CalendarPicker view) => handler.TryShowEmptyState();
+
+    public static void MapFontSize(CalendarPickerHandler handler, CalendarPicker view)
+    {
+        if (handler.PlatformView != null)
+        {
+            var font = GetUIFont(view);
+            handler.PlatformView.Font = font;
+        }
+    }
+
+    public static void MapFontFamily(CalendarPickerHandler handler, CalendarPicker view)
+    {
+        if (handler.PlatformView != null)
+        {
+            var font = GetUIFont(view);
+            handler.PlatformView.Font = font;
+        }
+    }
+
+    public static void MapFontAttributes(CalendarPickerHandler handler, CalendarPicker view)
+    {
+        if (handler.PlatformView != null)
+        {
+            var font = GetUIFont(view);
+            handler.PlatformView.Font = font;
+        }
+    }
+
+    private static UIKit.UIFont GetUIFont(CalendarPicker view)
+    {
+        var fontSize = (nfloat)view.FontSize;
+        var fontFamily = view.FontFamily;
+        var fontAttributes = view.FontAttributes;
+
+        if (string.IsNullOrEmpty(fontFamily))
+        {
+            if (fontAttributes == FontAttributes.Bold)
+            {
+                return UIKit.UIFont.BoldSystemFontOfSize(fontSize);
+            }
+            else if (fontAttributes == FontAttributes.Italic)
+            {
+                return UIKit.UIFont.ItalicSystemFontOfSize(fontSize);
+            }
+            else
+            {
+                return UIKit.UIFont.SystemFontOfSize(fontSize);
+            }
+        }
+        else
+        {
+            var font = UIKit.UIFont.FromName(fontFamily, fontSize);
+            if (font != null)
+            {
+                if (fontAttributes == FontAttributes.Bold)
+                {
+                    var descriptor = font.FontDescriptor.CreateWithTraits(UIKit.UIFontDescriptorSymbolicTraits.Bold);
+                    font = UIKit.UIFont.FromDescriptor(descriptor, fontSize);
+                }
+                else if (fontAttributes == FontAttributes.Italic)
+                {
+                    var descriptor = font.FontDescriptor.CreateWithTraits(UIKit.UIFontDescriptorSymbolicTraits.Italic);
+                    font = UIKit.UIFont.FromDescriptor(descriptor, fontSize);
+                }
+
+                return font;
+            }
+
+            return UIKit.UIFont.SystemFontOfSize(fontSize);
+        }
+    }
 
     private void OnDatePickerValueChanged(object sender, EventArgs e)
     {
