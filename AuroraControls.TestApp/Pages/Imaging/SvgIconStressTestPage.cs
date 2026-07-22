@@ -48,6 +48,20 @@ public class SvgIconStressTestPage : ContentPage
         var gcButton = new Button { Text = "Force GC" };
         gcButton.Clicked += (_, _) => ForceGc();
 
+        var shellButton = new Button { Text = "Open Shell Tab Stress" };
+        shellButton.Clicked += (_, _) =>
+        {
+            var window = Application.Current?.Windows.FirstOrDefault();
+
+            if (window is null)
+            {
+                return;
+            }
+
+            var originalPage = window.Page;
+            window.Page = new SvgShellTabStressShell(() => window.Page = originalPage);
+        };
+
         _cycleTabsSwitch = new Switch { IsToggled = true };
 
         var iconGrid = BuildIconGrid();
@@ -68,6 +82,7 @@ public class SvgIconStressTestPage : ContentPage
                     pushOnceButton,
                     checkButton,
                     gcButton,
+                    shellButton,
                     new HorizontalStackLayout
                     {
                         Spacing = 8,
