@@ -6,11 +6,11 @@ using UIKit;
 namespace AuroraControls.Platforms.MacCatalyst;
 
 /// <summary>
-/// Custom keyboard accessory view that replaces MAUI's fixed-height UIToolbar.
+/// Custom keyboard accessory view that replaces MAUI's fixed-height UIToolbar on macOS Catalyst.
 /// Supports two button styles:
 /// <list type="bullet">
 ///   <item><see cref="KeyboardToolbarDoneButtonStyle.Text"/> — a <see cref="UIButton"/> with configurable title, color, and font.</item>
-///   <item><see cref="KeyboardToolbarDoneButtonStyle.SystemCheckmark"/> — a <see cref="UIToolbar"/> pinned inside an unconstrained outer view; not clipped on macOS Catalyst.</item>
+///   <item><see cref="KeyboardToolbarDoneButtonStyle.SystemCheckmark"/> — a <see cref="UIToolbar"/> pinned inside an unconstrained outer view; not clipped on iOS/macOS 26+.</item>
 /// </list>
 /// </summary>
 internal sealed class AuroraKeyboardAccessoryView : UIView
@@ -19,6 +19,7 @@ internal sealed class AuroraKeyboardAccessoryView : UIView
     private UIToolbar? _systemToolbar;
     private NSObject? _fontSizeObserver;
     private nfloat _fixedHeight;
+    private NSLayoutConstraint? _heightConstraint;
 
     /// <summary>Gets or sets the action invoked when the Done button is tapped.</summary>
     public Action? DoneAction { get; set; }
@@ -27,7 +28,7 @@ internal sealed class AuroraKeyboardAccessoryView : UIView
         : base(CGRect.Empty)
     {
         TranslatesAutoresizingMaskIntoConstraints = false;
-        AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
+        ClipsToBounds = false;
     }
 
     /// <summary>
@@ -53,9 +54,16 @@ internal sealed class AuroraKeyboardAccessoryView : UIView
         _fontSizeObserver = null;
         _fixedHeight = height > 0 ? (nfloat)height : 0;
 
+        // Deactivate the previous self-height constraint before adding a new one.
+        // Without this, every Configure() call stacks constraints and AutoLayout conflicts.
+        _heightConstraint?.Active = false;
+        _heightConstraint = null;
+
+        // Default to transparent so the button floats above the keyboard's rounded corners
+        // without drawing a harsh straight-edged background bar.
         BackgroundColor = backgroundColor != null
             ? backgroundColor.ToPlatform()
-            : UIColor.SystemBackground;
+            : UIColor.Clear;
 
         if (style == KeyboardToolbarDoneButtonStyle.SystemCheckmark)
         {
@@ -100,18 +108,14 @@ internal sealed class AuroraKeyboardAccessoryView : UIView
 
         if (_fixedHeight <= 0)
         {
-            NSLayoutConstraint.ActivateConstraints(new[]
-            {
-                HeightAnchor.ConstraintGreaterThanOrEqualTo(60),
-            });
+            _heightConstraint = HeightAnchor.ConstraintGreaterThanOrEqualTo(60);
         }
         else
         {
-            NSLayoutConstraint.ActivateConstraints(new[]
-            {
-                HeightAnchor.ConstraintEqualTo(_fixedHeight),
-            });
+            _heightConstraint = HeightAnchor.ConstraintEqualTo(_fixedHeight);
         }
+
+        _heightConstraint.Active = true;
     }
 
     private static void UpdateTextButtonColor(UIButton button, Color? titleColor)
@@ -148,6 +152,7 @@ internal sealed class AuroraKeyboardAccessoryView : UIView
         _systemToolbar.TranslatesAutoresizingMaskIntoConstraints = false;
         _systemToolbar.BarStyle = UIBarStyle.Default;
         _systemToolbar.Translucent = true;
+        _systemToolbar.ClipsToBounds = false;
 
         var spacer = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
         var doneItem = new UIBarButtonItem(UIBarButtonSystemItem.Done, (_, _) => DoneAction?.Invoke());
@@ -155,18 +160,27 @@ internal sealed class AuroraKeyboardAccessoryView : UIView
 
         AddSubview(_systemToolbar);
 
+        // Allow the outer view to grow beyond the UIToolbar's own intrinsic height so that
+        // the larger circular Done button on iOS/macOS 26 is not clipped at the bottom.
         NSLayoutConstraint.ActivateConstraints(new[]
         {
             _systemToolbar.TopAnchor.ConstraintEqualTo(TopAnchor),
             _systemToolbar.LeadingAnchor.ConstraintEqualTo(LeadingAnchor),
             _systemToolbar.TrailingAnchor.ConstraintEqualTo(TrailingAnchor),
-            _systemToolbar.BottomAnchor.ConstraintEqualTo(BottomAnchor),
+            BottomAnchor.ConstraintGreaterThanOrEqualTo(_systemToolbar.BottomAnchor),
         });
 
         if (_fixedHeight > 0)
         {
-            HeightAnchor.ConstraintEqualTo(_fixedHeight).Active = true;
+            _heightConstraint = HeightAnchor.ConstraintEqualTo(_fixedHeight);
         }
+        else
+        {
+            // 56 pt is the minimum needed to show the iOS/macOS 26 circular Done button without clipping.
+            _heightConstraint = HeightAnchor.ConstraintGreaterThanOrEqualTo(56);
+        }
+
+        _heightConstraint.Active = true;
     }
 
     /// <inheritdoc/>
@@ -182,7 +196,9 @@ internal sealed class AuroraKeyboardAccessoryView : UIView
             if (_systemToolbar != null)
             {
                 var h = _systemToolbar.IntrinsicContentSize.Height;
-                return new CGSize(UIView.NoIntrinsicMetric, h > 0 ? h : 44);
+
+                // iOS/macOS 26 circular Done button needs at least 56 pt; older versions are fine with this too.
+                return new CGSize(UIView.NoIntrinsicMetric, h < 56 ? (nfloat)56 : h);
             }
 
             nfloat buttonHeight = 44;
@@ -193,6 +209,17 @@ internal sealed class AuroraKeyboardAccessoryView : UIView
 
             return new CGSize(UIView.NoIntrinsicMetric, buttonHeight + 16);
         }
+    }
+
+    /// <inheritdoc/>
+    public override UIView? HitTest(CGPoint point, UIEvent? uiEvent)
+    {
+        var hit = base.HitTest(point, uiEvent);
+
+        // Pass touches through the toolbar background so users can interact with content that
+        // may be partially obscured by the accessory bar. Only subview hits (the Done button)
+        // are returned; hits on this view itself fall through to views below.
+        return hit == this ? null : hit;
     }
 
     /// <summary>Updates the title text of the Done button.</summary>
@@ -211,13 +238,19 @@ internal sealed class AuroraKeyboardAccessoryView : UIView
         UpdateTextButtonColor(_textButton!, titleColor);
 
     /// <summary>Updates the font of the Done button label.</summary>
-    public void UpdateFont(string? fontFamily, double fontSize) =>
+    public void UpdateFont(string? fontFamily, double fontSize)
+    {
         UpdateTextButtonFont(_textButton!, fontFamily, fontSize);
+
+        // Re-evaluate auto height since a larger font requires more space.
+        InvalidateIntrinsicContentSize();
+        SetNeedsLayout();
+    }
 
     /// <summary>Updates the background color of the accessory view.</summary>
     public void UpdateBackgroundColor(Color? backgroundColor)
     {
-        BackgroundColor = backgroundColor?.ToPlatform() ?? UIColor.SystemBackground;
+        BackgroundColor = backgroundColor?.ToPlatform() ?? UIColor.Clear;
     }
 
     /// <inheritdoc/>
@@ -227,6 +260,8 @@ internal sealed class AuroraKeyboardAccessoryView : UIView
         {
             _fontSizeObserver?.Dispose();
             _fontSizeObserver = null;
+            _heightConstraint?.Dispose();
+            _heightConstraint = null;
             _textButton?.Dispose();
             _textButton = null;
             _systemToolbar?.Dispose();

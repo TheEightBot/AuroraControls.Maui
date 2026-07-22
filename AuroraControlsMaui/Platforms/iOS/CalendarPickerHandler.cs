@@ -17,6 +17,7 @@ public partial class CalendarPickerHandler : DatePickerHandler, IDisposable
             [nameof(CalendarPicker.FontSize)] = MapFontSize,
             [nameof(CalendarPicker.FontFamily)] = MapFontFamily,
             [nameof(CalendarPicker.FontAttributes)] = MapFontAttributes,
+            [nameof(CalendarPicker.ClearButtonVisibility)] = MapClearButtonVisibility,
         };
 
     public CalendarPickerHandler()
@@ -69,10 +70,15 @@ public partial class CalendarPickerHandler : DatePickerHandler, IDisposable
 
             tb.Items = [_clearButton, new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace), _doneButton];
         }
+
+        // The native clear ("X") button empties the text; mirror that back to a null Date.
+        platformView.EditingChanged += OnPlatformViewEditingChanged;
     }
 
     protected override void DisconnectHandler(MauiDatePicker platformView)
     {
+        platformView.EditingChanged -= OnPlatformViewEditingChanged;
+
         if (platformView.InputView is UIDatePicker dp)
         {
             dp.ValueChanged -= OnDatePickerValueChanged;
@@ -92,6 +98,19 @@ public partial class CalendarPickerHandler : DatePickerHandler, IDisposable
     }
 
     public static void MapDate(CalendarPickerHandler handler, CalendarPicker view) => handler.TryShowEmptyState();
+
+    public static void MapClearButtonVisibility(CalendarPickerHandler handler, CalendarPicker view)
+    {
+        if (handler.PlatformView is null)
+        {
+            return;
+        }
+
+        handler.PlatformView.ClearButtonMode =
+            view.ClearButtonVisibility == ClearButtonVisibility.WhileEditing
+                ? UITextFieldViewMode.WhileEditing
+                : UITextFieldViewMode.Never;
+    }
 
     public static void MapFontSize(CalendarPickerHandler handler, CalendarPicker view)
     {
@@ -161,6 +180,16 @@ public partial class CalendarPickerHandler : DatePickerHandler, IDisposable
             }
 
             return UIKit.UIFont.SystemFontOfSize(fontSize);
+        }
+    }
+
+    private void OnPlatformViewEditingChanged(object? sender, EventArgs e)
+    {
+        // The field is read-only (the date is chosen via the wheel), so an empty-text edit can only
+        // originate from the native clear ("X") button. Programmatic text updates do not raise EditingChanged.
+        if (this.VirtualView is CalendarPicker calendarPicker && string.IsNullOrEmpty(this.PlatformView?.Text))
+        {
+            calendarPicker.ClearValue();
         }
     }
 

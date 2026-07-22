@@ -39,7 +39,8 @@ public sealed class KeyboardToolbarOptions
 
     /// <summary>
     /// Gets or sets the default background color for the accessory view.
-    /// <see langword="null"/> uses a translucent system material.
+    /// <see langword="null"/> (the default) uses a transparent background so the button floats
+    /// above the keyboard without drawing a straight-edged bar across the keyboard's rounded corners.
     /// </summary>
     public Color? DefaultBackgroundColor { get; set; }
 

@@ -81,6 +81,7 @@
                                                        WidthRequest="200"
                                                        HorizontalOptions="Center"
                                                        UpdateMode="WhenDone"
+                                                       ClearButtonVisibility="WhileEditing"
                                                        DateSelected="OnDateSelected"
                                                        FontSize="16"
                                                        FontAttributes="Bold"

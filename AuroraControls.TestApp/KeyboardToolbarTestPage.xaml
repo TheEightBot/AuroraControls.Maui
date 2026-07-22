@@ -1,144 +1,200 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:aurora="http://auroracontrols.maui/controls"
-             xmlns:ap="clr-namespace:AuroraControls.AttachedProperties;assembly=AuroraControlsMaui"
-             x:Class="AuroraControls.TestApp.KeyboardToolbarTestPage"
-             Title="Keyboard Toolbar Test">
+<ContentPage
+    x:Class="AuroraControls.TestApp.KeyboardToolbarTestPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ap="clr-namespace:AuroraControls.AttachedProperties;assembly=AuroraControlsMaui"
+    Title="Keyboard Toolbar">
+
     <ScrollView>
-        <VerticalStackLayout Spacing="24" Padding="20">
+        <VerticalStackLayout Padding="16" Spacing="16">
 
-            <Label Text="Keyboard Toolbar"
-                   FontSize="Title"
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center" />
+            <!-- STATUS INDICATOR -->
+            <Border
+                BackgroundColor="{Binding StatusBackground}"
+                Padding="12,8"
+                StrokeShape="RoundRectangle 10">
+                <Label
+                    Text="{Binding StatusText}"
+                    TextColor="{Binding StatusColor}"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    HorizontalTextAlignment="Center" />
+            </Border>
 
-            <Label Text="iOS / macOS only. Tap each Entry or Editor to show the keyboard and its custom accessory bar."
-                   HorizontalOptions="Center"
-                   HorizontalTextAlignment="Center"
-                   TextColor="Gray" />
+            <!-- CONFIGURATION PANEL -->
+            <Border Padding="16" StrokeShape="RoundRectangle 12">
+                <VerticalStackLayout Spacing="12">
 
-            <!-- ─── A: Default Text style ──────────────────────────────────── -->
-            <Frame BorderColor="LightGray" CornerRadius="8" Padding="12">
-                <VerticalStackLayout Spacing="8">
-                    <Label Text="A — Default Text Style (Entry)"
-                           FontAttributes="Bold" />
-                    <Label Text="Shows 'Done' button with default title and system tint." TextColor="Gray" FontSize="Small" />
-                    <Entry Placeholder="Tap to open keyboard"
-                           Text="{Binding EntryText}"
-                           ap:KeyboardToolbar.Show="True" />
+                    <Label Text="Live Configuration" FontAttributes="Bold" FontSize="15" />
+
+                    <!-- Show Toggle -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="Show Keyboard Toolbar" VerticalOptions="Center" FontSize="14" />
+                        <Switch Grid.Column="1" IsToggled="{Binding ShowToolbar}" />
+                    </Grid>
+
+                    <!-- Button Style -->
+                    <Label Text="Button Style" FontSize="13" TextColor="Gray" />
+                    <Picker ItemsSource="{Binding ButtonStyleOptions}" SelectedIndex="{Binding ButtonStyleIndex}" Title="Select button style" />
+
+                    <!-- Done Title -->
+                    <Label Text="Button Title  (Text style only)" FontSize="13" TextColor="Gray" />
+                    <Entry Text="{Binding DoneTitle}" Placeholder="e.g. Done, Close, Dismiss" ClearButtonVisibility="WhileEditing" />
+
+                    <!-- Title Color -->
+                    <Label Text="Title Color  (Text style only)" FontSize="13" TextColor="Gray" />
+                    <Picker ItemsSource="{Binding TitleColorOptions}" SelectedIndex="{Binding TitleColorIndex}" Title="Select title color" />
+
+                    <!-- Background Color -->
+                    <Label Text="Toolbar Background Color" FontSize="13" TextColor="Gray" />
+                    <Picker ItemsSource="{Binding BackgroundColorOptions}" SelectedIndex="{Binding BackgroundColorIndex}" Title="Select background color" />
+
+                    <!-- Height -->
+                    <Label Text="{Binding HeightLabel}" FontSize="13" TextColor="Gray" />
+                    <Slider Value="{Binding ToolbarHeight}" Minimum="0" Maximum="120" />
+
+                    <!-- Font Size -->
+                    <Label Text="{Binding FontSizeLabel}" FontSize="13" TextColor="Gray" />
+                    <Slider Value="{Binding LiveFontSize}" Minimum="0" Maximum="36" />
+
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
 
-            <!-- ─── B: Default Text style on Editor ───────────────────────── -->
-            <Frame BorderColor="LightGray" CornerRadius="8" Padding="12">
+            <!-- LIVE TEST — Entry -->
+            <Border Padding="16" StrokeShape="RoundRectangle 12">
                 <VerticalStackLayout Spacing="8">
-                    <Label Text="B — Default Text Style (Editor)"
-                           FontAttributes="Bold" />
-                    <Label Text="Multi-line input; same 'Done' button." TextColor="Gray" FontSize="Small" />
-                    <Editor Placeholder="Tap to open keyboard"
-                            Text="{Binding EditorText}"
-                            MinimumHeightRequest="80"
-                            ap:KeyboardToolbar.Show="True" />
+                    <Label Text="Live Test · Entry" FontAttributes="Bold" FontSize="14" />
+                    <Label Text="Adjust config above, then tap this field to see the toolbar." FontSize="12" TextColor="Gray" />
+                    <Entry
+                        Text="{Binding LiveEntryText}"
+                        Placeholder="Tap me to see the toolbar"
+                        ap:KeyboardToolbar.Show="{Binding ShowToolbar}"
+                        ap:KeyboardToolbar.ButtonStyle="{Binding SelectedButtonStyle}"
+                        ap:KeyboardToolbar.Title="{Binding DoneTitle}"
+                        ap:KeyboardToolbar.TitleColor="{Binding SelectedTitleColor}"
+                        ap:KeyboardToolbar.BackgroundColor="{Binding SelectedBackgroundColor}"
+                        ap:KeyboardToolbar.Height="{Binding ToolbarHeight}"
+                        ap:KeyboardToolbar.FontSize="{Binding LiveFontSize}" />
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
 
-            <!-- ─── C: Custom title and color ─────────────────────────────── -->
-            <Frame BorderColor="LightGray" CornerRadius="8" Padding="12">
+            <!-- LIVE TEST — Editor -->
+            <Border Padding="16" StrokeShape="RoundRectangle 12">
                 <VerticalStackLayout Spacing="8">
-                    <Label Text="C — Custom Title &amp; Color"
-                           FontAttributes="Bold" />
-                    <Label Text="Title: 'Close' | Color: OrangeRed | FontSize: 17" TextColor="Gray" FontSize="Small" />
-                    <Entry Placeholder="Custom styled done button"
-                           Text="{Binding CustomEntry}"
+                    <Label Text="Live Test · Editor" FontAttributes="Bold" FontSize="14" />
+                    <Label Text="Multiline editor — also supports the toolbar." FontSize="12" TextColor="Gray" />
+                    <Editor
+                        Text="{Binding LiveEditorText}"
+                        Placeholder="Tap me to see the toolbar"
+                        HeightRequest="80"
+                        ap:KeyboardToolbar.Show="{Binding ShowToolbar}"
+                        ap:KeyboardToolbar.ButtonStyle="{Binding SelectedButtonStyle}"
+                        ap:KeyboardToolbar.Title="{Binding DoneTitle}"
+                        ap:KeyboardToolbar.TitleColor="{Binding SelectedTitleColor}"
+                        ap:KeyboardToolbar.BackgroundColor="{Binding SelectedBackgroundColor}"
+                        ap:KeyboardToolbar.Height="{Binding ToolbarHeight}"
+                        ap:KeyboardToolbar.FontSize="{Binding LiveFontSize}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- STATIC EXAMPLES -->
+            <Label Text="Static Examples  (effect always ON)" FontAttributes="Bold" FontSize="15" Margin="0,8,0,0" />
+
+            <!-- A: Orange "Done" — unmistakably custom (default MAUI bar is blue "Done") -->
+            <Border Padding="12" StrokeShape="RoundRectangle 10">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="A · Effect ON · Orange title 'Done' (custom)" FontSize="12" TextColor="Gray" />
+                    <Entry Placeholder="Tap to test"
+                           ap:KeyboardToolbar.Show="True"
+                           ap:KeyboardToolbar.TitleColor="Orange" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- B: Close / Red -->
+            <Border Padding="12" StrokeShape="RoundRectangle 10">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="B · title='Close' · Red" FontSize="12" TextColor="Gray" />
+                    <Entry Placeholder="Tap to test"
                            ap:KeyboardToolbar.Show="True"
                            ap:KeyboardToolbar.Title="Close"
-                           ap:KeyboardToolbar.TitleColor="OrangeRed"
-                           ap:KeyboardToolbar.ToolbarFontSize="17" />
+                           ap:KeyboardToolbar.TitleColor="Red" />
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
 
-            <!-- ─── D: Custom background color ────────────────────────────── -->
-            <Frame BorderColor="LightGray" CornerRadius="8" Padding="12">
-                <VerticalStackLayout Spacing="8">
-                    <Label Text="D — Custom Background Color"
-                           FontAttributes="Bold" />
-                    <Label Text="Dark toolbar background with white title." TextColor="Gray" FontSize="Small" />
-                    <Entry Placeholder="Dark accessory bar"
-                           Text="{Binding DarkEntry}"
+            <!-- C: Dismiss / Green / Teal bg -->
+            <Border Padding="12" StrokeShape="RoundRectangle 10">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="C · 'Dismiss' · Green · Teal background" FontSize="12" TextColor="Gray" />
+                    <Entry Placeholder="Tap to test"
                            ap:KeyboardToolbar.Show="True"
                            ap:KeyboardToolbar.Title="Dismiss"
-                           ap:KeyboardToolbar.TitleColor="White"
-                           ap:KeyboardToolbar.ToolbarBackgroundColor="#CC333333" />
+                           ap:KeyboardToolbar.TitleColor="Green"
+                           ap:KeyboardToolbar.BackgroundColor="Teal" />
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
 
-            <!-- ─── E: SystemCheckmark style ──────────────────────────────── -->
-            <Frame BorderColor="LightGray" CornerRadius="8" Padding="12">
-                <VerticalStackLayout Spacing="8">
-                    <Label Text="E — SystemCheckmark Style (iOS 26+)"
-                           FontAttributes="Bold" />
-                    <Label Text="Uses UIBarButtonSystemItem.Done inside an unconstrained UIToolbar. Not clipped on iOS 26." TextColor="Gray" FontSize="Small" />
-                    <Entry Placeholder="System checkmark style"
-                           Text="{Binding SystemEntry}"
+            <!-- D: SystemCheckmark -->
+            <Border Padding="12" StrokeShape="RoundRectangle 10">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="D · SystemCheckmark style (iOS 26 circular button)" FontSize="12" TextColor="Gray" />
+                    <Entry Placeholder="Tap to test"
                            ap:KeyboardToolbar.Show="True"
                            ap:KeyboardToolbar.ButtonStyle="SystemCheckmark" />
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
 
-            <!-- ─── F: Fixed height ────────────────────────────────────────── -->
-            <Frame BorderColor="LightGray" CornerRadius="8" Padding="12">
-                <VerticalStackLayout Spacing="8">
-                    <Label Text="F — Fixed Height (64 pt)"
-                           FontAttributes="Bold" />
-                    <Label Text="Toolbar is pinned to 64 pt tall — demonstrates explicit height override." TextColor="Gray" FontSize="Small" />
-                    <Entry Placeholder="Tall toolbar"
-                           Text="{Binding TallEntry}"
+            <!-- E: Fixed height 80 -->
+            <Border Padding="12" StrokeShape="RoundRectangle 10">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="E · Fixed Height=80" FontSize="12" TextColor="Gray" />
+                    <Entry Placeholder="Tap to test"
                            ap:KeyboardToolbar.Show="True"
-                           ap:KeyboardToolbar.ToolbarHeight="64"
-                           ap:KeyboardToolbar.Title="Done ✓" />
+                           ap:KeyboardToolbar.Height="80" />
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
 
-            <!-- ─── G: IsEnabled = false (should NOT show toolbar) ────────── -->
-            <Frame BorderColor="LightGray" CornerRadius="8" Padding="12">
-                <VerticalStackLayout Spacing="8">
-                    <Label Text="G — IsEnabled = False"
-                           FontAttributes="Bold" />
-                    <Label Text="Toolbar must NOT appear when the control is disabled." TextColor="Gray" FontSize="Small" />
-                    <Entry Placeholder="Disabled — no toolbar"
-                           IsEnabled="False"
-                           ap:KeyboardToolbar.Show="True" />
+            <!-- F: Large font -->
+            <Border Padding="12" StrokeShape="RoundRectangle 10">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="F · FontSize=22" FontSize="12" TextColor="Gray" />
+                    <Entry Placeholder="Tap to test"
+                           ap:KeyboardToolbar.Show="True"
+                           ap:KeyboardToolbar.FontSize="22" />
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
 
-            <!-- ─── H: IsReadOnly = true (should NOT show toolbar) ────────── -->
-            <Frame BorderColor="LightGray" CornerRadius="8" Padding="12">
-                <VerticalStackLayout Spacing="8">
-                    <Label Text="H — IsReadOnly = True"
-                           FontAttributes="Bold" />
-                    <Label Text="Toolbar must NOT appear when the control is read-only." TextColor="Gray" FontSize="Small" />
-                    <Entry Text="Read-only text"
-                           IsReadOnly="True"
-                           ap:KeyboardToolbar.Show="True" />
+            <!-- G: Dark background / White title -->
+            <Border Padding="12" StrokeShape="RoundRectangle 10">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="G · Dark bg · White title" FontSize="12" TextColor="Gray" />
+                    <Entry Placeholder="Tap to test"
+                           ap:KeyboardToolbar.Show="True"
+                           ap:KeyboardToolbar.BackgroundColor="#CC222222"
+                           ap:KeyboardToolbar.TitleColor="White" />
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
 
-            <!-- ─── I: Dynamic toggle ─────────────────────────────────────── -->
-            <Frame BorderColor="LightGray" CornerRadius="8" Padding="12">
-                <VerticalStackLayout Spacing="8">
-                    <Label Text="I — Dynamic Toggle (Show on/off)"
-                           FontAttributes="Bold" />
-                    <Label Text="Tap the toggle to add/remove the toolbar at runtime." TextColor="Gray" FontSize="Small" />
-                    <HorizontalStackLayout Spacing="12">
-                        <Label Text="Show Toolbar:" VerticalOptions="Center" />
-                        <Switch IsToggled="{Binding ToggleToolbarShown}" VerticalOptions="Center" />
-                    </HorizontalStackLayout>
-                    <Entry Placeholder="Toggle the switch then tap here"
-                           ap:KeyboardToolbar.Show="{Binding ToggleToolbarShown}"
-                           ap:KeyboardToolbar.Title="Done!" />
+            <!-- H: Editor with Save -->
+            <Border Padding="12" StrokeShape="RoundRectangle 10">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="H · Editor · title='Save'" FontSize="12" TextColor="Gray" />
+                    <Editor Placeholder="Tap to test"
+                            HeightRequest="80"
+                            ap:KeyboardToolbar.Show="True"
+                            ap:KeyboardToolbar.Title="Save" />
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
+
+            <!-- I: Control — no effect -->
+            <Border Padding="12" StrokeShape="RoundRectangle 10">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="I · No toolbar (control group — effect OFF)" FontSize="12" TextColor="Gray" />
+                    <Entry Placeholder="No toolbar on this one" ap:KeyboardToolbar.Show="False" />
+                </VerticalStackLayout>
+            </Border>
+
+            <BoxView HeightRequest="32" Color="Transparent" />
 
         </VerticalStackLayout>
     </ScrollView>

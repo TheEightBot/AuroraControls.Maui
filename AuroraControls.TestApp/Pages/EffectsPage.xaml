@@ -110,6 +110,33 @@
                 </Grid>
             </Border>
 
+            <Border x:Name="KeyboardToolbarCard"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
+                    StrokeShape="RoundRectangle 12"
+                    Stroke="{AppThemeBinding Light={StaticResource Light.Border}, Dark={StaticResource Dark.Border}}"
+                    Padding="16">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnKeyboardToolbarTapped" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="4,*,Auto">
+                    <BoxView Color="{StaticResource Accent.Primary}" CornerRadius="2" WidthRequest="4" />
+                    <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
+                        <Label Text="Keyboard Toolbar"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextPrimary}, Dark={StaticResource Dark.TextPrimary}}"
+                               FontSize="16"
+                               FontAttributes="Bold" />
+                        <Label Text="Configurable accessory toolbar for inputs"
+                               TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                               FontSize="12" />
+                    </VerticalStackLayout>
+                    <Label Grid.Column="2"
+                           Text="→"
+                           TextColor="{AppThemeBinding Light={StaticResource Light.TextTertiary}, Dark={StaticResource Dark.TextTertiary}}"
+                           FontSize="18"
+                           VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
             <Border x:Name="SafeAreaCard"
                     BackgroundColor="{AppThemeBinding Light={StaticResource Light.Surface}, Dark={StaticResource Dark.Surface}}"
                     StrokeShape="RoundRectangle 12"

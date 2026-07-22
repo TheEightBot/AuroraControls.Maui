@@ -28,6 +28,27 @@ public class CalendarPicker : DatePicker
         set => SetValue(UpdateModeProperty, value);
     }
 
+    /// <summary>
+    /// The clear button visibility property.
+    /// </summary>
+    public static readonly BindableProperty ClearButtonVisibilityProperty =
+        BindableProperty.Create(
+            nameof(ClearButtonVisibility),
+            typeof(ClearButtonVisibility),
+            typeof(CalendarPicker),
+            ClearButtonVisibility.Never);
+
+    /// <summary>
+    /// Gets or sets when the inline clear ("X") button is shown, using the same
+    /// <see cref="Microsoft.Maui.ClearButtonVisibility"/> semantics as <c>Entry.ClearButtonVisibility</c>.
+    /// Tapping the button clears the date to <see langword="null"/>.
+    /// </summary>
+    public ClearButtonVisibility ClearButtonVisibility
+    {
+        get => (ClearButtonVisibility)GetValue(ClearButtonVisibilityProperty);
+        set => SetValue(ClearButtonVisibilityProperty, value);
+    }
+
     public new event EventHandler<DateChangedEventArgs> DateSelected;
 
     /// <summary>
@@ -69,6 +90,12 @@ public class CalendarPicker : DatePicker
             this.SetValue(DateProperty, value);
         }
     }
+
+    /// <summary>
+    /// Clears the selected date. This is the single source of truth for what "clear" means on a
+    /// <see cref="CalendarPicker"/> and is invoked by the platform handlers when the inline clear button is tapped.
+    /// </summary>
+    internal void ClearValue() => Date = null;
 
     /// <summary>
     /// Method that is called when the property that is specified by propertyName is changed.
