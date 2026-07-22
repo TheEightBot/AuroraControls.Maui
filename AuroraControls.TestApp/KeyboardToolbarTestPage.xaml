@@ -54,7 +54,7 @@
                            ap:KeyboardToolbar.Show="True"
                            ap:KeyboardToolbar.Title="Close"
                            ap:KeyboardToolbar.TitleColor="OrangeRed"
-                           ap:KeyboardToolbar.ToolbarFontSize="17" />
+                           ap:KeyboardToolbar.FontSize="17" />
                 </VerticalStackLayout>
             </Frame>
 
@@ -69,7 +69,7 @@
                            ap:KeyboardToolbar.Show="True"
                            ap:KeyboardToolbar.Title="Dismiss"
                            ap:KeyboardToolbar.TitleColor="White"
-                           ap:KeyboardToolbar.ToolbarBackgroundColor="#CC333333" />
+                           ap:KeyboardToolbar.BackgroundColor="#CC333333" />
                 </VerticalStackLayout>
             </Frame>
 
@@ -95,7 +95,7 @@
                     <Entry Placeholder="Tall toolbar"
                            Text="{Binding TallEntry}"
                            ap:KeyboardToolbar.Show="True"
-                           ap:KeyboardToolbar.ToolbarHeight="64"
+                           ap:KeyboardToolbar.Height="64"
                            ap:KeyboardToolbar.Title="Done ✓" />
                 </VerticalStackLayout>
             </Frame>
