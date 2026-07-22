@@ -56,6 +56,7 @@ public partial class ControlsListPage : ContentPage
         new ControlItem("Cutout Overlay", "Spotlight overlay effects", "🖼️ Images & Graphics", Color.FromArgb("#EC4899"), typeof(Imaging.CutoutOverlayDemoPage)),
         new ControlItem("Signature Pad", "Capture signatures", "🖼️ Images & Graphics", Color.FromArgb("#EF4444"), typeof(Imaging.SignaturePadDemoPage)),
         new ControlItem("Touch Draw Letters", "Draw letter input", "🖼️ Images & Graphics", Color.FromArgb("#14B8A6"), typeof(Imaging.TouchDrawLettersDemoPage)),
+        new ControlItem("SVG Icon Stress", "Repro harness for disappearing icons", "🖼️ Images & Graphics", Color.FromArgb("#EF4444"), typeof(Imaging.SvgIconStressTestPage)),
 
         // Gauges & Progress
         new ControlItem("Gauges & Progress", "Progress indicators and loaders", "📊 Gauges & Progress", Color.FromArgb("#8B5CF6"), typeof(Gauges.GaugesDemoPage)),
