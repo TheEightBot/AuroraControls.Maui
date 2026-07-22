@@ -28,19 +28,19 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         _platformScalingFactor = (float)PlatformInfo.ScalingFactor;
     }
 
-    public Task<Image> IconFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null, bool hardwareAcceleration = true) =>
-        IconFromSvg(svgName, new Size(squareSize, squareSize), additionalCacheKey, colorOverride, hardwareAcceleration);
+    public Task<Image> IconFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null) =>
+        IconFromSvg(svgName, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
 
-    public async Task<Image> IconFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null, bool hardwareAcceleration = true) =>
+    public async Task<Image> IconFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null) =>
         new()
         {
-            Source = await ImageSourceFromSvg(svgName, size, additionalCacheKey, colorOverride, hardwareAcceleration),
+            Source = await ImageSourceFromSvg(svgName, size, additionalCacheKey, colorOverride),
         };
 
-    public Task<ImageSource> ImageSourceFromRawSvg(string svgName, string svgValue, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null, bool hardwareAcceleration = true) =>
-        ImageSourceFromRawSvg(svgName, svgValue, new Size(squareSize, squareSize), additionalCacheKey, colorOverride, hardwareAcceleration);
+    public Task<ImageSource> ImageSourceFromRawSvg(string svgName, string svgValue, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null) =>
+        ImageSourceFromRawSvg(svgName, svgValue, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
 
-    public async Task<ImageSource> ImageSourceFromRawSvg(string svgName, string svgValue, Size size, string additionalCacheKey = "", Color? colorOverride = null, bool hardwareAcceleration = true)
+    public async Task<ImageSource> ImageSourceFromRawSvg(string svgName, string svgValue, Size size, string additionalCacheKey = "", Color? colorOverride = null)
     {
         try
         {
@@ -52,7 +52,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
             if (_resolvedIcons.TryGetValue(key, out string? resolvedIcon) && File.Exists(resolvedIcon))
             {
-                return GetPlatformImageSource(resolvedIcon, hardwareAcceleration, regenerate);
+                return GetPlatformImageSource(resolvedIcon, regenerate);
             }
 
             // The memoized file no longer exists (e.g. the OS trimmed the cache directory);
@@ -64,7 +64,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
             if (!string.IsNullOrEmpty(diskCachedImage))
             {
                 _resolvedIcons[key] = diskCachedImage;
-                return GetPlatformImageSource(diskCachedImage, hardwareAcceleration, regenerate);
+                return GetPlatformImageSource(diskCachedImage, regenerate);
             }
 
             await GenerateImageFromRaw(key, svgValue, size, colorOverride).ConfigureAwait(false);
@@ -73,7 +73,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
             _resolvedIcons[key] = diskCachedImage;
 
-            return GetPlatformImageSource(diskCachedImage, hardwareAcceleration, regenerate);
+            return GetPlatformImageSource(diskCachedImage, regenerate);
         }
         finally
         {
@@ -81,10 +81,10 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
     }
 
-    public Task<ImageSource> ImageSourceFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null, bool hardwareAcceleration = true) =>
-        ImageSourceFromSvg(svgName, new Size(squareSize, squareSize), additionalCacheKey, colorOverride, hardwareAcceleration);
+    public Task<ImageSource> ImageSourceFromSvg(string svgName, double squareSize = 22d, string additionalCacheKey = "", Color? colorOverride = null) =>
+        ImageSourceFromSvg(svgName, new Size(squareSize, squareSize), additionalCacheKey, colorOverride);
 
-    public async Task<ImageSource> ImageSourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null, bool hardwareAcceleration = true)
+    public async Task<ImageSource> ImageSourceFromSvg(string svgName, Size size, string additionalCacheKey = "", Color? colorOverride = null)
     {
         try
         {
@@ -96,7 +96,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
             if (_resolvedIcons.TryGetValue(key, out string? resolvedIcon) && File.Exists(resolvedIcon))
             {
-                return GetPlatformImageSource(resolvedIcon, hardwareAcceleration, regenerate);
+                return GetPlatformImageSource(resolvedIcon, regenerate);
             }
 
             // The memoized file no longer exists (e.g. the OS trimmed the cache directory);
@@ -108,7 +108,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
             if (!string.IsNullOrEmpty(diskCachedImage))
             {
                 _resolvedIcons[key] = diskCachedImage;
-                return GetPlatformImageSource(diskCachedImage, hardwareAcceleration, regenerate);
+                return GetPlatformImageSource(diskCachedImage, regenerate);
             }
 
             await GenerateImageFromEmbedded(key, svgName, size, colorOverride).ConfigureAwait(false);
@@ -117,7 +117,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
             _resolvedIcons[key] = diskCachedImage;
 
-            return GetPlatformImageSource(diskCachedImage, hardwareAcceleration, regenerate);
+            return GetPlatformImageSource(diskCachedImage, regenerate);
         }
         catch (Exception ex)
         {
@@ -131,11 +131,11 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
     }
 
-    private ImageSource GetPlatformImageSource(string? file = null, bool hardwareAcceleration = true, Func<Task<string?>>? regenerate = null)
+    private ImageSource GetPlatformImageSource(string? file = null, Func<Task<string?>>? regenerate = null)
     {
         if (DeviceInfo.Current.Platform == DevicePlatform.Android)
         {
-            return new NoCacheFileImageSource { File = file, HardwareAcceleration = hardwareAcceleration, Regenerate = regenerate };
+            return new NoCacheFileImageSource { File = file, Regenerate = regenerate };
         }
 
         return new FileImageSource { File = file };

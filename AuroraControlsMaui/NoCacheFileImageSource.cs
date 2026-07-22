@@ -4,20 +4,12 @@ internal class NoCacheFileImageSource : ImageSource, INoCacheFileImageSource
 {
     public static readonly BindableProperty FileProperty = BindableProperty.Create(nameof(File), typeof(string), typeof(NoCacheFileImageSource));
 
-    public static readonly BindableProperty HardwareAccelerationProperty = BindableProperty.Create(nameof(HardwareAcceleration), typeof(bool), typeof(NoCacheFileImageSource), defaultValue: true);
-
     public override bool IsEmpty => string.IsNullOrEmpty(File);
 
     public string File
     {
         get => (string)GetValue(FileProperty);
         set => SetValue(FileProperty, value);
-    }
-
-    public bool HardwareAcceleration
-    {
-        get => (bool)GetValue(HardwareAccelerationProperty);
-        set => SetValue(HardwareAccelerationProperty, value);
     }
 
     public Func<Task<string?>>? Regenerate { get; set; }

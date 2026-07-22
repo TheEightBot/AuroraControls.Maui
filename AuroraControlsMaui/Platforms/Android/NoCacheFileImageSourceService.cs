@@ -1,17 +1,10 @@
-using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.Content;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Widget;
-using Bumptech.Glide;
-using Bumptech.Glide.Request;
-using Bumptech.Glide.Request.Target;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Platform;
 using Path = System.IO.Path;
 
@@ -19,12 +12,7 @@ namespace AuroraControls;
 
 internal partial class NoCacheFileImageSourceService
 {
-    // TEMPORARY diagnostic tracing for the disappearing-icon investigation (bucket 1).
-    // Remove or replace with proper logging once the root cause is confirmed.
-    private static int _traceLoadCounter;
-
-    private static void Trace(string message) =>
-        Console.WriteLine($"[AuroraSvgTrace] {message}");
+    private static int _loadCounter;
 
     public override async Task<IImageSourceServiceResult?> LoadDrawableAsync(IImageSource imageSource, ImageView imageView,
         CancellationToken cancellationToken = default)
@@ -50,23 +38,21 @@ internal partial class NoCacheFileImageSourceService
                 }
             }
 
-            var loadId = Interlocked.Increment(ref _traceLoadCounter);
-            Trace($"Load #{loadId} (LoadDrawableAsync) file='{Path.GetFileName(file)}' exists={File.Exists(file)} hwAccel={fileImageSource.HardwareAcceleration}");
+            var loadId = Interlocked.Increment(ref _loadCounter);
 
             var pathDrawable = await CreateDrawableWithHealingAsync(fileImageSource, imageView.Context!, loadId);
             if (pathDrawable != null)
             {
                 imageView.SetImageDrawable(pathDrawable);
 
-                // Intentionally no drawable/bitmap disposal here: the bitmap may still be
-                // referenced by the ImageView (or shared through the in-memory cache) when
+                // Intentionally no drawable/bitmap disposal on release: the bitmap may still
+                // be referenced by the ImageView (or shared through the in-memory cache) when
                 // MAUI releases the load result during navigation. The GC reclaims it once
                 // nothing references it.
-                return new ImageSourceServiceLoadResult(() =>
-                    Trace($"Load #{loadId} release callback invoked (no-op) file='{Path.GetFileName(file)}'"));
+                return new ImageSourceServiceLoadResult();
             }
 
-            Trace($"Load #{loadId} FAILED to create drawable (LoadDrawableAsync) file='{Path.GetFileName(file)}'");
+            Logger?.LogWarning("SVG icon load #{LoadId} failed to create a drawable for '{File}'.", loadId, Path.GetFileName(file));
             return null;
         }
         catch (Exception ex)
@@ -102,17 +88,15 @@ internal partial class NoCacheFileImageSourceService
                 }
             }
 
-            var loadId = Interlocked.Increment(ref _traceLoadCounter);
-            Trace($"Load #{loadId} (GetDrawableAsync) file='{Path.GetFileName(file)}' exists={File.Exists(file)} hwAccel={fileImageSource.HardwareAcceleration}");
+            var loadId = Interlocked.Increment(ref _loadCounter);
 
             var pathDrawable = await CreateDrawableWithHealingAsync(fileImageSource, context!, loadId);
             if (pathDrawable != null)
             {
-                return new ImageSourceServiceResult(pathDrawable, () =>
-                    Trace($"Load #{loadId} release callback invoked (no-op) file='{Path.GetFileName(file)}'"));
+                return new ImageSourceServiceResult(pathDrawable);
             }
 
-            Trace($"Load #{loadId} FAILED to create drawable (GetDrawableAsync) file='{Path.GetFileName(file)}'");
+            Logger?.LogWarning("SVG icon load #{LoadId} failed to create a drawable for '{File}'.", loadId, Path.GetFileName(file));
             return null;
         }
         catch (Exception ex)
@@ -125,10 +109,11 @@ internal partial class NoCacheFileImageSourceService
     /// <summary>
     /// Creates a drawable for the source file, serving the bitmap from the in-memory cache
     /// when possible. If the file is missing or fails to decode (e.g. the OS trimmed the
-    /// app cache directory), invokes the source's <see cref="INoCacheFileImageSource.Regenerate"/>
+    /// app cache directory — common on devices with scheduled cache cleaners such as
+    /// Samsung Device Care), invokes the source's <see cref="INoCacheFileImageSource.Regenerate"/>
     /// callback to re-render the icon and retries once.
     /// </summary>
-    private static async Task<Drawable?> CreateDrawableWithHealingAsync(INoCacheFileImageSource source, Context context, int loadId)
+    private async Task<Drawable?> CreateDrawableWithHealingAsync(INoCacheFileImageSource source, Context context, int loadId)
     {
         var drawable = TryCreateDrawable(source.File, context);
 
@@ -142,7 +127,7 @@ internal partial class NoCacheFileImageSourceService
             return null;
         }
 
-        Trace($"Load #{loadId} file missing or undecodable; regenerating '{Path.GetFileName(source.File)}'");
+        Logger?.LogInformation("SVG icon load #{LoadId}: cached file '{File}' is missing or undecodable; regenerating.", loadId, Path.GetFileName(source.File));
 
         var regeneratedPath = await source.Regenerate().ConfigureAwait(true);
 
@@ -155,13 +140,13 @@ internal partial class NoCacheFileImageSourceService
 
         if (drawable is not null)
         {
-            Trace($"Load #{loadId} regeneration succeeded for '{Path.GetFileName(regeneratedPath)}'");
+            Logger?.LogInformation("SVG icon load #{LoadId}: regeneration restored '{File}'.", loadId, Path.GetFileName(regeneratedPath));
         }
 
         return drawable;
     }
 
-    private static Drawable? TryCreateDrawable(string file, Context context)
+    private Drawable? TryCreateDrawable(string file, Context context)
     {
         var bitmap = BitmapCache.Get(file) ?? DecodeAndCacheBitmap(file);
 
@@ -170,7 +155,7 @@ internal partial class NoCacheFileImageSourceService
             : null;
     }
 
-    private static Bitmap? DecodeAndCacheBitmap(string file)
+    private Bitmap? DecodeAndCacheBitmap(string file)
     {
         try
         {
@@ -217,7 +202,7 @@ internal partial class NoCacheFileImageSourceService
         }
         catch (Exception ex)
         {
-            Trace($"DecodeAndCacheBitmap EXCEPTION for file='{Path.GetFileName(file)}': {ex.GetType().Name}: {ex.Message}");
+            Logger?.LogWarning(ex, "Failed to decode SVG icon bitmap from '{File}'.", Path.GetFileName(file));
             return null;
         }
     }
