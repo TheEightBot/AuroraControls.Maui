@@ -48,17 +48,23 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
             string key = CreateIconKey(svgName, size, additionalCacheKey, colorOverride);
 
-            if (_resolvedIcons.ContainsKey(key))
+            Func<Task<string?>> regenerate = () => RegenerateIconAsync(key, () => GenerateImageFromRaw(key, svgValue, size, colorOverride));
+
+            if (_resolvedIcons.TryGetValue(key, out string? resolvedIcon) && File.Exists(resolvedIcon))
             {
-                return GetPlatformImageSource(_resolvedIcons[key], hardwareAcceleration);
+                return GetPlatformImageSource(resolvedIcon, hardwareAcceleration, regenerate);
             }
+
+            // The memoized file no longer exists (e.g. the OS trimmed the cache directory);
+            // drop the stale entry and fall through to regenerate it.
+            _resolvedIcons.Remove(key);
 
             string? diskCachedImage = GetImagePathFromDiskCache(key);
 
             if (!string.IsNullOrEmpty(diskCachedImage))
             {
                 _resolvedIcons[key] = diskCachedImage;
-                return GetPlatformImageSource(diskCachedImage, hardwareAcceleration);
+                return GetPlatformImageSource(diskCachedImage, hardwareAcceleration, regenerate);
             }
 
             await GenerateImageFromRaw(key, svgValue, size, colorOverride).ConfigureAwait(false);
@@ -67,7 +73,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
             _resolvedIcons[key] = diskCachedImage;
 
-            return GetPlatformImageSource(diskCachedImage, hardwareAcceleration);
+            return GetPlatformImageSource(diskCachedImage, hardwareAcceleration, regenerate);
         }
         finally
         {
@@ -86,17 +92,23 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
             string key = CreateIconKey(svgName, size, additionalCacheKey, colorOverride);
 
-            if (_resolvedIcons.ContainsKey(key))
+            Func<Task<string?>> regenerate = () => RegenerateIconAsync(key, () => GenerateImageFromEmbedded(key, svgName, size, colorOverride));
+
+            if (_resolvedIcons.TryGetValue(key, out string? resolvedIcon) && File.Exists(resolvedIcon))
             {
-                return GetPlatformImageSource(_resolvedIcons[key], hardwareAcceleration);
+                return GetPlatformImageSource(resolvedIcon, hardwareAcceleration, regenerate);
             }
+
+            // The memoized file no longer exists (e.g. the OS trimmed the cache directory);
+            // drop the stale entry and fall through to regenerate it.
+            _resolvedIcons.Remove(key);
 
             string? diskCachedImage = GetImagePathFromDiskCache(key);
 
             if (!string.IsNullOrEmpty(diskCachedImage))
             {
                 _resolvedIcons[key] = diskCachedImage;
-                return GetPlatformImageSource(diskCachedImage, hardwareAcceleration);
+                return GetPlatformImageSource(diskCachedImage, hardwareAcceleration, regenerate);
             }
 
             await GenerateImageFromEmbedded(key, svgName, size, colorOverride).ConfigureAwait(false);
@@ -105,7 +117,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
 
             _resolvedIcons[key] = diskCachedImage;
 
-            return GetPlatformImageSource(diskCachedImage, hardwareAcceleration);
+            return GetPlatformImageSource(diskCachedImage, hardwareAcceleration, regenerate);
         }
         catch (Exception ex)
         {
@@ -119,14 +131,49 @@ public abstract class IconCacheBase : IIconCache, IDisposable
         }
     }
 
-    private ImageSource GetPlatformImageSource(string? file = null, bool hardwareAcceleration = true)
+    private ImageSource GetPlatformImageSource(string? file = null, bool hardwareAcceleration = true, Func<Task<string?>>? regenerate = null)
     {
         if (DeviceInfo.Current.Platform == DevicePlatform.Android)
         {
-            return new NoCacheFileImageSource { File = file, HardwareAcceleration = hardwareAcceleration };
+            return new NoCacheFileImageSource { File = file, HardwareAcceleration = hardwareAcceleration, Regenerate = regenerate };
         }
 
         return new FileImageSource { File = file };
+    }
+
+    /// <summary>
+    /// Re-renders an icon whose cached file has been deleted from disk and returns the restored path.
+    /// Used by platform image services to self-heal when the OS trims the cache directory.
+    /// </summary>
+    private async Task<string?> RegenerateIconAsync(string key, Func<Task> generate)
+    {
+        try
+        {
+            await _iconLock.WaitAsync().ConfigureAwait(false);
+
+            string? existing = GetImagePathFromDiskCache(key);
+
+            if (!string.IsNullOrEmpty(existing))
+            {
+                _resolvedIcons[key] = existing;
+                return existing;
+            }
+
+            await generate().ConfigureAwait(false);
+
+            existing = GetImagePathFromDiskCache(key);
+
+            if (!string.IsNullOrEmpty(existing))
+            {
+                _resolvedIcons[key] = existing;
+            }
+
+            return existing;
+        }
+        finally
+        {
+            _iconLock.Release();
+        }
     }
 
     private string? GetImagePathFromDiskCache(string key)
@@ -156,7 +203,7 @@ public abstract class IconCacheBase : IIconCache, IDisposable
     {
         Directory.CreateDirectory(PlatformInfo.IconCacheDirectory);
 
-        using var file = File.OpenWrite(Path.Combine(PlatformInfo.IconCacheDirectory, key));
+        using var file = File.Create(Path.Combine(PlatformInfo.IconCacheDirectory, key));
         await imageStream.CopyToAsync(file).ConfigureAwait(false);
         await file.FlushAsync().ConfigureAwait(false);
     }

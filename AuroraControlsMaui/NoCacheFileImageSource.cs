@@ -20,6 +20,8 @@ internal class NoCacheFileImageSource : ImageSource, INoCacheFileImageSource
         set => SetValue(HardwareAccelerationProperty, value);
     }
 
+    public Func<Task<string?>>? Regenerate { get; set; }
+
     public override Task<bool> Cancel() => Task.FromResult(false);
 
     public override string ToString() => $"File: {File}";

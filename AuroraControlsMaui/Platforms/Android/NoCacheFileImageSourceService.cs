@@ -19,18 +19,12 @@ namespace AuroraControls;
 
 internal partial class NoCacheFileImageSourceService
 {
-    private static readonly BitmapFactory.Options _bitmapFactoryOptions =
-        new()
-        {
-            InSampleSize = 1,
-            InPreferredConfig = Bitmap.Config.Argb8888, // Uses less memory than ARGB_8888
-            InDither = false,
-            InTempStorage = new byte[32 * 1024], // 32KB buffer for decoding
-        };
+    // TEMPORARY diagnostic tracing for the disappearing-icon investigation (bucket 1).
+    // Remove or replace with proper logging once the root cause is confirmed.
+    private static int _traceLoadCounter;
 
-    // Cache for hardware bitmap capability detection
-    private static readonly object _hardwareBitmapCacheLock = new();
-    private static bool? _cachedHardwareBitmapSupport;
+    private static void Trace(string message) =>
+        Console.WriteLine($"[AuroraSvgTrace] {message}");
 
     public override async Task<IImageSourceServiceResult?> LoadDrawableAsync(IImageSource imageSource, ImageView imageView,
         CancellationToken cancellationToken = default)
@@ -56,13 +50,23 @@ internal partial class NoCacheFileImageSourceService
                 }
             }
 
-            var pathDrawable = CreateDrawableModern(file, imageView.Context!, fileImageSource.HardwareAcceleration);
+            var loadId = Interlocked.Increment(ref _traceLoadCounter);
+            Trace($"Load #{loadId} (LoadDrawableAsync) file='{Path.GetFileName(file)}' exists={File.Exists(file)} hwAccel={fileImageSource.HardwareAcceleration}");
+
+            var pathDrawable = await CreateDrawableWithHealingAsync(fileImageSource, imageView.Context!, loadId);
             if (pathDrawable != null)
             {
                 imageView.SetImageDrawable(pathDrawable);
-                return new ImageSourceServiceLoadResult(() => pathDrawable.Dispose());
+
+                // Intentionally no drawable/bitmap disposal here: the bitmap may still be
+                // referenced by the ImageView (or shared through the in-memory cache) when
+                // MAUI releases the load result during navigation. The GC reclaims it once
+                // nothing references it.
+                return new ImageSourceServiceLoadResult(() =>
+                    Trace($"Load #{loadId} release callback invoked (no-op) file='{Path.GetFileName(file)}'"));
             }
 
+            Trace($"Load #{loadId} FAILED to create drawable (LoadDrawableAsync) file='{Path.GetFileName(file)}'");
             return null;
         }
         catch (Exception ex)
@@ -98,12 +102,17 @@ internal partial class NoCacheFileImageSourceService
                 }
             }
 
-            var pathDrawable = CreateDrawableModern(file, context!, fileImageSource.HardwareAcceleration);
+            var loadId = Interlocked.Increment(ref _traceLoadCounter);
+            Trace($"Load #{loadId} (GetDrawableAsync) file='{Path.GetFileName(file)}' exists={File.Exists(file)} hwAccel={fileImageSource.HardwareAcceleration}");
+
+            var pathDrawable = await CreateDrawableWithHealingAsync(fileImageSource, context!, loadId);
             if (pathDrawable != null)
             {
-                return new ImageSourceServiceResult(pathDrawable, () => pathDrawable.Dispose());
+                return new ImageSourceServiceResult(pathDrawable, () =>
+                    Trace($"Load #{loadId} release callback invoked (no-op) file='{Path.GetFileName(file)}'"));
             }
 
+            Trace($"Load #{loadId} FAILED to create drawable (GetDrawableAsync) file='{Path.GetFileName(file)}'");
             return null;
         }
         catch (Exception ex)
@@ -113,135 +122,172 @@ internal partial class NoCacheFileImageSourceService
         }
     }
 
-    private static Drawable? CreateDrawableModern(string file, Context context, bool hardwareAcceleration = true)
+    /// <summary>
+    /// Creates a drawable for the source file, serving the bitmap from the in-memory cache
+    /// when possible. If the file is missing or fails to decode (e.g. the OS trimmed the
+    /// app cache directory), invokes the source's <see cref="INoCacheFileImageSource.Regenerate"/>
+    /// callback to re-render the icon and retries once.
+    /// </summary>
+    private static async Task<Drawable?> CreateDrawableWithHealingAsync(INoCacheFileImageSource source, Context context, int loadId)
+    {
+        var drawable = TryCreateDrawable(source.File, context);
+
+        if (drawable is not null)
+        {
+            return drawable;
+        }
+
+        if (source.Regenerate is null)
+        {
+            return null;
+        }
+
+        Trace($"Load #{loadId} file missing or undecodable; regenerating '{Path.GetFileName(source.File)}'");
+
+        var regeneratedPath = await source.Regenerate().ConfigureAwait(true);
+
+        if (string.IsNullOrEmpty(regeneratedPath))
+        {
+            return null;
+        }
+
+        drawable = TryCreateDrawable(regeneratedPath, context);
+
+        if (drawable is not null)
+        {
+            Trace($"Load #{loadId} regeneration succeeded for '{Path.GetFileName(regeneratedPath)}'");
+        }
+
+        return drawable;
+    }
+
+    private static Drawable? TryCreateDrawable(string file, Context context)
+    {
+        var bitmap = BitmapCache.Get(file) ?? DecodeAndCacheBitmap(file);
+
+        return bitmap is not null
+            ? new BitmapDrawable(context.Resources, bitmap)
+            : null;
+    }
+
+    private static Bitmap? DecodeAndCacheBitmap(string file)
     {
         try
         {
+            if (!File.Exists(file))
+            {
+                return null;
+            }
+
+            Bitmap? bitmap;
+
             if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.P)
             {
-                // Use modern ImageDecoder for Android API 28+
                 using var source = ImageDecoder.CreateSource(new Java.IO.File(file));
-                var bitmap = ImageDecoder.DecodeBitmap(
+                bitmap = ImageDecoder.DecodeBitmap(
                     source,
                     new ImageDecoderOnHeaderDecodedListener(
                         decoder =>
                         {
                             decoder.MemorySizePolicy = ImageDecoderMemoryPolicy.Default;
 
-                            // Determine if we should use hardware or software allocation
+                            // Software allocation: these bitmaps may be drawn into software
+                            // canvases (navigation transitions, software layers), where
+                            // hardware bitmaps throw and render blank.
                             decoder.MutableRequired = true;
-                            decoder.Allocator = ImageDecoderAllocator.Default;
+                            decoder.Allocator = ImageDecoderAllocator.Software;
                         }));
-                return new BitmapDrawable(context.Resources, bitmap);
             }
             else
             {
-                // Fallback to optimized BitmapFactory for older devices
-                var bitmap = BitmapFactory.DecodeFile(file, _bitmapFactoryOptions);
-                return new BitmapDrawable(context.Resources, bitmap);
+                var options = new BitmapFactory.Options
+                {
+                    InSampleSize = 1,
+                    InPreferredConfig = Bitmap.Config.Argb8888,
+                };
+                bitmap = BitmapFactory.DecodeFile(file, options);
             }
+
+            if (bitmap is not null)
+            {
+                BitmapCache.Put(file, bitmap);
+            }
+
+            return bitmap;
         }
-        catch
+        catch (Exception ex)
         {
+            Trace($"DecodeAndCacheBitmap EXCEPTION for file='{Path.GetFileName(file)}': {ex.GetType().Name}: {ex.Message}");
             return null;
         }
     }
 
-    private static bool ShouldUseHardwareBitmap(Context context)
+    /// <summary>
+    /// Bounded in-memory bitmap cache keyed by file path. Icon bitmaps are shared across
+    /// drawables (bitmaps are never explicitly recycled; the GC reclaims them after they
+    /// leave the cache and no view references them), which makes repeat loads during
+    /// navigation/tab churn instant and removes the disk round-trip.
+    /// </summary>
+    private static class BitmapCache
     {
-        // Only available on API 28+
-        if (Android.OS.Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.P)
-        {
-            return false;
-        }
+        private const int MaxSizeBytes = 12 * 1024 * 1024;
 
-        // Check the cached value first with double-checked locking pattern
-        if (_cachedHardwareBitmapSupport.HasValue && !_cachedHardwareBitmapSupport.Value)
-        {
-            return false;
-        }
+        private static readonly object _lock = new();
+        private static readonly Dictionary<string, LinkedListNode<(string Key, Bitmap Bitmap, int Size)>> _entries = new();
+        private static readonly LinkedList<(string Key, Bitmap Bitmap, int Size)> _lruOrder = new();
+        private static int _currentSizeBytes;
 
-        lock (_hardwareBitmapCacheLock)
+        public static Bitmap? Get(string key)
         {
-            // Double-check inside the lock to avoid race conditions
-            if (_cachedHardwareBitmapSupport.HasValue && !_cachedHardwareBitmapSupport.Value)
+            lock (_lock)
             {
-                return _cachedHardwareBitmapSupport.Value;
-            }
-
-            if (!_cachedHardwareBitmapSupport.HasValue)
-            {
-                try
+                if (!_entries.TryGetValue(key, out var node))
                 {
-                    // Check if hardware acceleration is enabled for the application
-                    var activity = context as Android.App.Activity;
-                    if (activity?.Window?.Attributes?.Flags.HasFlag(Android.Views.WindowManagerFlags.HardwareAccelerated) == false)
-                    {
-                        _cachedHardwareBitmapSupport = false;
-                        return false;
-                    }
-
-                    // Check if the device supports hardware bitmaps
-                    // Hardware bitmaps require sufficient GPU memory and capabilities
-                    var activityManager = context.GetSystemService(Context.ActivityService) as Android.App.ActivityManager;
-
-                    // OpenGL ES 2.0 requirement
-                    if (activityManager?.DeviceConfigurationInfo?.ReqGlEsVersion < 0x20000)
-                    {
-                        _cachedHardwareBitmapSupport = false;
-                        return false;
-                    }
+                    return null;
                 }
-                catch
+
+                var bitmap = node.Value.Bitmap;
+
+                if (bitmap.Handle == IntPtr.Zero || bitmap.IsRecycled)
                 {
-                    // If any check fails, default to software bitmap for safety
-                    return false;
+                    RemoveNode(node);
+                    return null;
+                }
+
+                _lruOrder.Remove(node);
+                _lruOrder.AddFirst(node);
+
+                return bitmap;
+            }
+        }
+
+        public static void Put(string key, Bitmap bitmap)
+        {
+            var size = bitmap.ByteCount;
+
+            lock (_lock)
+            {
+                if (_entries.TryGetValue(key, out var existing))
+                {
+                    RemoveNode(existing);
+                }
+
+                var node = _lruOrder.AddFirst((key, bitmap, size));
+                _entries[key] = node;
+                _currentSizeBytes += size;
+
+                while (_currentSizeBytes > MaxSizeBytes && _lruOrder.Last is not null)
+                {
+                    RemoveNode(_lruOrder.Last);
                 }
             }
-
-            var memoryActivityManager = context.GetSystemService(Context.ActivityService) as Android.App.ActivityManager;
-
-            // Check available memory - avoid hardware bitmaps on low memory devices
-            var memoryInfo = new Android.App.ActivityManager.MemoryInfo();
-            memoryActivityManager?.GetMemoryInfo(memoryInfo);
-
-            // If available memory is less than 512MB, prefer software bitmaps for stability
-            if (memoryInfo.AvailMem < 512 * 1024 * 1024)
-            {
-                return false;
-            }
-
-            // Additional check: avoid hardware bitmaps if we're in a software rendering context
-            // This is a heuristic based on the current thread and context
-            return !IsLikelySoftwareRenderingContext();
         }
-    }
 
-    private static bool IsLikelySoftwareRenderingContext()
-    {
-        try
+        private static void RemoveNode(LinkedListNode<(string Key, Bitmap Bitmap, int Size)> node)
         {
-            // Check if we're potentially in a Canvas drawing operation or similar software context
-            // This is a heuristic - if we're on the main UI thread and there are no obvious indicators
-            // of hardware acceleration being actively used, prefer software bitmaps
-            var currentThread = Java.Lang.Thread.CurrentThread();
-            var threadName = currentThread?.Name;
-
-            // If we're on a background thread, it's likely for caching/processing, use software
-            if (threadName != null && (
-                threadName.Contains("Background") ||
-                threadName.Contains("Cache") ||
-                threadName.Contains("Worker") ||
-                !threadName.Contains("main")))
-            {
-                return true;
-            }
-
-            return false;
-        }
-        catch
-        {
-            return true; // Default to software rendering context if unsure
+            _entries.Remove(node.Value.Key);
+            _lruOrder.Remove(node);
+            _currentSizeBytes -= node.Value.Size;
         }
     }
 
