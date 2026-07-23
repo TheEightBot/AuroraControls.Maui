@@ -95,7 +95,14 @@ public class CalendarPicker : DatePicker
     /// Clears the selected date. This is the single source of truth for what "clear" means on a
     /// <see cref="CalendarPicker"/> and is invoked by the platform handlers when the inline clear button is tapped.
     /// </summary>
-    internal void ClearValue() => Date = null;
+    internal void ClearValue()
+    {
+        // Unfocus before nulling, matching the accessory-toolbar Clear button: while focused,
+        // OnPropertyChanged mirrors base.Date back into Date (both share the "Date" property name),
+        // which would immediately undo the clear.
+        Unfocus();
+        Date = null;
+    }
 
     /// <summary>
     /// Method that is called when the property that is specified by propertyName is changed.

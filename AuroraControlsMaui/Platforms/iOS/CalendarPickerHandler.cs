@@ -73,6 +73,22 @@ public partial class CalendarPickerHandler : DatePickerHandler, IDisposable
 
         // The native clear ("X") button empties the text; mirror that back to a null Date.
         platformView.EditingChanged += OnPlatformViewEditingChanged;
+
+        // Subscribing to any UITextField event installs an internal UITextFieldDelegate whose
+        // textFieldShouldClear: answers false when no ShouldClear handler is set, which silently
+        // disables the clear button. This is also the one reliable hook for the clear action itself.
+        platformView.ShouldClear = OnShouldClear;
+    }
+
+    private bool OnShouldClear(UITextField textField)
+    {
+        if (this.VirtualView is CalendarPicker calendarPicker)
+        {
+            // Defer the clear so first responder is not resigned inside UIKit's clear callback.
+            calendarPicker.Dispatcher.Dispatch(calendarPicker.ClearValue);
+        }
+
+        return true;
     }
 
     protected override void DisconnectHandler(MauiDatePicker platformView)
