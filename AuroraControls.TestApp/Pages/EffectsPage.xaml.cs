@@ -40,6 +40,17 @@ public partial class EffectsPage : ContentPage
         await Navigation.PushAsync(new ShowKeyboardDoneButtonEffectTestPage());
     }
 
+    private async void OnKeyboardToolbarTapped(object? sender, TappedEventArgs e)
+    {
+        if (sender is View view)
+        {
+            AnimationExtensions.TriggerHaptic();
+            await view.AnimatePressAsync();
+        }
+
+        await Navigation.PushAsync(new KeyboardToolbarTestPage());
+    }
+
     private async void OnSafeAreaTapped(object? sender, TappedEventArgs e)
     {
         if (sender is View view)

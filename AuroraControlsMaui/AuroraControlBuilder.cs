@@ -43,7 +43,8 @@ public static class AuroraControlBuilder
                         .Add<Effects.ImageProcessingEffect, Effects.ImageProcessingPlatformEffect>()
                         .Add<Effects.ShadowEffect, ShadowPlatformEffect>()
                         .Add<Effects.RoundedCornersEffect, RoundedCornersPlatformEffect>()
-                        .Add<Effects.KeyboardReturnKeyTypeNameEffect, DroidKeyboardReturnKeyTypeNameEffect>();
+                        .Add<Effects.KeyboardReturnKeyTypeNameEffect, DroidKeyboardReturnKeyTypeNameEffect>()
+                        .Add<Effects.ClearButtonEffect, ClearButtonPlatformEffect>();
 #elif IOS
                     effects
                         .Add<Effects.ImageProcessingEffect, Effects.ImageProcessingPlatformEffect>()
@@ -53,7 +54,8 @@ public static class AuroraControlBuilder
                         .Add<Effects.KeyboardReturnKeyTypeNameEffect, AppleKeyboardReturnKeyTypeNameEffect>()
                         .Add<Effects.ListViewHideEmptyCellsEffect, AppleListViewHideEmptyCellsEffect>()
                         .Add<Effects.ShowKeyboardDoneButtonEffect, AppleShowKeyboardDoneButtonEffect>()
-                        .Add<Effects.KeyboardToolbarEffect, AppleKeyboardToolbarEffect>();
+                        .Add<Effects.KeyboardToolbarEffect, AppleKeyboardToolbarEffect>()
+                        .Add<Effects.ClearButtonEffect, ClearButtonPlatformEffect>();
 #elif MACCATALYST
                     effects
                         .Add<Effects.ImageProcessingEffect, Effects.ImageProcessingPlatformEffect>()
@@ -63,7 +65,8 @@ public static class AuroraControlBuilder
                         .Add<Effects.KeyboardReturnKeyTypeNameEffect, AppleKeyboardReturnKeyTypeNameEffect>()
                         .Add<Effects.ListViewHideEmptyCellsEffect, AppleListViewHideEmptyCellsEffect>()
                         .Add<Effects.ShowKeyboardDoneButtonEffect, MacCatalystShowKeyboardDoneButtonEffect>()
-                        .Add<Effects.KeyboardToolbarEffect, MacCatalystKeyboardToolbarEffect>();
+                        .Add<Effects.KeyboardToolbarEffect, MacCatalystKeyboardToolbarEffect>()
+                        .Add<Effects.ClearButtonEffect, ClearButtonPlatformEffect>();
 #endif
                 })
             .ConfigureImageSources(

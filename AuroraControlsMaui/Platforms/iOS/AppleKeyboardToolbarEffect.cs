@@ -40,6 +40,10 @@ public class AppleKeyboardToolbarEffect : PlatformEffect
         };
 
         SetInputAccessoryView(inputView, _accessoryView);
+
+        // If the keyboard is already visible, reload immediately so the new accessory view appears
+        // without requiring the user to dismiss and re-tap.
+        inputView.ReloadInputViews();
     }
 
     /// <inheritdoc/>
@@ -49,6 +53,7 @@ public class AppleKeyboardToolbarEffect : PlatformEffect
         if (inputView != null)
         {
             SetInputAccessoryView(inputView, _previousAccessoryView);
+            inputView.ReloadInputViews();
         }
 
         _accessoryView?.Dispose();

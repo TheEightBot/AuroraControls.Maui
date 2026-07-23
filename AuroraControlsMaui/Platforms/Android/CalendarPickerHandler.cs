@@ -13,6 +13,7 @@ public partial class CalendarPickerHandler : DatePickerHandler
             [nameof(CalendarPicker.FontSize)] = MapFontSize,
             [nameof(CalendarPicker.FontFamily)] = MapFontFamily,
             [nameof(CalendarPicker.FontAttributes)] = MapFontAttributes,
+            [nameof(CalendarPicker.ClearButtonVisibility)] = MapClearButtonVisibility,
         };
 
     public CalendarPickerHandler()
@@ -40,6 +41,12 @@ public partial class CalendarPickerHandler : DatePickerHandler
     }
 
     public static void MapDate(CalendarPickerHandler handler, CalendarPicker view) => handler.TryShowEmptyState();
+
+    public static void MapClearButtonVisibility(CalendarPickerHandler handler, CalendarPicker view)
+    {
+        // TODO Bucket E: draw the trailing clear drawable on the MauiDatePicker (AppCompatEditText),
+        // toggle per ClearButtonVisibility, and call view.ClearValue() when the clear icon is tapped.
+    }
 
     public static void MapFontSize(CalendarPickerHandler handler, CalendarPicker view)
     {
