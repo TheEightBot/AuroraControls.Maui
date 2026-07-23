@@ -28,7 +28,7 @@ public static class MauiProgram
 
                     fonts.AddToAuroraFontCache();
                 })
-            .UseAuroraControls<App>();
+            .UseAuroraControls<App>(opts => opts.IsGloballyHidden = true);
 
         // Register services
         builder.Services.AddSingleton<IThemeService, ThemeService>();

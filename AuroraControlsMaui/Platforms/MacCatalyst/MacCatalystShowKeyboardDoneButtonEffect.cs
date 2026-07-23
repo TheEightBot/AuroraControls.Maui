@@ -4,20 +4,25 @@ using UIKit;
 namespace AuroraControls;
 
 [Obsolete("Use KeyboardToolbarEffect with KeyboardToolbar attached properties instead. See docs/keyboard-toolbar.md for migration guidance.")]
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "Disposable fields are cleaned up in OnDetached which is the correct MAUI PlatformEffect lifecycle.")]
 public class MacCatalystShowKeyboardDoneButtonEffect : PlatformEffect
 {
+    private Platforms.MacCatalyst.AuroraKeyboardAccessoryView? _accessoryView;
+    private UIView? _previousAccessoryView;
+
     protected override void OnAttached()
     {
-        var textField = this.Control as UITextField;
-
-        // Fixed: was `&&` (would NullReferenceException); now `||` correctly guards both conditions
-        if (textField == null || textField.InputAccessoryView != null)
+        if (this.Control is not UITextField textField)
         {
             return;
         }
 
-        var accessoryView = new Platforms.MacCatalyst.AuroraKeyboardAccessoryView();
-        accessoryView.Configure(
+        // MAUI installs its own MauiDoneAccessoryView on every Entry/Editor, so an existing
+        // accessory view is the norm, not the exception. Replace it and restore on detach.
+        _previousAccessoryView = textField.InputAccessoryView;
+
+        _accessoryView = new Platforms.MacCatalyst.AuroraKeyboardAccessoryView();
+        _accessoryView.Configure(
             KeyboardToolbarOptions.Default.DefaultButtonStyle,
             KeyboardToolbarOptions.Default.DefaultTitle,
             KeyboardToolbarOptions.Default.DefaultTitleColor,
@@ -27,7 +32,7 @@ public class MacCatalystShowKeyboardDoneButtonEffect : PlatformEffect
             KeyboardToolbarOptions.Default.DefaultHeight);
 
         var weakField = new WeakReference<UITextField>(textField);
-        accessoryView.DoneAction = () =>
+        _accessoryView.DoneAction = () =>
         {
             if (weakField.TryGetTarget(out var tf))
             {
@@ -35,21 +40,20 @@ public class MacCatalystShowKeyboardDoneButtonEffect : PlatformEffect
             }
         };
 
-        textField.InputAccessoryView = accessoryView;
+        textField.InputAccessoryView = _accessoryView;
+        textField.ReloadInputViews();
     }
 
     protected override void OnDetached()
     {
-        var textField = this.Control as UITextField;
-
-        // Fixed: was `&&` (same bug); now `||`
-        if (textField == null || textField.InputAccessoryView == null)
+        if (this.Control is UITextField textField)
         {
-            return;
+            textField.InputAccessoryView = _previousAccessoryView;
+            textField.ReloadInputViews();
         }
 
-        var iav = textField.InputAccessoryView;
-        textField.InputAccessoryView = null;
-        iav?.Dispose();
+        _accessoryView?.Dispose();
+        _accessoryView = null;
+        _previousAccessoryView = null;
     }
 }
