@@ -37,18 +37,23 @@ public partial class CalendarPickerHandler : DatePickerHandler, IDisposable
 
         if (platformView.InputView is UIDatePicker dp)
         {
-            // Wrap UIDatePicker in a UIView to workaround UpdateMode=Inline sizing issues when within InputView
-            var container = new UIView();
-            container.BackgroundColor = UIColor.Clear;
-            container.AutoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth;
-            container.Frame = new CoreGraphics.CGRect(0, 0, dp.Frame.Width, dp.Frame.Height);
-
-            dp.Center = new CoreGraphics.CGPoint(container.Frame.Width / 2, container.Frame.Height / 2);
-            dp.AutoresizingMask = UIViewAutoresizing.FlexibleMargins;
-            dp.LayoutMargins = new UIEdgeInsets(0, 0, SafeAreaInfo.GetSafeArea().Bottom, 0);
+            var bottomInset = SafeAreaInfo.GetSafeArea().Bottom;
 
             dp.PreferredDatePickerStyle = UIDatePickerStyle.Inline;
             dp.Mode = UIDatePickerMode.Date;
+            dp.LayoutMargins = new UIEdgeInsets(0, 0, bottomInset, 0);
+
+            // The inline calendar only reports its real size once the style is set. Wrap it in a fixed-height
+            // UIView so UIKit sizes the input view to the calendar instead of stretching it to the keyboard height.
+            var size = dp.SizeThatFits(new CoreGraphics.CGSize(10000, 10000));
+
+            var container = new UIView();
+            container.BackgroundColor = UIColor.Clear;
+            container.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
+            container.Frame = new CoreGraphics.CGRect(0, 0, size.Width, size.Height + bottomInset);
+
+            dp.Frame = new CoreGraphics.CGRect(0, 0, size.Width, size.Height);
+            dp.AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin;
 
             // Add ValueChanged event handler to update the Date when user selects from calendar
             dp.ValueChanged += OnDatePickerValueChanged;
@@ -79,7 +84,9 @@ public partial class CalendarPickerHandler : DatePickerHandler, IDisposable
     {
         platformView.EditingChanged -= OnPlatformViewEditingChanged;
 
-        if (platformView.InputView is UIDatePicker dp)
+        var dp = platformView.InputView as UIDatePicker ?? platformView.InputView?.Subviews.OfType<UIDatePicker>().FirstOrDefault();
+
+        if (dp != null)
         {
             dp.ValueChanged -= OnDatePickerValueChanged;
         }
