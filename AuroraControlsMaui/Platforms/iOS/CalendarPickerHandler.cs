@@ -31,29 +31,17 @@ public partial class CalendarPickerHandler : DatePickerHandler, IDisposable
         TryShowEmptyState();
     }
 
+    protected override MauiDatePicker CreatePlatformView() => new CalendarPickerField();
+
     protected override void ConnectHandler(MauiDatePicker platformView)
     {
-        base.ConnectHandler(platformView);
-
+        // Wrapped before base.ConnectHandler so MAUI does not set the date on the wheels picker;
+        // the date is applied when the inline calendar is built on first edit.
         if (platformView.InputView is UIDatePicker dp)
         {
-            var bottomInset = SafeAreaInfo.GetSafeArea().Bottom;
-
-            dp.PreferredDatePickerStyle = UIDatePickerStyle.Inline;
-            dp.Mode = UIDatePickerMode.Date;
-            dp.LayoutMargins = new UIEdgeInsets(0, 0, bottomInset, 0);
-
-            // The inline calendar only reports its real size once the style is set. Wrap it in a fixed-height
-            // UIView so UIKit sizes the input view to the calendar instead of stretching it to the keyboard height.
-            var size = dp.SizeThatFits(new CoreGraphics.CGSize(10000, 10000));
-
             var container = new UIView();
             container.BackgroundColor = UIColor.Clear;
             container.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
-            container.Frame = new CoreGraphics.CGRect(0, 0, size.Width, size.Height + bottomInset);
-
-            dp.Frame = new CoreGraphics.CGRect(0, 0, size.Width, size.Height);
-            dp.AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin;
 
             // Add ValueChanged event handler to update the Date when user selects from calendar
             dp.ValueChanged += OnDatePickerValueChanged;
@@ -62,6 +50,13 @@ public partial class CalendarPickerHandler : DatePickerHandler, IDisposable
 
             platformView.InputView = container;
         }
+
+        if (platformView is CalendarPickerField field)
+        {
+            field.WillBecomeFirstResponder = PrepareInlineCalendar;
+        }
+
+        base.ConnectHandler(platformView);
 
         if (platformView.InputAccessoryView is UIToolbar tb)
         {
@@ -83,6 +78,11 @@ public partial class CalendarPickerHandler : DatePickerHandler, IDisposable
     protected override void DisconnectHandler(MauiDatePicker platformView)
     {
         platformView.EditingChanged -= OnPlatformViewEditingChanged;
+
+        if (platformView is CalendarPickerField field)
+        {
+            field.WillBecomeFirstResponder = null;
+        }
 
         var dp = platformView.InputView as UIDatePicker ?? platformView.InputView?.Subviews.OfType<UIDatePicker>().FirstOrDefault();
 
@@ -256,6 +256,36 @@ public partial class CalendarPickerHandler : DatePickerHandler, IDisposable
             });
     }
 
+    private void PrepareInlineCalendar()
+    {
+        if (this.PlatformView?.InputView is not { } container ||
+            container.Subviews.OfType<UIDatePicker>().FirstOrDefault() is not { } dp ||
+            dp.PreferredDatePickerStyle == UIDatePickerStyle.Inline)
+        {
+            return;
+        }
+
+        var bottomInset = SafeAreaInfo.GetSafeArea().Bottom;
+
+        dp.PreferredDatePickerStyle = UIDatePickerStyle.Inline;
+        dp.Mode = UIDatePickerMode.Date;
+        dp.LayoutMargins = new UIEdgeInsets(0, 0, bottomInset, 0);
+
+        if (this.VirtualView?.Date is DateTime date)
+        {
+            dp.Date = date.ToNSDate();
+        }
+
+        // The inline calendar only reports its real size once the style is set. Give the wrapper a fixed height
+        // so UIKit sizes the input view to the calendar instead of stretching it to the keyboard height.
+        var size = dp.SizeThatFits(new CoreGraphics.CGSize(10000, 10000));
+
+        container.Frame = new CoreGraphics.CGRect(0, 0, size.Width, size.Height + bottomInset);
+
+        dp.Frame = new CoreGraphics.CGRect(0, 0, size.Width, size.Height);
+        dp.AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin;
+    }
+
     protected virtual void Dispose(bool disposing)
     {
         if (!disposing)
@@ -274,4 +304,15 @@ public partial class CalendarPickerHandler : DatePickerHandler, IDisposable
     }
 
     ~CalendarPickerHandler() => Dispose(false);
+
+    private sealed class CalendarPickerField : MauiDatePicker
+    {
+        public Action? WillBecomeFirstResponder { get; set; }
+
+        public override bool BecomeFirstResponder()
+        {
+            WillBecomeFirstResponder?.Invoke();
+            return base.BecomeFirstResponder();
+        }
+    }
 }
