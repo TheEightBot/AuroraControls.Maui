@@ -397,7 +397,9 @@ public class SegmentedControl : AuroraViewBase
 
                 int newIndex = (int)Math.Floor(e.Location.X / segmentSize);
 
-                if (_previousIndex != newIndex && !_segments.ElementAt(newIndex).IsSpacer)
+                bool isValidIndex = newIndex >= 0 && newIndex < _segments.Count;
+
+                if (isValidIndex && _previousIndex != newIndex && !_segments.ElementAt(newIndex).IsSpacer)
                 {
                     SelectedIndex = newIndex;
                 }
